@@ -6,11 +6,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BSE.Tunes.Entities.Extension
+namespace System.Data
 {
     public static class DataReader
     {
-        public static byte[] GetBytes(this IDataRecord dataReader, string strFieldName, bool bNullAllowed, byte[] arbyteDefault)
+        public static byte[] GetBytes(this IDataRecord dataReader, string strFieldName, bool nullAllowed, byte[] arbyteDefault)
         {
             if (dataReader == null)
             {
@@ -20,13 +20,13 @@ namespace BSE.Tunes.Entities.Extension
             object obj = dataReader[strFieldName];
             if (obj is System.DBNull)
             {
-                if (bNullAllowed == true)
+                if (nullAllowed == true)
                 {
                     return arbyteDefault;
                 }
                 else
                 {
-                    throw new ArgumentException("bNullAllowed",
+                    throw new ArgumentException("nullAllowed",
                         string.Format(CultureInfo.InvariantCulture, "IDataReader.GetBytes Field '{0}' is null.", strFieldName));
                 }
             }
@@ -41,7 +41,7 @@ namespace BSE.Tunes.Entities.Extension
             throw new InvalidCastException(string.Format(CultureInfo.InvariantCulture, "IDataReader.GetBytes Field '{0}'", strFieldName));
         }
 
-        public static Guid GetGuid(this IDataRecord dataReader, string strFieldName, bool bNullAllowed, Guid defaultGuid)
+        public static Guid GetGuid(this IDataRecord dataReader, string strFieldName, bool nullAllowed, Guid defaultGuid)
         {
             if (dataReader == null)
             {
@@ -51,13 +51,13 @@ namespace BSE.Tunes.Entities.Extension
             object obj = dataReader[strFieldName];
             if (obj is System.DBNull)
             {
-                if (bNullAllowed == true)
+                if (nullAllowed == true)
                 {
                     return defaultGuid;
                 }
                 else
                 {
-                    throw new ArgumentException("bNullAllowed",
+                    throw new ArgumentException("nullAllowed",
                         string.Format(CultureInfo.InvariantCulture, "IDataReader.GetGuid Field '{0}' is null.", strFieldName));
                 }
             }
@@ -79,7 +79,7 @@ namespace BSE.Tunes.Entities.Extension
             throw new InvalidCastException(string.Format(CultureInfo.InvariantCulture, "IDataReader.GetGuid Field '{0}'", strFieldName));
         }
 
-        public static int GetInt32(this IDataReader dataReader, string strFieldName, bool bNullAllowed, int iDefault)
+        public static int GetInt32(this IDataReader dataReader, string strFieldName, bool nullAllowed, int iDefault)
         {
             if (dataReader == null)
             {
@@ -89,13 +89,13 @@ namespace BSE.Tunes.Entities.Extension
             object obj = dataReader[strFieldName];
             if (obj is System.DBNull)
             {
-                if (bNullAllowed == true)
+                if (nullAllowed == true)
                 {
                     return iDefault;
                 }
                 else
                 {
-                    throw new ArgumentException("bNullAllowed",
+                    throw new ArgumentException("nullAllowed",
                         string.Format(CultureInfo.InvariantCulture, "IDataReader.GetInt32 Field '{0}' is null.", strFieldName));
                 }
             }
@@ -105,7 +105,7 @@ namespace BSE.Tunes.Entities.Extension
             }
             throw new InvalidCastException(string.Format(CultureInfo.InvariantCulture, "IDataReader.GetInt32 Field '{0}'", strFieldName));
         }
-        public static string GetString(this IDataRecord dataReader, string strFieldName, bool bNullAllowed, string strDefault)
+        public static string GetString(this IDataRecord dataReader, string strFieldName, bool nullAllowed, string strDefault)
         {
             if (dataReader == null)
             {
@@ -115,13 +115,13 @@ namespace BSE.Tunes.Entities.Extension
             object obj = dataReader[strFieldName];
             if (obj is System.DBNull)
             {
-                if (bNullAllowed == true)
+                if (nullAllowed == true)
                 {
                     return strDefault;
                 }
                 else
                 {
-                    throw new ArgumentException("bNullAllowed",
+                    throw new ArgumentException("nullAllowed",
                         string.Format(CultureInfo.InvariantCulture, "IDataReader.GetString Field '{0}' is null.", strFieldName));
                 }
             }
@@ -135,7 +135,7 @@ namespace BSE.Tunes.Entities.Extension
             }
             throw new InvalidCastException(string.Format(CultureInfo.InvariantCulture, "IDataReader.GetString Field '{0}'", strFieldName));
         }
-        public static DateTime GetDateTime(this IDataRecord dataReader, string strFieldName, bool bNullAllowed, DateTime dtDefault)
+        public static DateTime GetDateTime(this IDataRecord dataReader, string strFieldName, bool nullAllowed, DateTime dtDefault)
         {
             if (dataReader == null)
             {
@@ -145,13 +145,13 @@ namespace BSE.Tunes.Entities.Extension
             object obj = dataReader[strFieldName];
             if (obj is System.DBNull)
             {
-                if (bNullAllowed == true)
+                if (nullAllowed == true)
                 {
                     return dtDefault;
                 }
                 else
                 {
-                    throw new ArgumentException("bNullAllowed",
+                    throw new ArgumentException("nullAllowed",
                         string.Format(CultureInfo.InvariantCulture, "IDataReader.GetDateTime Field '{0}' is null.", strFieldName));
                 }
             }
@@ -161,9 +161,9 @@ namespace BSE.Tunes.Entities.Extension
             }
             throw new InvalidCastException(string.Format(CultureInfo.InvariantCulture, "ModelSql.GetDateTime Field '{0}'", strFieldName));
         }
-        public static TimeSpan GetTimeSpan(this IDataRecord dataReader, string strFieldName, bool bNullAllowed, TimeSpan tsDefault)
+        public static TimeSpan GetTimeSpan(this IDataRecord dataReader, string strFieldName, bool nullAllowed, TimeSpan tsDefault)
         {
-            DateTime dateTime = GetDateTime(dataReader, strFieldName, bNullAllowed, new DateTime());
+            DateTime dateTime = GetDateTime(dataReader, strFieldName, nullAllowed, new DateTime());
             if (dateTime != null)
             {
                 return new TimeSpan(
