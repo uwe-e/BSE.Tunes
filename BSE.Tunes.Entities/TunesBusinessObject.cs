@@ -6,7 +6,6 @@ using System.Data.EntityClient;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using BSE.Tunes.Entities.Extension;
 using System.Collections.ObjectModel;
 using BSE.Tunes.Data.Exceptions;
 using MySql.Data.MySqlClient;
