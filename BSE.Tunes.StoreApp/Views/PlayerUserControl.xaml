@@ -1,0 +1,105 @@
+﻿<UserControl
+    x:Class="BSE.Tunes.StoreApp.Views.PlayerUserControl"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    DataContext="{Binding PlayerViewModel, Source={StaticResource Locator}}"
+    xmlns:local="using:BSE.Tunes.StoreApp.Views"
+    xmlns:controls="using:BSE.Tunes.StoreApp.Controls"
+    xmlns:views="using:BSE.Tunes.StoreApp.Views"
+    xmlns:behaviours="using:BSE.Tunes.StoreApp.Behaviours"
+        xmlns:toolkit="using:WinRTXamlToolkit.Controls.Extensions"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:callisto="using:Callisto.Controls"
+    mc:Ignorable="d" d:DesignHeight="600" d:DesignWidth="800">
+    <UserControl.Resources>
+        <Style x:Key="TitleTextStyle" TargetType="TextBlock" BasedOn="{StaticResource HeaderTextStyle}">
+            <Setter Property="FontSize" Value="46"/>
+            <Setter Property="LineHeight" Value="50"/>
+            <Setter Property="TextWrapping" Value="NoWrap"/>
+            <Setter Property="RenderTransform">
+                <Setter.Value>
+                    <TranslateTransform X="-2" Y="8"/>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <Style x:Key="ArtistTextStyle" TargetType="TextBlock" BasedOn="{StaticResource HeaderTextStyle}">
+            <Setter Property="FontSize" Value="26"/>
+        </Style>
+
+        <Style x:Key="PlayPlayerButtonStyle" TargetType="ButtonBase" BasedOn="{StaticResource PlayerButtonStyle}">
+            <Setter Property="AutomationProperties.AutomationId" Value="PlayAppBarButton"/>
+            <Setter Property="Content" Value="&#xE102;"/>
+        </Style>
+        <Style x:Key="PausePlayerButtonStyle" TargetType="ButtonBase" BasedOn="{StaticResource PlayerButtonStyle}">
+            <Setter Property="AutomationProperties.AutomationId" Value="PauseAppBarButton"/>
+            <Setter Property="Content" Value="&#xE103;"/>
+        </Style>
+        <Style x:Key="NextPlayerButtonStyle" TargetType="ButtonBase" BasedOn="{StaticResource PlayerButtonStyle}">
+            <Setter Property="AutomationProperties.AutomationId" Value="NextAppBarButton"/>
+            <Setter Property="Content" Value="&#xE111;"/>
+        </Style>
+        <Style x:Key="PreviousPlayerButtonStyle" TargetType="ButtonBase" BasedOn="{StaticResource PlayerButtonStyle}">
+            <Setter Property="AutomationProperties.AutomationId" Value="PreviousAppBarButton"/>
+            <Setter Property="Content" Value="&#xE112;"/>
+        </Style>
+
+    </UserControl.Resources>
+    <Grid>
+        <Grid Margin="0,40,0,0">
+            <StackPanel HorizontalAlignment="Left" VerticalAlignment="Top">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="355"/>
+                        <ColumnDefinition Width="675"/>
+                    </Grid.ColumnDefinitions>
+                    <!--<Image Height="335" Grid.Column="0" HorizontalAlignment="Left" behaviours:ImageExtensions.FadeIn="True" Source="{Binding Cover, Converter={StaticResource ImageConverter}}" Stretch="Uniform" />-->
+                    <controls:CrossfadingImage Height="335" Grid.Column="0" HorizontalAlignment="Left" Source="{Binding Cover, Converter={StaticResource ImageConverter}}" Stretch="Uniform" Command="{Binding SelectCommand}"/>
+                    <StackPanel Grid.Column="1">
+                        <TextBlock Margin="2"
+                               Text="{Binding CurrentTitle}"
+                               Style="{StaticResource TitleTextStyle}"
+                                   TextTrimming="WordEllipsis"
+                               VerticalAlignment="Center"
+                               HorizontalAlignment="Left"/>
+                        <TextBlock Margin="2,0" Text="{Binding CurrentArtist}" 
+                               Style="{StaticResource ArtistTextStyle}"
+                               VerticalAlignment="Center"
+                               HorizontalAlignment="Left"/>
+                    </StackPanel>
+                </Grid>
+                <Grid Grid.Row="1" HorizontalAlignment="Left" Width="335">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="auto" />
+                        <RowDefinition Height="auto" />
+                    </Grid.RowDefinitions>
+                    <TextBlock Text="{Binding CurrentProgressTime}"
+                           FontSize="12" Opacity="0.89"/>
+                    <TextBlock Text="{Binding CurrentTrackDuration}"
+                           FontSize="12" Opacity="0.89"
+                           HorizontalAlignment="Right" />
+                    <Slider Grid.Row="1" IsEnabled="{Binding IsPlaying}" StepFrequency="{Binding StepFrequency}"
+                            Maximum="{Binding ProgressMaximumValue}" Value="{Binding ProgressValue, Mode=TwoWay}"/>
+                </Grid>
+                <StackPanel Orientation="Horizontal">
+                    <Button Style="{StaticResource PreviousPlayerButtonStyle}" Command="{Binding PreviousTrackCommand}" VerticalAlignment="Center"/>
+                    <Button x:Name="ButtonPlay" Style="{StaticResource PlayPlayerButtonStyle}" Content="{Binding PlayerState, Converter={StaticResource PlayerStateToIconConverter}}" Command="{Binding PlayCommand}" VerticalAlignment="Center"/>
+                    <Button Style="{StaticResource NextPlayerButtonStyle}" Command="{Binding NextTrackCommand}" VerticalAlignment="Center"/>
+                    <controls:DropDownButton Style="{StaticResource AddToFavouritesAppBarButtonStyle}" x:Uid="ButtonAddToPlaylist" VerticalAlignment="Center"
+                                             Visibility="{Binding CurrentTrack, Mode=OneWay, Converter={StaticResource TrackToVisibilityConverter}}">
+                        <controls:DropDownButton.ContextMenu>
+                            <controls:ContextMenu ItemsSource="{Binding MenuItemsPlaylist}" toolkit:ListViewExtensions.Command="{Binding SelectToPlaylistCommand}">
+                                <controls:ContextMenu.ItemTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding Content}" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                                    </DataTemplate>
+                                </controls:ContextMenu.ItemTemplate>
+                            </controls:ContextMenu>
+                        </controls:DropDownButton.ContextMenu>
+                    </controls:DropDownButton>
+                    <views:NewPlaylistUserControl Height="110" Width="300" DataContext="{Binding NewPlaylistViewModel}"/>
+                </StackPanel>
+            </StackPanel>
+        </Grid>
+    </Grid>
+</UserControl>
