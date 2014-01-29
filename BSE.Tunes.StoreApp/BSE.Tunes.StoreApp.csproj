@@ -138,6 +138,8 @@
     <Compile Include="Messaging\PlaylistChangeMessage.cs" />
     <Compile Include="Messaging\PlaylistEntryChangeMessage.cs" />
     <Compile Include="Messaging\TrackMessage.cs" />
+    <None Include="BSE.Tunes.StoreApp_StoreKey.pfx" />
+    <None Include="BSE.Tunes.StoreApp_TemporaryKey.pfx" />
     <None Include="Properties\DataSources\BSE.Tunes.Data.SearchResult.datasource" />
     <Compile Include="Services\AccountService.cs" />
     <Compile Include="Services\HostsettingsService.cs" />
