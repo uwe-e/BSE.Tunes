@@ -1,0 +1,68 @@
+﻿<common:LayoutAwarePage
+    x:Class="BSE.Tunes.StoreApp.Views.PlaylistPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    DataContext="{Binding PlaylistPageViewModel, Source={StaticResource Locator}}"
+    xmlns:local="using:BSE.Tunes.StoreApp.Views"
+    xmlns:common="using:BSE.Tunes.StoreApp.Common"
+    xmlns:views="using:BSE.Tunes.StoreApp.Views"
+    xmlns:toolkit="using:WinRTXamlToolkit.Controls.Extensions"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d">
+    
+    <Page.TopAppBar>
+        <AppBar x:Uid="TopAppBar">
+            <views:TopAppBarUserControl/>
+        </AppBar>
+    </Page.TopAppBar>
+    
+    <Grid Style="{StaticResource LayoutRootStyle}">
+        <Grid.Background>
+            <ImageBrush ImageSource="/Assets/BSEBackground620x300.png" Opacity="0.35" Stretch="UniformToFill"/>
+        </Grid.Background>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="140"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <Grid Grid.Row="1">
+            <GridView Grid.Row="1" x:Name="itemsGridView"
+                      AutomationProperties.AutomationId="ItemsGridView"
+                      AutomationProperties.Name="Items In Category"
+                      Margin="0,-14,0,0" Padding="120,0,120,50"
+                      ItemsSource="{Binding Playlists}"
+                      ItemTemplate="{StaticResource PlaylistItemTemplate}" SelectionMode="Multiple" IsItemClickEnabled="True"
+                      toolkit:ListViewExtensions.BindableSelection="{Binding SelectedPlaylists, Mode=TwoWay}"
+                      toolkit:ListViewExtensions.Command="{Binding SelectCommand}">
+                <GridView.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <WrapGrid/>
+                    </ItemsPanelTemplate>
+                </GridView.ItemsPanel>
+            </GridView>
+            <Grid VerticalAlignment="Bottom" Visibility="{Binding HasSelectedItems, Converter={StaticResource BooleanToVisibilityConverter}}" Background="#99000000">
+                <Border BorderBrush="{StaticResource AppBarItemForegroundThemeBrush}" BorderThickness="0,2,0,0">
+                    <Grid>
+                        <StackPanel Orientation="Horizontal" Height="100" HorizontalAlignment="Left">
+                            <Button Style="{StaticResource DeleteAppBarButtonStyle}" Command="{Binding DeleteSelectedPlaylistCommand}" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+                        </StackPanel>
+                    </Grid>
+                </Border>
+            </Grid>
+        </Grid>
+        
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+            <Button x:Name="backButton" Command="{Binding GoBackCommand}" IsEnabled="{Binding Frame.CanGoBack, ElementName=pageRoot}" Style="{StaticResource BackButtonStyle}"/>
+            <StackPanel Orientation="Horizontal" Grid.Column="1">
+                <Image Source="ms-appx:///Assets/BSELogo220x140.png"/>
+                <TextBlock x:Name="pageTitle" x:Uid="PlaylistPage_TxtPageTitle" TextTrimming="WordEllipsis" Style="{StaticResource PageHeaderTextStyle}"/>
+            </StackPanel>
+            <views:SearchUserControl Grid.Column="2" Margin="15,20,15,15"/>
+        </Grid>
+    </Grid>
+</common:LayoutAwarePage>

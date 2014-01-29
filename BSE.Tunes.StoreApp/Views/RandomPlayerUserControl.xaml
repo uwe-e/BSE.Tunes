@@ -1,0 +1,38 @@
+﻿<UserControl
+    x:Class="BSE.Tunes.StoreApp.Views.RandomPlayerUserControl"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        DataContext="{Binding RandomPlayerViewModel, Source={StaticResource Locator}}"
+    xmlns:local="using:BSE.Tunes.StoreApp.Views"
+        xmlns:controls="using:BSE.Tunes.StoreApp.Controls"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    d:DesignHeight="300"
+    d:DesignWidth="400">
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="33"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <controls:VariableSizedWrapGridView Grid.Row="1">
+            <Button Command="{Binding PlayRandomTracksCommand}" Style="{StaticResource BigButtonStyle}">
+                <Button.Content>
+                    <Grid HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+                        <Grid Grid.Row="0" Width="90" Height="90" Margin="0,0,0,0" HorizontalAlignment="Center">
+                            <TextBlock x:Name="BackgroundGlyph" Text="&#xE0A8;" FontFamily="Segoe UI Symbol" Margin="3,-24,0,0" FontSize="95.333" Foreground="{StaticResource AppBarItemBackgroundThemeBrush}"/>
+                            <TextBlock x:Name="OutlineGlyph" Text="&#xE0A7;" FontFamily="Segoe UI Symbol" Margin="3,-24,0,0" FontSize="95.333" />
+                            <TextBlock x:Name="Content" Text="&#xE14B;" FontFamily="Segoe UI Symbol" HorizontalAlignment="Center" Margin="-1,-1,0,0" VerticalAlignment="Center" />
+                        </Grid>
+                        <TextBlock x:Uid="RandomPlayerUserControl_BtnPlayRandom" HorizontalAlignment="Center" Grid.Row="1" Text="Play"/>
+                    </Grid>
+                </Button.Content>
+            </Button>
+        </controls:VariableSizedWrapGridView>
+    </Grid>
+</UserControl>
