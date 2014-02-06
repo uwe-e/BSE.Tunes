@@ -68,6 +68,7 @@ namespace BSE.Tunes.StoreApp.Services
 
         #region FieldsPrivate
         private IDataService m_dataService;
+        private IAccountService m_accountService;
         private MediaElement m_mediaElement;
         private Track m_currentTrack;
         private PlayerState m_currentState;
@@ -143,11 +144,12 @@ namespace BSE.Tunes.StoreApp.Services
         #endregion
 
         #region MethodsPublic
-        public PlayerService(IDataService dataService)
+        public PlayerService(IDataService dataService, IAccountService accountService)
         {
             this.CurrentState = Data.Audio.PlayerState.Closed;
 
             this.m_dataService = dataService;
+            this.m_accountService = accountService;
 
             MediaControl.PlayPressed += OnnMediaControlPlayPressed;
             MediaControl.PausePressed += OnMediaControlPausePressed;
@@ -179,27 +181,22 @@ namespace BSE.Tunes.StoreApp.Services
                     if (guid != null && !guid.Equals(Guid.Empty))
                     {
                         //string fileName = 
-                        var stream = await this.m_dataService.GetAudioFile(this.m_currentTrack.Guid);
-                        if (stream != null)
-                        {
-                            var accessStream = await stream.AsRandomAccessStreamAsync();
-                            this.m_mediaElement.SetSource(accessStream, "application/octet-stream");
-                        }
-                    }
+                        //var stream = await this.m_dataService.GetAudioFile(this.m_currentTrack.Guid);
+                        //if (stream != null)
+                        //{
+                        //    var accessStream = await stream.AsRandomAccessStreamAsync();
+                        //    this.m_mediaElement.SetSource(accessStream, "application/octet-stream");
+                        //}
 
-                    //string strFileFromPath = track.Path;
-                    //if (string.IsNullOrEmpty(strFileFromPath) == false)
-                    //{
-                    //    this.m_mediaElement.Source = new Uri("http://bse.tunes.webapi/api/files/GetFile/S1328_04.mp3/");
-                    //    //this.Play();
-                    //    //var src = await this.m_dataService.GetAudioFile("S1328_04.mp3");
-                    //    //Windows.Storage.StorageFile file = await Windows.Storage.StorageFile.GetFileFromPathAsync(strFileFromPath);
-                    //    //if (file != null)
-                    //    //{
-                    //    //    Windows.Storage.Streams.IRandomAccessStream stream = await file.OpenReadAsync();
-                    //    //    this.m_mediaElement.SetSource(stream, "application/octet-stream");
-                    //    //}
-                    //}
+
+                        //var accessStream = await this.m_dataService.GetAudioStream(this.m_currentTrack.Guid);
+                        //this.m_mediaElement.SetSource(accessStream, "audio/mpeg");
+
+                        var tokenResponse = await this.m_accountService.RefreshToken();
+
+                        string strUrl = string.Format("{0}/api/files/{1}/", this.m_dataService.ServiceUrl, guid.ToString());
+                        this.m_mediaElement.Source = new Uri(strUrl);
+                    }
                 }
             }
             catch (Exception ex)

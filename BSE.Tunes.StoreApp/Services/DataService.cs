@@ -9,6 +9,8 @@ using System.Text;
 using System.Threading.Tasks;
 using Thinktecture.IdentityModel.Client;
 
+using System.Runtime.InteropServices.WindowsRuntime;
+
 namespace BSE.Tunes.StoreApp.Services
 {
     public class DataService : IDataService
@@ -165,7 +167,26 @@ namespace BSE.Tunes.StoreApp.Services
             string strUrl = string.Format("{0}/api/tunes/DeletePlaylists", this.ServiceUrl);
             return await GetHttpResponseFromPost<bool, ObservableCollection<Playlist>>(new Uri(strUrl), playlists);
         }
-
+        public async Task<Windows.Storage.Streams.InMemoryRandomAccessStream> GetAudioStream(Guid guid)
+        {
+            string strUrl = string.Format("{0}/api/files/{1}/", this.ServiceUrl, guid.ToString());
+            using (var client = await this.GetHttpClient())
+            {
+                try
+                {
+                    var responseMessage = await client.GetAsync(new Uri(strUrl));
+                    responseMessage.EnsureExtendedSuccessStatusCode();
+                    Windows.Storage.Streams.InMemoryRandomAccessStream randomAccessStream = new Windows.Storage.Streams.InMemoryRandomAccessStream();
+                    var byteArray = await responseMessage.Content.ReadAsByteArrayAsync();
+                    await randomAccessStream.WriteAsync(byteArray.AsBuffer());
+                    return randomAccessStream;
+                }
+                catch (Exception)
+                {
+                    throw;
+                }
+            }
+        }
         public async Task<System.IO.Stream> GetAudioFile(Guid guid)
         {
             string strUrl = string.Format("{0}/api/files/{1}/", this.ServiceUrl, guid.ToString());
