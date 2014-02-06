@@ -33,8 +33,8 @@ namespace BSE.Tunes.WebApi.Controllers
             this.m_tunesService = new BSE.Tunes.Entities.TunesBusinessObject();
             this.m_impersonationUser = Settings.ImpersonationUser;
         }
-
-        //[Route("{id}")]
+        [AllowAnonymous]
+        [Route("{id}")]
         public HttpResponseMessage GetAudioFile(string id)
         {
             HttpResponseMessage responseMessage = null;
@@ -59,8 +59,10 @@ namespace BSE.Tunes.WebApi.Controllers
                             var fileStream = this.m_fileProvider.Open(fileName);
                             responseMessage = new HttpResponseMessage();
                             responseMessage.Content = new StreamContent(fileStream);
+                            responseMessage.Headers.AcceptRanges.Add("bytes");
                             responseMessage.Content.Headers.ContentLength = fileStream.Length;
-                            responseMessage.Content.Headers.ContentType = new MediaTypeHeaderValue("application/octet-stream");
+                            //responseMessage.Content.Headers.ContentType = new MediaTypeHeaderValue("application/octet-stream");
+                            responseMessage.Content.Headers.ContentType = new MediaTypeHeaderValue("audio/mpeg");
                         }
                     }
                     else
@@ -71,7 +73,8 @@ namespace BSE.Tunes.WebApi.Controllers
             }
             return responseMessage;
         }
-        [Route("{id}")]
+        //[AllowAnonymous]
+        //[Route("{id}")]
         public HttpResponseMessage GetFile(string id)
         {
             HttpResponseMessage responseMessage = null;
