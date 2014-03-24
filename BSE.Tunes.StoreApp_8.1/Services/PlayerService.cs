@@ -310,19 +310,17 @@ namespace BSE.Tunes.StoreApp.Services
 			updater.Type = MediaPlaybackType.Music;
 			updater.MusicProperties.AlbumArtist = this.CurrentTrack.Album.Artist.Name;
 			updater.MusicProperties.Title = this.CurrentTrack.Name;
-			if (this.CurrentTrack.Album.Cover != null)
-			{
-				using (MemoryStream stream = new MemoryStream(this.CurrentTrack.Album.Cover))
-				{
-					var t2 = await stream.AsRandomAccessStreamAsync();
-					updater.Thumbnail = Windows.Storage.Streams.RandomAccessStreamReference.CreateFromStream(t2);
-					//updater.Thumbnail = Windows.Storage.Streams.RandomAccessStreamReference.CreateFromStream(stream.AsRandomAccessStreamAsync().Result);
-					//updater.Thumbnail = stream.AsRandomAccessStreamAsync().Result;
-					//updater.Thumbnail = Windows.Storage.Streams.RandomAccessStreamReference.CreateFromStream(stream.AsRandomAccessStreamAsync());
-				}
 
-
-			}
+			//UE 24.03.2014: If the updater.Thumbnail is used, the background task capability was lost
+			//
+			//if (this.CurrentTrack.Album.Cover != null)
+			//{
+			//	using (MemoryStream stream = new MemoryStream(this.CurrentTrack.Album.Cover))
+			//	{
+			//		var t2 = await stream.AsRandomAccessStreamAsync();
+			//		updater.Thumbnail = Windows.Storage.Streams.RandomAccessStreamReference.CreateFromStream(t2);
+			//	}
+			//}
 			
 			updater.Update();
 			this.m_mediaControls.IsPlayEnabled = true;

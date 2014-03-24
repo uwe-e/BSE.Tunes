@@ -193,27 +193,69 @@
     <Compile Include="ViewModels\TopAppBarUserControlViewModel.cs" />
     <Compile Include="ViewModels\ViewModelBase.cs" />
     <Compile Include="ViewModels\ViewModelLocator.cs" />
-    <Compile Include="Views\AlbumDetailPage.xaml.cs" />
-    <Compile Include="Views\AlbumsGroupUserControl.xaml.cs" />
-    <Compile Include="Views\AlbumsPage.xaml.cs" />
-    <Compile Include="Views\HostSettingsPage.xaml.cs" />
-    <Compile Include="Views\HostSettingsRedirectorUserControl.xaml.cs" />
-    <Compile Include="Views\ImagePreview.xaml.cs" />
-    <Compile Include="Views\MainPage.xaml.cs" />
-    <Compile Include="Views\NewPlaylistUserControl.xaml.cs" />
-    <Compile Include="Views\PlayerUserControl.xaml.cs" />
-    <Compile Include="Views\PlaylistDetailPage.xaml.cs" />
-    <Compile Include="Views\PlaylistGroupUserControl.xaml.cs" />
-    <Compile Include="Views\PlaylistPage.xaml.cs" />
-    <Compile Include="Views\PrivacyStatementUserControl.xaml.cs" />
-    <Compile Include="Views\RandomPlayerUserControl.xaml.cs" />
-    <Compile Include="Views\SearchCategoryAlbumsPage.xaml.cs" />
-    <Compile Include="Views\SearchCategoryTracksPage.xaml.cs" />
-    <Compile Include="Views\SearchResultPage.xaml.cs" />
-    <Compile Include="Views\SearchUserControl.xaml.cs" />
-    <Compile Include="Views\SignInSettingsPage.xaml.cs" />
-    <Compile Include="Views\SignInSettingsRedirectorUserControl.xaml.cs" />
-    <Compile Include="Views\TopAppBarUserControl.xaml.cs" />
+    <Compile Include="Views\AlbumDetailPage.xaml.cs">
+      <DependentUpon>AlbumDetailPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\AlbumsGroupUserControl.xaml.cs">
+      <DependentUpon>AlbumsGroupUserControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\AlbumsPage.xaml.cs">
+      <DependentUpon>AlbumsPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\HostSettingsPage.xaml.cs">
+      <DependentUpon>HostSettingsPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\HostSettingsRedirectorUserControl.xaml.cs">
+      <DependentUpon>HostSettingsRedirectorUserControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\ImagePreview.xaml.cs">
+      <DependentUpon>ImagePreview.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\MainPage.xaml.cs">
+      <DependentUpon>MainPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\NewPlaylistUserControl.xaml.cs">
+      <DependentUpon>NewPlaylistUserControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\PlayerUserControl.xaml.cs">
+      <DependentUpon>PlayerUserControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\PlaylistDetailPage.xaml.cs">
+      <DependentUpon>PlaylistDetailPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\PlaylistGroupUserControl.xaml.cs">
+      <DependentUpon>PlaylistGroupUserControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\PlaylistPage.xaml.cs">
+      <DependentUpon>PlaylistPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\PrivacyStatementUserControl.xaml.cs">
+      <DependentUpon>PrivacyStatementUserControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\RandomPlayerUserControl.xaml.cs">
+      <DependentUpon>RandomPlayerUserControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\SearchCategoryAlbumsPage.xaml.cs">
+      <DependentUpon>SearchCategoryAlbumsPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\SearchCategoryTracksPage.xaml.cs">
+      <DependentUpon>SearchCategoryTracksPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\SearchResultPage.xaml.cs">
+      <DependentUpon>SearchResultPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\SearchUserControl.xaml.cs">
+      <DependentUpon>SearchUserControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\SignInSettingsPage.xaml.cs">
+      <DependentUpon>SignInSettingsPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\SignInSettingsRedirectorUserControl.xaml.cs">
+      <DependentUpon>SignInSettingsRedirectorUserControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\TopAppBarUserControl.xaml.cs">
+      <DependentUpon>TopAppBarUserControl.xaml</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <AppxManifest Include="Package.appxmanifest">
@@ -376,9 +418,7 @@
       <Name>BSE.Tunes.Data</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Streams\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <SDKReference Include="BehaviorsXamlSDKManaged, Version=12.0">
       <Name>Behaviors SDK %28XAML%29</Name>

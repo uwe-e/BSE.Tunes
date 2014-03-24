@@ -24,7 +24,7 @@
         <m2:SplashScreen Image="Assets\BSELogo620x300.png" />
       </m2:VisualElements>
       <Extensions>
-        <Extension Category="windows.backgroundTasks" StartPage="Views\MainPage.xaml">
+        <Extension Category="windows.backgroundTasks" EntryPoint="BSE.Tunes.StoreApp.App">
           <BackgroundTasks>
             <Task Type="audio" />
           </BackgroundTasks>
