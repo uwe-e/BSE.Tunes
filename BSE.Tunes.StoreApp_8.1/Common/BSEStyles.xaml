@@ -77,6 +77,7 @@
     as source for the player service.
     -->
     <Style x:Key="RootFrameStyle" TargetType="Frame">
+        <Setter Property="Background" Value="{ThemeResource ApplicationPageBackgroundThemeBrush}"/>
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="Frame">

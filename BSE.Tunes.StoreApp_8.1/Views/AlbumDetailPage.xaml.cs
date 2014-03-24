@@ -17,8 +17,7 @@ using Windows.UI.Xaml.Navigation;
 namespace BSE.Tunes.StoreApp.Views
 {
     /// <summary>
-    /// A page that displays details for a single item within a group while allowing gestures to
-    /// flip through other items belonging to the same group.
+    /// A page that displays details for a single album.
     /// </summary>
     public sealed partial class AlbumDetailPage : BSE.Tunes.StoreApp.Common.LayoutAwarePage
     {

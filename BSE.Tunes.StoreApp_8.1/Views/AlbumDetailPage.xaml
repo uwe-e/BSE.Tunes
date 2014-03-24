@@ -36,7 +36,7 @@
             <RowDefinition Height="*"/>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
-        <views:ImagePreview Grid.RowSpan="2" Source="{Binding Album.Cover, Converter={StaticResource ImageConverter}}" ImageOpacity="0.35" Stretch="UniformToFill"/>
+        <views:ImagePreview Grid.RowSpan="3" Source="{Binding Album.Cover, Converter={StaticResource ImageConverter}}" ImageOpacity="0.35" Stretch="UniformToFill"/>
         <Grid Grid.Row="1">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="660"/>
@@ -70,7 +70,7 @@
         </Grid>
 
         <!--<AppBar Grid.Row="2" VerticalAlignment="Bottom" IsOpen="True" Background="#99000000">-->
-        <Border Grid.Row="2"  BorderBrush="{StaticResource AppBarItemForegroundThemeBrush}" BorderThickness="0,2,0,0">
+        <Border Grid.Row="2" Background="#99000000" BorderBrush="{StaticResource AppBarItemForegroundThemeBrush}" BorderThickness="0,2,0,0">
             <Grid>
                 <StackPanel Orientation="Horizontal" Height="100" HorizontalAlignment="Left">
                     <!--<Button Style="{StaticResource AddToFavouritesAppBarButtonStyle}" Command="{Binding NextTrackCommand}" HorizontalAlignment="Left" VerticalAlignment="Top"/>-->

@@ -12,7 +12,7 @@ using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 
-// The Grouped Items Page item template is documented at http://go.microsoft.com/fwlink/?LinkId=234231
+// The Hub Page item template is documented at http://go.microsoft.com/fwlink/?LinkID=321224
 
 namespace BSE.Tunes.StoreApp.Views
 {
@@ -24,14 +24,6 @@ namespace BSE.Tunes.StoreApp.Views
         public MainPage()
         {
             this.InitializeComponent();
-        }
-        /// <summary>
-        /// Invoked when this page is about to be displayed in a Frame.
-        /// </summary>
-        /// <param name="e">Event data that describes how this page was reached.  The Parameter
-        /// property is typically used to configure the page.</param>
-        protected override void OnNavigatedTo(NavigationEventArgs e)
-        {
         }
     }
 }

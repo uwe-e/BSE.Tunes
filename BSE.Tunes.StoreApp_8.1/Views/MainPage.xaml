@@ -16,9 +16,6 @@
             <RowDefinition Height="140"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
-        <Grid.Background>
-            <ImageBrush ImageSource="/Assets/BSEBackground620x300.png" Opacity="0.35" Stretch="UniformToFill"/>
-        </Grid.Background>
 
         <view:ImagePreview Grid.RowSpan="2" Source="{Binding BackgroundCover, Converter={StaticResource ImageConverter}}" ImageOpacity="0.35"  Stretch="UniformToFill"/>
 

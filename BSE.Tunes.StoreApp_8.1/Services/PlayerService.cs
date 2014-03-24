@@ -50,18 +50,21 @@ namespace BSE.Tunes.StoreApp.Services
 		private static void RegisterAsMediaServicePropertyChanged(DependencyObject d,
 			DependencyPropertyChangedEventArgs e)
 		{
-			MediaElement mediaElement = d as MediaElement;
-			if (mediaElement != null)
+			if (!Windows.ApplicationModel.DesignMode.DesignModeEnabled)
 			{
-				bool newValue = (bool)e.NewValue;
-				bool oldValue = (bool)e.OldValue;
-
-				if (newValue)
+				MediaElement mediaElement = d as MediaElement;
+				if (mediaElement != null)
 				{
-					var playerService = ServiceLocator.Current.GetInstance<IPlayerService>();
-					if (playerService != null)
+					bool newValue = (bool)e.NewValue;
+					bool oldValue = (bool)e.OldValue;
+
+					if (newValue)
 					{
-						playerService.RegisterAsMediaService(mediaElement);
+						var playerService = ServiceLocator.Current.GetInstance<IPlayerService>();
+						if (playerService != null)
+						{
+							playerService.RegisterAsMediaService(mediaElement);
+						}
 					}
 				}
 			}

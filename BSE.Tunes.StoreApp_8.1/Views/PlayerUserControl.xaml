@@ -7,7 +7,7 @@
     xmlns:controls="using:BSE.Tunes.StoreApp.Controls"
     xmlns:views="using:BSE.Tunes.StoreApp.Views"
     xmlns:behaviours="using:BSE.Tunes.StoreApp.Behaviours"
-        xmlns:toolkit="using:WinRTXamlToolkit.Controls.Extensions"
+    xmlns:toolkit="using:WinRTXamlToolkit.Controls.Extensions"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:callisto="using:Callisto.Controls"
