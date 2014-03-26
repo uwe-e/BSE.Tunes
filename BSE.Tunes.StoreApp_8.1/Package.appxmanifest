@@ -1,10 +1,10 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Package xmlns="http://schemas.microsoft.com/appx/2010/manifest" xmlns:m2="http://schemas.microsoft.com/appx/2013/manifest">
-  <Identity Name="0fd72143-e09e-4520-a0c0-c09e7876b4c5" Publisher="CN=uwe" Version="1.0.0.0" />
+  <Identity Name="21447uwe.bse.BSEtunes" Publisher="CN=438A661D-E2DD-4C49-9A75-9143B493592A" Version="1.1.0.10" />
   <Properties>
-    <DisplayName>BSE.Tunes.StoreApp_8.1</DisplayName>
-    <PublisherDisplayName>uwe</PublisherDisplayName>
-    <Logo>Assets\StoreLogo.png</Logo>
+    <DisplayName>BSEtunes</DisplayName>
+    <PublisherDisplayName>uwe.bse</PublisherDisplayName>
+    <Logo>Assets\BSELogo50x50.png</Logo>
   </Properties>
   <Prerequisites>
     <OSMinVersion>6.3.0</OSMinVersion>
@@ -14,7 +14,7 @@
     <Resource Language="x-generate" />
   </Resources>
   <Applications>
-    <Application Id="App" Executable="$targetnametoken$.exe" EntryPoint="BSE.Tunes.StoreApp_8._1.App">
+    <Application Id="App" Executable="$targetnametoken$.exe" EntryPoint="BSE.Tunes.StoreApp.App">
       <m2:VisualElements DisplayName="BSEtunes" Square150x150Logo="Assets\BSELogo150x150.png" Square30x30Logo="Assets\BSELogo30x30.png" Description="BSEtunes Client" ForegroundText="light" BackgroundColor="#1f5fbc">
         <m2:DefaultTile>
           <m2:ShowNameOnTiles>
