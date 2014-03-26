@@ -11,7 +11,8 @@
     <OSMaxVersionTested>6.3.0</OSMaxVersionTested>
   </Prerequisites>
   <Resources>
-    <Resource Language="x-generate" />
+    <Resource Language="en" />
+	<Resource Language="de" />
   </Resources>
   <Applications>
     <Application Id="App" Executable="$targetnametoken$.exe" EntryPoint="BSE.Tunes.StoreApp_8._1.App">

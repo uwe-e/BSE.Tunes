@@ -218,7 +218,7 @@ Please choose a different name for your playlist!</value>
   <data name="NewPlaylistDialog_LblNewPlaylist.Text" xml:space="preserve">
     <value>Name the new playlist</value>
   </data>
-  <data name="NewPlaylistDialog_TxtNewPlaylist.Watermark" xml:space="preserve">
+  <data name="NewPlaylistDialog_TxtNewPlaylist.PlaceholderText" xml:space="preserve">
     <value>New playlist</value>
   </data>
   <data name="PlaylistDetailPage_BtnRemoveSelection.[using:Windows.UI.Xaml.Automation]AutomationProperties.Name" xml:space="preserve">
@@ -251,6 +251,12 @@ Other than that the application stores no other informations about you.</value>
   </data>
   <data name="SignInSettingsPage_Header.Text" xml:space="preserve">
     <value>User Settings</value>
+  </data>
+  <data name="SignInSettingsPage_TxtAccountInfo.Text" xml:space="preserve">
+    <value>Due to copyright of the music files to stream, the load of your server and because the perhaps limited bandwidth in the operation of the server, you need a user account on this server. 
+
+You may not have to register via the app.
+A registration can only be done by the operator of the server.</value>
   </data>
   <data name="SignInSettingsPage_TxtPassword.Text" xml:space="preserve">
     <value>Password</value>

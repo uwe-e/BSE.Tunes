@@ -218,7 +218,7 @@ Bitte wählen Sie einen neuen Namen.</value>
   <data name="NewPlaylistDialog_LblNewPlaylist.Text" xml:space="preserve">
     <value>Diese Wiedergabeliste benennen</value>
   </data>
-  <data name="NewPlaylistDialog_TxtNewPlaylist.Watermark" xml:space="preserve">
+  <data name="NewPlaylistDialog_TxtNewPlaylist.PlaceholderText" xml:space="preserve">
     <value>Neue Wiedergabeliste</value>
   </data>
   <data name="PlaylistDetailPage_BtnRemoveSelection.[using:Windows.UI.Xaml.Automation]AutomationProperties.Name" xml:space="preserve">
@@ -251,6 +251,12 @@ Es werden sonst keine personenbezogenen Informationen gespeichert.</value>
   </data>
   <data name="SignInSettingsPage_Header.Text" xml:space="preserve">
     <value>Benutzer Einstellungen</value>
+  </data>
+  <data name="SignInSettingsPage_TxtAccountInfo.Text" xml:space="preserve">
+    <value>Wegen dem Schutz des Urheberrechts der zu streamenden Musikdateien, der Belastung Deines Servers und wegen der eventuell eingeschränkten Bandbreite beim Betrieb des Servers brauchst Du ein Benutzerkonto auf diesem Server. 
+
+Du kannst Dich nicht über die App registrieren.
+Die Registrierung kann nur durch den Betreiber des Servers, quasi auf Einladung, erfolgen.</value>
   </data>
   <data name="SignInSettingsPage_TxtPassword.Text" xml:space="preserve">
     <value>Passwort</value>

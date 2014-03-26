@@ -53,10 +53,10 @@ namespace BSE.Tunes.StoreApp
             this.InitializeComponent();
             
             //For localization tests
-            //var culture = new CultureInfo("en-US");
-            //Windows.Globalization.ApplicationLanguages.PrimaryLanguageOverride = culture.Name;
-            //CultureInfo.DefaultThreadCurrentCulture = culture;
-            //CultureInfo.DefaultThreadCurrentUICulture = culture;
+			//var culture = new CultureInfo("en-US");
+			//Windows.Globalization.ApplicationLanguages.PrimaryLanguageOverride = culture.Name;
+			//CultureInfo.DefaultThreadCurrentCulture = culture;
+			//CultureInfo.DefaultThreadCurrentUICulture = culture;
 
             this.Suspending += OnSuspending;
         }
