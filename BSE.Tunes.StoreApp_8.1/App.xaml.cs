@@ -5,6 +5,7 @@ using Callisto.Controls.SettingsManagement;
 using Microsoft.Practices.ServiceLocation;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
@@ -43,6 +44,13 @@ namespace BSE.Tunes.StoreApp
         public App()
         {
             this.InitializeComponent();
+
+			//For localization tests
+			//var culture = new CultureInfo("en-US");
+			//Windows.Globalization.ApplicationLanguages.PrimaryLanguageOverride = culture.Name;
+			//CultureInfo.DefaultThreadCurrentCulture = culture;
+			//CultureInfo.DefaultThreadCurrentUICulture = culture;
+
             this.Suspending += OnSuspending;
         }
 

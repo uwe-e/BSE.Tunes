@@ -252,6 +252,12 @@ Other than that the application stores no other informations about you.</value>
   <data name="SignInSettingsPage_Header.Text" xml:space="preserve">
     <value>User Settings</value>
   </data>
+  <data name="SignInSettingsPage_TxtAccountInfo.Text" xml:space="preserve">
+    <value>Due to copyright of the music files to stream, the load of your server and because the perhaps limited bandwidth in the operation of the server, you need a user account on this server. 
+
+You may not have to register via the app.
+A registration can only be done by the operator of the server.</value>
+  </data>
   <data name="SignInSettingsPage_TxtPassword.Text" xml:space="preserve">
     <value>Password</value>
   </data>

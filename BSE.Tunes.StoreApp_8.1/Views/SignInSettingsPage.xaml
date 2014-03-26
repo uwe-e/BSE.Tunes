@@ -37,6 +37,7 @@
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition />
@@ -61,6 +62,7 @@
                 <Button x:Uid="SignInSettingsPage_ButtonSave" Content="Speichern" Command="{Binding SaveCommand}"/>
                 <Button x:Uid="SignInSettingsPage_ButtonCancel" Content="Abbrechen" Command="{Binding CancelCommand}"/>
             </StackPanel>
+            <TextBlock x:Uid="SignInSettingsPage_TxtAccountInfo" Text="Schutz des Urheberrechts" Grid.Row="8" Grid.Column="1" Style="{StaticResource ItemTextStyle}"/>
         </Grid>
     </Grid>
 </Page>
