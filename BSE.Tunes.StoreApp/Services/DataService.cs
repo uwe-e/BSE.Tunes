@@ -55,6 +55,10 @@ namespace BSE.Tunes.StoreApp.Services
                     {
                         isHostAccessible = message.Content.ReadAsAsync<bool>().Result;
                     }
+					else
+					{
+						throw new Exception(message.ReasonPhrase);
+					}
                 }
                 catch (Exception exception)
                 {

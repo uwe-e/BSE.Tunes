@@ -118,6 +118,11 @@ namespace BSE.Tunes.StoreApp.Services
                     this.TokenResponse = await authClient.RequestResourceOwnerPasswordAsync(userName, password);
                     if (this.TokenResponse != null)
                     {
+						//if (this.TokenResponse..IsError)
+						//{
+						//	throw new UnauthorizedAccessException(this.m_strUnauthorizedAccessExceptionMessage);
+						//}
+
                         Windows.Storage.ApplicationData.Current.RoamingSettings.Values["username"] = userName;
 
                         Windows.Security.Credentials.PasswordVault vault = new Windows.Security.Credentials.PasswordVault();

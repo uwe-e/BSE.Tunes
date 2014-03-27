@@ -1,4 +1,5 @@
-﻿using BSE.Tunes.StoreApp.Interfaces;
+﻿using BSE.Tunes.Data;
+using BSE.Tunes.StoreApp.Interfaces;
 using BSE.Tunes.StoreApp.Services;
 using BSE.Tunes.StoreApp.Views;
 using GalaSoft.MvvmLight.Command;
@@ -18,6 +19,8 @@ namespace BSE.Tunes.StoreApp.ViewModels
         private IDataService m_dataService;
         private IHostsettingsService m_hostSettingsService;
         private INavigationService m_navigationService;
+		private IResourceService m_resourceService;
+		private IAccountService m_accountService;
         private RelayCommand m_saveHostCommand;
         private ICommand m_cancelCommand;
         private string m_strServiceUrl;
@@ -70,11 +73,13 @@ namespace BSE.Tunes.StoreApp.ViewModels
         #endregion
 
         #region MethodsPublic
-        public HostSettingsPageViewModel(IDataService dataService, IHostsettingsService hostSettingsService, INavigationService navigationService)
+		public HostSettingsPageViewModel(IDataService dataService, IHostsettingsService hostSettingsService, IAccountService accountService, INavigationService navigationService, IResourceService resourceService)
         {
             this.m_dataService = dataService;
+			this.m_accountService = accountService;
             this.m_navigationService = navigationService;
             this.m_hostSettingsService = hostSettingsService;
+			this.m_resourceService = resourceService;
             this.ServiceUrl = this.m_hostSettingsService.ServiceUrl;
         }
         public void OnNavigatedTo(object navigationParameter, NavigationMode navigationMode)
@@ -103,8 +108,18 @@ namespace BSE.Tunes.StoreApp.ViewModels
                     bool isAccessible = isAccessibleTask.Result;
                     if (isAccessible)
                     {
-                        //this.m_hostSettingsService.SetServiceUrl(this.ServiceUrl);
-                        this.m_navigationService.Navigate(typeof(MainPage));
+						System.Threading.Tasks.Task<TunesUser> verifyUserTask = System.Threading.Tasks.Task.Run(async () => await this.m_accountService.VerifyUserAuthentication());
+						verifyUserTask.Wait();
+						TunesUser tunesUser = verifyUserTask.Result;
+						if (tunesUser != null)
+						{
+							this.m_navigationService.Navigate(typeof(MainPage));
+						}
+						else
+						{
+							this.m_accountService.ServiceUrl = this.m_hostSettingsService.ServiceUrl;
+							this.m_navigationService.Navigate(typeof(SignInSettingsPage));
+						}
                     }
                 }
                 catch (AggregateException ae)
@@ -117,11 +132,11 @@ namespace BSE.Tunes.StoreApp.ViewModels
                             errorMessage += e.Message + Environment.NewLine;
                         }
                     }
-                    ErrorMessage = errorMessage;
+					ErrorMessage = this.m_resourceService.GetString("HostNotAvailableExceptionMessage", errorMessage);
                 }
                 catch (Exception exception)
                 {
-                    ErrorMessage = exception.Message;
+					ErrorMessage = this.m_resourceService.GetString("HostNotAvailableExceptionMessage", exception.Message);
                 }
             }
         }

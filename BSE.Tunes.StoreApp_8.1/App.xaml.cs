@@ -47,6 +47,7 @@ namespace BSE.Tunes.StoreApp
 
 			//For localization tests
 			//var culture = new CultureInfo("en-US");
+			////var culture = new CultureInfo("de-CH");
 			//Windows.Globalization.ApplicationLanguages.PrimaryLanguageOverride = culture.Name;
 			//CultureInfo.DefaultThreadCurrentCulture = culture;
 			//CultureInfo.DefaultThreadCurrentUICulture = culture;
@@ -120,39 +121,46 @@ namespace BSE.Tunes.StoreApp
                         IAccountService accountService = ServiceLocator.Current.GetInstance<IAccountService>();
                         accountService.ServiceUrl = hostSettings.ServiceUrl;
                         System.Threading.Tasks.Task<TunesUser> verifyUserTask = System.Threading.Tasks.Task.Run(async () => await accountService.VerifyUserAuthentication());
-                        try
-                        {
-                            verifyUserTask.Wait();
+						try
+						{
+							verifyUserTask.Wait();
 
-                            TunesUser tunesUser = verifyUserTask.Result;
-                            if (tunesUser != null)
-                            {
-                                // When the navigation stack isn't restored navigate to the first page,
-                                // configuring the new page by passing required information as a navigation
-                                // parameter
-                                if (!rootFrame.Navigate(typeof(MainPage), e.Arguments))
-                                {
-                                    throw new Exception("Failed to create initial page");
-                                }
-                            }
-                            else
-                            {
-                                // When the navigation stack isn't restored navigate to the first page,
-                                // configuring the new page by passing required information as a navigation
-                                // parameter
-                                if (!rootFrame.Navigate(typeof(SignInSettingsPage), e.Arguments))
-                                {
-                                    throw new Exception("Failed to create initial page");
-                                }
-                            }
-                        }
-                        catch (Exception unauthorizedAccessException)
-                        {
-                            if (!rootFrame.Navigate(typeof(SignInSettingsPage), e.Arguments))
-                            {
-                                throw new Exception("Failed to create initial page");
-                            }
-                        }
+							TunesUser tunesUser = verifyUserTask.Result;
+							if (tunesUser != null)
+							{
+								// When the navigation stack isn't restored navigate to the first page,
+								// configuring the new page by passing required information as a navigation
+								// parameter
+								if (!rootFrame.Navigate(typeof(MainPage), e.Arguments))
+								{
+									throw new Exception("Failed to create initial page");
+								}
+							}
+							else
+							{
+								// When the navigation stack isn't restored navigate to the first page,
+								// configuring the new page by passing required information as a navigation
+								// parameter
+								if (!rootFrame.Navigate(typeof(SignInSettingsPage), e.Arguments))
+								{
+									throw new Exception("Failed to create initial page");
+								}
+							}
+						}
+						catch (AggregateException ae)
+						{
+							if (!rootFrame.Navigate(typeof(SignInSettingsPage), ae))
+							{
+								throw new Exception("Failed to create initial page");
+							}
+						}
+						catch (Exception unauthorizedAccessException)
+						{
+							if (!rootFrame.Navigate(typeof(SignInSettingsPage), e.Arguments))
+							{
+								throw new Exception("Failed to create initial page");
+							}
+						}
                     }
                 }
                 catch (Exception)

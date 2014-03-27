@@ -13,8 +13,7 @@ namespace BSE.Tunes.StoreApp.Services
         {
             get
             {
-                return Windows.Storage.ApplicationData.Current.RoamingSettings.Values["serviceurl"] != null ?
-                    (string)Windows.Storage.ApplicationData.Current.RoamingSettings.Values["serviceurl"] : "localhost";
+				return (string)Windows.Storage.ApplicationData.Current.RoamingSettings.Values["serviceurl"];
             }
         }
         #endregion

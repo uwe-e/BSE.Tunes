@@ -36,19 +36,19 @@ namespace BSE.Tunes.StoreApp.Views
 
         private void OnPopupOpened(object sender, object e)
         {
-            Popup popup = sender as Popup;
-            if (popup != null)
-            {
-                if (popup.Parent != null)
-                {
-                    popup.Opacity = 1;
-                    this.TxtPlaylistName.Focus(Windows.UI.Xaml.FocusState.Programmatic);
-                }
-                else
-                {
-                    popup.Opacity = 0;
-                }
-            }
+			Popup popup = sender as Popup;
+			if (popup != null)
+			{
+				if (popup.Parent != null)
+				{
+					popup.Opacity = 1;
+					this.TxtPlaylistName.Focus(Windows.UI.Xaml.FocusState.Programmatic);
+				}
+				else
+				{
+					popup.Opacity = 0;
+				}
+			}
         }
     }
 }

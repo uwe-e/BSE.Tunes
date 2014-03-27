@@ -267,6 +267,7 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Assets\BSEBackground620x300.png" />
     <Content Include="Assets\BSELogo100x140.png" />
     <Content Include="Assets\BSELogo150x150.png" />
     <Content Include="Assets\BSELogo220x140.png" />

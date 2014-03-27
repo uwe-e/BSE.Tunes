@@ -135,6 +135,9 @@
   <data name="CboArtists.Content" xml:space="preserve">
     <value>Künstler</value>
   </data>
+  <data name="HostNotAvailableExceptionMessage" xml:space="preserve">
+    <value>Die Adresse des Webservers wurde falsch eingegeben oder der Webserver ist momentan nicht erreichbar.</value>
+  </data>
   <data name="HostSettingsPage_BtnBrowseAudioFolder.Content" xml:space="preserve">
     <value>Auswählen</value>
   </data>
@@ -145,7 +148,7 @@
     <value>Speichern</value>
   </data>
   <data name="HostSettingsPage_Header.Text" xml:space="preserve">
-    <value>Host Einstellungen</value>
+    <value>Hallo</value>
   </data>
   <data name="HostSettingsPage_TxtAudioFolder.Text" xml:space="preserve">
     <value>Netzwerk- Audioverzeichnis</value>
@@ -154,12 +157,12 @@
     <value>Host</value>
   </data>
   <data name="HostSettingsPage_TxtServiceHostDescription.Text" xml:space="preserve">
-    <value>Trage die Adresse des Webs ein, das den Audiodienst enthält.</value>
+    <value>Trage die Adresse des Webservers ein, der den Audiodienst enthält.</value>
   </data>
   <data name="HostSettingsPage_TxtServicePort.Text" xml:space="preserve">
     <value>Port</value>
   </data>
-  <data name="HostSettingsPage_TxtServiceUrl.Text" xml:space="preserve">
+  <data name="HostSettingsPage_TxtServiceUrl.PlaceholderText" xml:space="preserve">
     <value>Adresse</value>
   </data>
   <data name="HostSettingsRedirector_RedirectorButtonText.Content" xml:space="preserve">
@@ -216,7 +219,7 @@ Bitte wählen Sie einen neuen Namen.</value>
     <value>Ergebnisse für "{0}"</value>
   </data>
   <data name="IDS_SignInSettingsRedirector_Header" xml:space="preserve">
-    <value>Benutzer Einstellungen</value>
+    <value>Benutzerkonto Einstellungen</value>
   </data>
   <data name="NewPlaylistDialog_LblNewPlaylist.Text" xml:space="preserve">
     <value>Diese Wiedergabeliste benennen</value>
@@ -234,17 +237,21 @@ Bitte wählen Sie einen neuen Namen.</value>
     <value>Wiedergabelisten</value>
   </data>
   <data name="PrivacyStatement_TxtDescription.Text" xml:space="preserve">
-    <value>Diese Applikation kommuniziert mit einem Windows Dienst in Deinem privaten Netzwerk und spielt die Audiodateien einer, in den Einstellungen eingetragenen, Netzwerkfreigabe ab.
+    <value>Diese Applikation kommuniziert mit einem Webserver der sich im heimischen Netzwerk oder auch im Internet befinden kann. Sie benötigt EMail- Adresse und Passwort zur Authentifizierung und zur Verwaltung der personenbezogenen Wiedergabelisten. Es werden sonst keine personenbezogenen Informationen gespeichert.
 
-Sie benötigt die eingetragene, nicht überprüfte, EMail- Adresse nur für personenbezogene Wiedergabelisten.
+Wegen dem Schutz des Urheberrechts der zu streamenden Musikdateien, der Belastung Deines Servers und wegen der eventuell eingeschränkten Bandbreite beim Betrieb des Servers brauchst Du ein Benutzerkonto auf diesem Server. 
 
-Es werden sonst keine personenbezogenen Informationen gespeichert.</value>
+Du kannst Dich nicht über die App registrieren. 
+Die Registrierung kann nur durch den Betreiber des Servers erfolgen.</value>
   </data>
   <data name="RandomPlayerUserControl_BtnPlayRandom.Text" xml:space="preserve">
     <value>spiele alles</value>
   </data>
   <data name="RandomPlayerUserControl_GroupHeader.Text" xml:space="preserve">
     <value>Wiedergabelisten</value>
+  </data>
+  <data name="SearchUserControl_TxtSearch.PlaceholderText" xml:space="preserve">
+    <value>Suchen</value>
   </data>
   <data name="SignInSettingsPage_ButtonCancel" xml:space="preserve">
     <value>Abbrechen</value>
@@ -253,18 +260,18 @@ Es werden sonst keine personenbezogenen Informationen gespeichert.</value>
     <value>Speichern</value>
   </data>
   <data name="SignInSettingsPage_Header.Text" xml:space="preserve">
-    <value>Benutzer Einstellungen</value>
+    <value>Einstellungen Benutzerkonto</value>
   </data>
   <data name="SignInSettingsPage_TxtAccountInfo.Text" xml:space="preserve">
     <value>Wegen dem Schutz des Urheberrechts der zu streamenden Musikdateien, der Belastung Deines Servers und wegen der eventuell eingeschränkten Bandbreite beim Betrieb des Servers brauchst Du ein Benutzerkonto auf diesem Server. 
 
 Du kannst Dich nicht über die App registrieren.
-Die Registrierung kann nur durch den Betreiber des Servers, quasi auf Einladung, erfolgen.</value>
+Die Registrierung kann nur durch den Betreiber des Servers erfolgen.</value>
   </data>
-  <data name="SignInSettingsPage_TxtPassword.Text" xml:space="preserve">
+  <data name="SignInSettingsPage_TxtPassword.PlaceholderText" xml:space="preserve">
     <value>Passwort</value>
   </data>
-  <data name="SignInSettingsPage_TxtUserName" xml:space="preserve">
+  <data name="SignInSettingsPage_TxtUserName.PlaceholderText" xml:space="preserve">
     <value>EMail Adresse</value>
   </data>
   <data name="SignInSettingsRedirector_RedirectorButtonText.Content" xml:space="preserve">

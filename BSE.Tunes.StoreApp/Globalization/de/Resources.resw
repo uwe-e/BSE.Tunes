@@ -135,6 +135,9 @@
   <data name="CboArtists.Content" xml:space="preserve">
     <value>Künstler</value>
   </data>
+  <data name="HostNotAvailableExceptionMessage" xml:space="preserve">
+    <value>Die Adresse des Webservers wurde falsch eingegeben oder der Webserver ist momentan nicht erreichbar.</value>
+  </data>
   <data name="HostSettingsPage_BtnBrowseAudioFolder.Content" xml:space="preserve">
     <value>Auswählen</value>
   </data>
@@ -145,7 +148,7 @@
     <value>Speichern</value>
   </data>
   <data name="HostSettingsPage_Header.Text" xml:space="preserve">
-    <value>Host Einstellungen</value>
+    <value>Hallo</value>
   </data>
   <data name="HostSettingsPage_TxtAudioFolder.Text" xml:space="preserve">
     <value>Netzwerk- Audioverzeichnis</value>
@@ -154,10 +157,13 @@
     <value>Host</value>
   </data>
   <data name="HostSettingsPage_TxtServiceHostDescription.Text" xml:space="preserve">
-    <value>Tragen Sie Namen und Port des Hosts ein der den Audiodienst enthält.</value>
+    <value>Trage die Adresse des Webservers ein, der den Audiodienst enthält.</value>
   </data>
   <data name="HostSettingsPage_TxtServicePort.Text" xml:space="preserve">
     <value>Port</value>
+  </data>
+  <data name="HostSettingsPage_TxtServiceUrl.Watermark" xml:space="preserve">
+    <value>Adresse</value>
   </data>
   <data name="HostSettingsRedirector_RedirectorButtonText.Content" xml:space="preserve">
     <value>Klicken Sie hier, um die Hosteinstellungen vorzunehmen</value>
@@ -231,11 +237,12 @@ Bitte wählen Sie einen neuen Namen.</value>
     <value>Wiedergabelisten</value>
   </data>
   <data name="PrivacyStatement_TxtDescription.Text" xml:space="preserve">
-    <value>Diese Applikation kommuniziert mit einem Windows Dienst in Deinem privaten Netzwerk und spielt die Audiodateien einer, in den Einstellungen eingetragenen, Netzwerkfreigabe ab.
+    <value>Diese Applikation kommuniziert mit einem Webserver der sich im heimischen Netzwerk oder auch im Internet befinden kann. Sie benötigt EMail- Adresse und Passwort zur Authentifizierung und zur Verwaltung der personenbezogenen Wiedergabelisten. Es werden sonst keine personenbezogenen Informationen gespeichert.
 
-Sie benötigt die eingetragene, nicht überprüfte, EMail- Adresse nur für personenbezogene Wiedergabelisten.
+Wegen dem Schutz des Urheberrechts der zu streamenden Musikdateien, der Belastung Deines Servers und wegen der eventuell eingeschränkten Bandbreite beim Betrieb des Servers brauchst Du ein Benutzerkonto auf diesem Server. 
 
-Es werden sonst keine personenbezogenen Informationen gespeichert.</value>
+Du kannst Dich nicht über die App registrieren. 
+Die Registrierung kann nur durch den Betreiber des Servers erfolgen.</value>
   </data>
   <data name="RandomPlayerUserControl_BtnPlayRandom.Text" xml:space="preserve">
     <value>spiele alles</value>
@@ -250,7 +257,7 @@ Es werden sonst keine personenbezogenen Informationen gespeichert.</value>
     <value>Speichern</value>
   </data>
   <data name="SignInSettingsPage_Header.Text" xml:space="preserve">
-    <value>Benutzer Einstellungen</value>
+    <value>Einstellungen Benutzerkonto</value>
   </data>
   <data name="SignInSettingsPage_TxtAccountInfo.Text" xml:space="preserve">
     <value>Wegen dem Schutz des Urheberrechts der zu streamenden Musikdateien, der Belastung Deines Servers und wegen der eventuell eingeschränkten Bandbreite beim Betrieb des Servers brauchst Du ein Benutzerkonto auf diesem Server. 

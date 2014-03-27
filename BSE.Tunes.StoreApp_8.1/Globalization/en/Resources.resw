@@ -135,6 +135,9 @@
   <data name="CboArtists.Content" xml:space="preserve">
     <value>Artists</value>
   </data>
+  <data name="HostNotAvailableExceptionMessage" xml:space="preserve">
+    <value>The address of your webserver was entered incorrectly or the webserver is not available.</value>
+  </data>
   <data name="HostSettingsPage_BtnBrowseAudioFolder.Content" xml:space="preserve">
     <value>Browse</value>
   </data>
@@ -145,7 +148,7 @@
     <value>Save</value>
   </data>
   <data name="HostSettingsPage_Header.Text" xml:space="preserve">
-    <value>Host Settings</value>
+    <value>Hello</value>
   </data>
   <data name="HostSettingsPage_TxtAudioFolder.Text" xml:space="preserve">
     <value>Network Audio Directory</value>
@@ -154,16 +157,16 @@
     <value>Host</value>
   </data>
   <data name="HostSettingsPage_TxtServiceHostDescription.Text" xml:space="preserve">
-    <value>Enter the address of the web that contains the audio service.</value>
+    <value>Enter the address of the webserver that contains the audio service.</value>
   </data>
   <data name="HostSettingsPage_TxtServicePort.Text" xml:space="preserve">
     <value>Port</value>
   </data>
-  <data name="HostSettingsPage_TxtServiceUrl.Text" xml:space="preserve">
+  <data name="HostSettingsPage_TxtServiceUrl.PlaceholderText" xml:space="preserve">
     <value>Address</value>
   </data>
   <data name="HostSettingsRedirector_RedirectorButtonText.Content" xml:space="preserve">
-    <value>Click here to enter the host settings.</value>
+    <value>Click here to enter the web settings.</value>
   </data>
   <data name="IDS_Albums" xml:space="preserve">
     <value>Albums</value>
@@ -182,7 +185,7 @@
 Please check the settings for the Network Audio Directory within the Host Settings.</value>
   </data>
   <data name="IDS_HostSettingsRedirector_Header" xml:space="preserve">
-    <value>Host Settings</value>
+    <value>Web Settings</value>
   </data>
   <data name="IDS_NewPlaylistDialog_PlayListAlreadyExistsExceptionMessage" xml:space="preserve">
     <value>The name "{0}" for the playlist already exists.
@@ -216,7 +219,7 @@ Please choose a different name for your playlist!</value>
     <value>Results for "{0}"</value>
   </data>
   <data name="IDS_SignInSettingsRedirector_Header" xml:space="preserve">
-    <value>User Settings</value>
+    <value>User Account Settings</value>
   </data>
   <data name="NewPlaylistDialog_LblNewPlaylist.Text" xml:space="preserve">
     <value>Name the new playlist</value>
@@ -234,17 +237,21 @@ Please choose a different name for your playlist!</value>
     <value>Playlists</value>
   </data>
   <data name="PrivacyStatement_TxtDescription.Text" xml:space="preserve">
-    <value>This application communicates with a windows service in your private network and plays audio files from a network share.
+    <value>This application communicates with a web service that is located in your private network or in the internet. The application uses an email address and a password only for authentication and personal playlists. Other than that the application stores no other informations about you.
 
-The application uses the, not verified, email address only for personal playlists.
+Due to copyright of the music files to stream, the load of your server and because the perhaps limited bandwidth in the operation of the server, you need a user account on this server. 
 
-Other than that the application stores no other informations about you.</value>
+You may not have to register via the app.
+A registration can only be done by the operator of the server.</value>
   </data>
   <data name="RandomPlayerUserControl_BtnPlayRandom.Text" xml:space="preserve">
     <value>play all</value>
   </data>
   <data name="RandomPlayerUserControl_GroupHeader.Text" xml:space="preserve">
     <value>Playlists</value>
+  </data>
+  <data name="SearchUserControl_TxtSearch.PlaceholderText" xml:space="preserve">
+    <value>Search</value>
   </data>
   <data name="SignInSettingsPage_ButtonCancel" xml:space="preserve">
     <value>Cancel</value>
@@ -253,7 +260,7 @@ Other than that the application stores no other informations about you.</value>
     <value>Save</value>
   </data>
   <data name="SignInSettingsPage_Header.Text" xml:space="preserve">
-    <value>User Settings</value>
+    <value>User Account Settings</value>
   </data>
   <data name="SignInSettingsPage_TxtAccountInfo.Text" xml:space="preserve">
     <value>Due to copyright of the music files to stream, the load of your server and because the perhaps limited bandwidth in the operation of the server, you need a user account on this server. 
@@ -261,14 +268,14 @@ Other than that the application stores no other informations about you.</value>
 You may not have to register via the app.
 A registration can only be done by the operator of the server.</value>
   </data>
-  <data name="SignInSettingsPage_TxtPassword.Text" xml:space="preserve">
+  <data name="SignInSettingsPage_TxtPassword.PlaceholderText" xml:space="preserve">
     <value>Password</value>
   </data>
-  <data name="SignInSettingsPage_TxtUserName" xml:space="preserve">
+  <data name="SignInSettingsPage_TxtUserName.PlaceholderText" xml:space="preserve">
     <value>EMail Address</value>
   </data>
   <data name="SignInSettingsRedirector_RedirectorButtonText.Content" xml:space="preserve">
-    <value>Click here to enter the user settings.</value>
+    <value>Click here to enter the user account settings.</value>
   </data>
   <data name="UnauthorizedAccessExceptionMessage" xml:space="preserve">
     <value>The email address or password is incorrect</value>

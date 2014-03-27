@@ -143,6 +143,13 @@ namespace BSE.Tunes.StoreApp
 								}
 							}
 						}
+						catch (AggregateException ae)
+						{
+							if (!rootFrame.Navigate(typeof(SignInSettingsPage), ae))
+							{
+								throw new Exception("Failed to create initial page");
+							}
+						}
 						catch (Exception unauthorizedAccessException)
 						{
 							if (!rootFrame.Navigate(typeof(SignInSettingsPage), args.Arguments))

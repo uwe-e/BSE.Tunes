@@ -1,4 +1,5 @@
 ﻿using BSE.Tunes.Data;
+using BSE.Tunes.StoreApp.Interfaces;
 using BSE.Tunes.StoreApp.Services;
 using BSE.Tunes.StoreApp.Views;
 using GalaSoft.MvvmLight.Command;
@@ -12,7 +13,7 @@ using Windows.Security.Credentials;
 
 namespace BSE.Tunes.StoreApp.ViewModels
 {
-    public class SignInSettingsPageViewModel : ViewModelBase
+	public class SignInSettingsPageViewModel : ViewModelBase, INavigationAware
     {
         #region FieldsPrivate
         private IDataService m_dataService;
@@ -92,6 +93,25 @@ namespace BSE.Tunes.StoreApp.ViewModels
             
             this.LoadData();
         }
+		public void OnNavigatedTo(object navigationParameter, Windows.UI.Xaml.Navigation.NavigationMode navigationMode)
+		{
+			AggregateException aggregateException = navigationParameter as AggregateException;
+			if (aggregateException != null)
+			{
+				string errorMessage = string.Empty;
+				foreach (var e in aggregateException.Flatten().InnerExceptions)
+				{
+					if (e != null && !string.IsNullOrEmpty(e.Message))
+					{
+						errorMessage += e.Message + Environment.NewLine;
+					}
+				}
+				this.ErrorMessage = errorMessage;
+			}
+		}
+		public void OnNavigatedFrom(bool suspending)
+		{
+		}
         #endregion
 
         #region MethodsPrivate

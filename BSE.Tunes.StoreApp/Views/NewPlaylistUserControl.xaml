@@ -5,6 +5,7 @@
     xmlns:local="using:BSE.Tunes.StoreApp.Views"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:callisto="using:Callisto.Controls"
     mc:Ignorable="d"
     d:DesignHeight="110"
     d:DesignWidth="300">
@@ -19,7 +20,7 @@
         <Grid Background="{StaticResource FlyoutBackgroundBrush}" Width="300">
             <StackPanel Margin="10">
                 <TextBlock TextWrapping="Wrap" x:Uid="NewPlaylistDialog_LblNewPlaylist" Text="Diese Wiederg1abeliste benennen"/>
-                <TextBox TextWrapping="NoWrap" x:Name="TxtPlaylistName" x:Uid="NewPlaylistDialog_TxtNewPlaylist" Text="{Binding PlaylistName, Mode=TwoWay}" BorderBrush="{StaticResource TextBoxBorderThemeBrushLight}"/>
+                <callisto:WatermarkTextBox TextWrapping="NoWrap" x:Name="TxtPlaylistName" x:Uid="NewPlaylistDialog_TxtNewPlaylist" Text="{Binding PlaylistName, Mode=TwoWay}" BorderBrush="{StaticResource TextBoxBorderThemeBrushLight}"/>
                 <TextBlock TextWrapping="Wrap" Text="{Binding ErrorMessage}" Visibility="{Binding ErrorMessage, Mode=OneWay, Converter={StaticResource StringToVisibilityConverter}}"/>
                 <Button Content="Speichern" HorizontalAlignment="Right" Style="{StaticResource LightThemeButtonStyle}" Command="{Binding SaveNewPlaylistCommand}"/>
             </StackPanel>
