@@ -76,7 +76,7 @@ namespace BSE.Tunes.StoreApp
 
             AppSettings.Current.AddCommand<SignInSettingsRedirectorUserControl>(
                 ServiceLocator.Current.GetInstance<IResourceService>().GetString("IDS_SignInSettingsRedirector_Header", "Host Settings"),
-                646);
+                446);
 
             AppSettings.Current.AddCommand<PrivacyStatementUserControl>(
                 ServiceLocator.Current.GetInstance<IResourceService>().GetString("IDS_PrivacysStatement_Header", "Privacy"),
