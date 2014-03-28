@@ -148,7 +148,7 @@
     <value>Speichern</value>
   </data>
   <data name="HostSettingsPage_Header.Text" xml:space="preserve">
-    <value>Hallo</value>
+    <value>Hallo bei BSEtunes</value>
   </data>
   <data name="HostSettingsPage_TxtAudioFolder.Text" xml:space="preserve">
     <value>Netzwerk- Audioverzeichnis</value>
@@ -166,7 +166,7 @@
     <value>Adresse</value>
   </data>
   <data name="HostSettingsRedirector_RedirectorButtonText.Content" xml:space="preserve">
-    <value>Klicken Sie hier, um die Hosteinstellungen vorzunehmen</value>
+    <value>Klicke hier um die Webeinstellungen vorzunehmen</value>
   </data>
   <data name="IDS_Albums" xml:space="preserve">
     <value>Alben</value>
@@ -185,7 +185,7 @@
 Bitte überprüfen Sie die Einstellung des Netzwerk- Audioverzeichnisses in den Host Einstellungen.</value>
   </data>
   <data name="IDS_HostSettingsRedirector_Header" xml:space="preserve">
-    <value>Host Einstellungen</value>
+    <value>Webeinstellungen</value>
   </data>
   <data name="IDS_NewPlaylistDialog_PlayListAlreadyExistsExceptionMessage" xml:space="preserve">
     <value>Der Name {0} existiert bereits.
@@ -219,7 +219,7 @@ Bitte wählen Sie einen neuen Namen.</value>
     <value>Ergebnisse für "{0}"</value>
   </data>
   <data name="IDS_SignInSettingsRedirector_Header" xml:space="preserve">
-    <value>Benutzer Einstellungen</value>
+    <value>Kontoeinstellungen</value>
   </data>
   <data name="NewPlaylistDialog_LblNewPlaylist.Text" xml:space="preserve">
     <value>Diese Wiedergabeliste benennen</value>
@@ -257,13 +257,16 @@ Die Registrierung kann nur durch den Betreiber des Servers erfolgen.</value>
     <value>Speichern</value>
   </data>
   <data name="SignInSettingsPage_Header.Text" xml:space="preserve">
-    <value>Einstellungen Benutzerkonto</value>
+    <value>Kontoeinstellungen</value>
   </data>
   <data name="SignInSettingsPage_TxtAccountInfo.Text" xml:space="preserve">
     <value>Wegen dem Schutz des Urheberrechts der zu streamenden Musikdateien, der Belastung Deines Servers und wegen der eventuell eingeschränkten Bandbreite beim Betrieb des Servers brauchst Du ein Benutzerkonto auf diesem Server. 
 
 Du kannst Dich nicht über die App registrieren.
 Die Registrierung kann nur durch den Betreiber des Servers, quasi auf Einladung, erfolgen.</value>
+  </data>
+  <data name="SignInSettingsPage_TxtAcountDescription.Text" xml:space="preserve">
+    <value>Melde dich mit Deinem Konto an</value>
   </data>
   <data name="SignInSettingsPage_TxtPassword.Text" xml:space="preserve">
     <value>Passwort</value>
@@ -272,7 +275,7 @@ Die Registrierung kann nur durch den Betreiber des Servers, quasi auf Einladung,
     <value>EMail Adresse</value>
   </data>
   <data name="SignInSettingsRedirector_RedirectorButtonText.Content" xml:space="preserve">
-    <value>Klicken Sie hier, um die Benutzereinstellungen vorzunehmen</value>
+    <value>Klicke hier um Dich anzumelden</value>
   </data>
   <data name="UnauthorizedAccessExceptionMessage" xml:space="preserve">
     <value>Die Mailadresse oder das Passwort ist falsch</value>

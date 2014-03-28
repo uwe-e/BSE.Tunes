@@ -145,7 +145,7 @@
     <value>Save</value>
   </data>
   <data name="HostSettingsPage_Header.Text" xml:space="preserve">
-    <value>Hello</value>
+    <value>Hello in BSEtunes</value>
   </data>
   <data name="HostSettingsPage_TxtAudioFolder.Text" xml:space="preserve">
     <value>Network Audio Directory</value>
@@ -182,7 +182,7 @@
 Please check the settings for the Network Audio Directory within the Host Settings.</value>
   </data>
   <data name="IDS_HostSettingsRedirector_Header" xml:space="preserve">
-    <value>Host Settings</value>
+    <value>Web Settings</value>
   </data>
   <data name="IDS_NewPlaylistDialog_PlayListAlreadyExistsExceptionMessage" xml:space="preserve">
     <value>The name "{0}" for the playlist already exists.
@@ -216,7 +216,7 @@ Please choose a different name for your playlist!</value>
     <value>Results for "{0}"</value>
   </data>
   <data name="IDS_SignInSettingsRedirector_Header" xml:space="preserve">
-    <value>User Account Settings</value>
+    <value>Account Settings</value>
   </data>
   <data name="NewPlaylistDialog_LblNewPlaylist.Text" xml:space="preserve">
     <value>Name the new playlist</value>
@@ -254,13 +254,16 @@ A registration can only be done by the operator of the server.</value>
     <value>Save</value>
   </data>
   <data name="SignInSettingsPage_Header.Text" xml:space="preserve">
-    <value>User Account Settings</value>
+    <value>Account Settings</value>
   </data>
   <data name="SignInSettingsPage_TxtAccountInfo.Text" xml:space="preserve">
     <value>Due to copyright of the music files to stream, the load of your server and because the perhaps limited bandwidth in the operation of the server, you need a user account on this server. 
 
 You may not have to register via the app.
 A registration can only be done by the operator of the server.</value>
+  </data>
+  <data name="SignInSettingsPage_TxtAcountDescription.Text" xml:space="preserve">
+    <value>Login with your account</value>
   </data>
   <data name="SignInSettingsPage_TxtPassword.Text" xml:space="preserve">
     <value>Password</value>
@@ -269,7 +272,7 @@ A registration can only be done by the operator of the server.</value>
     <value>EMail Address</value>
   </data>
   <data name="SignInSettingsRedirector_RedirectorButtonText.Content" xml:space="preserve">
-    <value>Click here to enter the user account settings.</value>
+    <value>Click here to login.</value>
   </data>
   <data name="UnauthorizedAccessExceptionMessage" xml:space="preserve">
     <value>The email address or password is incorrect</value>

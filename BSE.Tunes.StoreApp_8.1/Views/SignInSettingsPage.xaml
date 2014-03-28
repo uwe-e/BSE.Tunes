@@ -42,10 +42,10 @@
                 <ColumnDefinition />
             </Grid.ColumnDefinitions>
             <TextBlock x:Uid="SignInSettingsPage_Header" Grid.Row="0" Grid.Column="1"
-                       Margin="0,10,0,5" Text="User Settings" Style="{StaticResource PageSubheaderTextStyle}"/>
+                       Margin="0,10,0,5" Text="Account Settings" Style="{StaticResource PageSubheaderTextStyle}"/>
 
-            <TextBlock x:Uid="SignInSettingsPage_TxtAccountInfo" Text="Schutz des Urheberrechts" Grid.Row="1" Grid.Column="1" Margin="0,0,0,20" Style="{StaticResource ItemTextStyle}"/>
-            <TextBlock x:Uid="SignInSettingsPage_TxtAcountDescription" Text="Schutz des Urheberrechts" Grid.Row="2" Grid.Column="1" Style="{StaticResource ItemTextStyle}"/>
+            <TextBlock x:Uid="SignInSettingsPage_TxtAccountInfo" Text="Due to copyright of the music..." Grid.Row="1" Grid.Column="1" Margin="0,0,0,20" Style="{StaticResource ItemTextStyle}"/>
+            <TextBlock x:Uid="SignInSettingsPage_TxtAcountDescription" Text="Login with your account" Grid.Row="2" Grid.Column="1" Style="{StaticResource ItemTextStyle}"/>
             <TextBox x:Uid="SignInSettingsPage_TxtUserName" AutomationProperties.LabeledBy="{Binding ElementName=TxtUserName}" InputScope="EmailSmtpAddress"
                      AutomationProperties.IsRequiredForForm="True"
                      Text="{Binding UserName, Mode=TwoWay}" Grid.Row="3" Grid.Column="1" Width="300"

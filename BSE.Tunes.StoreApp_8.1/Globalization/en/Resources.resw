@@ -219,7 +219,7 @@ Please choose a different name for your playlist!</value>
     <value>Results for "{0}"</value>
   </data>
   <data name="IDS_SignInSettingsRedirector_Header" xml:space="preserve">
-    <value>User Account Settings</value>
+    <value>Account Settings</value>
   </data>
   <data name="NewPlaylistDialog_LblNewPlaylist.Text" xml:space="preserve">
     <value>Name the new playlist</value>
