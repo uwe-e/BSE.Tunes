@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Package xmlns="http://schemas.microsoft.com/appx/2010/manifest">
-  <Identity Name="21447uwe.bse.BSEtunes" Publisher="CN=438A661D-E2DD-4C49-9A75-9143B493592A" Version="1.0.0.14" />
+  <Identity Name="21447uwe.bse.BSEtunes" Publisher="CN=438A661D-E2DD-4C49-9A75-9143B493592A" Version="1.0.0.15" />
   <Properties>
     <DisplayName>BSEtunes</DisplayName>
     <PublisherDisplayName>uwe.bse</PublisherDisplayName>

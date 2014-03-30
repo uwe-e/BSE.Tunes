@@ -22,7 +22,7 @@
     <SccProvider>
     </SccProvider>
     <PackageCertificateThumbprint>F3C4238490E2D280FF0489DB1D077BE28DE1AC4F</PackageCertificateThumbprint>
-    <AppxAutoIncrementPackageRevision>False</AppxAutoIncrementPackageRevision>
+    <AppxAutoIncrementPackageRevision>True</AppxAutoIncrementPackageRevision>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>

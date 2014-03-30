@@ -14,7 +14,10 @@
     <MinimumVisualStudioVersion>12</MinimumVisualStudioVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{BC8A1FFA-BEE3-4634-8014-F334798102B3};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
-    <PackageCertificateKeyFile>BSE.Tunes.StoreApp_8.1_TemporaryKey.pfx</PackageCertificateKeyFile>
+    <PackageCertificateKeyFile>BSE.Tunes.StoreApp_8.1_StoreKey.pfx</PackageCertificateKeyFile>
+    <AppxAutoIncrementPackageRevision>False</AppxAutoIncrementPackageRevision>
+    <AppxBundlePlatforms>neutral</AppxBundlePlatforms>
+    <PackageCertificateThumbprint>CB29475D3376954D4C2CB758143A587D508651FD</PackageCertificateThumbprint>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -261,6 +264,7 @@
     <AppxManifest Include="Package.appxmanifest">
       <SubType>Designer</SubType>
     </AppxManifest>
+    <None Include="BSE.Tunes.StoreApp_8.1_StoreKey.pfx" />
     <None Include="BSE.Tunes.StoreApp_8.1_TemporaryKey.pfx" />
     <PRIResource Include="Globalization\de\Resources.resw" />
     <PRIResource Include="Globalization\en\Resources.resw" />
@@ -272,11 +276,13 @@
     <Content Include="Assets\BSELogo150x150.png" />
     <Content Include="Assets\BSELogo220x140.png" />
     <Content Include="Assets\BSELogo30x30.png" />
+    <Content Include="Assets\BSELogo50x50.png" />
     <Content Include="Assets\BSELogo620x300.png" />
     <Content Include="Assets\Logo.scale-100.png" />
     <Content Include="Assets\SmallLogo.scale-100.png" />
     <Content Include="Assets\SplashScreen.scale-100.png" />
     <Content Include="Assets\StoreLogo.scale-100.png" />
+    <None Include="Package.StoreAssociation.xml" />
   </ItemGroup>
   <ItemGroup>
     <ApplicationDefinition Include="App.xaml">
