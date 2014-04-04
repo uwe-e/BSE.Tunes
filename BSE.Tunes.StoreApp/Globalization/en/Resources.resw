@@ -247,10 +247,10 @@ A registration can only be done by the operator of the server.</value>
   <data name="RandomPlayerUserControl_GroupHeader.Text" xml:space="preserve">
     <value>Playlists</value>
   </data>
-  <data name="SignInSettingsPage_ButtonCancel" xml:space="preserve">
+  <data name="SignInSettingsPage_ButtonCancel.Content" xml:space="preserve">
     <value>Cancel</value>
   </data>
-  <data name="SignInSettingsPage_ButtonSave" xml:space="preserve">
+  <data name="SignInSettingsPage_ButtonSave.Content" xml:space="preserve">
     <value>Save</value>
   </data>
   <data name="SignInSettingsPage_Header.Text" xml:space="preserve">

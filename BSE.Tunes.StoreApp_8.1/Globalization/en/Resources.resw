@@ -253,10 +253,10 @@ A registration can only be done by the operator of the server.</value>
   <data name="SearchUserControl_TxtSearch.PlaceholderText" xml:space="preserve">
     <value>Search</value>
   </data>
-  <data name="SignInSettingsPage_ButtonCancel" xml:space="preserve">
+  <data name="SignInSettingsPage_ButtonCancel.Content" xml:space="preserve">
     <value>Cancel</value>
   </data>
-  <data name="SignInSettingsPage_ButtonSave" xml:space="preserve">
+  <data name="SignInSettingsPage_ButtonSave.Content" xml:space="preserve">
     <value>Save</value>
   </data>
   <data name="SignInSettingsPage_Header.Text" xml:space="preserve">

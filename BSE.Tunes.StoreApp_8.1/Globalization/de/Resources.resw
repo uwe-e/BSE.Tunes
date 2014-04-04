@@ -253,10 +253,10 @@ Die Registrierung kann nur durch den Betreiber des Servers erfolgen.</value>
   <data name="SearchUserControl_TxtSearch.PlaceholderText" xml:space="preserve">
     <value>Suchen</value>
   </data>
-  <data name="SignInSettingsPage_ButtonCancel" xml:space="preserve">
+  <data name="SignInSettingsPage_ButtonCancel.Content" xml:space="preserve">
     <value>Abbrechen</value>
   </data>
-  <data name="SignInSettingsPage_ButtonSave" xml:space="preserve">
+  <data name="SignInSettingsPage_ButtonSave.Content" xml:space="preserve">
     <value>Speichern</value>
   </data>
   <data name="SignInSettingsPage_Header.Text" xml:space="preserve">
