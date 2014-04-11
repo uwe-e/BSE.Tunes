@@ -17,7 +17,7 @@
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
-        <view:ImagePreview Grid.RowSpan="2" Source="{Binding BackgroundCover, Converter={StaticResource ImageConverter}}" ImageOpacity="0.35"  Stretch="UniformToFill"/>
+        <view:ImagePreview Grid.RowSpan="2" Source="{Binding CoverSource}" ImageOpacity="0.35"  Stretch="UniformToFill"/>
 
         <Hub Grid.Row="2" Grid.RowSpan="2">
             <HubSection>

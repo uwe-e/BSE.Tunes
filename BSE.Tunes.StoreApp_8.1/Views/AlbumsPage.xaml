@@ -16,7 +16,7 @@
         <DataTemplate x:Key="Standard200x200ItemTemplate">
             <Grid HorizontalAlignment="Left" Width="200" Height="200">
                 <Border Background="{StaticResource ListViewItemPlaceholderBackgroundThemeBrush}">
-                    <Image Source="{Binding Path=Cover, Mode=OneWay, Converter={StaticResource ImageConverter}}" Stretch="UniformToFill" AutomationProperties.Name="{Binding Title}"/>
+                    <Image Source="{Binding Path=CoverSource}" Stretch="UniformToFill" AutomationProperties.Name="{Binding Title}"/>
                 </Border>
                 <StackPanel VerticalAlignment="Bottom" Background="{StaticResource ListViewItemOverlayBackgroundThemeBrush}">
                     <TextBlock Text="{Binding Title}" Foreground="{StaticResource ListViewItemOverlayForegroundThemeBrush}" Style="{StaticResource TitleTextStyle}" Height="22" Margin="15,0,15,0"/>

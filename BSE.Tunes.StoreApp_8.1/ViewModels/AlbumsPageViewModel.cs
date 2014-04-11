@@ -166,7 +166,7 @@ namespace BSE.Tunes.StoreApp.ViewModels
                         {
                             foreach (var album in albums)
                             {
-                                this.Albums.Add(new AlbumViewModel(album));
+                                this.Albums.Add(new AlbumViewModel(this.m_dataService ,album));
                             }
                             pageNumber += pageSize;
                         }

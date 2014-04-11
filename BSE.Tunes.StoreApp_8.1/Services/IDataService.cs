@@ -29,6 +29,7 @@ namespace BSE.Tunes.StoreApp.Services
         Task<ObservableCollection<Playlist>> GetPlaylistsByUserName(string userName);
         Task<ObservableCollection<Playlist>> GetPlaylistsByUserName(string userName, int limit);
         Task<Playlist> GetPlaylistByIdWithNumberOfEntries(int playlistId, string userName);
+		Task<ObservableCollection<int>> GetTrackIdsByFilters(Filter filter);
         Task<ObservableCollection<Track>> GetTracksByFilters(Filter filter);
         Task<Playlist> InsertPlaylist(Playlist playlist);
         Task<Playlist> AppendToPlaylist(Playlist playlist);
@@ -38,5 +39,6 @@ namespace BSE.Tunes.StoreApp.Services
 
         Task<Windows.Storage.Streams.InMemoryRandomAccessStream> GetAudioStream(Guid guid);
         Task<System.IO.Stream> GetAudioFile(Guid guid);
+		Uri GetImage(Guid imageId, bool asThumbnail = false );
     }
 }

@@ -73,11 +73,15 @@ namespace BSE.Tunes.StoreApp.ViewModels
 						if (iIndex == 0)
 						{
 							dataItem = new BigDataItemViewModel();
+							dataItem.ImageSource = this.m_dataService.GetImage(album.AlbumId);
+						}
+						else
+						{
+							dataItem.ImageSource = this.m_dataService.GetImage(album.AlbumId, true);
 						}
 						iIndex++;
 						dataItem.Title = album.Title;
 						dataItem.Subtitle = album.Artist.Name;
-						dataItem.Image = album.Cover;
 						dataItem.Data = album;
 						this.DataGroup.Items.Add(dataItem);
 					}

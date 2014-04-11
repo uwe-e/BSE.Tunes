@@ -22,5 +22,7 @@ namespace BSE.Tunes.Data
         public Genre Genre { get; set; }
         [DataMember]
         public Track[] Tracks { get; set; }
+		[DataMember]
+		public Guid AlbumId { get; 	set;}
     }
 }

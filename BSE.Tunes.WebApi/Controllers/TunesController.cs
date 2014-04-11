@@ -71,7 +71,12 @@ namespace BSE.Tunes.WebApi.Controllers
         {
             return this.m_tunesService.GetTrackById(trackId);
         }
-        
+		[HttpPost]
+		[Route("{action}")]
+		public ICollection<int> GetTrackIdsByFilters([FromBody]Filter filter)
+		{
+			return this.m_tunesService.GetTrackIdsByFilters(filter);
+		}
         [HttpPost]
         [Route("{action}")]
         public ICollection<Track> GetTracksByFilters([FromBody]Filter filter)

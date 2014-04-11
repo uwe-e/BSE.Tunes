@@ -9,13 +9,15 @@ using Windows.Storage.Streams;
 using Windows.UI.Xaml.Media;
 using System.Runtime.InteropServices.WindowsRuntime;
 using Windows.UI.Xaml.Media.Imaging;
+using BSE.Tunes.StoreApp.Services;
 
 namespace BSE.Tunes.StoreApp.ViewModels
 {
     public class AlbumViewModel : ViewModelBase
     {
         #region FieldsPrivate
-        #endregion
+		private IDataService m_dataService;
+		#endregion
 
         #region Properties
         public string Title
@@ -33,14 +35,13 @@ namespace BSE.Tunes.StoreApp.ViewModels
                 return this.Album.Artist;
             }
         }
-
-        public byte[] Cover
-        {
-            get
-            {
-                return this.Album.Cover;
-            }
-        }
+		public Uri CoverSource
+		{
+			get
+			{
+				return this.m_dataService != null ? this.m_dataService.GetImage(this.Album.AlbumId, true) : null;
+			}
+		}
         public Genre Genre
         {
             get
@@ -70,9 +71,10 @@ namespace BSE.Tunes.StoreApp.ViewModels
         #endregion
 
         #region MethodsPublic
-        public AlbumViewModel(Album album)
+        public AlbumViewModel(IDataService dataService, Album album)
         {
-            this.Album = album;
+			this.m_dataService = dataService;
+			this.Album = album;
         }
         #endregion
     }

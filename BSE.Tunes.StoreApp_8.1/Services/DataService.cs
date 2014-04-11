@@ -104,7 +104,11 @@ namespace BSE.Tunes.StoreApp.Services
             string strUrl = string.Format("{0}/api/tunes/GetTrackById/{1}", this.ServiceUrl, trackId);
             return await GetHttpResponse<Track>(new Uri(strUrl));
         }
-
+		public async Task<ObservableCollection<int>> GetTrackIdsByFilters(Filter filter)
+		{
+			string strUrl = string.Format("{0}/api/tunes/GetTrackIdsByFilters", this.ServiceUrl);
+			return await GetHttpResponseFromPost<ObservableCollection<int>, Filter>(new Uri(strUrl), filter);
+		}
         public async Task<ObservableCollection<Track>> GetTracksByFilters(Filter filter)
         {
             string strUrl = string.Format("{0}/api/tunes/GetTracksByFilters", this.ServiceUrl);
@@ -208,6 +212,16 @@ namespace BSE.Tunes.StoreApp.Services
             }
         }
         
+		public Uri GetImage(Guid imageId, bool asThumbnail = false )
+		{
+			string strUrl = string.Format("{0}/api/files/getimage/{1}/", this.ServiceUrl, imageId.ToString());
+			if (asThumbnail)
+			{
+				strUrl = string.Format("{0}/api/files/getimage/{1}/true", this.ServiceUrl, imageId.ToString());
+			}
+			return new Uri(strUrl);
+		}
+
         #endregion
 
         #region MethodsPrivate

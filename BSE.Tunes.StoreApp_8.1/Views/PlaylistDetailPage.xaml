@@ -32,13 +32,18 @@
             <RowDefinition Height="*"/>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
-
+        <!--<controls:WriteableImage Grid.RowSpan="3" UriSource="{Binding Uris}" ImageOpacity="0.35" Stretch="UniformToFill"/>-->
         <Grid Grid.Row="1">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="660"/>
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
             <Grid Grid.Column="0">
+                <StackPanel>
+                    <!--<Image Source="{Binding CoverSource}" Width="500" Margin="10" Stretch="UniformToFill"/>-->
+                    <!--<controls:WriteableImage Width="500" UriSource="{Binding Uris}"/>-->
+                    <controls:WriteableImage Width="500" UriSource="{Binding Uris}"/>
+                </StackPanel>
             </Grid>
             <ListView Grid.Column="1" ItemsSource="{Binding Entries}" SelectionMode="Extended"
                       AllowDrop="True" CanDragItems="True" CanReorderItems="True"

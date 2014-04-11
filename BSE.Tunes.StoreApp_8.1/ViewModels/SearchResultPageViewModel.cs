@@ -119,7 +119,7 @@ namespace BSE.Tunes.StoreApp.ViewModels
                                 {
                                     DataItemViewModel dataItem = new DataItemViewModel();
                                     dataItem.Title = album.Title;
-                                    dataItem.Image = album.Thumbnail;
+									dataItem.ImageSource = this.m_dataService.GetImage(album.AlbumId, true);
                                     dataItem.Subtitle = album.Artist.Name;
                                     dataItem.Data = album;
                                     albumGroup.Items.Add(dataItem);
@@ -145,7 +145,7 @@ namespace BSE.Tunes.StoreApp.ViewModels
                                 {
                                     DataItemViewModel dataItem = new DataItemViewModel();
                                     dataItem.Title = track.Name;
-                                    dataItem.Image = track.Album.Thumbnail;
+									dataItem.ImageSource = this.m_dataService.GetImage(track.Album.AlbumId, true);
                                     dataItem.Subtitle = track.Album.Artist.Name;
                                     dataItem.Data = track;
                                     trackGroup.Items.Add(dataItem);

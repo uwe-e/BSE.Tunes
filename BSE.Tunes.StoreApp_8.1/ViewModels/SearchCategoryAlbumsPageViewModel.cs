@@ -113,7 +113,7 @@ namespace BSE.Tunes.StoreApp.ViewModels
                                     {
                                         Title = album.Title,
                                         Subtitle = album.Artist.Name,
-                                        Image = album.Thumbnail,
+										ImageSource = this.m_dataService.GetImage(album.AlbumId, true),
                                         Data = album
                                     });
                                 }

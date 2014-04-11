@@ -19,6 +19,6 @@ namespace BSE.Tunes.Entities
         public string ArtistName { get; set; }
         public int TrackId { get; set; }
         public string Track { get; set; }
-        public byte[] Thumbnail { get; set; }
+        public string Guid { get; set; }
     }
 }

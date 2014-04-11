@@ -36,7 +36,7 @@
             <RowDefinition Height="*"/>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
-        <views:ImagePreview Grid.RowSpan="3" Source="{Binding Album.Cover, Converter={StaticResource ImageConverter}}" ImageOpacity="0.35" Stretch="UniformToFill"/>
+        <views:ImagePreview Grid.RowSpan="3" Source="{Binding CoverSource}" ImageOpacity="0.35" Stretch="UniformToFill"/>
         <Grid Grid.Row="1">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="660"/>
@@ -44,7 +44,7 @@
             </Grid.ColumnDefinitions>
             <Grid Grid.Column="0">
                 <StackPanel>
-                    <Image Source="{Binding Album.Cover, Mode=OneWay, Converter={StaticResource ImageConverter}}" Width="500" Margin="10" Stretch="UniformToFill"/>
+                    <Image Source="{Binding CoverSource}" Width="500" Margin="10" Stretch="UniformToFill"/>
                 </StackPanel>
             </Grid>
             <ListView Grid.Column="1" ItemsSource="{Binding Album.Tracks}" SelectionMode="Extended"

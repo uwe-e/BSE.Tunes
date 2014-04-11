@@ -14,7 +14,7 @@ namespace BSE.Tunes.StoreApp.ViewModels
         private string m_title;
         private string m_subTitle;
         private string m_description;
-        private byte[] m_image;
+		private Uri m_imageSource;
         private object m_data;
         #endregion
 
@@ -55,18 +55,18 @@ namespace BSE.Tunes.StoreApp.ViewModels
                 RaisePropertyChanged("Description");
             }
         }
-        public byte[] Image
-        {
-            get
-            {
-                return this.m_image;
-            }
-            set
-            {
-                this.m_image = value;
-                RaisePropertyChanged("Image");
-            }
-        }
+		public Uri ImageSource
+		{
+			get
+			{
+				return this.m_imageSource;
+			}
+			set
+			{
+				this.m_imageSource = value;
+				RaisePropertyChanged("ImageSource");
+			}
+		}
         public object Data
         {
             get
@@ -81,33 +81,4 @@ namespace BSE.Tunes.StoreApp.ViewModels
         }
         #endregion
     }
-
-    //public class Data<T>
-    //{
-    //    private T _value;
-
-    //    public T Value
-    //    {
-    //        get
-    //        {
-    //            // insert desired logic here
-    //            return _value;
-    //        }
-    //        set
-    //        {
-    //            // insert desired logic here
-    //            _value = value;
-    //        }
-    //    }
-
-    //    public static implicit operator T(Data<T> value)
-    //    {
-    //        return value.Value;
-    //    }
-
-    //    public static implicit operator Data<T>(T value)
-    //    {
-    //        return new Data<T> { Value = value };
-    //    }
-    //}
 }
