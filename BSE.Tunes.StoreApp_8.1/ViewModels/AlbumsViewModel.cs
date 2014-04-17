@@ -35,7 +35,15 @@ namespace BSE.Tunes.StoreApp.ViewModels
                 return this.Album.Artist;
             }
         }
-		public Uri CoverSource
+		public string Subtitle
+		{
+			get
+			{
+				return this.Artist.Name;
+			}
+		}
+		//public Uri CoverSource
+		public Uri ImageSource
 		{
 			get
 			{

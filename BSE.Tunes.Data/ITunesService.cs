@@ -39,6 +39,8 @@ namespace BSE.Tunes.Data
         [OperationContract]
         void UpdateHistory(History history);
         [OperationContract]
+		ICollection<Guid> GetPlaylistImageIdsById(int playlistId, string userName, int limit);
+		[OperationContract]
         Playlist GetPlaylistById(int playlistId, string userName);
         [OperationContract(Name = "GetPlaylistsByUserName")]
         Playlist[] GetPlaylistsByUserName(string userName);

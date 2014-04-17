@@ -45,6 +45,11 @@
             <Grid Grid.Column="0">
                 <StackPanel>
                     <Image Source="{Binding CoverSource}" Width="500" Margin="10" Stretch="UniformToFill"/>
+                    <!--<Image Stretch="UniformToFill" Margin="10">
+                        <Image.Source>
+                            <BitmapImage UriSource="{Binding CoverSource}" DecodePixelWidth="200"/>
+                        </Image.Source>
+                    </Image>-->
                 </StackPanel>
             </Grid>
             <ListView Grid.Column="1" ItemsSource="{Binding Album.Tracks}" SelectionMode="Extended"

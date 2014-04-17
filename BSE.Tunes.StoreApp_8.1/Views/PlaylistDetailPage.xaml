@@ -42,7 +42,7 @@
                 <StackPanel>
                     <!--<Image Source="{Binding CoverSource}" Width="500" Margin="10" Stretch="UniformToFill"/>-->
                     <!--<controls:WriteableImage Width="500" UriSource="{Binding Uris}"/>-->
-                    <controls:WriteableImage Width="500" UriSource="{Binding Uris}"/>
+                    <controls:WriteableImage Width="500" UriSource="{Binding Uris}" ImageId="{Binding Playlist.Guid}"/>
                 </StackPanel>
             </Grid>
             <ListView Grid.Column="1" ItemsSource="{Binding Entries}" SelectionMode="Extended"

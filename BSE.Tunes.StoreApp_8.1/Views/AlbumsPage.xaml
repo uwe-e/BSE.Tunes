@@ -12,21 +12,6 @@
     mc:Ignorable="d"
     DataContext="{Binding AlbumsPageViewModel, Source={StaticResource Locator}}">
 
-    <common:LayoutAwarePage.Resources>
-        <DataTemplate x:Key="Standard200x200ItemTemplate">
-            <Grid HorizontalAlignment="Left" Width="200" Height="200">
-                <Border Background="{StaticResource ListViewItemPlaceholderBackgroundThemeBrush}">
-                    <Image Source="{Binding Path=CoverSource}" Stretch="UniformToFill" AutomationProperties.Name="{Binding Title}"/>
-                </Border>
-                <StackPanel VerticalAlignment="Bottom" Background="{StaticResource ListViewItemOverlayBackgroundThemeBrush}">
-                    <TextBlock Text="{Binding Title}" Foreground="{StaticResource ListViewItemOverlayForegroundThemeBrush}" Style="{StaticResource TitleTextStyle}" Height="22" Margin="15,0,15,0"/>
-                    <TextBlock Text="{Binding Artist.Name}" Foreground="{StaticResource ListViewItemOverlaySecondaryForegroundThemeBrush}" Style="{StaticResource CaptionTextStyle}" TextWrapping="NoWrap" Margin="15,0,15,10"/>
-                </StackPanel>
-            </Grid>
-        </DataTemplate>
-
-        </common:LayoutAwarePage.Resources>
-
     <Page.TopAppBar>
         <AppBar x:Uid="TopAppBar">
             <views:TopAppBarUserControl/>

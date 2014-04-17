@@ -111,7 +111,13 @@ namespace BSE.Tunes.WebApi.Controllers
             this.m_tunesService.UpdateHistory(history);
         }
 
-        [Route("{action}/{playlistId}/{username}/")]
+		[Route("{action}/{playlistId}/{username}/{limit}")]
+		public ICollection<Guid> GetPlaylistImageIdsById(int playlistId, string userName, int limit)
+		{
+			return this.m_tunesService.GetPlaylistImageIdsById(playlistId, userName, limit);
+		}
+        
+		[Route("{action}/{playlistId}/{username}/")]
         public Playlist GetPlaylistById(int playlistId, string userName)
         {
             return this.m_tunesService.GetPlaylistById(playlistId, userName);

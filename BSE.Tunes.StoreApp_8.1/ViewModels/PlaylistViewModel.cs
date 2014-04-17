@@ -4,6 +4,7 @@ using BSE.Tunes.StoreApp.Services;
 using GalaSoft.MvvmLight.Messaging;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Globalization;
 using System.Linq;
 using System.Text;
@@ -19,6 +20,7 @@ namespace BSE.Tunes.StoreApp.ViewModels
         private IAccountService m_accountService;
         private Playlist m_playlist;
         private int m_playlistId;
+		private ObservableCollection<Uri> m_uris;
         private string m_numbersOfEntries;
         #endregion
 
@@ -56,6 +58,18 @@ namespace BSE.Tunes.StoreApp.ViewModels
                 RaisePropertyChanged("Playlist");
             }
         }
+		public ObservableCollection<Uri> UriSource
+		{
+			get
+			{
+				return this.m_uris;
+			}
+			set
+			{
+				this.m_uris = value;
+				RaisePropertyChanged("UriSource");
+			}
+		}
         #endregion
 
         #region MethodsPublic
@@ -78,25 +92,44 @@ namespace BSE.Tunes.StoreApp.ViewModels
         #endregion
 
         #region MethodsPrivate
-        private void LoadData()
-        {
-            TunesUser user = this.m_accountService.User;
-            if (user != null && !string.IsNullOrEmpty(user.UserName))
-            {
-                try
-                {
-                    var task = Task.Run(async () => await this.m_dataService.GetPlaylistByIdWithNumberOfEntries(this.PlaylistId, user.UserName));
-                    task.Wait();
 
-                    this.Playlist = task.Result;
-                    this.FormatNumberOfEntriesString();
-                }
-                catch (Exception ex)
-                {
+		private async void LoadData()
+		{
+			TunesUser user = this.m_accountService.User;
+			if (user != null && !string.IsNullOrEmpty(user.UserName))
+			{
+				this.Playlist = await this.m_dataService.GetPlaylistByIdWithNumberOfEntries(this.PlaylistId, user.UserName);
+				this.FormatNumberOfEntriesString();
 
-                }
-            }
-        }
+				System.Collections.ObjectModel.ObservableCollection<Guid> albumIds = await this.m_dataService.GetPlaylistImageIdsById(this.PlaylistId, user.UserName, 4);
+				if (albumIds != null)
+				{
+					
+					this.UriSource = new ObservableCollection<Uri>(albumIds.Select(id => this.m_dataService.GetImage(id)));
+					//var tt = albumIds.Select(id => this.m_dataService.GetImage(id));
+				}
+			}
+		}
+		//private void LoadData()
+		//{
+		//	TunesUser user = this.m_accountService.User;
+		//	if (user != null && !string.IsNullOrEmpty(user.UserName))
+		//	{
+		//		try
+		//		{
+		//			var task = Task.Run(async () => await this.m_dataService.GetPlaylistByIdWithNumberOfEntries(this.PlaylistId, user.UserName));
+		//			task.Wait();
+
+		//			this.Playlist = task.Result;
+		//			this.FormatNumberOfEntriesString();
+
+		//		}
+		//		catch (Exception ex)
+		//		{
+
+		//		}
+		//	}
+		//}
         private void FormatNumberOfEntriesString()
         {
             int numberOfEntries = 0;

@@ -20,12 +20,13 @@ namespace BSE.Tunes.StoreApp.Services
         Task<ObservableCollection<Album>> GetAlbums(Query query);
         Task<ObservableCollection<Album>> GetNewestAlbums(int limit);
         Task<int> GetNumberOfPlayableAlbums();
-        Task<Album> GetAlbumById(int albumId);
+		Task<Album> GetAlbumById(int albumId);
         Task<Track> GetTrackById(int trackId);
         Task<SearchResult> GetSearchResults(Query query);
         Task<ObservableCollection<Album>> GetAlbumSearchResults(Query query);
         Task<ObservableCollection<Track>> GetTrackSearchResults(Query query);
-        Task<Playlist> GetPlaylistById(int playlistId, string userName);
+        Task<ObservableCollection<Guid>> GetPlaylistImageIdsById(int playlistId, string userName, int limit);
+		Task<Playlist> GetPlaylistById(int playlistId, string userName);
         Task<ObservableCollection<Playlist>> GetPlaylistsByUserName(string userName);
         Task<ObservableCollection<Playlist>> GetPlaylistsByUserName(string userName, int limit);
         Task<Playlist> GetPlaylistByIdWithNumberOfEntries(int playlistId, string userName);

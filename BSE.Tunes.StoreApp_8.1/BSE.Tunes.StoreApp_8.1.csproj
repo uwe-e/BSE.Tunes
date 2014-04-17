@@ -137,7 +137,10 @@
     <Compile Include="Extensions\HttpContentExtensions.cs" />
     <Compile Include="Extensions\HttpResponseMessageExtensions.cs" />
     <Compile Include="Extensions\ObjectExtensions.cs" />
+    <Compile Include="Extensions\ScaledImageFile.cs" />
     <Compile Include="Extensions\StreamExtensions.cs" />
+    <Compile Include="Extensions\WriteableBitmapLoadExtensions.cs" />
+    <Compile Include="Extensions\WriteableBitmapSaveExtensions.cs" />
     <Compile Include="Interfaces\INavigationAware.cs" />
     <Compile Include="Managers\IPlayerManager.cs" />
     <Compile Include="Managers\PlayerManager.cs" />

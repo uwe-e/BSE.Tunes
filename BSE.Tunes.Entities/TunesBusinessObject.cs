@@ -842,13 +842,76 @@ namespace BSE.Tunes.Entities
                 }
             }
         }
+		public ICollection<Guid> GetPlaylistImageIdsById(int playlistId, string userName, int limit)
+		{
+			Collection<Guid> imageIds = null;
+			if (string.IsNullOrEmpty(userName) == false)
+			{
+				StringBuilder stringBuilder = new StringBuilder();
+				stringBuilder.Append("SELECT a.Guid, COUNT(a.Guid) AS Number FROM tunesEntities.playlist AS p");
+				stringBuilder.Append(" LEFT JOIN tunesEntities.playlistentries AS pe ON p.ListId = pe.PlaylistId");
+				stringBuilder.Append(" LEFT JOIN tunesEntities.lieder AS t ON pe.LiedId = t.LiedID");
+				stringBuilder.Append(" LEFT JOIN tunesEntities.titel AS a ON t.TitelID = a.TitelID");
+				stringBuilder.Append(" WHERE p.ListId = @playlistId");
+				stringBuilder.Append(" AND p.User = @userName");
+				stringBuilder.Append(" GROUP BY a.Guid ");
+				stringBuilder.Append(" ORDER BY Number");
+				stringBuilder.Append(" LIMIT @limit ");
+
+				string sql = stringBuilder.ToString();
+				using (System.Data.EntityClient.EntityConnection entityConnection =
+				   new System.Data.EntityClient.EntityConnection(this.ConnectionString))
+				{
+					try
+					{
+						entityConnection.Open();
+						using (EntityCommand entityCommand = entityConnection.CreateCommand())
+						{
+							EntityParameter idParam = new EntityParameter();
+							idParam.ParameterName = "playlistId";
+							idParam.Value = playlistId;
+							entityCommand.Parameters.Add(idParam);
+
+							EntityParameter user = new EntityParameter();
+							user.ParameterName = "userName";
+							user.Value = userName;
+							entityCommand.Parameters.Add(user);
+
+							EntityParameter limitParam = new EntityParameter();
+							limitParam.ParameterName = "limit";
+							limitParam.Value = limit;
+							entityCommand.Parameters.Add(limitParam);
+
+							entityCommand.CommandText = sql;
+							// Execute the command.
+							using (EntityDataReader dataReader = entityCommand.ExecuteReader(System.Data.CommandBehavior.SequentialAccess))
+							{
+								while (dataReader.Read())
+								{
+									if (imageIds == null)
+									{
+										imageIds = new Collection<Guid>();
+									}
+									imageIds.Add(dataReader.GetGuid("Guid", false, Guid.Empty));
+								}
+							}
+						}
+					}
+					finally
+					{
+						entityConnection.Close();
+					}
+				}
+			}
+			return imageIds;
+		}
         public Playlist GetPlaylistById(int playlistId, string userName)
         {
             Playlist playlist = null;
             if (string.IsNullOrEmpty(userName) == false)
             {
                 StringBuilder stringBuilder = new StringBuilder();
-                stringBuilder.Append("SELECT p.ListId, p.ListName, p.User, pe.EntryId, pe.sortorder, t.LiedID, t.Lied, t.Dauer, a.Guid as AlbumId, i.Interpret FROM tunesEntities.playlist AS p");
+                stringBuilder.Append("SELECT p.ListId, p.ListName, p.User, p.Guid, pe.EntryId, pe.sortorder, pe.Guid as EntryGuid, t.LiedID, t.Lied, t.Dauer, a.Guid as AlbumId, i.Interpret FROM tunesEntities.playlist AS p");
                 stringBuilder.Append(" LEFT JOIN tunesEntities.playlistentries AS pe ON p.ListId = pe.PlaylistId");
                 stringBuilder.Append(" LEFT JOIN tunesEntities.lieder AS t ON pe.LiedId = t.LiedID");
                 stringBuilder.Append(" LEFT JOIN tunesEntities.titel AS a ON t.TitelID = a.TitelID");
@@ -888,7 +951,8 @@ namespace BSE.Tunes.Entities
                                         {
                                             Id = dataReader.GetInt32("ListId", false, 0),
                                             Name = dataReader.GetString("ListName", false, string.Empty),
-                                            UserName = dataReader.GetString("User", false, string.Empty)
+                                            UserName = dataReader.GetString("User", false, string.Empty),
+											Guid = dataReader.GetGuid("Guid", false, Guid.Empty),
                                         };
                                     }
                                     int entryId = dataReader.GetInt32("EntryId", true, 0);
@@ -898,7 +962,8 @@ namespace BSE.Tunes.Entities
                                         {
                                             Id = entryId,
                                             SortOrder = dataReader.GetInt32("sortorder", true, 0),
-                                            TrackId = dataReader.GetInt32("LiedID", true, 0),
+											Guid = dataReader.GetGuid("EntryGuid", true, Guid.Empty),
+											TrackId = dataReader.GetInt32("LiedID", true, 0),
                                             Name = dataReader.GetString("Lied", true, string.Empty),
                                             Duration = dataReader.GetTimeSpan("Dauer", true, TimeSpan.MinValue),
 											AlbumId = dataReader.GetGuid("AlbumId", false, Guid.Empty),
@@ -1004,11 +1069,12 @@ namespace BSE.Tunes.Entities
             if (string.IsNullOrEmpty(userName) == false)
             {
                 StringBuilder stringBuilder = new StringBuilder();
-                stringBuilder.Append("SELECT p.ListId, p.ListName, COUNT(pe.PlaylistId) as Number  FROM tunesEntities.playlist AS p");
+                stringBuilder.Append("SELECT p.ListId, p.ListName, p.guid, COUNT(pe.PlaylistId) as Number ");
+				stringBuilder.Append(" FROM tunesEntities.playlist AS p");
                 stringBuilder.Append(" LEFT JOIN tunesEntities.playlistentries AS pe ON p.ListId = pe.PlaylistId");
                 stringBuilder.Append(" WHERE p.ListId = @playlistId");
                 stringBuilder.Append(" AND p.User = @userName");
-                stringBuilder.Append(" GROUP BY p.listid, p.ListName");
+				stringBuilder.Append(" GROUP BY p.listid, p.ListName, p.guid");
 
                 string sql = stringBuilder.ToString();
                 using (System.Data.EntityClient.EntityConnection entityConnection =
@@ -1039,12 +1105,16 @@ namespace BSE.Tunes.Entities
                                     {
                                         Id = dataReader.GetInt32("ListId", false, 0),
                                         Name = dataReader.GetString("ListName", false, string.Empty),
-                                        NumberEntries = dataReader.GetInt32("Number", false, 0)
+										Guid = dataReader.GetGuid("guid", false, Guid.Empty),
+										NumberEntries = dataReader.GetInt32("Number", false, 0)
                                     };
                                 }
                             }
                         }
                     }
+						catch(Exception ex)
+					{
+					}
                     finally
                     {
                         entityConnection.Close();

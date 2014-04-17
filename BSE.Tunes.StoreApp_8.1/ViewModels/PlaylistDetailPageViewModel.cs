@@ -188,7 +188,7 @@ namespace BSE.Tunes.StoreApp.ViewModels
                         this.SelectedEntries.CollectionChanged += OnSelectedEntryCollectionChanged;
                         if (this.Playlist != null && this.Playlist.Entries != null)
                         {
-                            foreach (var entry in this.Playlist.Entries.OrderBy(pe => pe.SortOrder))
+							foreach (var entry in this.Playlist.Entries.OrderBy(pe => pe.SortOrder))
                             {
                                 if (entry != null)
                                 {
