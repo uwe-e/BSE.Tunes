@@ -53,8 +53,7 @@
                         <ColumnDefinition Width="355"/>
                         <ColumnDefinition Width="345"/>
                     </Grid.ColumnDefinitions>
-                    <!--<Image Height="335" Grid.Column="0" HorizontalAlignment="Left" behaviours:ImageExtensions.FadeIn="True" Source="{Binding Cover, Converter={StaticResource ImageConverter}}" Stretch="Uniform" />-->
-                    <controls:CrossfadingImage Height="335" Grid.Column="0" HorizontalAlignment="Left" Source="{Binding Cover, Converter={StaticResource ImageConverter}}" Stretch="Uniform" Command="{Binding SelectCommand}"/>
+                    <controls:CrossfadingImage Height="335" Grid.Column="0" HorizontalAlignment="Left" Source="{Binding CoverSource}" Stretch="Uniform" Command="{Binding SelectCommand}"/>
                     <StackPanel Grid.Column="1">
                         <TextBlock Margin="2"
                                Text="{Binding CurrentTitle}"

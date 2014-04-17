@@ -254,7 +254,7 @@
           <Property Type="String" Name="ArtistName" Nullable="false" />
           <Property Type="Int32" Name="TrackId" Nullable="false" />
           <Property Type="String" Name="Track" Nullable="false" />
-          <Property Type="Binary" Name="Thumbnail" Nullable="true" />
+          <Property Type="String" Name="Guid" Nullable="false" />
         </ComplexType>
       </Schema>
     </edmx:ConceptualModels>

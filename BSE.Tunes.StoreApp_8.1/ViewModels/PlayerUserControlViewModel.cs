@@ -42,8 +42,8 @@ namespace BSE.Tunes.StoreApp.ViewModels
         private string m_currentTitle;
         private string m_currentProgressTime;
         private string m_currentTrackDuration;
-        private DispatcherTimer m_progressTimer;
-        private byte[] m_cover;
+		private Uri m_coverSource;
+		private DispatcherTimer m_progressTimer;
         #endregion
 
         #region Properties
@@ -142,19 +142,19 @@ namespace BSE.Tunes.StoreApp.ViewModels
                 RaisePropertyChanged("StepFrequency");
             }
         }
-        public byte[] Cover
-        {
-            get
-            {
-                return this.m_cover;
-            }
-            set
-            {
-                byte[] oldValue = this.m_cover;
-                this.m_cover = value;
-                RaisePropertyChanged<byte[]>(() => this.Cover, oldValue, value, true);
-            }
-        }
+		public Uri CoverSource
+		{
+			get
+			{
+				return this.m_coverSource;
+			}
+			set
+			{
+				Uri oldValue = this.m_coverSource;
+				this.m_coverSource = value;
+				RaisePropertyChanged<Uri>(() => this.CoverSource, oldValue, value, true);
+			}
+		}
         public string CurrentTitle
         {
             get
@@ -343,7 +343,8 @@ namespace BSE.Tunes.StoreApp.ViewModels
                 this.CurrentTrack = track;
                 this.CurrentTitle = track.Name;
                 this.CurrentArtist = track.Album.Artist.Name;
-                this.Cover = track.Album.Cover;
+                //this.Cover = track.Album.Cover;
+				this.CoverSource = this.DataService.GetImage(track.Album.AlbumId);
             }
         }
         private void OnMediaOpened()
@@ -355,18 +356,12 @@ namespace BSE.Tunes.StoreApp.ViewModels
             this.CurrentTrackDuration = this.CurrentTrack.Duration.ToString();
             this.CurrentProgressTime = TimeSpan.FromMinutes(0).ToString();
 
-            byte[] cover = this.CurrentTrack.Album.Cover;
-            if (cover == null)
-            {
-                this.Cover = cover;
-            }
-            else
-            {
-                if (cover.SequenceEqualTo<byte>(this.Cover) == false)
-                {
-                    this.Cover = this.CurrentTrack.Album.Cover;
-                }
-            }
+			Uri coverSource = this.DataService.GetImage(this.CurrentTrack.Album.AlbumId);
+			if (coverSource != null && !coverSource.Equals(this.CoverSource))
+			{
+				this.CoverSource = coverSource;
+			}
+
             this.ProgressMaximumValue = this.m_playerManager.Duration.TotalSeconds;
             this.StepFrequency = this.SliderFrequency(this.m_playerManager.Duration);
 

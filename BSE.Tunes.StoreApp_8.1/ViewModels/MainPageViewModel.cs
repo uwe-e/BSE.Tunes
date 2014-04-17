@@ -16,33 +16,32 @@ namespace BSE.Tunes.StoreApp.ViewModels
     {
         #region FieldsPrivate
         private IDataService m_dataService;
-        private byte[] m_backgroundCover;
+		private Uri m_coverSource;
         #endregion
 
         #region Properties
-        public byte[] BackgroundCover
-        {
-            get
-            {
-                return this.m_backgroundCover;
-            }
-            set
-            {
-                this.m_backgroundCover = value;
-                RaisePropertyChanged("BackgroundCover");
-            }
-        }
+		public Uri CoverSource
+		{
+			get
+			{
+				return this.m_coverSource;
+			}
+			set
+			{
+				this.m_coverSource = value;
+				RaisePropertyChanged("CoverSource");
+			}
+		}
         #endregion
 
         #region MethodsPublic
         public MainPageViewModel(IDataService dataService)
         {
             this.m_dataService = dataService;
-
-            GalaSoft.MvvmLight.Messaging.Messenger.Default.Register<GalaSoft.MvvmLight.Messaging.PropertyChangedMessage<byte[]>>(this, true, action =>
-                {
-                    this.BackgroundCover = action.NewValue;
-                });
+			GalaSoft.MvvmLight.Messaging.Messenger.Default.Register<GalaSoft.MvvmLight.Messaging.PropertyChangedMessage<Uri>>(this, true, action =>
+			{
+				this.CoverSource = action.NewValue;
+			});
         }
         #endregion
     }

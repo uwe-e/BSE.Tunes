@@ -11,7 +11,8 @@ namespace BSE.Tunes.Data
     {
         [OperationContract]
         bool IsHostAccessible();
-        [OperationContract]
+		CoverImage GetImage(Guid imageId, bool asThumbnail = false);
+		[OperationContract]
         string GetAudioFileNameByGuid(Guid guid);
         [OperationContract]
         Album GetAlbumById(int albumId);
@@ -26,25 +27,20 @@ namespace BSE.Tunes.Data
         [OperationContract]
         Track GetTrackById(int trackId);
         [OperationContract]
+		ICollection<int> GetTrackIdsByFilters(Filter filter);
+		[OperationContract]
         ICollection<Track> GetTracksByFilters(Filter filter);
         [OperationContract]
         SearchResult GetSearchResults(Query query);
         [OperationContract]
-        [Obsolete("use method GetSearchResults(query) instead!")]
-        SearchResult GetSearchResults(string queryString, int pageIndex, int pageSize);
-        [OperationContract]
         Album[] GetAlbumSearchResults(Query query);
-        [OperationContract]
-        [Obsolete("use method GetAlbumSearchResults(query) instead!")]
-        Album[] GetAlbumSearchResults(string queryString, int pageIndex, int pageSize);
         [OperationContract]
         Track[] GetTrackSearchResults(Query query);
         [OperationContract]
-        [Obsolete("use method GetTrackSearchResults(query) instead!")]
-        Track[] GetTrackSearchResults(string queryString, int pageIndex, int pageSize);
-        [OperationContract]
         void UpdateHistory(History history);
         [OperationContract]
+		ICollection<Guid> GetPlaylistImageIdsById(int playlistId, string userName, int limit);
+		[OperationContract]
         Playlist GetPlaylistById(int playlistId, string userName);
         [OperationContract(Name = "GetPlaylistsByUserName")]
         Playlist[] GetPlaylistsByUserName(string userName);

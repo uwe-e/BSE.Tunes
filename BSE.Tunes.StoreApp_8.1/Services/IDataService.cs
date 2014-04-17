@@ -20,15 +20,17 @@ namespace BSE.Tunes.StoreApp.Services
         Task<ObservableCollection<Album>> GetAlbums(Query query);
         Task<ObservableCollection<Album>> GetNewestAlbums(int limit);
         Task<int> GetNumberOfPlayableAlbums();
-        Task<Album> GetAlbumById(int albumId);
+		Task<Album> GetAlbumById(int albumId);
         Task<Track> GetTrackById(int trackId);
         Task<SearchResult> GetSearchResults(Query query);
         Task<ObservableCollection<Album>> GetAlbumSearchResults(Query query);
         Task<ObservableCollection<Track>> GetTrackSearchResults(Query query);
-        Task<Playlist> GetPlaylistById(int playlistId, string userName);
+        Task<ObservableCollection<Guid>> GetPlaylistImageIdsById(int playlistId, string userName, int limit);
+		Task<Playlist> GetPlaylistById(int playlistId, string userName);
         Task<ObservableCollection<Playlist>> GetPlaylistsByUserName(string userName);
         Task<ObservableCollection<Playlist>> GetPlaylistsByUserName(string userName, int limit);
         Task<Playlist> GetPlaylistByIdWithNumberOfEntries(int playlistId, string userName);
+		Task<ObservableCollection<int>> GetTrackIdsByFilters(Filter filter);
         Task<ObservableCollection<Track>> GetTracksByFilters(Filter filter);
         Task<Playlist> InsertPlaylist(Playlist playlist);
         Task<Playlist> AppendToPlaylist(Playlist playlist);
@@ -38,5 +40,6 @@ namespace BSE.Tunes.StoreApp.Services
 
         Task<Windows.Storage.Streams.InMemoryRandomAccessStream> GetAudioStream(Guid guid);
         Task<System.IO.Stream> GetAudioFile(Guid guid);
+		Uri GetImage(Guid imageId, bool asThumbnail = false );
     }
 }

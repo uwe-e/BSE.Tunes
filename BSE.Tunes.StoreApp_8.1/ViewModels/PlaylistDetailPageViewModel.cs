@@ -26,6 +26,7 @@ namespace BSE.Tunes.StoreApp.ViewModels
         private Playlist m_playlist;
         private ObservableCollection<PlaylistEntry> m_selectedEntries;
         private ObservableCollection<PlaylistEntry> m_entries;
+		private ObservableCollection<Uri> m_uris;
         private bool m_hasSelectedTracks;
         private RelayCommand m_playPlaylistCommand;
         private RelayCommand m_removeSelectedEntriesCommand;
@@ -104,6 +105,18 @@ namespace BSE.Tunes.StoreApp.ViewModels
                 RaisePropertyChanged("HasSelectedTracks");
             }
         }
+		public ObservableCollection<Uri> Uris
+		{
+			get
+			{
+				return this.m_uris;
+			}
+			set
+			{
+				this.m_uris = value;
+				RaisePropertyChanged("Uris");
+			}
+		}
         public RelayCommand PlayPlaylistCommand
         {
             get
@@ -175,21 +188,28 @@ namespace BSE.Tunes.StoreApp.ViewModels
                         this.SelectedEntries.CollectionChanged += OnSelectedEntryCollectionChanged;
                         if (this.Playlist != null && this.Playlist.Entries != null)
                         {
-                            foreach (var entry in this.Playlist.Entries.OrderBy(pe => pe.SortOrder))
+							foreach (var entry in this.Playlist.Entries.OrderBy(pe => pe.SortOrder))
                             {
                                 if (entry != null)
                                 {
                                     if (this.Entries == null)
                                     {
                                         this.Entries = new ObservableCollection<PlaylistEntry>();
-                                        this.Entries.CollectionChanged += OnEntryCollectionChanged;
+                                        //this.Entries.CollectionChanged += OnEntryCollectionChanged;
+										this.Uris = new ObservableCollection<Uri>();
                                     }
-                                    this.Entries.Add(entry);
+									this.Entries.Add(entry);
+									//this.Uris.Add(this.DataService.GetImage(entry.AlbumId, true));
+									this.Uris.Add(this.DataService.GetImage(entry.AlbumId));
                                     this.PlayPlaylistCommand.RaiseCanExecuteChanged();
                                 }
                             }
                         }
-                        this.MenuItemsPlaylist = new ObservableCollection<MenuItemViewModel>();
+						if (this.Entries != null)
+						{
+							this.Entries.CollectionChanged += OnEntryCollectionChanged;
+						}
+						this.MenuItemsPlaylist = new ObservableCollection<MenuItemViewModel>();
                         this.LoadPlaylists();
                     }
                     catch (Exception exception)
@@ -331,31 +351,46 @@ namespace BSE.Tunes.StoreApp.ViewModels
         }
         private void PlayPlaylist()
         {
-            var str = this.SelectedEntries.Select((t) => new Track
-            {
-                Id = t.TrackId
-            });
-            var selectedTracks = new System.Collections.ObjectModel.ObservableCollection<Track>(str);
-            if (selectedTracks != null && selectedTracks.Count() > 0)
-            {
-                this.m_playerManager.PlayTracks(selectedTracks, PlayerMode.Song);
-            }
-            else
-            {
-                var tr = this.Entries.Select((t) => new Track
-                {
-                    Id = t.TrackId
-                });
-                var tracks = new System.Collections.ObjectModel.ObservableCollection<Track>(tr);
-                if (tracks != null && tracks.Count() > 0)
-                {
-                    this.m_playerManager.PlayTracks(tracks, PlayerMode.Playlist);
-                }
-            }
+			PlayerMode playerMode = PlayerMode.Playlist;
+			var entryIds = this.Entries.Select(entry => entry.TrackId);
+			var selectedEntryIds = this.SelectedEntries.Select(entry => entry.TrackId);
+			if (selectedEntryIds != null && selectedEntryIds.Count() > 0)
+			{
+				entryIds = selectedEntryIds;
+				playerMode = PlayerMode.Song;
+			}
+			if (entryIds != null)
+			{
+				this.m_playerManager.PlayTracks(
+					new System.Collections.ObjectModel.ObservableCollection<int>(entryIds),
+					playerMode);
+			}
         }
         private void OnEntryCollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
         {
             this.m_hasChanged = true;
+			if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Remove)
+			{
+				foreach(var item in e.OldItems)
+				{
+					var entry = item as PlaylistEntry;
+					if (entry != null)
+					{
+						this.Uris.Remove(this.DataService.GetImage(entry.AlbumId, true));
+					}
+				}
+			}
+			if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Add)
+			{
+				foreach (var item in e.NewItems)
+				{
+					var entry = item as PlaylistEntry;
+					if (entry != null)
+					{
+						this.Uris.Add(this.DataService.GetImage(entry.AlbumId, true));
+					}
+				}
+			}
         }
         private void OnSelectedEntryCollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
         {

@@ -73,7 +73,51 @@ namespace BSE.Tunes.WebApi.Controllers
             }
             return responseMessage;
         }
-        //[AllowAnonymous]
+		[AllowAnonymous]
+		[Route("{action}/{id}/{asThumbnail:bool=false}")]
+		public HttpResponseMessage GetImage(string id, bool asThumbnail = false)
+		{
+			HttpResponseMessage responseMessage = new HttpResponseMessage();
+			Guid guid = Guid.Empty;
+			if (Guid.TryParse(id, out guid))
+			{
+				CoverImage image = this.m_tunesService.GetImage(guid, asThumbnail);
+				if (image != null && image.Cover != null)
+				{
+					DateTimeOffset dtModified = !image.ModifiedSince.Equals(DateTime.MinValue) ? image.ModifiedSince : DateTimeOffset.Now;
+					if ( Request.Headers.IfModifiedSince.HasValue && Request.Headers.IfModifiedSince.Equals(dtModified))
+					{
+						responseMessage.StatusCode = HttpStatusCode.NotModified;
+					}
+					else
+					{
+						responseMessage.Content = new ByteArrayContent(image.Cover);
+						if (image.ModifiedSince != DateTime.MinValue)
+						{
+							responseMessage.Content.Headers.Expires = DateTime.Now.AddHours(12);
+							responseMessage.Content.Headers.LastModified = image.ModifiedSince;
+						}
+						string contentType = "image/jpeg";
+						switch(image.Extension)
+						{
+							case "png":
+								contentType = "image/png";
+								break;
+							case "gif":
+								contentType = "image/gif";
+								break;
+						}
+						responseMessage.Content.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue(contentType);
+					}
+				}
+			}
+			else
+			{
+				responseMessage.StatusCode = HttpStatusCode.NotFound;
+			}
+			return responseMessage;
+		}
+		//[AllowAnonymous]
         //[Route("{id}")]
         public HttpResponseMessage GetFile(string id)
         {

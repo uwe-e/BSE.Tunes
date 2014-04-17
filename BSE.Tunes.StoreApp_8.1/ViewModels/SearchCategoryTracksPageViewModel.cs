@@ -112,7 +112,7 @@ namespace BSE.Tunes.StoreApp.ViewModels
                                     {
                                         Title = track.Name,
                                         Subtitle = track.Album.Artist.Name,
-                                        Image = track.Album.Thumbnail,
+										ImageSource = this.m_dataService.GetImage(track.Album.AlbumId, true),
                                         Data = track
                                     });
                                 }

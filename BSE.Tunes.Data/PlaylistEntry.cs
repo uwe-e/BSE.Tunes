@@ -33,6 +33,15 @@ namespace BSE.Tunes.Data
         /// </summary>
         [DataMember]
         public string Artist { get; set; }
+		/// <summary>
+		/// Gets or sets the id of an album as guid
+		/// </summary>
+		[DataMember]
+		public Guid AlbumId
+		{
+			get;
+			set;
+		}
         /// <summary>
         /// Gets or sets the duration oft the track.
         /// </summary>

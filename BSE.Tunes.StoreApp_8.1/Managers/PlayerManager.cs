@@ -23,8 +23,8 @@ namespace BSE.Tunes.StoreApp.Managers
         private IAccountService m_accountService;
         private IDialogService m_dialogService;
         private IResourceService m_resourceService;
-        private NavigableCollection<Track> m_navigableTracks;
-        private ObservableCollection<Track> m_tracks;
+		private NavigableCollection<int> m_navigableTrackIds;
+		private ObservableCollection<int> m_trackIds;
         #endregion
 
         #region Properties
@@ -33,17 +33,17 @@ namespace BSE.Tunes.StoreApp.Managers
             get;
             private set;
         }
-        public ObservableCollection<Track> Tracks
-        {
-            get
-            {
-                return this.m_tracks;
-            }
-            set
-            {
-                this.m_tracks = value;
-            }
-        }
+		public ObservableCollection<int> TrackIds
+		{
+			get
+			{
+				return this.m_trackIds;
+			}
+			set
+			{
+				this.m_trackIds = value;
+			}
+		}
         public Track CurrentTrack
         {
             get
@@ -106,39 +106,38 @@ namespace BSE.Tunes.StoreApp.Managers
         }
         public async void ReplayPlayTracks()
         {
-            if (this.Tracks != null)
-            {
-                this.m_navigableTracks = this.Tracks.ToNavigableCollection();
-                var track = this.m_navigableTracks.FirstOrDefault();
-                if (track != null)
-                {
-                    track = await this.m_dataService.GetTrackById(track.Id);
-                    if (track != null)
-                    {
-                        await SetTrackAsync(track);
-                    }
-                }
-            }
+			if (this.TrackIds != null)
+			{
+				this.m_navigableTrackIds = this.TrackIds.ToNavigableCollection();
+				var trackId = this.m_navigableTrackIds.FirstOrDefault();
+				if (trackId > 0)
+				{
+					Track track = await this.m_dataService.GetTrackById(trackId);
+					if (track != null)
+					{
+						await SetTrackAsync(track);
+					}
+				}
+			}
         }
-
-        public async void PlayTracks(ObservableCollection<Track> tracks, PlayerMode playerMode)
-        {
-            this.PlayerMode = playerMode;
-            this.Tracks = tracks;
-            if (this.Tracks != null)
-            {
-                this.m_navigableTracks = this.Tracks.ToNavigableCollection();
-                var track = this.m_navigableTracks.FirstOrDefault();
-                if (track != null)
-                {
-                    track = await this.m_dataService.GetTrackById(track.Id);
-                    if (track != null)
-                    {
-                        await this.SetTrackAsync(track);
-                    }
-                }
-            }
-        }
+		public async void PlayTracks(ObservableCollection<int> trackIds, PlayerMode playerMode)
+		{
+			this.PlayerMode = playerMode;
+			this.TrackIds = trackIds;
+			if (this.TrackIds != null)
+			{
+				this.m_navigableTrackIds = this.TrackIds.ToNavigableCollection();
+				var trackId = this.m_navigableTrackIds.FirstOrDefault();
+				if (trackId > 0)
+				{
+					var track = await this.m_dataService.GetTrackById(trackId);
+					if (track != null)
+					{
+						await this.SetTrackAsync(track);
+					}
+				}
+			}
+		}
         public async Task SetTrackAsync(Track track)
         {
             if (track != null)
@@ -160,51 +159,51 @@ namespace BSE.Tunes.StoreApp.Managers
         }
         public bool CanExecuteNextTrack()
         {
-            return this.m_navigableTracks != null ? this.m_navigableTracks.CanMoveNext : false; ;
+			return this.m_navigableTrackIds != null ? this.m_navigableTrackIds.CanMoveNext : false;
         }
         public async void ExecuteNextTrack()
         {
             if (this.CanExecuteNextTrack())
             {
-                if (this.m_navigableTracks.MoveNext())
-                {
-                    Track track = this.m_navigableTracks.Current;
-                    if (track != null)
-                    {
-                        track = await this.m_dataService.GetTrackById(track.Id);
-                        if (track != null)
-                        {
-                            await this.SetTrackAsync(track);
-                        }
-                    }
-                }
+				if (this.m_navigableTrackIds.MoveNext())
+				{
+					var trackId = this.m_navigableTrackIds.Current;
+					if (trackId > 0)
+					{
+						Track track = await this.m_dataService.GetTrackById(trackId);
+						if (track != null)
+						{
+							await this.SetTrackAsync(track);
+						}
+					}
+				}
             }
         }
         public bool CanExecutePreviousTrack()
         {
-            return this.m_navigableTracks != null ? this.m_navigableTracks.CanMovePrevious : false; ;
+			return this.m_navigableTrackIds != null ? this.m_navigableTrackIds.CanMovePrevious : false;
         }
         public async void ExecutePreviousTrack()
         {
             if (this.CanExecutePreviousTrack())
             {
-                if (this.m_navigableTracks.MovePrevious())
-                {
-                    Track track = this.m_navigableTracks.Current;
-                    if (track != null)
-                    {
-                        track = await this.m_dataService.GetTrackById(track.Id);
-                        if (track != null)
-                        {
-                            await this.SetTrackAsync(track);
-                        }
-                    }
-                }
+				if (this.m_navigableTrackIds.MovePrevious())
+				{
+					var trackId = this.m_navigableTrackIds.Current;
+					if (trackId > 0)
+					{
+						var track = await this.m_dataService.GetTrackById(trackId);
+						if (track != null)
+						{
+							await this.SetTrackAsync(track);
+						}
+					}
+				}
             }
         }
         public bool CanExecutePlay()
         {
-            return this.Tracks != null && this.Tracks.Count > 0;
+			return this.TrackIds != null && this.TrackIds.Count > 0;
         }
         public void Play()
         {

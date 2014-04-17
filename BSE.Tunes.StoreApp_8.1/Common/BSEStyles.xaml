@@ -3,6 +3,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:converter="using:BSE.Tunes.StoreApp.Converter"
     xmlns:services="using:BSE.Tunes.StoreApp.Services"
+    xmlns:controls="using:BSE.Tunes.StoreApp.Controls"
     xmlns:callisto="using:Callisto.Controls">
     
     <ResourceDictionary.MergedDictionaries>
@@ -29,6 +30,7 @@
 
     <DataTemplate x:Key="PlaylistItemTemplate">
         <StackPanel Orientation="Horizontal" Width="320" Height="160" Background="{StaticResource ListViewItemOverlayBackgroundThemeBrush}">
+            <controls:WriteableImage Width="160" UriSource="{Binding Path=UriSource}" ImageId="{Binding Playlist.Guid}"/>
             <StackPanel Orientation="Vertical" Width="160" Height="160">
                 <TextBlock Text="{Binding Playlist.Name}" FontWeight="Normal" FontSize="22" Margin="10,0,0,0" Height="130" VerticalAlignment="Top" TextTrimming="WordEllipsis" />
                 <TextBlock Text="{Binding NumbersOfEntries}" Margin="10,2,0,0" Height="30" VerticalAlignment="Bottom" TextTrimming="WordEllipsis" TextWrapping="Wrap"/>
@@ -39,7 +41,7 @@
     <DataTemplate x:Key="Standard200x200ItemTemplate">
         <Grid HorizontalAlignment="Left" Width="200" Height="200">
             <Border Background="{StaticResource ListViewItemPlaceholderBackgroundThemeBrush}">
-                <Image Source="{Binding Path=Image, Mode=OneWay, Converter={StaticResource ImageConverter}}" Stretch="UniformToFill" AutomationProperties.Name="{Binding Title}"/>
+                <Image Source="{Binding Path=ImageSource}" Stretch="UniformToFill" AutomationProperties.Name="{Binding Title}"/>
             </Border>
             <StackPanel VerticalAlignment="Bottom" Background="{StaticResource ListViewItemOverlayBackgroundThemeBrush}">
                 <TextBlock Text="{Binding Title}" Foreground="{StaticResource ListViewItemOverlayForegroundThemeBrush}" Style="{StaticResource TitleTextStyle}" Height="22" Margin="15,0,15,0"/>
@@ -51,7 +53,8 @@
     <DataTemplate x:Key="Standard160x160ItemTemplate">
         <Grid HorizontalAlignment="Left" Width="160" Height="160">
             <Border Background="{StaticResource ListViewItemPlaceholderBackgroundThemeBrush}">
-                <Image Source="{Binding Path=Image, Mode=OneWay, Converter={StaticResource ImageConverter}}" Stretch="UniformToFill" AutomationProperties.Name="{Binding Title}"/>
+                <!--<Image Source="{Binding Path=Image, Mode=OneWay, Converter={StaticResource ImageConverter}}" Stretch="UniformToFill" AutomationProperties.Name="{Binding Title}"/>-->
+                <Image Source="{Binding Path=ImageSource}" Stretch="UniformToFill" AutomationProperties.Name="{Binding Title}"/>
             </Border>
             <StackPanel VerticalAlignment="Bottom" Background="{StaticResource ListViewItemOverlayBackgroundThemeBrush}">
                 <TextBlock Text="{Binding Title}" Foreground="{StaticResource ListViewItemOverlayForegroundThemeBrush}" Style="{StaticResource TitleTextStyle}" Height="22" Margin="15,0,15,0"/>
@@ -63,7 +66,8 @@
     <DataTemplate x:Key="Standard320x320ItemTemplate">
         <Grid HorizontalAlignment="Left" Width="320" Height="320">
             <Border Background="{StaticResource ListViewItemPlaceholderBackgroundThemeBrush}">
-                <Image Source="{Binding Path=Image, Mode=OneWay, Converter={StaticResource ImageConverter}}" Stretch="UniformToFill" AutomationProperties.Name="{Binding Title}"/>
+                <!--<Image Source="{Binding Path=Image, Mode=OneWay, Converter={StaticResource ImageConverter}}" Stretch="UniformToFill" AutomationProperties.Name="{Binding Title}"/>-->
+                <Image Source="{Binding Path=ImageSource}" Stretch="UniformToFill" AutomationProperties.Name="{Binding Title}"/>
             </Border>
             <StackPanel VerticalAlignment="Bottom" Background="{StaticResource ListViewItemOverlayBackgroundThemeBrush}">
                 <TextBlock Text="{Binding Title}" Foreground="{StaticResource ListViewItemOverlayForegroundThemeBrush}" Style="{StaticResource TitleTextStyle}" Height="22" Margin="15,0,15,0"/>

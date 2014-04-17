@@ -122,6 +122,7 @@
     <Compile Include="Controls\GridItemDataTemplateSelector.cs" />
     <Compile Include="Controls\MenuItem.cs" />
     <Compile Include="Controls\VariableSizedWrapGridView.cs" />
+    <Compile Include="Controls\WriteableImage.cs" />
     <Compile Include="Converter\AlbumPageTitleConverter.cs" />
     <Compile Include="Converter\BooleanToVisibilityConverter.cs" />
     <Compile Include="Converter\ImageSourceConverter .cs" />
@@ -136,7 +137,10 @@
     <Compile Include="Extensions\HttpContentExtensions.cs" />
     <Compile Include="Extensions\HttpResponseMessageExtensions.cs" />
     <Compile Include="Extensions\ObjectExtensions.cs" />
+    <Compile Include="Extensions\ScaledImageFile.cs" />
     <Compile Include="Extensions\StreamExtensions.cs" />
+    <Compile Include="Extensions\WriteableBitmapLoadExtensions.cs" />
+    <Compile Include="Extensions\WriteableBitmapSaveExtensions.cs" />
     <Compile Include="Interfaces\INavigationAware.cs" />
     <Compile Include="Managers\IPlayerManager.cs" />
     <Compile Include="Managers\PlayerManager.cs" />
@@ -417,6 +421,9 @@
     </Reference>
     <Reference Include="Thinktecture.IdentityModel.Client">
       <HintPath>..\packages\Thinktecture.IdentityModel.Client.1.4.2\lib\portable-net45+wp80+win8\Thinktecture.IdentityModel.Client.dll</HintPath>
+    </Reference>
+    <Reference Include="WriteableBitmapEx.WinRT">
+      <HintPath>..\packages\WriteableBitmapEx.1.0.12.0\lib\NetCore45\WriteableBitmapEx.WinRT.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
