@@ -112,8 +112,8 @@ namespace BSE.Tunes.StoreApp.ViewModels
         #endregion
 
         #region MethodsPublic
-        public AlbumDetailPageViewModel(IDataService dataService, IAccountService accountService, INavigationService navigationService, IResourceService resourceService, PlayerManager playerManager, IDialogService dialogService)
-            : base(dataService, accountService, dialogService, resourceService)
+        public AlbumDetailPageViewModel(IDataService dataService, IAccountService accountService, INavigationService navigationService, IResourceService resourceService, PlayerManager playerManager, IDialogService dialogService, ICacheableBitmapService cacheableBitmapService)
+            : base(dataService, accountService, dialogService, resourceService, cacheableBitmapService)
         {
             this.m_navigationService = navigationService;
             this.m_playerManager = playerManager;

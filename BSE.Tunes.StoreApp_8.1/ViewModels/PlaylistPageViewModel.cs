@@ -21,6 +21,7 @@ namespace BSE.Tunes.StoreApp.ViewModels
         private IDataService m_dataService;
         private IAccountService m_accountService;
         private INavigationService m_navigationService;
+        private ICacheableBitmapService m_cacheableBitmapService;
         private ObservableCollection<PlaylistViewModel> m_playlists;
         private ObservableCollection<PlaylistViewModel> m_selectedPlaylists;
         private ICommand m_selectCommand;
@@ -89,12 +90,13 @@ namespace BSE.Tunes.StoreApp.ViewModels
         #endregion
 
         #region MethodsPublic
-        public PlaylistPageViewModel(IDataService dataService, IAccountService accountService, INavigationService navigationService, IResourceService resourceService)
+        public PlaylistPageViewModel(IDataService dataService, IAccountService accountService, INavigationService navigationService, IResourceService resourceService, ICacheableBitmapService cacheableBitmapService)
         {
             this.m_dataService = dataService;
             this.m_accountService = accountService;
             this.m_navigationService = navigationService;
             this.m_resourceService = resourceService;
+            this.m_cacheableBitmapService = cacheableBitmapService;
         }
         public void OnNavigatedTo(object navigationParameter, NavigationMode navigationMode)
         {
@@ -139,7 +141,7 @@ namespace BSE.Tunes.StoreApp.ViewModels
                     {
                         if (playlist != null)
                         {
-                            this.Playlists.Add(new PlaylistViewModel(this.m_dataService, this.m_accountService, this.m_resourceService, playlist.Id));
+                            this.Playlists.Add(new PlaylistViewModel(this.m_dataService, this.m_accountService, this.m_resourceService, this.m_cacheableBitmapService, playlist.Id));
                         }
                     }
                 }
@@ -183,6 +185,7 @@ namespace BSE.Tunes.StoreApp.ViewModels
                                 if (playlistViewModel != null)
                                 {
                                     this.Playlists.Remove(playlistViewModel);
+                                    this.m_cacheableBitmapService.RemoveCache(playlistViewModel.Playlist.Guid.ToString());
                                 }
                             }
                             GalaSoft.MvvmLight.Messaging.Messenger.Default.Send<BSE.Tunes.StoreApp.Messaging.PlaylistChangeMessage>(

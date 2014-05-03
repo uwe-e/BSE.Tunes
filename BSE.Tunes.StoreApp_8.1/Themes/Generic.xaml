@@ -8,15 +8,7 @@
             <Setter.Value>
                 <ControlTemplate TargetType="controls:WriteableImage">
                     <Border x:Name="LayoutRoot">
-                        <!--<Border.Resources>
-                            <Storyboard x:Name="ImageFadeOut">
-                                <FadeOutThemeAnimation Storyboard.TargetName="Image" />
-                            </Storyboard>
-                            <Storyboard x:Name="ImageFadeIn">
-                                <FadeInThemeAnimation Storyboard.TargetName="Image" />
-                            </Storyboard>
-                        </Border.Resources>-->
-                        <Image x:Name="Image" Stretch="{TemplateBinding Stretch}" Opacity="{TemplateBinding ImageOpacity}"/>
+                        <Image x:Name="Image"/>
                     </Border>
                 </ControlTemplate>
             </Setter.Value>

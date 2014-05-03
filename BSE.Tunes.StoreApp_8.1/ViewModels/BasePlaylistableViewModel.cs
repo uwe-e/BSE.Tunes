@@ -41,6 +41,11 @@ namespace BSE.Tunes.StoreApp.ViewModels
             get;
             private set;
         }
+        public ICacheableBitmapService CacheableBitmapService
+        {
+            get;
+            private set;
+        }
         public abstract ObservableCollection<MenuItemViewModel> MenuItemsPlaylist
         {
             get;
@@ -66,12 +71,13 @@ namespace BSE.Tunes.StoreApp.ViewModels
         #endregion
 
         #region MethodsPublic
-        public BasePlaylistableViewModel(IDataService dataService, IAccountService accountService, IDialogService dialogService, IResourceService resourceService)
+        public BasePlaylistableViewModel(IDataService dataService, IAccountService accountService, IDialogService dialogService, IResourceService resourceService, ICacheableBitmapService cacheableBitmapService)
         {
             this.DataService = dataService;
             this.AccountService = accountService;
             this.DialogService = dialogService;
             this.ResourceService = resourceService;
+            this.CacheableBitmapService = cacheableBitmapService;
         }
         #endregion
 
@@ -126,6 +132,7 @@ namespace BSE.Tunes.StoreApp.ViewModels
                     var changedPlaylist = await this.DataService.AppendToPlaylist(playlist);
                     if (changedPlaylist != null)
                     {
+                        await this.CacheableBitmapService.RemoveCache(changedPlaylist.Guid.ToString());
                         //Refreshing all the playlist entry views
                         Messenger.Default.Send<PlaylistEntryChangeMessage>(new PlaylistEntryChangeMessage { Playlist = changedPlaylist });
                     }

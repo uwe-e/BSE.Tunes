@@ -20,6 +20,7 @@ namespace BSE.Tunes.StoreApp.ViewModels
         private INavigationService m_navigationService;
         private IDataService m_dataService;
         private IAccountService m_accountService;
+        private ICacheableBitmapService m_cacheableBitmapService;
         private ICommand m_selectCommand;
         private ObservableCollection<PlaylistViewModel> m_playlists;
         #endregion
@@ -44,12 +45,13 @@ namespace BSE.Tunes.StoreApp.ViewModels
         #endregion
 
         #region MethodsPublic
-        public PlaylistGroupUserControlViewModel(IDataService dataService, IAccountService accountService, INavigationService navigationService, IResourceService resourceService)
+        public PlaylistGroupUserControlViewModel(IDataService dataService, IAccountService accountService, INavigationService navigationService, IResourceService resourceService, ICacheableBitmapService cacheableBitmapService)
         {
             this.m_dataService = dataService;
             this.m_accountService = accountService;
             this.m_navigationService = navigationService;
             this.m_resourceService = resourceService;
+            this.m_cacheableBitmapService = cacheableBitmapService;
             this.LoadData();
             GalaSoft.MvvmLight.Messaging.Messenger.Default.Register<BSE.Tunes.StoreApp.Messaging.PlaylistChangeMessage>(this, message =>
             {
@@ -78,7 +80,7 @@ namespace BSE.Tunes.StoreApp.ViewModels
                     {
                         if (playlist != null)
                         {
-                            this.Playlists.Add(new PlaylistViewModel(this.m_dataService, this.m_accountService, this.m_resourceService, playlist.Id));
+                            this.Playlists.Add(new PlaylistViewModel(this.m_dataService, this.m_accountService, this.m_resourceService, this.m_cacheableBitmapService, playlist.Id));
                         }
                     }
                 }

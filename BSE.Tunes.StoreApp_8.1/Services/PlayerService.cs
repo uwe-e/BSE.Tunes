@@ -148,6 +148,7 @@ namespace BSE.Tunes.StoreApp.Services
 			this.m_accountService = accountService;
 
 			this.m_mediaControls = SystemMediaTransportControls.GetForCurrentView();
+            this.m_mediaControls.IsEnabled = false;
 			this.m_mediaControls.ButtonPressed += (sender, args) =>
 				{
 					switch (args.Button)
@@ -169,13 +170,12 @@ namespace BSE.Tunes.StoreApp.Services
 							break;
 					}
 				};
+            this.m_mediaControls.IsPlayEnabled = true;
+            this.m_mediaControls.IsPauseEnabled = true;
+            this.m_mediaControls.IsStopEnabled = true;
+            this.m_mediaControls.PlaybackStatus = MediaPlaybackStatus.Closed;
 		}
 
-		void systemControls_ButtonPressed(SystemMediaTransportControls sender, SystemMediaTransportControlsButtonPressedEventArgs args)
-		{
-			throw new NotImplementedException();
-		}
-		
 		public void RegisterAsMediaService(MediaElement mediaElement)
 		{
 			if (mediaElement != null && this.m_mediaElement == null)
@@ -309,7 +309,9 @@ namespace BSE.Tunes.StoreApp.Services
 		}
 		private async void OnMediaOpened(object sender, Windows.UI.Xaml.RoutedEventArgs e)
 		{
-			SystemMediaTransportControlsDisplayUpdater updater = this.m_mediaControls.DisplayUpdater;
+            this.m_mediaControls.IsEnabled = true;
+            
+            SystemMediaTransportControlsDisplayUpdater updater = this.m_mediaControls.DisplayUpdater;
 			updater.Type = MediaPlaybackType.Music;
 			updater.MusicProperties.AlbumArtist = this.CurrentTrack.Album.Artist.Name;
 			updater.MusicProperties.Title = this.CurrentTrack.Name;
@@ -326,6 +328,7 @@ namespace BSE.Tunes.StoreApp.Services
 			//}
 			
 			updater.Update();
+
 			this.m_mediaControls.IsPlayEnabled = true;
 			this.m_mediaControls.IsPauseEnabled = true;
 			this.m_mediaControls.IsNextEnabled = false;

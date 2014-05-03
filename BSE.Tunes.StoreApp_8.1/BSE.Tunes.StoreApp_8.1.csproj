@@ -142,6 +142,8 @@
     <Compile Include="Extensions\WriteableBitmapLoadExtensions.cs" />
     <Compile Include="Extensions\WriteableBitmapSaveExtensions.cs" />
     <Compile Include="Interfaces\INavigationAware.cs" />
+    <Compile Include="Services\CacheableBitmapService.cs" />
+    <Compile Include="Services\ICacheableBitmapService.cs" />
     <Compile Include="Managers\IPlayerManager.cs" />
     <Compile Include="Managers\PlayerManager.cs" />
     <Compile Include="Messaging\MediaEndedMessage.cs" />
@@ -152,20 +154,48 @@
     <Compile Include="Messaging\PlaylistEntryChangeMessage.cs" />
     <Compile Include="Messaging\TrackMessage.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Services\AccountService.cs" />
-    <Compile Include="Services\DataService.cs" />
-    <Compile Include="Services\DialogService.cs" />
-    <Compile Include="Services\HostsettingsService.cs" />
-    <Compile Include="Services\IAccountService.cs" />
-    <Compile Include="Services\IDataService.cs" />
-    <Compile Include="Services\IDialogService.cs" />
-    <Compile Include="Services\IHostsettingsService.cs" />
-    <Compile Include="Services\INavigationService.cs" />
-    <Compile Include="Services\IPlayerService.cs" />
-    <Compile Include="Services\IResourceService.cs" />
-    <Compile Include="Services\NavigationService.cs" />
-    <Compile Include="Services\PlayerService.cs" />
-    <Compile Include="Services\ResourceService.cs" />
+    <Compile Include="Services\AccountService.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Services\DataService.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Services\DialogService.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Services\HostsettingsService.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Services\IAccountService.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Services\IDataService.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Services\IDialogService.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Services\IHostsettingsService.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Services\INavigationService.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Services\IPlayerService.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Services\IResourceService.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Services\NavigationService.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Services\PlayerService.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Services\ResourceService.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="ViewModels\AlbumDetailPageViewModel.cs" />
     <Compile Include="ViewModels\AlbumsGroupUserControlViewModel.cs" />
     <Compile Include="ViewModels\AlbumsPageViewModel.cs" />

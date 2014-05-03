@@ -848,14 +848,14 @@ namespace BSE.Tunes.Entities
 			if (string.IsNullOrEmpty(userName) == false)
 			{
 				StringBuilder stringBuilder = new StringBuilder();
-				stringBuilder.Append("SELECT a.Guid, COUNT(a.Guid) AS Number FROM tunesEntities.playlist AS p");
+				//stringBuilder.Append("SELECT a.Guid, COUNT(a.Guid) AS Number FROM tunesEntities.playlist AS p");
+                stringBuilder.Append("SELECT a.Guid FROM tunesEntities.playlist AS p");
 				stringBuilder.Append(" LEFT JOIN tunesEntities.playlistentries AS pe ON p.ListId = pe.PlaylistId");
 				stringBuilder.Append(" LEFT JOIN tunesEntities.lieder AS t ON pe.LiedId = t.LiedID");
 				stringBuilder.Append(" LEFT JOIN tunesEntities.titel AS a ON t.TitelID = a.TitelID");
 				stringBuilder.Append(" WHERE p.ListId = @playlistId");
 				stringBuilder.Append(" AND p.User = @userName");
-				stringBuilder.Append(" GROUP BY a.Guid ");
-				stringBuilder.Append(" ORDER BY Number");
+                stringBuilder.Append(" ORDER BY pe.sortorder");
 				stringBuilder.Append(" LIMIT @limit ");
 
 				string sql = stringBuilder.ToString();
@@ -892,7 +892,7 @@ namespace BSE.Tunes.Entities
 									{
 										imageIds = new Collection<Guid>();
 									}
-									imageIds.Add(dataReader.GetGuid("Guid", false, Guid.Empty));
+                                    imageIds.Add(dataReader.GetGuid("Guid", true, Guid.Empty));
 								}
 							}
 						}
@@ -999,7 +999,7 @@ namespace BSE.Tunes.Entities
                 }
 
                 StringBuilder stringBuilder = new StringBuilder();
-                stringBuilder.Append("SELECT p.ListId, p.ListName, p.User ,p.guid FROM tunesEntities.playlist AS p");
+                stringBuilder.Append("SELECT p.ListId, p.ListName, p.User, p.guid FROM tunesEntities.playlist AS p");
                 stringBuilder.Append(" WHERE p.User = @userName");
                 stringBuilder.Append(" ORDER BY p.ListName");
                 if (hasLimit)
@@ -1043,7 +1043,8 @@ namespace BSE.Tunes.Entities
                                     {
                                         Id = dataReader.GetInt32("ListId", false, 0),
                                         Name = dataReader.GetString("ListName", false, string.Empty),
-                                        UserName = dataReader.GetString("User", false, string.Empty)
+                                        UserName = dataReader.GetString("User", false, string.Empty),
+                                        Guid = dataReader.GetGuid("guid", true, Guid.Empty)
                                     };
                                     playlistCollection.Add(playlist);
                                 }

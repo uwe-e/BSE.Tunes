@@ -251,8 +251,8 @@ namespace BSE.Tunes.StoreApp.ViewModels
         #endregion
 
         #region MethodsPublic
-        public PlayerUserControlViewModel(IDataService dataService, IAccountService accountService, IDialogService dialogService, IResourceService resourceService, PlayerManager playerManager, INavigationService navigationService)
-            : base(dataService, accountService, dialogService, resourceService)
+        public PlayerUserControlViewModel(IDataService dataService, IAccountService accountService, IDialogService dialogService, IResourceService resourceService, PlayerManager playerManager, INavigationService navigationService, ICacheableBitmapService cacheableBitmapService)
+            : base(dataService, accountService, dialogService, resourceService, cacheableBitmapService)
         {
             this.m_playerManager = playerManager;
             this.m_navigationService = navigationService;

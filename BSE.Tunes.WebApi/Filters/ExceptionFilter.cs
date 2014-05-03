@@ -20,7 +20,7 @@ namespace BSE.Tunes.WebApi.Filters
         /// <param name="actionExecutedContext">The context for the action.</param>
         public override void OnException(HttpActionExecutedContext actionExecutedContext)
         {
-            System.Diagnostics.Trace.WriteLine(string.Format("{0}\t{1}", DateTime.Now.ToFileTime(), actionExecutedContext.Exception.Message), "Exception");
+            System.Diagnostics.Trace.WriteLine(string.Format("{0}\t{1}", DateTime.Now.ToLocalTime(), actionExecutedContext.Exception.Message), "Exception");
             actionExecutedContext.Response = actionExecutedContext.Request.CreateExceptionResponse(HttpStatusCode.BadRequest, actionExecutedContext.Exception);
         }
     }

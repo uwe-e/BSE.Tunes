@@ -30,7 +30,7 @@
 
     <DataTemplate x:Key="PlaylistItemTemplate">
         <StackPanel Orientation="Horizontal" Width="320" Height="160" Background="{StaticResource ListViewItemOverlayBackgroundThemeBrush}">
-            <controls:WriteableImage Width="160" UriSource="{Binding Path=UriSource}" ImageId="{Binding Playlist.Guid}"/>
+            <Image Width="160" Source="{Binding ImageSource, Mode=TwoWay}"/>
             <StackPanel Orientation="Vertical" Width="160" Height="160">
                 <TextBlock Text="{Binding Playlist.Name}" FontWeight="Normal" FontSize="22" Margin="10,0,0,0" Height="130" VerticalAlignment="Top" TextTrimming="WordEllipsis" />
                 <TextBlock Text="{Binding NumbersOfEntries}" Margin="10,2,0,0" Height="30" VerticalAlignment="Bottom" TextTrimming="WordEllipsis" TextWrapping="Wrap"/>
