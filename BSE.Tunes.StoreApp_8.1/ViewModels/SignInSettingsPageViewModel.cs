@@ -1,4 +1,4 @@
-﻿using BSE.Tunes.Data;
+﻿using BSE.Tunes.StoreApp.DataModel;
 using BSE.Tunes.StoreApp.Interfaces;
 using BSE.Tunes.StoreApp.Services;
 using BSE.Tunes.StoreApp.Views;
@@ -23,6 +23,7 @@ namespace BSE.Tunes.StoreApp.ViewModels
         private ICommand m_cancelCommand;
         private string m_strUserName;
         private string m_strPassword;
+        private bool m_useSecureLogin;
         private string m_errorMessage;
         #endregion
 
@@ -51,6 +52,18 @@ namespace BSE.Tunes.StoreApp.ViewModels
                 this.m_strPassword = value;
                 this.SaveCommand.RaiseCanExecuteChanged();
                 this.RaisePropertyChanged("Password");
+            }
+        }
+        public bool UseSecureLogin
+        {
+            get
+            {
+                return this.m_useSecureLogin;
+            }
+            set
+            {
+                this.m_useSecureLogin = value;
+                this.RaisePropertyChanged("UseSecureLogin");
             }
         }
         public string ErrorMessage
@@ -124,6 +137,7 @@ namespace BSE.Tunes.StoreApp.ViewModels
                 {
                     this.UserName = tunesUser.UserName;
                     this.Password = tunesUser.Password;
+                    this.UseSecureLogin = tunesUser.UseSecureLogin;
                 }
             }
             catch { }
@@ -139,7 +153,7 @@ namespace BSE.Tunes.StoreApp.ViewModels
             {
                 try
                 {
-                    TunesUser tunesUser = await this.m_accoutService.SignInUser(this.UserName, this.Password);
+                    TunesUser tunesUser = await this.m_accoutService.SignInUser(this.UserName, this.Password, this.UseSecureLogin);
                     this.m_navigationService.Navigate(typeof(MainPage));
                 }
                 catch (Exception exception)

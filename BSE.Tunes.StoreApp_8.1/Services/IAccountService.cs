@@ -1,4 +1,4 @@
-﻿using BSE.Tunes.Data;
+﻿using BSE.Tunes.StoreApp.DataModel;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,7 +15,7 @@ namespace BSE.Tunes.StoreApp.Services
 
         Task<TunesUser> VerifyUserCredentials();
         Task<TunesUser> VerifyUserAuthentication();
-        Task<TunesUser> SignInUser(string userName, string password);
+        Task<TunesUser> SignInUser(string userName, string password, bool useSecureLogin);
         Task<TokenResponse> RefreshToken();
     }
 }

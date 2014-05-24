@@ -1,4 +1,4 @@
-﻿using BSE.Tunes.Data;
+﻿using BSE.Tunes.StoreApp.DataModel;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -70,7 +70,8 @@ namespace BSE.Tunes.StoreApp.Services
                             tunesUser = this.User = new TunesUser
                             {
                                 UserName = userName,
-                                Password = vault.Retrieve(PasswordVaultResourceName, passwordCredential.UserName).Password
+                                Password = vault.Retrieve(PasswordVaultResourceName, passwordCredential.UserName).Password,
+                                UseSecureLogin = Windows.Storage.ApplicationData.Current.RoamingSettings.Values["usesecurelogin"] != null ? (bool)Windows.Storage.ApplicationData.Current.RoamingSettings.Values["usesecurelogin"] : false
                             };
                         }
                     }
@@ -88,7 +89,7 @@ namespace BSE.Tunes.StoreApp.Services
                 {
                     try
                     {
-                        tunesUser = await SignInUser(tunesUser.UserName, tunesUser.Password);
+                        tunesUser = await SignInUser(tunesUser.UserName, tunesUser.Password, tunesUser.UseSecureLogin);
                     }
                     catch(Exception)
                     {
@@ -102,20 +103,15 @@ namespace BSE.Tunes.StoreApp.Services
             }
             return tunesUser;
         }
-        public async Task<TunesUser> SignInUser(string userName, string password)
+        public async Task<TunesUser> SignInUser(string userName, string password, bool useSecureLogin)
         {
             TunesUser tunesUser = null;
             if (!string.IsNullOrEmpty(userName) && !string.IsNullOrEmpty(password))
             {
-                string strUrl = string.Format("{0}/token", this.ServiceUrl);
-
-                var authClient = new OAuth2Client(
-                    new Uri(strUrl),
-                    "BSEtunes",
-                    OAuthClientSercret);
+                var client = this.GetHttpClient(useSecureLogin);
                 try
                 {
-                    this.TokenResponse = await authClient.RequestResourceOwnerPasswordAsync(userName, password);
+                    this.TokenResponse = await client.RequestResourceOwnerPasswordAsync(userName, password);
                     if (this.TokenResponse != null)
                     {
 						if (this.TokenResponse.IsError)
@@ -124,6 +120,7 @@ namespace BSE.Tunes.StoreApp.Services
 						}
 
                         Windows.Storage.ApplicationData.Current.RoamingSettings.Values["username"] = userName;
+                        Windows.Storage.ApplicationData.Current.RoamingSettings.Values["usesecurelogin"] = useSecureLogin;
 
                         Windows.Security.Credentials.PasswordVault vault = new Windows.Security.Credentials.PasswordVault();
                         PasswordCredential passwordCredential = new PasswordCredential(PasswordVaultResourceName, userName, password);
@@ -134,7 +131,8 @@ namespace BSE.Tunes.StoreApp.Services
                             tunesUser = this.User = new TunesUser
                             {
                                 UserName = userName,
-                                Password = vault.Retrieve(PasswordVaultResourceName, passwordCredential.UserName).Password
+                                Password = vault.Retrieve(PasswordVaultResourceName, passwordCredential.UserName).Password,
+                                UseSecureLogin = useSecureLogin
                             };
                         }
                     }
@@ -152,13 +150,34 @@ namespace BSE.Tunes.StoreApp.Services
         }
         public async Task<TokenResponse> RefreshToken()
         {
-            var client = new OAuth2Client(
-                new Uri(this.TokenEndpointAddress),
-                "BSEtunes",
-                OAuthClientSercret);
-
+            var client = this.GetHttpClient(false);
             this.TokenResponse = await client.RequestRefreshTokenAsync(this.TokenResponse.RefreshToken);
             return this.TokenResponse;
+        }
+        #endregion
+
+        #region MethodsPrivate
+        private OAuth2Client GetHttpClient(bool useSecureLogin)
+        {
+            var filter = new Windows.Web.Http.Filters.HttpBaseProtocolFilter();
+            filter.IgnorableServerCertificateErrors.Add(Windows.Security.Cryptography.Certificates.ChainValidationResult.Untrusted);
+            filter.IgnorableServerCertificateErrors.Add(Windows.Security.Cryptography.Certificates.ChainValidationResult.InvalidName);
+
+            UriBuilder uriBuilder = new UriBuilder(this.TokenEndpointAddress);
+            if (useSecureLogin)
+            {
+                if (string.Compare(uriBuilder.Scheme, "http", StringComparison.OrdinalIgnoreCase) == 0)
+                {
+                    uriBuilder.Scheme = "https";
+                    uriBuilder.Port = 443;
+                }
+            }
+
+            return new OAuth2Client(
+                uriBuilder.Uri,
+                "BSEtunes",
+                OAuthClientSercret,
+                new WindowsRuntime.HttpClientFilters.WinRtHttpClientHandler(filter));
         }
         #endregion
     }

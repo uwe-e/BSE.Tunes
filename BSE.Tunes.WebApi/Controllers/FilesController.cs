@@ -57,12 +57,27 @@ namespace BSE.Tunes.WebApi.Controllers
                                 throw new HttpResponseException(HttpStatusCode.NotFound);
                             }
                             var fileStream = this.m_fileProvider.Open(fileName);
-                            responseMessage = new HttpResponseMessage();
-                            responseMessage.Content = new StreamContent(fileStream);
-                            responseMessage.Headers.AcceptRanges.Add("bytes");
-                            responseMessage.Content.Headers.ContentLength = fileStream.Length;
-                            //responseMessage.Content.Headers.ContentType = new MediaTypeHeaderValue("application/octet-stream");
-                            responseMessage.Content.Headers.ContentType = new MediaTypeHeaderValue("audio/mpeg");
+                            if (this.Request.Headers.Range != null)
+                            {
+                                try
+                                {
+                                    responseMessage = Request.CreateResponse(HttpStatusCode.PartialContent);
+                                    responseMessage.Content = new ByteRangeStreamContent(fileStream, Request.Headers.Range, new MediaTypeHeaderValue("audio/mpeg"));
+                                    return responseMessage;
+                                }
+                                catch (InvalidByteRangeException invalidByteRangeException)
+                                {
+                                    return Request.CreateErrorResponse(invalidByteRangeException);
+                                }
+                            }
+                            else
+                            {
+                                responseMessage = new HttpResponseMessage();
+                                responseMessage.Content = new StreamContent(fileStream);
+                                responseMessage.Headers.AcceptRanges.Add("bytes");
+                                responseMessage.Content.Headers.ContentLength = fileStream.Length;
+                                responseMessage.Content.Headers.ContentType = new MediaTypeHeaderValue("audio/mpeg");
+                            }
                         }
                     }
                     else

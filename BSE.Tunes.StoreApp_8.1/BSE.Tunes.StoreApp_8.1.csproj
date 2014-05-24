@@ -131,6 +131,7 @@
     <Compile Include="Converter\TrackToVisibilityConverter.cs" />
     <Compile Include="DataModel\FilterMode.cs" />
     <Compile Include="DataModel\SearchCategory.cs" />
+    <Compile Include="DataModel\TunesUser.cs" />
     <Compile Include="Event\PlaylistChangedEventArgs.cs" />
     <Compile Include="Extensions\DependencyObjectExtensions.cs" />
     <Compile Include="Extensions\EnumerableExtensions.cs" />
@@ -139,6 +140,7 @@
     <Compile Include="Extensions\ObjectExtensions.cs" />
     <Compile Include="Extensions\ScaledImageFile.cs" />
     <Compile Include="Extensions\StreamExtensions.cs" />
+    <Compile Include="Extensions\WinRtHttpClientHandler.cs" />
     <Compile Include="Extensions\WriteableBitmapLoadExtensions.cs" />
     <Compile Include="Extensions\WriteableBitmapSaveExtensions.cs" />
     <Compile Include="Interfaces\INavigationAware.cs" />

@@ -1,4 +1,4 @@
-﻿using BSE.Tunes.Data;
+﻿using BSE.Tunes.StoreApp.DataModel;
 using BSE.Tunes.StoreApp.Services;
 using BSE.Tunes.StoreApp.Views;
 using Callisto.Controls.SettingsManagement;

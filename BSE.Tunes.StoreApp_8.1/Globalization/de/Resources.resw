@@ -262,6 +262,12 @@ Die Registrierung kann nur durch den Betreiber des Servers erfolgen.</value>
   <data name="SignInSettingsPage_Header.Text" xml:space="preserve">
     <value>Kontoeinstellungen</value>
   </data>
+  <data name="SignInSettingsPage_TSUseSecureLogin.OffContent" xml:space="preserve">
+    <value>Nein</value>
+  </data>
+  <data name="SignInSettingsPage_TSUseSecureLogin.OnContent" xml:space="preserve">
+    <value>Ja</value>
+  </data>
   <data name="SignInSettingsPage_TxtAccountInfo.Text" xml:space="preserve">
     <value>Wegen dem Schutz des Urheberrechts der zu streamenden Musikdateien, der Belastung Deines Servers und wegen der eventuell eingeschränkten Bandbreite beim Betrieb des Servers brauchst Du ein Benutzerkonto auf diesem Server. 
 
@@ -276,6 +282,9 @@ Die Registrierung kann nur durch den Betreiber des Servers erfolgen.</value>
   </data>
   <data name="SignInSettingsPage_TxtUserName.PlaceholderText" xml:space="preserve">
     <value>EMail Adresse</value>
+  </data>
+  <data name="SignInSettingsPage_TxtUseSecureLogin.Text" xml:space="preserve">
+    <value>Soll, falls der Webserver dies zulässt, die Anmeldung verschlüsselt erfolgen?</value>
   </data>
   <data name="SignInSettingsRedirector_RedirectorButtonText.Content" xml:space="preserve">
     <value>Klicke hier um Dich anzumelden</value>

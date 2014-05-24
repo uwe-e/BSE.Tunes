@@ -262,6 +262,12 @@ A registration can only be done by the operator of the server.</value>
   <data name="SignInSettingsPage_Header.Text" xml:space="preserve">
     <value>Account Settings</value>
   </data>
+  <data name="SignInSettingsPage_TSUseSecureLogin.OffContent" xml:space="preserve">
+    <value>No</value>
+  </data>
+  <data name="SignInSettingsPage_TSUseSecureLogin.OnContent" xml:space="preserve">
+    <value>Yes</value>
+  </data>
   <data name="SignInSettingsPage_TxtAccountInfo.Text" xml:space="preserve">
     <value>Due to copyright of the music files to stream, the load of your server and because the perhaps limited bandwidth in the operation of the server, you need a user account on this server. 
 
@@ -276,6 +282,9 @@ A registration can only be done by the operator of the server.</value>
   </data>
   <data name="SignInSettingsPage_TxtUserName.PlaceholderText" xml:space="preserve">
     <value>EMail Address</value>
+  </data>
+  <data name="SignInSettingsPage_TxtUseSecureLogin.Text" xml:space="preserve">
+    <value>Use an encrypted login if the webserver allows that?</value>
   </data>
   <data name="SignInSettingsRedirector_RedirectorButtonText.Content" xml:space="preserve">
     <value>Click here to login.</value>

@@ -43,10 +43,10 @@ namespace BSE.Tunes.StoreApp.Services
         public async Task<bool> IsHostAccessible()
         {
             bool isHostAccessible = false;
-            using (var httpClient = new System.Net.Http.HttpClient())
+
+            using (var httpClient =  this.GetHttpClient())
             {
                 httpClient.BaseAddress = new Uri(string.Format("{0}/", this.ServiceUrl));
-                httpClient.DefaultRequestHeaders.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json"));
                 try
                 {
                     HttpResponseMessage message = await httpClient.GetAsync("api/tunes/IsHostAccessible");
@@ -182,7 +182,7 @@ namespace BSE.Tunes.StoreApp.Services
         public async Task<Windows.Storage.Streams.InMemoryRandomAccessStream> GetAudioStream(Guid guid)
         {
             string strUrl = string.Format("{0}/api/files/{1}/", this.ServiceUrl, guid.ToString());
-            using (var client = await this.GetHttpClient())
+            using (var client = await this.GetBearerClient())
             {
                 try
                 {
@@ -202,7 +202,7 @@ namespace BSE.Tunes.StoreApp.Services
         public async Task<System.IO.Stream> GetAudioFile(Guid guid)
         {
             string strUrl = string.Format("{0}/api/files/{1}/", this.ServiceUrl, guid.ToString());
-            using (var client = await this.GetHttpClient())
+            using (var client = await this.GetBearerClient())
             {
                 try
                 {
@@ -234,7 +234,7 @@ namespace BSE.Tunes.StoreApp.Services
         private async Task<T> GetHttpResponseFromPost<T, U>(Uri uri, U from)
         {
             T result = default(T);
-            using (var client = await this.GetHttpClient())
+            using (var client = await this.GetBearerClient())
             {
                 try
                 {
@@ -252,7 +252,7 @@ namespace BSE.Tunes.StoreApp.Services
         private async Task<T> GetHttpResponse<T>(Uri uri)
         {
             T result = default(T);
-            using (var client = await this.GetHttpClient())
+            using (var client = await this.GetBearerClient())
             {
                 try
                 {
@@ -267,11 +267,21 @@ namespace BSE.Tunes.StoreApp.Services
             }
             return result;
         }
-        private async Task<HttpClient> GetHttpClient()
+        private async Task<HttpClient> GetBearerClient()
         {
             var tokenResponse = await this.m_accountService.RefreshToken();
-            var client = new HttpClient();
+            var client = this.GetHttpClient();
             client.SetBearerToken(tokenResponse.AccessToken);
+            return client;
+        }
+
+        private HttpClient GetHttpClient()
+        {
+            var filter = new Windows.Web.Http.Filters.HttpBaseProtocolFilter();
+            filter.IgnorableServerCertificateErrors.Add(Windows.Security.Cryptography.Certificates.ChainValidationResult.Untrusted);
+            filter.IgnorableServerCertificateErrors.Add(Windows.Security.Cryptography.Certificates.ChainValidationResult.InvalidName);
+            
+            var client = new System.Net.Http.HttpClient(new WindowsRuntime.HttpClientFilters.WinRtHttpClientHandler(filter));
             client.DefaultRequestHeaders.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json"));
             return client;
         }

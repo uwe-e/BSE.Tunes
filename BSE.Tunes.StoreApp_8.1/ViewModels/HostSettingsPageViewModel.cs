@@ -1,4 +1,4 @@
-﻿using BSE.Tunes.Data;
+﻿using BSE.Tunes.StoreApp.DataModel;
 using BSE.Tunes.StoreApp.Interfaces;
 using BSE.Tunes.StoreApp.Services;
 using BSE.Tunes.StoreApp.Views;
@@ -108,7 +108,7 @@ namespace BSE.Tunes.StoreApp.ViewModels
                     bool isAccessible = isAccessibleTask.Result;
                     if (isAccessible)
                     {
-						System.Threading.Tasks.Task<TunesUser> verifyUserTask = System.Threading.Tasks.Task.Run(async () => await this.m_accountService.VerifyUserAuthentication());
+                        System.Threading.Tasks.Task<TunesUser> verifyUserTask = System.Threading.Tasks.Task.Run(async () => await this.m_accountService.VerifyUserAuthentication());
 						verifyUserTask.Wait();
 						TunesUser tunesUser = verifyUserTask.Result;
 						if (tunesUser != null)

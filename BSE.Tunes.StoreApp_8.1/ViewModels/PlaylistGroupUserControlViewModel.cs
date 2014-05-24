@@ -67,7 +67,7 @@ namespace BSE.Tunes.StoreApp.ViewModels
         #region MethodsPrivate
         private void LoadData()
         {
-            TunesUser user = this.m_accountService.User;
+            BSE.Tunes.Data.TunesUser user = this.m_accountService.User;
             if (user != null && !string.IsNullOrEmpty(user.UserName))
             {
                 this.IsBusy = true;

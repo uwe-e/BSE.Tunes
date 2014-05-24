@@ -35,6 +35,8 @@
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition />
@@ -56,9 +58,11 @@
                      Password="{Binding Password, Mode=TwoWay}" Grid.Row="4" Grid.Column="1" Width="300"
                          Margin="0,10,0,10"
                          HorizontalAlignment="Left"/>
-            <TextBlock Text="{Binding ErrorMessage}" Margin="0,10,0,5" Grid.Row="5" Grid.Column="1"
+            <TextBlock x:Uid="SignInSettingsPage_TxtUseSecureLogin" Text="Use an encrypted login if the webserver allows that?" Grid.Row="5" Grid.Column="1" Style="{StaticResource ItemTextStyle}"/>
+            <ToggleSwitch x:Uid="SignInSettingsPage_TSUseSecureLogin" IsOn="{Binding UseSecureLogin, Mode=TwoWay}" Grid.Row="6" Grid.Column="1"/>
+            <TextBlock Text="{Binding ErrorMessage}" Margin="0,10,0,5" Grid.Row="7" Grid.Column="1"
                        Foreground="Red" TextWrapping="Wrap" Style="{StaticResource ItemTextStyle}"/>
-            <StackPanel Orientation="Horizontal" Margin="300,0,0,25" Grid.Row="6" Grid.Column="1">
+            <StackPanel Orientation="Horizontal" Margin="300,0,0,25" Grid.Row="8" Grid.Column="1">
                 <Button x:Uid="SignInSettingsPage_ButtonSave" Content="Speichern" Command="{Binding SaveCommand}"/>
                 <Button x:Uid="SignInSettingsPage_ButtonCancel" Content="Abbrechen" Command="{Binding CancelCommand}"/>
             </StackPanel>
