@@ -201,8 +201,6 @@ namespace BSE.Tunes.StoreApp.Services
 					Guid guid = this.m_currentTrack.Guid;
 					if (guid != null && !guid.Equals(Guid.Empty))
 					{
-						//MediaStreamSource mediaStreamSource = new MediaStreamSource()
-
 						//string fileName = 
 						//var stream = await this.m_dataService.GetAudioFile(this.m_currentTrack.Guid);
 						//if (stream != null)

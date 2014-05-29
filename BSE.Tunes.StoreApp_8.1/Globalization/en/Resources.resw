@@ -284,7 +284,7 @@ A registration can only be done by the operator of the server.</value>
     <value>EMail Address</value>
   </data>
   <data name="SignInSettingsPage_TxtUseSecureLogin.Text" xml:space="preserve">
-    <value>Use an encrypted login if the webserver allows that?</value>
+    <value>Should the login be encrypted if the webserver supports that?</value>
   </data>
   <data name="SignInSettingsRedirector_RedirectorButtonText.Content" xml:space="preserve">
     <value>Click here to login.</value>

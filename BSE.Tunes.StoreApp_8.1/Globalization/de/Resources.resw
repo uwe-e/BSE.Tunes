@@ -284,7 +284,7 @@ Die Registrierung kann nur durch den Betreiber des Servers erfolgen.</value>
     <value>EMail Adresse</value>
   </data>
   <data name="SignInSettingsPage_TxtUseSecureLogin.Text" xml:space="preserve">
-    <value>Soll, falls der Webserver dies zulässt, die Anmeldung verschlüsselt erfolgen?</value>
+    <value>Soll die Anmeldung verschlüsselt erfolgen wenn der Webserver dies erlaubt?</value>
   </data>
   <data name="SignInSettingsRedirector_RedirectorButtonText.Content" xml:space="preserve">
     <value>Klicke hier um Dich anzumelden</value>
