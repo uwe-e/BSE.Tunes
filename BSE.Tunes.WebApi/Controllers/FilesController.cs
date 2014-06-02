@@ -63,6 +63,7 @@ namespace BSE.Tunes.WebApi.Controllers
                                 {
                                     responseMessage = Request.CreateResponse(HttpStatusCode.PartialContent);
                                     responseMessage.Content = new ByteRangeStreamContent(fileStream, Request.Headers.Range, new MediaTypeHeaderValue("audio/mpeg"));
+                                    responseMessage.Headers.AcceptRanges.Add("bytes");
                                     return responseMessage;
                                 }
                                 catch (InvalidByteRangeException invalidByteRangeException)
