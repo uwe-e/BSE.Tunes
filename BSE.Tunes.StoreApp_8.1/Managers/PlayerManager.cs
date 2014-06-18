@@ -146,11 +146,6 @@ namespace BSE.Tunes.StoreApp.Managers
                 {
                     await this.PlayerService.SetTrackAsync(track);
                 }
-                catch (UnauthorizedAccessException)
-                {
-                    string message = string.Format(CultureInfo.CurrentCulture, this.m_resourceService.GetString("IDS_AudioDirectory_UnauthorizedAccessException"));
-                    this.m_dialogService.ShowDialog(message);
-                }
                 catch (Exception exception)
                 {
                     this.m_dialogService.ShowDialog(exception.Message);
