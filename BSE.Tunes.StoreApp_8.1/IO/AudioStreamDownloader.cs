@@ -16,25 +16,26 @@ using BSE.Tunes.StoreApp.Extensions;
 
 namespace BSE.Tunes.StoreApp.IO
 {
-    internal class AudioStreamDownloader
+    internal class AudioStreamDownloader : IDisposable
     {
         #region Events
         public event EventHandler<DownloaderEventArgs> DownloadStarting;
         public event EventHandler<DownloaderEventArgs> DownloadEnded;
-        public event EventHandler<DownloaderEventArgs> CanStartConsumingData;
-        public event EventHandler<DownloaderEventArgs> ProgressChanged;
+        public event EventHandler<DownloaderEventArgs> DownloadProgessStarted;
         #endregion
 
         #region Constants
+        //internal const int ResponseContentBufferSize = 52000;//512000;
         internal const int ResponseContentBufferSize = 52000;//512000;
         #endregion
 
         #region FieldsPrivate
         private Stream m_responseStream;
-        private HttpStatusCode m_httpStatusCode;
         private bool m_isCanceled;
         private long m_bytesReceived;
         private long m_totalBytesToReceive;
+        // Track whether Dispose has been called.
+        private bool m_bDisposed;
         #endregion
 
         #region Properties
@@ -45,45 +46,71 @@ namespace BSE.Tunes.StoreApp.IO
                 return this.m_responseStream.AsRandomAccessStream();
             }
         }
+        public long TotalBytesToReceive
+        {
+            get
+            {
+                return this.m_totalBytesToReceive;
+            }
+        }
         #endregion
 
         #region MethodsPublic
         public AudioStreamDownloader()
         {
         }
-        public async Task DownloadAsync(Uri source)
+        // Implement IDisposable.
+        // Do not make this method virtual.
+        // A derived class should not be able to override this method.
+        public void Dispose()
+        {
+            this.Dispose(true);
+            // This object will be cleaned up by the Dispose method.
+            // Therefore, you should call GC.SupressFinalize to
+            // take this object off the finalization queue
+            // and prevent finalization code for this object
+            // from executing a second time.
+            GC.SuppressFinalize(this);
+        }
+        public async Task DownloadAsync(Uri source, Guid trackId)
         {
             if (source == null)
             {
                 throw new ArgumentNullException("source");
             }
-            this.m_totalBytesToReceive = -1;
-            bool canStartConsumingDataExecuted = false;
-            this.m_responseStream = await this.CreateStream();
+            this.m_totalBytesToReceive = 0;
+            this.m_bytesReceived = 0;
+            this.m_isCanceled = false;
+            bool hasDownloadStarted = false;
+            this.m_responseStream = await this.CreateStream(trackId);
             try
             {
                 this.OnDownloadStarting(source);
-                while (this.m_bytesReceived != this.m_totalBytesToReceive)
+
+                this.m_totalBytesToReceive = await this.GetFileSizeAsync(source);
+                //this.OnDownloadProgessStarted(source, this.m_bytesReceived, this.m_totalBytesToReceive);
+                
+                do
                 {
-                    if (!this.m_isCanceled)
+                    if (this.m_isCanceled)
+                    {
+                        return;
+                    }
+                    else
                     {
                         long newTo = this.m_bytesReceived + (ResponseContentBufferSize - 1);
                         int receivedBytes = await this.GetReceivedBytes(source, this.m_bytesReceived, newTo);
                         this.m_bytesReceived += (long)receivedBytes;
-                        this.OnProgressChanged(source, this.m_bytesReceived, this.m_totalBytesToReceive);
-                        if (!canStartConsumingDataExecuted && (this.m_bytesReceived >= ResponseContentBufferSize || this.m_bytesReceived >= this.m_totalBytesToReceive))
+                        if (!hasDownloadStarted)
                         {
-                            this.OnCanStartConsumingData(source, this.m_bytesReceived, this.m_totalBytesToReceive);
-                            canStartConsumingDataExecuted = true;
+                            hasDownloadStarted = true;
+                            this.OnDownloadProgessStarted(source, this.m_bytesReceived, this.m_totalBytesToReceive);
+
                         }
                     }
                 }
+                while (this.m_bytesReceived != this.m_totalBytesToReceive);
                 this.OnDownloadEnded(source, true, null);
-            }
-            catch (TaskCanceledException taskCanceledException)
-            {
-                this.OnDownloadEnded(source, true, taskCanceledException);
-                return;
             }
             catch (WebException webException)
             {
@@ -106,18 +133,32 @@ namespace BSE.Tunes.StoreApp.IO
         #endregion
 
         #region MethodsProtected
+        // Dispose(bool disposing) executes in two distinct scenarios.
+        // If disposing equals true, the method has been called directly
+        // or indirectly by a user's code. Managed and unmanaged resources
+        // can be disposed.
+        // If disposing equals false, the method has been called by the
+        // runtime from inside the finalizer and you should not reference
+        // other objects. Only unmanaged resources can be disposed.
+        protected void Dispose(bool disposing)
+        {
+            // Check to see if Dispose has already been called.
+            if (this.m_bDisposed == false)
+            {
+                // If disposing equals true, dispose all managed
+                // and unmanaged resources.
+                if (disposing)
+                {
+                    // Dispose managed resources.
+                }
+                this.m_bDisposed = true;
+            }
+        }
         protected virtual void OnDownloadStarting(Uri requestUri)
         {
             if (this.DownloadStarting != null)
             {
                 this.DownloadStarting(this, new DownloaderEventArgs(requestUri, this.m_responseStream, false, null));
-            }
-        }
-        protected void OnProgressChanged(Uri requestUri, long bytesReceived, long totalBytesToReceive)
-        {
-            if (this.ProgressChanged != null)
-            {
-                this.ProgressChanged(this, new DownloaderEventArgs(requestUri, this.m_responseStream, bytesReceived, totalBytesToReceive));
             }
         }
         protected void OnDownloadEnded(Uri requestUri, bool isCancelled, Exception error)
@@ -127,28 +168,41 @@ namespace BSE.Tunes.StoreApp.IO
                 this.DownloadEnded(this, new DownloaderEventArgs(requestUri, this.m_responseStream, isCancelled, error));
             }
         }
-        protected void OnCanStartConsumingData(Uri requestUri, long bytesReceived, long totalBytesToReceive)
+        protected void OnDownloadProgessStarted(Uri requestUri, long bytesReceived, long totalBytesToReceive)
         {
-            if (this.CanStartConsumingData != null)
+            if (this.DownloadProgessStarted != null)
             {
-                this.CanStartConsumingData(this, new DownloaderEventArgs(requestUri, this.m_responseStream, bytesReceived, totalBytesToReceive));
+                this.DownloadProgessStarted(this, new DownloaderEventArgs(requestUri, this.m_responseStream, bytesReceived, totalBytesToReceive));
             }
         }
         #endregion
 
         #region MethodsPrivate
-        private async Task<Stream> CreateStream()
+        private async Task<Stream> CreateStream(Guid trackId)
         {
-            IStorageFile file = await Windows.Storage.ApplicationData.Current.LocalFolder.TryGetItemAsync("dummy") as Windows.Storage.StorageFile;
-            if (file != null)
-            {
-                await file.DeleteAsync();
-            }
-            file = await Windows.Storage.ApplicationData.Current.LocalFolder.CreateFileAsync("dummy");
+            IStorageFolder storageFolder = await LocalStorage.GetTempFolderAsync();
+            IStorageFile file = await storageFolder.CreateFileAsync(trackId.ToString(), CreationCollisionOption.GenerateUniqueName) as StorageFile;
             IRandomAccessStream windowsRuntimeStream = await file.OpenAsync(FileAccessMode.ReadWrite);
             return windowsRuntimeStream.AsStream();
         }
-
+        private async Task<long> GetFileSizeAsync(Uri uri)
+        {
+            long contentLength = -1;
+            using (var httpClient = new HttpClient())
+            {
+                using (HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Head, uri))
+                {
+                    using (HttpResponseMessage response = await httpClient.SendAsync(request))
+                    {
+                        if (response.IsSuccessStatusCode)
+                        {
+                            contentLength = response.Content.Headers.ContentLength.GetValueOrDefault(0);
+                        }
+                    }
+                }
+            }
+            return contentLength;
+        }
         private async Task<int> GetReceivedBytes(Uri uri, long rangeFrom, long rangeTo)
         {
             int receivedBytes = -1;
@@ -160,11 +214,11 @@ namespace BSE.Tunes.StoreApp.IO
                     using (var responseMessage = await httpClient.SendAsync(request))
                     {
                         responseMessage.EnsureSuccessStatusCode();
-                        this.m_totalBytesToReceive = responseMessage.Content.Headers.ContentRange.Length.Value;
+                        //this.m_totalBytesToReceive = responseMessage.Content.Headers.ContentRange.Length.Value;
                         receivedBytes = (int)responseMessage.Content.Headers.ContentLength.GetValueOrDefault(0);
                         using (var stream = await responseMessage.Content.ReadAsStreamAsync())
                         {
-                            this.m_responseStream.Seek(rangeFrom, SeekOrigin.Begin);
+                            this.m_responseStream.Position = rangeFrom;
                             await stream.CopyToAsync(this.m_responseStream, ResponseContentBufferSize);
                             this.m_responseStream.Flush();
                         }

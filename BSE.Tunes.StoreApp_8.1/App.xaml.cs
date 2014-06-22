@@ -1,4 +1,5 @@
 ﻿using BSE.Tunes.StoreApp.DataModel;
+using BSE.Tunes.StoreApp.IO;
 using BSE.Tunes.StoreApp.Services;
 using BSE.Tunes.StoreApp.Views;
 using Callisto.Controls.SettingsManagement;
@@ -128,7 +129,10 @@ namespace BSE.Tunes.StoreApp
 							TunesUser tunesUser = verifyUserTask.Result;
 							if (tunesUser != null)
 							{
-								// When the navigation stack isn't restored navigate to the first page,
+                                //Deletes the tmp download folder with its files from the local store.
+                                System.Threading.Tasks.Task.Run(async () => await LocalStorage.ClearTempFolderAsync());
+
+                                // When the navigation stack isn't restored navigate to the first page,
 								// configuring the new page by passing required information as a navigation
 								// parameter
 								if (!rootFrame.Navigate(typeof(MainPage), e.Arguments))

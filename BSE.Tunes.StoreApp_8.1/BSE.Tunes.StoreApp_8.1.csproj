@@ -135,6 +135,7 @@
     <Compile Include="Event\PlaylistChangedEventArgs.cs" />
     <Compile Include="Extensions\DependencyObjectExtensions.cs" />
     <Compile Include="Extensions\EnumerableExtensions.cs" />
+    <Compile Include="Extensions\HttpClientExtensions.cs" />
     <Compile Include="Extensions\HttpContentExtensions.cs" />
     <Compile Include="Extensions\HttpResponseMessageExtensions.cs" />
     <Compile Include="Extensions\ObjectExtensions.cs" />
@@ -144,6 +145,9 @@
     <Compile Include="Extensions\WriteableBitmapLoadExtensions.cs" />
     <Compile Include="Extensions\WriteableBitmapSaveExtensions.cs" />
     <Compile Include="Interfaces\INavigationAware.cs" />
+    <Compile Include="IO\AudioStreamDownloader.cs" />
+    <Compile Include="IO\DownloaderEventArgs.cs" />
+    <Compile Include="IO\LocalStorage.cs" />
     <Compile Include="Services\CacheableBitmapService.cs" />
     <Compile Include="Services\ICacheableBitmapService.cs" />
     <Compile Include="Managers\IPlayerManager.cs" />

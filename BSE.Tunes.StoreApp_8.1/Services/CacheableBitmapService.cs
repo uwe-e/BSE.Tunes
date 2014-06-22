@@ -1,4 +1,5 @@
-﻿using System;
+﻿using BSE.Tunes.StoreApp.IO;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -27,7 +28,8 @@ namespace BSE.Tunes.StoreApp.Services
             {
                 cacheName = asThumbnail ? cacheName + ThumbnailPart : cacheName;
                 string cacheFileName = string.Format("{0}.{1}", cacheName, ImageExtension);
-                var storageFile = await Windows.Storage.ApplicationData.Current.LocalFolder.TryGetItemAsync(cacheFileName) as StorageFile;
+                var storageFolder = await LocalStorage.GetImageFolderAsync();
+                var storageFile = await storageFolder.TryGetItemAsync(cacheFileName) as StorageFile;
                 if (storageFile != null)
                 {
                     writeableBitmap = await new WriteableBitmap(width, height).LoadAsync(storageFile);
@@ -86,7 +88,7 @@ namespace BSE.Tunes.StoreApp.Services
                         catch (Exception)
                         { }
                     }
-                    await writeableBitmap.SaveToFile(Windows.Storage.ApplicationData.Current.LocalFolder, cacheFileName, CreationCollisionOption.ReplaceExisting);
+                    await writeableBitmap.SaveToFile(storageFolder, cacheFileName, CreationCollisionOption.ReplaceExisting);
                 }
                 catch (Exception)
                 {
@@ -100,7 +102,8 @@ namespace BSE.Tunes.StoreApp.Services
             if (string.IsNullOrEmpty(cacheName) == false)
             {
                 string cacheFileName = string.Format("{0}.{1}", cacheName, ImageExtension);
-                var storageFiles = await Windows.Storage.ApplicationData.Current.LocalFolder.GetFilesAsync();
+                var storageFolder = await LocalStorage.GetImageFolderAsync();
+                var storageFiles = await storageFolder.GetFilesAsync();
                 if (storageFiles != null)
                 {
                     var files = storageFiles.Where(file => file.Name.StartsWith(cacheName));

@@ -180,10 +180,6 @@
   <data name="IDS_Artists" xml:space="preserve">
     <value>Artists</value>
   </data>
-  <data name="IDS_AudioDirectory_UnauthorizedAccessException" xml:space="preserve">
-    <value>you have no access to the Network Audio Directory!
-Please check the settings for the Network Audio Directory within the Host Settings.</value>
-  </data>
   <data name="IDS_HostSettingsRedirector_Header" xml:space="preserve">
     <value>Web Settings</value>
   </data>
