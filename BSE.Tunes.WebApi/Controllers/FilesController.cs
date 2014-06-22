@@ -33,6 +33,7 @@ namespace BSE.Tunes.WebApi.Controllers
             this.m_tunesService = new BSE.Tunes.Entities.TunesBusinessObject();
             this.m_impersonationUser = Settings.ImpersonationUser;
         }
+        [AcceptVerbs("GET", "HEAD")]
         [AllowAnonymous]
         [Route("{id}")]
         public HttpResponseMessage GetAudioFile(string id)
@@ -62,7 +63,7 @@ namespace BSE.Tunes.WebApi.Controllers
                                 try
                                 {
                                     responseMessage = Request.CreateResponse(HttpStatusCode.PartialContent);
-                                    responseMessage.Content = new ByteRangeStreamContent(fileStream, Request.Headers.Range, new MediaTypeHeaderValue("audio/mpeg"));
+                                    responseMessage.Content = new ByteRangeStreamContent(fileStream, Request.Headers.Range, new MediaTypeHeaderValue("application/octet-stream"));
                                     responseMessage.Headers.AcceptRanges.Add("bytes");
                                     return responseMessage;
                                 }
@@ -77,7 +78,7 @@ namespace BSE.Tunes.WebApi.Controllers
                                 responseMessage.Content = new StreamContent(fileStream);
                                 responseMessage.Headers.AcceptRanges.Add("bytes");
                                 responseMessage.Content.Headers.ContentLength = fileStream.Length;
-                                responseMessage.Content.Headers.ContentType = new MediaTypeHeaderValue("audio/mpeg");
+                                responseMessage.Content.Headers.ContentType = new MediaTypeHeaderValue("application/octet-stream");
                             }
                         }
                     }
@@ -133,61 +134,6 @@ namespace BSE.Tunes.WebApi.Controllers
 			}
 			return responseMessage;
 		}
-		//[AllowAnonymous]
-        //[Route("{id}")]
-        public HttpResponseMessage GetFile(string id)
-        {
-            HttpResponseMessage responseMessage = null;
-            if (string.IsNullOrEmpty(id) == false)
-            {
-                Guid guid = Guid.Empty;
-                if (Guid.TryParse(id, out guid))
-                {
-                    string fileName = this.m_tunesService.GetAudioFileNameByGuid(guid);
-                    if (!string.IsNullOrEmpty(fileName))
-                    {
-                        //var audio = new AudioStream(fileName);
-
-
-                        responseMessage = Request.CreateResponse();
-                        //responseMessage.Content = new PushStreamContent(audio.WriteToStream, new MediaTypeHeaderValue("application/octet-stream"));
-
-                        responseMessage.Content = new PushStreamContent(async (Stream outputStream, HttpContent content, TransportContext context) =>
-                        {
-                            using (var impersonator = new Impersonator(
-                                                        this.m_impersonationUser.Username,
-                                                        this.m_impersonationUser.Domain,
-                                                        this.m_impersonationUser.Password,
-                                                        this.m_impersonationUser.LogonType))
-                            {
-                                try
-                                {
-                                    var buffer = new byte[65536];
-
-                                    using (var audio = File.Open(fileName, FileMode.Open, FileAccess.Read))
-                                    {
-                                        var length = (int)audio.Length;
-                                        var bytesRead = 1;
-
-                                        while (length > 0 && bytesRead > 0)
-                                        {
-                                            bytesRead = audio.Read(buffer, 0, Math.Min(length, buffer.Length));
-                                            await outputStream.WriteAsync(buffer, 0, bytesRead);
-                                            length -= bytesRead;
-                                        }
-                                    }
-                                }
-                                finally
-                                {
-                                    outputStream.Close();
-                                }
-                            }
-                        }, new MediaTypeHeaderValue("application/octet-stream"));
-                    }
-                }
-            }
-            return responseMessage;
-        }
         #endregion
 
         #region MethodsProtected
