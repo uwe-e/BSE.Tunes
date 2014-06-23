@@ -25,8 +25,7 @@ namespace BSE.Tunes.StoreApp.IO
         #endregion
 
         #region Constants
-        //internal const int ResponseContentBufferSize = 52000;//512000;
-        internal const int ResponseContentBufferSize = 52000;//512000;
+        internal const int ResponseContentBufferSize = 100000;
         #endregion
 
         #region FieldsPrivate
@@ -86,10 +85,8 @@ namespace BSE.Tunes.StoreApp.IO
             try
             {
                 this.OnDownloadStarting(source);
-
                 this.m_totalBytesToReceive = await this.GetFileSizeAsync(source);
-                //this.OnDownloadProgessStarted(source, this.m_bytesReceived, this.m_totalBytesToReceive);
-                
+
                 do
                 {
                     if (this.m_isCanceled)
@@ -105,7 +102,6 @@ namespace BSE.Tunes.StoreApp.IO
                         {
                             hasDownloadStarted = true;
                             this.OnDownloadProgessStarted(source, this.m_bytesReceived, this.m_totalBytesToReceive);
-
                         }
                     }
                 }
@@ -150,6 +146,11 @@ namespace BSE.Tunes.StoreApp.IO
                 if (disposing)
                 {
                     // Dispose managed resources.
+                    if (this.m_responseStream != null)
+                    {
+                        this.m_responseStream.Dispose();
+                        this.m_responseStream = null;
+                    }
                 }
                 this.m_bDisposed = true;
             }
@@ -214,7 +215,6 @@ namespace BSE.Tunes.StoreApp.IO
                     using (var responseMessage = await httpClient.SendAsync(request))
                     {
                         responseMessage.EnsureSuccessStatusCode();
-                        //this.m_totalBytesToReceive = responseMessage.Content.Headers.ContentRange.Length.Value;
                         receivedBytes = (int)responseMessage.Content.Headers.ContentLength.GetValueOrDefault(0);
                         using (var stream = await responseMessage.Content.ReadAsStreamAsync())
                         {
