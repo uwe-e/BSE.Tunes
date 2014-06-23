@@ -37,7 +37,7 @@ namespace BSE.Tunes.Data
         [OperationContract]
         Track[] GetTrackSearchResults(Query query);
         [OperationContract]
-        void UpdateHistory(History history);
+        bool UpdateHistory(History history);
         [OperationContract]
 		ICollection<Guid> GetPlaylistImageIdsById(int playlistId, string userName, int limit);
 		[OperationContract]
