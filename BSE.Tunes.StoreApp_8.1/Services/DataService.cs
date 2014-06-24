@@ -134,10 +134,10 @@ namespace BSE.Tunes.StoreApp.Services
             string strUrl = string.Format("{0}/api/tunes/InsertPlaylist", this.ServiceUrl);
             return await GetHttpResponseFromPost<Playlist, Playlist>(new Uri(strUrl), playlist);
         }
-        public async void UpdateHistory(History history)
+        public async Task<bool> UpdateHistory(History history)
         {
             string strUrl = string.Format("{0}/api/tunes/UpdateHistory", this.ServiceUrl);
-            await GetHttpResponseFromPost<object, History>(new Uri(strUrl), history);
+            return await GetHttpResponseFromPost<bool, History>(new Uri(strUrl), history);
         }
 		public async Task<ObservableCollection<Guid>> GetPlaylistImageIdsById(int playlistId, string userName, int limit)
 		{

@@ -25,7 +25,7 @@ namespace BSE.Tunes.StoreApp.IO
         #endregion
 
         #region Constants
-        internal const int ResponseContentBufferSize = 100000;
+        internal const int ResponseContentBufferSize = 512000;
         #endregion
 
         #region FieldsPrivate

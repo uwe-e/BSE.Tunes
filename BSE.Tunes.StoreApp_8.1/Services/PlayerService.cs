@@ -83,7 +83,6 @@ namespace BSE.Tunes.StoreApp.Services
         private bool m_canExecuteNextTrack;
         private bool m_canExecutePreviousTrack;
         private TimeSpan m_playerNaturalDuration = new TimeSpan(0);
-        private TimeSpan m_playerPosition = new TimeSpan();
         private SystemMediaTransportControls m_mediaControls;
 
         private AudioStreamDownloader m_audioStreamDownloader;
@@ -120,13 +119,7 @@ namespace BSE.Tunes.StoreApp.Services
         {
             get
             {
-                return this.m_playerPosition;
-                //return new TimeSpan(0);
-                //return this.m_mediaElement.Position;
-            }
-            private set
-            {
-                this.m_playerPosition = value;
+                return this.m_mediaElement.Position;
             }
         }
         public PlayerState CurrentState
@@ -205,9 +198,6 @@ namespace BSE.Tunes.StoreApp.Services
         {
             if (mediaElement != null && this.m_mediaElement == null)
             {
-                //this.m_audioStreamDownloader = new AudioStreamDownloader();
-                //this.m_audioStreamDownloader.CanStartConsumingData += OnDownloaderCanStartConsumingData;
-
                 this.m_mediaElement = mediaElement;
                 //The property AreTransportControlsEnabled causes in an additional displaying of mediaplayer content.
                 //this.m_mediaElement.AreTransportControlsEnabled = true;
@@ -400,7 +390,7 @@ namespace BSE.Tunes.StoreApp.Services
             }
         }
 
-        private async void OnStreamSourceClosed(MediaStreamSource sender, MediaStreamSourceClosedEventArgs args)
+        private void OnStreamSourceClosed(MediaStreamSource sender, MediaStreamSourceClosedEventArgs args)
         {
             // close the MediaStreamSource and remove the MediaStreamSource event handlers
             if (this.m_mediaStream != null)

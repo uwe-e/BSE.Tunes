@@ -36,7 +36,7 @@ namespace BSE.Tunes.StoreApp.Services
         Task<Playlist> AppendToPlaylist(Playlist playlist);
         Task<bool> UpdatePlaylistEntries(Playlist playlist);
         Task<bool> DeletePlaylists(ObservableCollection<Playlist> playlists);
-        void UpdateHistory(History history);
+        Task<bool> UpdateHistory(History history);
 
         Task<Windows.Storage.Streams.InMemoryRandomAccessStream> GetAudioStream(Guid guid);
         Task<System.IO.Stream> GetAudioFile(Guid guid);

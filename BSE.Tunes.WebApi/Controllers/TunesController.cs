@@ -106,9 +106,9 @@ namespace BSE.Tunes.WebApi.Controllers
 
         [HttpPost]
         [Route("{action}")]
-        public void UpdateHistory([FromBody] History history)
+        public bool UpdateHistory([FromBody] History history)
         {
-            this.m_tunesService.UpdateHistory(history);
+            return this.m_tunesService.UpdateHistory(history);
         }
 
 		[Route("{action}/{playlistId}/{username}/{limit}")]

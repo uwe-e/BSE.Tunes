@@ -819,8 +819,9 @@ namespace BSE.Tunes.Entities
             }
             return tracks;
         }
-        public void UpdateHistory(History history)
+        public bool UpdateHistory(History history)
         {
+            bool hasUpdated = false;
             if (history != null)
             {
                 HistoryEntity entity = new HistoryEntity
@@ -838,9 +839,10 @@ namespace BSE.Tunes.Entities
                 using (TunesEntities tunesEntity = new TunesEntities(this.ConnectionString))
                 {
                     tunesEntity.history.Add(entity);
-                    tunesEntity.SaveChanges();
+                    hasUpdated = tunesEntity.SaveChanges() > 0;
                 }
             }
+            return hasUpdated;
         }
 		public ICollection<Guid> GetPlaylistImageIdsById(int playlistId, string userName, int limit)
 		{
