@@ -306,7 +306,7 @@ namespace BSE.Tunes.StoreApp.Services
         #endregion
 
         #region MethodsPrivate
-        private void OnDownloadProgessStarted(object sender, DownloaderEventArgs e)
+        private void OnDownloadProgessStarted(object sender, EventArgs e)
         {
             // initialize Parsing Variables
             this.m_byteOffset = 0;

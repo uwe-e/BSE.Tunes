@@ -146,7 +146,6 @@
     <Compile Include="Extensions\WriteableBitmapSaveExtensions.cs" />
     <Compile Include="Interfaces\INavigationAware.cs" />
     <Compile Include="IO\AudioStreamDownloader.cs" />
-    <Compile Include="IO\DownloaderEventArgs.cs" />
     <Compile Include="IO\LocalStorage.cs" />
     <Compile Include="Services\CacheableBitmapService.cs" />
     <Compile Include="Services\ICacheableBitmapService.cs" />

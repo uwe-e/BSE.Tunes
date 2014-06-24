@@ -19,9 +19,8 @@ namespace BSE.Tunes.StoreApp.IO
     internal class AudioStreamDownloader : IDisposable
     {
         #region Events
-        public event EventHandler<DownloaderEventArgs> DownloadStarting;
-        public event EventHandler<DownloaderEventArgs> DownloadEnded;
-        public event EventHandler<DownloaderEventArgs> DownloadProgessStarted;
+        public event EventHandler<EventArgs> DownloadStarting;
+        public event EventHandler<EventArgs> DownloadProgessStarted;
         #endregion
 
         #region Constants
@@ -84,7 +83,7 @@ namespace BSE.Tunes.StoreApp.IO
             this.m_responseStream = await this.CreateStream(trackId);
             try
             {
-                this.OnDownloadStarting(source);
+                this.OnDownloadStarting();
                 this.m_totalBytesToReceive = await this.GetFileSizeAsync(source);
 
                 do
@@ -101,12 +100,11 @@ namespace BSE.Tunes.StoreApp.IO
                         if (!hasDownloadStarted)
                         {
                             hasDownloadStarted = true;
-                            this.OnDownloadProgessStarted(source, this.m_bytesReceived, this.m_totalBytesToReceive);
+                            this.OnDownloadProgessStarted();
                         }
                     }
                 }
                 while (this.m_bytesReceived != this.m_totalBytesToReceive);
-                this.OnDownloadEnded(source, true, null);
             }
             catch (WebException webException)
             {
@@ -117,8 +115,7 @@ namespace BSE.Tunes.StoreApp.IO
             }
             catch (Exception exception)
             {
-                this.OnDownloadEnded(source, false, exception);
-                return;
+                //return;
             }
         }
         public virtual void Close()
@@ -155,25 +152,18 @@ namespace BSE.Tunes.StoreApp.IO
                 this.m_bDisposed = true;
             }
         }
-        protected virtual void OnDownloadStarting(Uri requestUri)
+        protected virtual void OnDownloadStarting()
         {
             if (this.DownloadStarting != null)
             {
-                this.DownloadStarting(this, new DownloaderEventArgs(requestUri, this.m_responseStream, false, null));
+                this.DownloadStarting(this, EventArgs.Empty);
             }
         }
-        protected void OnDownloadEnded(Uri requestUri, bool isCancelled, Exception error)
-        {
-            if (this.DownloadEnded != null)
-            {
-                this.DownloadEnded(this, new DownloaderEventArgs(requestUri, this.m_responseStream, isCancelled, error));
-            }
-        }
-        protected void OnDownloadProgessStarted(Uri requestUri, long bytesReceived, long totalBytesToReceive)
+        protected void OnDownloadProgessStarted()
         {
             if (this.DownloadProgessStarted != null)
             {
-                this.DownloadProgessStarted(this, new DownloaderEventArgs(requestUri, this.m_responseStream, bytesReceived, totalBytesToReceive));
+                this.DownloadProgessStarted(this, EventArgs.Empty);
             }
         }
         #endregion
