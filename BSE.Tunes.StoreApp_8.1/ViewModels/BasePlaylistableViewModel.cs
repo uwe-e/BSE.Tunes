@@ -46,7 +46,12 @@ namespace BSE.Tunes.StoreApp.ViewModels
             get;
             private set;
         }
-        public abstract ObservableCollection<MenuItemViewModel> MenuItemsPlaylist
+        //public abstract ObservableCollection<MenuItemViewModel> MenuItemsPlaylist
+        //{
+        //	get;
+        //	set;
+        //}
+        public virtual ObservableCollection<MenuItemViewModel> MenuItemsPlaylist
         {
             get;
             set;
@@ -137,7 +142,7 @@ namespace BSE.Tunes.StoreApp.ViewModels
                         Messenger.Default.Send<PlaylistEntryChangeMessage>(new PlaylistEntryChangeMessage { Playlist = changedPlaylist });
                     }
                 }
-                catch(Exception exception)
+                catch (Exception exception)
                 {
                     this.DialogService.ShowDialog(exception.Message);
                 }

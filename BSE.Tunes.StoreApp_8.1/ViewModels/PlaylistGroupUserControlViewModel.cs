@@ -1,8 +1,10 @@
 ﻿using BSE.Tunes.Data;
 using BSE.Tunes.StoreApp.DataModel;
+using BSE.Tunes.StoreApp.Messaging;
 using BSE.Tunes.StoreApp.Services;
 using BSE.Tunes.StoreApp.Views;
 using GalaSoft.MvvmLight.Command;
+using GalaSoft.MvvmLight.Messaging;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -53,7 +55,7 @@ namespace BSE.Tunes.StoreApp.ViewModels
             this.m_resourceService = resourceService;
             this.m_cacheableBitmapService = cacheableBitmapService;
             this.LoadData();
-            GalaSoft.MvvmLight.Messaging.Messenger.Default.Register<BSE.Tunes.StoreApp.Messaging.PlaylistChangeMessage>(this, message =>
+            Messenger.Default.Register<PlaylistChangeMessage>(this, message =>
             {
                 this.LoadData();
             });
@@ -61,6 +63,11 @@ namespace BSE.Tunes.StoreApp.ViewModels
         public override void OnSelectGroupHeader()
         {
             this.m_navigationService.Navigate(typeof(PlaylistPage));
+        }
+        public override void ResetData()
+        {
+            base.ResetData();
+            this.LoadData();
         }
         #endregion
 

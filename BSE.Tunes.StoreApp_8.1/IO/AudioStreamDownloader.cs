@@ -80,31 +80,46 @@ namespace BSE.Tunes.StoreApp.IO
             this.m_bytesReceived = 0;
             this.m_isCanceled = false;
             bool hasDownloadStarted = false;
-            this.m_responseStream = await this.CreateStream(trackId);
+
             try
             {
                 this.OnDownloadStarting();
                 this.m_totalBytesToReceive = await this.GetFileSizeAsync(source);
-
-                do
+                if (this.m_totalBytesToReceive > 0)
                 {
-                    if (this.m_isCanceled)
+                    this.m_responseStream = await this.CreateStream(trackId);
+                    this.m_bytesReceived = this.m_responseStream.Length;
+                    if (this.m_bytesReceived.Equals(this.m_totalBytesToReceive))
                     {
-                        return;
-                    }
-                    else
-                    {
-                        long newTo = this.m_bytesReceived + (ResponseContentBufferSize - 1);
-                        int receivedBytes = await this.GetReceivedBytes(source, this.m_bytesReceived, newTo);
-                        this.m_bytesReceived += (long)receivedBytes;
                         if (!hasDownloadStarted)
                         {
                             hasDownloadStarted = true;
                             this.OnDownloadProgessStarted();
                         }
                     }
+                    else
+                    {
+                        do
+                        {
+                            if (this.m_isCanceled)
+                            {
+                                return;
+                            }
+                            else
+                            {
+                                long newTo = this.m_bytesReceived + (ResponseContentBufferSize - 1);
+                                int receivedBytes = await this.GetReceivedBytes(source, this.m_bytesReceived, newTo);
+                                this.m_bytesReceived += (long)receivedBytes;
+                                if (!hasDownloadStarted)
+                                {
+                                    hasDownloadStarted = true;
+                                    this.OnDownloadProgessStarted();
+                                }
+                            }
+                        }
+                        while (this.m_bytesReceived != this.m_totalBytesToReceive);
+                    }
                 }
-                while (this.m_bytesReceived != this.m_totalBytesToReceive);
             }
             catch (WebException webException)
             {
@@ -172,7 +187,7 @@ namespace BSE.Tunes.StoreApp.IO
         private async Task<Stream> CreateStream(Guid trackId)
         {
             IStorageFolder storageFolder = await LocalStorage.GetTempFolderAsync();
-            IStorageFile file = await storageFolder.CreateFileAsync(trackId.ToString(), CreationCollisionOption.GenerateUniqueName) as StorageFile;
+            IStorageFile file = await storageFolder.CreateFileAsync(trackId.ToString(), CreationCollisionOption.OpenIfExists) as StorageFile;
             IRandomAccessStream windowsRuntimeStream = await file.OpenAsync(FileAccessMode.ReadWrite);
             return windowsRuntimeStream.AsStream();
         }

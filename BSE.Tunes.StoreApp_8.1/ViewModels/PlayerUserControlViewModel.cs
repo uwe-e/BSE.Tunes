@@ -42,8 +42,8 @@ namespace BSE.Tunes.StoreApp.ViewModels
         private string m_currentTitle;
         private string m_currentProgressTime;
         private string m_currentTrackDuration;
-		private Uri m_coverSource;
-		private DispatcherTimer m_progressTimer;
+        private Uri m_coverSource;
+        private DispatcherTimer m_progressTimer;
         #endregion
 
         #region Properties
@@ -142,19 +142,19 @@ namespace BSE.Tunes.StoreApp.ViewModels
                 RaisePropertyChanged("StepFrequency");
             }
         }
-		public Uri CoverSource
-		{
-			get
-			{
-				return this.m_coverSource;
-			}
-			set
-			{
-				Uri oldValue = this.m_coverSource;
-				this.m_coverSource = value;
-				RaisePropertyChanged<Uri>(() => this.CoverSource, oldValue, value, true);
-			}
-		}
+        public Uri CoverSource
+        {
+            get
+            {
+                return this.m_coverSource;
+            }
+            set
+            {
+                Uri oldValue = this.m_coverSource;
+                this.m_coverSource = value;
+                RaisePropertyChanged<Uri>(() => this.CoverSource, oldValue, value, true);
+            }
+        }
         public string CurrentTitle
         {
             get
@@ -203,11 +203,11 @@ namespace BSE.Tunes.StoreApp.ViewModels
                 RaisePropertyChanged("CurrentTrackDuration");
             }
         }
-        public override ObservableCollection<MenuItemViewModel> MenuItemsPlaylist
-        {
-            get;
-            set;
-        }
+        //public override ObservableCollection<MenuItemViewModel> MenuItemsPlaylist
+        //{
+        //	get;
+        //	set;
+        //}
         public ICommand SelectCommand
         {
             get
@@ -259,25 +259,25 @@ namespace BSE.Tunes.StoreApp.ViewModels
             this.PlayerMode = Data.Audio.PlayerMode.Random;
             this.PlayerState = Data.Audio.PlayerState.Closed;
             Messenger.Default.Register<BSE.Tunes.Data.Audio.PlayerState>(this, playerState =>
-                {
-                    this.OnPlayerStateChanged(playerState);
-                });
+            {
+                this.OnPlayerStateChanged(playerState);
+            });
             Messenger.Default.Register<BSE.Tunes.StoreApp.Messaging.MediaOpenedMessage>(this, message =>
-                {
-                    this.OnMediaOpened();
-                });
+            {
+                this.OnMediaOpened();
+            });
             Messenger.Default.Register<BSE.Tunes.StoreApp.Messaging.MediaEndedMessage>(this, message =>
             {
                 this.OnMediaEnded();
             });
             Messenger.Default.Register<TrackMessage>(this, message =>
+            {
+                Track track = message.Track;
+                if (track != null)
                 {
-                    Track track = message.Track;
-                    if (track != null)
-                    {
-                        this.OnInitializeView(track);
-                    }
-                });
+                    this.OnInitializeView(track);
+                }
+            });
             Messenger.Default.Register<PlaylistChangeMessage>(this, message =>
             {
                 this.LoadPlaylists();
@@ -285,6 +285,14 @@ namespace BSE.Tunes.StoreApp.ViewModels
             this.MenuItemsPlaylist = new ObservableCollection<MenuItemViewModel>();
             this.LoadPlaylists();
         }
+        public override void ResetData()
+        {
+            base.ResetData();
+
+        }
+        #endregion
+
+        #region MethodsProtected
         protected override void AddTracksToPlaylist(Playlist playlist)
         {
             if (playlist != null)
@@ -344,7 +352,7 @@ namespace BSE.Tunes.StoreApp.ViewModels
                 this.CurrentTitle = track.Name;
                 this.CurrentArtist = track.Album.Artist.Name;
                 //this.Cover = track.Album.Cover;
-				this.CoverSource = this.DataService.GetImage(track.Album.AlbumId);
+                this.CoverSource = this.DataService.GetImage(track.Album.AlbumId);
             }
         }
         private void OnMediaOpened()
@@ -356,11 +364,11 @@ namespace BSE.Tunes.StoreApp.ViewModels
             this.CurrentTrackDuration = this.CurrentTrack.Duration.ToString();
             this.CurrentProgressTime = TimeSpan.FromMinutes(0).ToString();
 
-			Uri coverSource = this.DataService.GetImage(this.CurrentTrack.Album.AlbumId);
-			if (coverSource != null && !coverSource.Equals(this.CoverSource))
-			{
-				this.CoverSource = coverSource;
-			}
+            Uri coverSource = this.DataService.GetImage(this.CurrentTrack.Album.AlbumId);
+            if (coverSource != null && !coverSource.Equals(this.CoverSource))
+            {
+                this.CoverSource = coverSource;
+            }
 
             this.ProgressMaximumValue = this.m_playerManager.Duration.TotalSeconds;
             this.StepFrequency = this.SliderFrequency(this.m_playerManager.Duration);
@@ -381,7 +389,7 @@ namespace BSE.Tunes.StoreApp.ViewModels
         private void OnMediaFailed(object exceptionRoutedEventArgs)
         {
         }
-        
+
         private void OnPlayerStateChanged(PlayerState playerState)
         {
             this.PlayerState = playerState;

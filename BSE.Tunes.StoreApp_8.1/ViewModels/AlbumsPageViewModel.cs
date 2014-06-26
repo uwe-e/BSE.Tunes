@@ -107,7 +107,12 @@ namespace BSE.Tunes.StoreApp.ViewModels
             this.m_dialogService = dialogService;
 
             this.m_resourceService = resourceService;
-            Load();
+            this.Load();
+        }
+        public override void ResetData()
+        {
+            base.ResetData();
+            this.Load();
         }
         #endregion
 
@@ -166,7 +171,7 @@ namespace BSE.Tunes.StoreApp.ViewModels
                         {
                             foreach (var album in albums)
                             {
-                                this.Albums.Add(new AlbumViewModel(this.m_dataService ,album));
+                                this.Albums.Add(new AlbumViewModel(this.m_dataService, album));
                             }
                             pageNumber += pageSize;
                         }

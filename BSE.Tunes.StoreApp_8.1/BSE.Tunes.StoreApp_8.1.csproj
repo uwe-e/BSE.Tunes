@@ -147,6 +147,7 @@
     <Compile Include="Interfaces\INavigationAware.cs" />
     <Compile Include="IO\AudioStreamDownloader.cs" />
     <Compile Include="IO\LocalStorage.cs" />
+    <Compile Include="Messaging\ResetDataMessage.cs" />
     <Compile Include="Services\CacheableBitmapService.cs" />
     <Compile Include="Services\ICacheableBitmapService.cs" />
     <Compile Include="Managers\IPlayerManager.cs" />
@@ -195,7 +196,7 @@
     <Compile Include="Services\NavigationService.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Services\PlayerService.cs">
+    <Compile Include="Themes\PlayerService.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Services\ResourceService.cs">

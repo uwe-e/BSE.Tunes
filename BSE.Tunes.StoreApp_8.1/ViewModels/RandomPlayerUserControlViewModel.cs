@@ -21,7 +21,7 @@ namespace BSE.Tunes.StoreApp.ViewModels
         private readonly IDataService m_dataService;
         private readonly PlayerManager m_playerManager;
         private RelayCommand m_playRandomTracksCommand;
-		private ObservableCollection<int> m_filteredTrackIds;
+        private ObservableCollection<int> m_filteredTrackIds;
         #endregion
 
         #region Properties
@@ -33,18 +33,18 @@ namespace BSE.Tunes.StoreApp.ViewModels
                     (this.m_playRandomTracksCommand = new RelayCommand(this.PlayRandomTracks, this.CanExecutePlayRandomTracks));
             }
         }
-		public ObservableCollection<int> FilteredTrackIds
-		{
-			get
-			{
-				return this.m_filteredTrackIds;
-			}
-			set
-			{
-				this.m_filteredTrackIds = value;
-				RaisePropertyChanged("FilteredTrackIds");
-			}
-		}
+        public ObservableCollection<int> FilteredTrackIds
+        {
+            get
+            {
+                return this.m_filteredTrackIds;
+            }
+            set
+            {
+                this.m_filteredTrackIds = value;
+                RaisePropertyChanged("FilteredTrackIds");
+            }
+        }
         #endregion
 
         #region MethodsPublic
@@ -54,27 +54,32 @@ namespace BSE.Tunes.StoreApp.ViewModels
             this.m_playerManager = playerManager;
             this.LoadData();
         }
+        public override void ResetData()
+        {
+            base.ResetData();
+            this.LoadData();
+        }
         #endregion
 
         #region MethodsPrivate
         private async void LoadData()
         {
-			ObservableCollection<int> trackIds = await this.m_dataService.GetTrackIdsByFilters(new Filter());
-			if (trackIds != null)
-			{
-				this.FilteredTrackIds = trackIds.ToRandomCollection();
-				int trackId = this.FilteredTrackIds.FirstOrDefault();
-				if (trackId > 0)
-				{
-					Track track = await this.m_dataService.GetTrackById(trackId);
+            ObservableCollection<int> trackIds = await this.m_dataService.GetTrackIdsByFilters(new Filter());
+            if (trackIds != null)
+            {
+                this.FilteredTrackIds = trackIds.ToRandomCollection();
+                int trackId = this.FilteredTrackIds.FirstOrDefault();
+                if (trackId > 0)
+                {
+                    Track track = await this.m_dataService.GetTrackById(trackId);
                     if (track != null)
                     {
                         Messenger.Default.Send<TrackMessage>(new TrackMessage(track));
                     }
-				}
-				this.m_playerManager.TrackIds = new ObservableCollection<int>(this.FilteredTrackIds);
-				this.PlayRandomTracksCommand.RaiseCanExecuteChanged();
-			}
+                }
+                this.m_playerManager.TrackIds = new ObservableCollection<int>(this.FilteredTrackIds);
+                this.PlayRandomTracksCommand.RaiseCanExecuteChanged();
+            }
         }
         private bool CanExecutePlayRandomTracks()
         {
@@ -82,11 +87,11 @@ namespace BSE.Tunes.StoreApp.ViewModels
         }
         private void PlayRandomTracks()
         {
-			if (this.FilteredTrackIds != null)
-			{
-				this.FilteredTrackIds = this.FilteredTrackIds.ToRandomCollection();
-				this.m_playerManager.PlayTracks(this.FilteredTrackIds, Data.Audio.PlayerMode.Random);
-			}
+            if (this.FilteredTrackIds != null)
+            {
+                this.FilteredTrackIds = this.FilteredTrackIds.ToRandomCollection();
+                this.m_playerManager.PlayTracks(this.FilteredTrackIds, Data.Audio.PlayerMode.Random);
+            }
         }
         #endregion
     }

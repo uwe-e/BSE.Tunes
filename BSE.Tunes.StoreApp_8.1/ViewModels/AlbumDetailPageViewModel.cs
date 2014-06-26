@@ -22,7 +22,7 @@ namespace BSE.Tunes.StoreApp.ViewModels
         #region FieldsPrivate
         private INavigationService m_navigationService;
         private Album m_album;
-		private Uri m_coverSource;
+        private Uri m_coverSource;
         private PlayerManager m_playerManager;
         private RelayCommand m_playAlbumCommand;
         private RelayCommand m_removeSelectionCommand;
@@ -52,18 +52,18 @@ namespace BSE.Tunes.StoreApp.ViewModels
                 RaisePropertyChanged("Album");
             }
         }
-		public Uri CoverSource
-		{
-			get
-			{
-				return this.m_coverSource;
-			}
-			set
-			{
-				this.m_coverSource = value;
-				RaisePropertyChanged("CoverSource");
-			}
-		}
+        public Uri CoverSource
+        {
+            get
+            {
+                return this.m_coverSource;
+            }
+            set
+            {
+                this.m_coverSource = value;
+                RaisePropertyChanged("CoverSource");
+            }
+        }
         public ObservableCollection<Track> SelectedTracks
         {
             get
@@ -104,11 +104,11 @@ namespace BSE.Tunes.StoreApp.ViewModels
                     (this.m_removeSelectionCommand = new RelayCommand(RemoveSelection, CanExecuteRemoveSelection));
             }
         }
-        public override ObservableCollection<MenuItemViewModel> MenuItemsPlaylist
-        {
-            get;
-            set;
-        }
+        //public override ObservableCollection<MenuItemViewModel> MenuItemsPlaylist
+        //{
+        //	get;
+        //	set;
+        //}
         #endregion
 
         #region MethodsPublic
@@ -128,8 +128,8 @@ namespace BSE.Tunes.StoreApp.ViewModels
             if (navigationParameter is int)
             {
                 this.Album = await this.DataService.GetAlbumById((int)navigationParameter);
-				this.CoverSource = this.DataService.GetImage(this.Album.AlbumId);
-				this.PlayAlbumCommand.RaiseCanExecuteChanged();
+                this.CoverSource = this.DataService.GetImage(this.Album.AlbumId);
+                this.PlayAlbumCommand.RaiseCanExecuteChanged();
                 this.SelectedTracks = new ObservableCollection<Track>();
                 this.SelectedTracks.CollectionChanged += OnSelectedTrackCollectionChanged;
                 this.RemoveSelectionCommand.RaiseCanExecuteChanged();
@@ -204,15 +204,15 @@ namespace BSE.Tunes.StoreApp.ViewModels
             }
             if (tracks != null)
             {
-				var trackIds = tracks.Select(track => track.Id);
-				if (trackIds != null)
-				{
-					this.m_playerManager.PlayTracks(
-						new System.Collections.ObjectModel.ObservableCollection<int>(trackIds),
-						PlayerMode.CD);
-				}
-				//this.m_playerManager.PlayTracks(tracks, PlayerMode.CD);
-				
+                var trackIds = tracks.Select(track => track.Id);
+                if (trackIds != null)
+                {
+                    this.m_playerManager.PlayTracks(
+                        new System.Collections.ObjectModel.ObservableCollection<int>(trackIds),
+                        PlayerMode.CD);
+                }
+                //this.m_playerManager.PlayTracks(tracks, PlayerMode.CD);
+
             }
         }
         private bool CanExecuteRemoveSelection()
@@ -237,7 +237,7 @@ namespace BSE.Tunes.StoreApp.ViewModels
         {
             this.RemoveSelectionCommand.RaiseCanExecuteChanged();
         }
-        
+
         #endregion
     }
 }

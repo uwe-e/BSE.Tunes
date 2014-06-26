@@ -219,19 +219,19 @@ namespace BSE.Tunes.StoreApp.Services
                     Guid guid = this.m_currentTrack.Guid;
                     if (guid != null && !guid.Equals(Guid.Empty))
                     {
-                        //if (this.m_mediaStreamSource != null)
-                        //{
-                        //    try
-                        //    {
-                        //        this.m_mediaStreamSource.SampleRequested -= OnStreamSourceSampleRequested;
-                        //        this.m_mediaStreamSource.Starting -= OnStreamSourceStarting;
-                        //        this.m_mediaStreamSource.Closed -= OnStreamSourceClosed;
-                        //    }
-                        //    catch (Exception ex)
-                        //    {
-                        //    };
-                        //    this.m_mediaStreamSource = null;
-                        //}
+                        if (this.m_mediaStreamSource != null)
+                        {
+                            try
+                            {
+                                this.m_mediaStreamSource.SampleRequested -= OnStreamSourceSampleRequested;
+                                this.m_mediaStreamSource.Starting -= OnStreamSourceStarting;
+                                this.m_mediaStreamSource.Closed -= OnStreamSourceClosed;
+                            }
+                            catch (Exception ex)
+                            {
+                            };
+                            this.m_mediaStreamSource = null;
+                        }
                         // close the MediaStreamSource and remove the MediaStreamSource event handlers
                         if (this.m_mediaStream != null)
                         {

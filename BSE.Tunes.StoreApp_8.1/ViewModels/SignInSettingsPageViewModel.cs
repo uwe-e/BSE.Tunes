@@ -1,8 +1,10 @@
 ﻿using BSE.Tunes.StoreApp.DataModel;
 using BSE.Tunes.StoreApp.Interfaces;
+using BSE.Tunes.StoreApp.Messaging;
 using BSE.Tunes.StoreApp.Services;
 using BSE.Tunes.StoreApp.Views;
 using GalaSoft.MvvmLight.Command;
+using GalaSoft.MvvmLight.Messaging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,7 +15,7 @@ using Windows.Security.Credentials;
 
 namespace BSE.Tunes.StoreApp.ViewModels
 {
-	public class SignInSettingsPageViewModel : ViewModelBase, INavigationAware
+    public class SignInSettingsPageViewModel : ViewModelBase, INavigationAware
     {
         #region FieldsPrivate
         private IDataService m_dataService;
@@ -103,28 +105,20 @@ namespace BSE.Tunes.StoreApp.ViewModels
             this.m_dataService = dataService;
             this.m_navigationService = navigationService;
             this.m_accoutService = accountService;
-            
+
             this.LoadData();
         }
-		public void OnNavigatedTo(object navigationParameter, Windows.UI.Xaml.Navigation.NavigationMode navigationMode)
-		{
-			AggregateException aggregateException = navigationParameter as AggregateException;
-			if (aggregateException != null)
-			{
-				string errorMessage = string.Empty;
-				foreach (var e in aggregateException.Flatten().InnerExceptions)
-				{
-					if (e != null && !string.IsNullOrEmpty(e.Message))
-					{
-						errorMessage += e.Message + Environment.NewLine;
-					}
-				}
-				this.ErrorMessage = errorMessage;
-			}
-		}
-		public void OnNavigatedFrom(bool suspending)
-		{
-		}
+        public void OnNavigatedTo(object navigationParameter, Windows.UI.Xaml.Navigation.NavigationMode navigationMode)
+        {
+            Exception exception = navigationParameter as Exception;
+            if (exception != null)
+            {
+                this.ErrorMessage = exception.Message;
+            }
+        }
+        public void OnNavigatedFrom(bool suspending)
+        {
+        }
         #endregion
 
         #region MethodsPrivate
@@ -154,6 +148,7 @@ namespace BSE.Tunes.StoreApp.ViewModels
                 try
                 {
                     TunesUser tunesUser = await this.m_accoutService.SignInUser(this.UserName, this.Password, this.UseSecureLogin);
+                    Messenger.Default.Send<ResetDataMessage>(new ResetDataMessage());
                     this.m_navigationService.Navigate(typeof(MainPage));
                 }
                 catch (Exception exception)

@@ -114,10 +114,10 @@ namespace BSE.Tunes.StoreApp.Services
                     this.TokenResponse = await client.RequestResourceOwnerPasswordAsync(userName, password);
                     if (this.TokenResponse != null)
                     {
-						if (this.TokenResponse.IsError)
-						{
-							throw new UnauthorizedAccessException(this.m_strUnauthorizedAccessExceptionMessage);
-						}
+                        if (this.TokenResponse.IsError)
+                        {
+                            throw new UnauthorizedAccessException(this.m_strUnauthorizedAccessExceptionMessage);
+                        }
 
                         Windows.Storage.ApplicationData.Current.RoamingSettings.Values["username"] = userName;
                         Windows.Storage.ApplicationData.Current.RoamingSettings.Values["usesecurelogin"] = useSecureLogin;
@@ -137,9 +137,13 @@ namespace BSE.Tunes.StoreApp.Services
                         }
                     }
                 }
-                catch (Exception)
+                catch (UnauthorizedAccessException)
                 {
                     throw new UnauthorizedAccessException(this.m_strUnauthorizedAccessExceptionMessage);
+                }
+                catch (Exception exception)
+                {
+                    throw exception;
                 }
             }
             else
