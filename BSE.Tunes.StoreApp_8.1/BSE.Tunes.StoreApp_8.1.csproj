@@ -196,7 +196,7 @@
     <Compile Include="Services\NavigationService.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Themes\PlayerService.cs">
+    <Compile Include="Services\PlayerService.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Services\ResourceService.cs">

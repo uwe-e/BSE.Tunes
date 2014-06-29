@@ -219,40 +219,10 @@ namespace BSE.Tunes.StoreApp.Services
                     Guid guid = this.m_currentTrack.Guid;
                     if (guid != null && !guid.Equals(Guid.Empty))
                     {
-                        if (this.m_mediaStreamSource != null)
-                        {
-                            try
-                            {
-                                this.m_mediaStreamSource.SampleRequested -= OnStreamSourceSampleRequested;
-                                this.m_mediaStreamSource.Starting -= OnStreamSourceStarting;
-                                this.m_mediaStreamSource.Closed -= OnStreamSourceClosed;
-                            }
-                            catch (Exception ex)
-                            {
-                            };
-                            this.m_mediaStreamSource = null;
-                        }
-                        // close the MediaStreamSource and remove the MediaStreamSource event handlers
-                        if (this.m_mediaStream != null)
-                        {
-                            this.m_mediaStream.Dispose();
-                            this.m_mediaStream = null;
-                        }
-                        //var tokenResponse = await this.m_accountService.RefreshToken();
-                        
-                        if (this.m_audioStreamDownloader != null)
-                        {
-                            this.m_audioStreamDownloader.DownloadProgessStarted -= OnDownloadProgessStarted;
-                            this.m_audioStreamDownloader.Dispose();
-                            this.m_audioStreamDownloader = null;
-                        }
                         string strUrl = string.Format("{0}/api/files/{1}/", this.m_dataService.ServiceUrl, guid.ToString());
 
                         this.m_audioStreamDownloader = new AudioStreamDownloader();
                         this.m_audioStreamDownloader.DownloadProgessStarted += OnDownloadProgessStarted;
-                        
-                        //string strUrl1 = string.Format("{0}/api/files/head/{1}/", this.m_dataService.ServiceUrl, guid.ToString());
-                        //long size = await m_audioStreamDownloader.GetFileSizeAsync(new Uri(strUrl));
                         await m_audioStreamDownloader.DownloadAsync(new Uri(strUrl), guid);
                     }
                 }
@@ -306,6 +276,34 @@ namespace BSE.Tunes.StoreApp.Services
         #endregion
 
         #region MethodsPrivate
+        private void Reset()
+        {
+            if (this.m_audioStreamDownloader != null)
+            {
+                this.m_audioStreamDownloader.DownloadProgessStarted -= OnDownloadProgessStarted;
+                this.m_audioStreamDownloader.Close();
+                this.m_audioStreamDownloader.Dispose();
+                this.m_audioStreamDownloader = null;
+            }
+            if (this.m_mediaStream != null)
+            {
+                this.m_mediaStream.Dispose();
+                this.m_mediaStream = null;
+            }
+            if (this.m_mediaStreamSource != null)
+            {
+                try
+                {
+                    this.m_mediaStreamSource.SampleRequested -= OnStreamSourceSampleRequested;
+                    this.m_mediaStreamSource.Starting -= OnStreamSourceStarting;
+                    this.m_mediaStreamSource.Closed -= OnStreamSourceClosed;
+                }
+                catch (Exception ex)
+                {
+                }
+                this.m_mediaStreamSource = null;
+            }
+        }
         private void OnDownloadProgessStarted(object sender, EventArgs e)
         {
             // initialize Parsing Variables

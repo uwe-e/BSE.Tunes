@@ -32,6 +32,7 @@ namespace BSE.Tunes.StoreApp.IO
         private bool m_isCanceled;
         private long m_bytesReceived;
         private long m_totalBytesToReceive;
+        private IStorageFile m_storageFile;
         // Track whether Dispose has been called.
         private bool m_bDisposed;
         #endregion
@@ -107,14 +108,17 @@ namespace BSE.Tunes.StoreApp.IO
                             }
                             else
                             {
-                                long newTo = this.m_bytesReceived + (ResponseContentBufferSize - 1);
-                                int receivedBytes = await this.GetReceivedBytes(source, this.m_bytesReceived, newTo);
-                                this.m_bytesReceived += (long)receivedBytes;
-                                if (!hasDownloadStarted)
+                                if (this.m_bytesReceived >= ResponseContentBufferSize)
                                 {
-                                    hasDownloadStarted = true;
-                                    this.OnDownloadProgessStarted();
+                                    if (!hasDownloadStarted)
+                                    {
+                                        hasDownloadStarted = true;
+                                        this.OnDownloadProgessStarted();
+                                    }
                                 }
+                                long newTo = this.m_bytesReceived + (ResponseContentBufferSize - 1);
+                                int receivedBytes = await this.GetReceivedBytes(this.m_responseStream, source, this.m_bytesReceived, newTo);
+                                this.m_bytesReceived += (long)receivedBytes;
                             }
                         }
                         while (this.m_bytesReceived != this.m_totalBytesToReceive);
@@ -163,6 +167,10 @@ namespace BSE.Tunes.StoreApp.IO
                         this.m_responseStream.Dispose();
                         this.m_responseStream = null;
                     }
+                    if (this.m_storageFile != null)
+                    {
+                        this.m_storageFile = null;
+                    }
                 }
                 this.m_bDisposed = true;
             }
@@ -187,8 +195,8 @@ namespace BSE.Tunes.StoreApp.IO
         private async Task<Stream> CreateStream(Guid trackId)
         {
             IStorageFolder storageFolder = await LocalStorage.GetTempFolderAsync();
-            IStorageFile file = await storageFolder.CreateFileAsync(trackId.ToString(), CreationCollisionOption.OpenIfExists) as StorageFile;
-            IRandomAccessStream windowsRuntimeStream = await file.OpenAsync(FileAccessMode.ReadWrite);
+            this.m_storageFile = await storageFolder.CreateFileAsync(trackId.ToString(), CreationCollisionOption.OpenIfExists) as StorageFile;
+            IRandomAccessStream windowsRuntimeStream = await this.m_storageFile.OpenAsync(FileAccessMode.ReadWrite);
             return windowsRuntimeStream.AsStream();
         }
         private async Task<long> GetFileSizeAsync(Uri uri)
@@ -209,23 +217,33 @@ namespace BSE.Tunes.StoreApp.IO
             }
             return contentLength;
         }
-        private async Task<int> GetReceivedBytes(Uri uri, long rangeFrom, long rangeTo)
+        private async Task<int> GetReceivedBytes(Stream responseStream, Uri uri, long rangeFrom, long rangeTo)
         {
             int receivedBytes = -1;
-            using (var httpClient = new HttpClient())
+            if (responseStream != null)
             {
-                httpClient.AddRange(rangeFrom, rangeTo);
-                using (HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Get, uri))
+                using (var httpClient = new HttpClient())
                 {
-                    using (var responseMessage = await httpClient.SendAsync(request))
+                    httpClient.AddRange(rangeFrom, rangeTo);
+                    using (HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Get, uri))
                     {
-                        responseMessage.EnsureSuccessStatusCode();
-                        receivedBytes = (int)responseMessage.Content.Headers.ContentLength.GetValueOrDefault(0);
-                        using (var stream = await responseMessage.Content.ReadAsStreamAsync())
+                        using (var responseMessage = await httpClient.SendAsync(request))
                         {
-                            this.m_responseStream.Position = rangeFrom;
-                            await stream.CopyToAsync(this.m_responseStream, ResponseContentBufferSize);
-                            this.m_responseStream.Flush();
+                            responseMessage.EnsureSuccessStatusCode();
+                            receivedBytes = (int)responseMessage.Content.Headers.ContentLength.GetValueOrDefault(0);
+                            using (var stream = await responseMessage.Content.ReadAsStreamAsync())
+                            {
+                                try
+                                {
+                                    responseStream.Position = rangeFrom;
+                                    await stream.CopyToAsync(this.m_responseStream, ResponseContentBufferSize);
+                                    responseStream.Flush();
+                                }
+                                catch (Exception e)
+                                {
+                                    throw e;
+                                }
+                            }
                         }
                     }
                 }
