@@ -116,28 +116,16 @@ namespace BSE.Tunes.StoreApp.ViewModels
         #endregion
 
         #region MethodsPrivate
-        private void LoadData()
+        private async void LoadData()
         {
             TunesUser user = this.m_accountService.User;
             if (user != null && !string.IsNullOrEmpty(user.UserName))
             {
-                var playlists = Task.Run(() =>
-                {
-                    try
-                    {
-                        return this.m_dataService.GetPlaylistsByUserName(user.UserName);
-                    }
-                    catch (Exception)
-                    {
-                        throw;
-                    }
-                });
-
                 try
                 {
                     this.Playlists.Clear();
-                    playlists.Wait();
-                    foreach (var playlist in playlists.Result)
+                    var playlists = await this.m_dataService.GetPlaylistsByUserName(user.UserName);
+                    foreach (var playlist in playlists)
                     {
                         if (playlist != null)
                         {
@@ -165,7 +153,7 @@ namespace BSE.Tunes.StoreApp.ViewModels
         {
             return this.HasSelectedItems = this.SelectedPlaylists != null && this.SelectedPlaylists.Count > 0;
         }
-        private void DeleteSelectedPlaylists()
+        private async void DeleteSelectedPlaylists()
         {
             var selectedPlaylistViewModels = new System.Collections.ObjectModel.ObservableCollection<PlaylistViewModel>(this.SelectedPlaylists);
             if (selectedPlaylistViewModels != null)
@@ -176,8 +164,7 @@ namespace BSE.Tunes.StoreApp.ViewModels
                     var playlistsToDelete = new System.Collections.ObjectModel.ObservableCollection<Playlist>(this.SelectedPlaylists.Select(p => p.Playlist));
                     if (playlistsToDelete != null)
                     {
-                        Task<bool> task = Task.Run(() => this.m_dataService.DeletePlaylists(playlistsToDelete));
-                        var hasDeleted = task.Result;
+                        var hasDeleted = await this.m_dataService.DeletePlaylists(playlistsToDelete);
                         if (hasDeleted)
                         {
                             foreach (var playlistViewModel in list)
@@ -185,7 +172,7 @@ namespace BSE.Tunes.StoreApp.ViewModels
                                 if (playlistViewModel != null)
                                 {
                                     this.Playlists.Remove(playlistViewModel);
-                                    this.m_cacheableBitmapService.RemoveCache(playlistViewModel.Playlist.Guid.ToString());
+                                    await this.m_cacheableBitmapService.RemoveCache(playlistViewModel.Playlist.Guid.ToString());
                                 }
                             }
                             GalaSoft.MvvmLight.Messaging.Messenger.Default.Send<BSE.Tunes.StoreApp.Messaging.PlaylistChangeMessage>(

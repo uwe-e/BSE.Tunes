@@ -443,7 +443,7 @@ namespace BSE.Tunes.StoreApp.Services
         {
             //throw new NotImplementedException();
         }
-        private async void OnMediaOpened(object sender, Windows.UI.Xaml.RoutedEventArgs e)
+        private void OnMediaOpened(object sender, Windows.UI.Xaml.RoutedEventArgs e)
         {
             this.m_playerNaturalDuration = this.m_mediaElement.NaturalDuration.TimeSpan;
             this.m_mediaControls.IsEnabled = true;
@@ -452,18 +452,7 @@ namespace BSE.Tunes.StoreApp.Services
             updater.Type = MediaPlaybackType.Music;
             updater.MusicProperties.AlbumArtist = this.CurrentTrack.Album.Artist.Name;
             updater.MusicProperties.Title = this.CurrentTrack.Name;
-
-            //UE 24.03.2014: If the updater.Thumbnail is used, the background task capability was lost
-            //
-            //if (this.CurrentTrack.Album.Cover != null)
-            //{
-            //	using (MemoryStream stream = new MemoryStream(this.CurrentTrack.Album.Cover))
-            //	{
-            //		var t2 = await stream.AsRandomAccessStreamAsync();
-            //		updater.Thumbnail = Windows.Storage.Streams.RandomAccessStreamReference.CreateFromStream(t2);
-            //	}
-            //}
-            
+            updater.Thumbnail = Windows.Storage.Streams.RandomAccessStreamReference.CreateFromUri(this.m_dataService.GetImage(this.CurrentTrack.Album.AlbumId, true));
             updater.Update();
 
             this.m_mediaControls.IsPlayEnabled = true;

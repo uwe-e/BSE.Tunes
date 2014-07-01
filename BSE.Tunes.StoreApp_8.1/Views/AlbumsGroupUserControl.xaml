@@ -36,7 +36,8 @@
                                             toolkit:ListViewExtensions.Command="{Binding SelectCommand}">
             <GridView.ItemsPanel>
                 <ItemsPanelTemplate>
-                    <VariableSizedWrapGrid Orientation="Vertical" ItemHeight="165" ItemWidth="165" />
+                    <!--<VariableSizedWrapGrid Orientation="Vertical" ItemHeight="165" ItemWidth="165" />-->
+                    <VariableSizedWrapGrid Orientation="Vertical" ItemHeight="170" ItemWidth="170"/>
                 </ItemsPanelTemplate>
             </GridView.ItemsPanel>
         </controls:VariableSizedWrapGridView>

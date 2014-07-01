@@ -165,21 +165,9 @@ namespace BSE.Tunes.StoreApp.ViewModels
                 TunesUser user = this.AccountService.User;
                 if (user != null && !string.IsNullOrEmpty(user.UserName))
                 {
-                    var playlist = Task.Run(() =>
-                    {
-                        try
-                        {
-                            return this.DataService.GetPlaylistById((int)navigationParameter, user.UserName);
-                        }
-                        catch (Exception)
-                        {
-                            throw;
-                        }
-                    });
                     try
                     {
-                        playlist.Wait();
-                        this.Playlist = playlist.Result;
+                        this.Playlist = await this.DataService.GetPlaylistById((int)navigationParameter, user.UserName);
 
                         this.PageTitle = string.Format(CultureInfo.CurrentCulture,
                             this.ResourceService.GetString("IDS_PlaylistPage_PageTitle", "Playlist {0}"), this.Playlist.Name);

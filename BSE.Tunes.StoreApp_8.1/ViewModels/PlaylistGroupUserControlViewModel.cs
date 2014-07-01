@@ -72,7 +72,7 @@ namespace BSE.Tunes.StoreApp.ViewModels
         #endregion
 
         #region MethodsPrivate
-        private void LoadData()
+        private async void LoadData()
         {
             BSE.Tunes.Data.TunesUser user = this.m_accountService.User;
             if (user != null && !string.IsNullOrEmpty(user.UserName))
@@ -81,9 +81,8 @@ namespace BSE.Tunes.StoreApp.ViewModels
                 this.Playlists.Clear();
                 try
                 {
-                    var playlists = Task.Run(async () => await this.m_dataService.GetPlaylistsByUserName(user.UserName, 4));
-                    playlists.Wait();
-                    foreach (var playlist in playlists.Result)
+                    var playlists = await this.m_dataService.GetPlaylistsByUserName(user.UserName, 4);
+                    foreach (var playlist in playlists)
                     {
                         if (playlist != null)
                         {

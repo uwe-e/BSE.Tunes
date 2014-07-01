@@ -53,7 +53,6 @@
     <DataTemplate x:Key="Standard160x160ItemTemplate">
         <Grid HorizontalAlignment="Left" Width="160" Height="160">
             <Border Background="{StaticResource ListViewItemPlaceholderBackgroundThemeBrush}">
-                <!--<Image Source="{Binding Path=Image, Mode=OneWay, Converter={StaticResource ImageConverter}}" Stretch="UniformToFill" AutomationProperties.Name="{Binding Title}"/>-->
                 <Image Source="{Binding Path=ImageSource}" Stretch="UniformToFill" AutomationProperties.Name="{Binding Title}"/>
             </Border>
             <StackPanel VerticalAlignment="Bottom" Background="{StaticResource ListViewItemOverlayBackgroundThemeBrush}">
@@ -64,9 +63,8 @@
     </DataTemplate>
 
     <DataTemplate x:Key="Standard320x320ItemTemplate">
-        <Grid HorizontalAlignment="Left" Width="320" Height="320">
+        <Grid HorizontalAlignment="Left" Width="328" Height="328">
             <Border Background="{StaticResource ListViewItemPlaceholderBackgroundThemeBrush}">
-                <!--<Image Source="{Binding Path=Image, Mode=OneWay, Converter={StaticResource ImageConverter}}" Stretch="UniformToFill" AutomationProperties.Name="{Binding Title}"/>-->
                 <Image Source="{Binding Path=ImageSource}" Stretch="UniformToFill" AutomationProperties.Name="{Binding Title}"/>
             </Border>
             <StackPanel VerticalAlignment="Bottom" Background="{StaticResource ListViewItemOverlayBackgroundThemeBrush}">

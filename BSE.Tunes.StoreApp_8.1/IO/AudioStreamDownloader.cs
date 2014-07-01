@@ -79,6 +79,7 @@ namespace BSE.Tunes.StoreApp.IO
             }
             this.m_totalBytesToReceive = 0;
             this.m_bytesReceived = 0;
+            this.m_storageFile = null;
             this.m_isCanceled = false;
             bool hasDownloadStarted = false;
 
@@ -130,6 +131,12 @@ namespace BSE.Tunes.StoreApp.IO
             }
             catch (HttpRequestException httpRequestException)
             {
+                throw httpRequestException;
+            }
+            catch (UnauthorizedAccessException unauthorizedAccessException)
+            {
+                //System.Threading.Tasks.Task.Run(async () => await LocalStorage.ClearTempFolderAsync());
+                //var test = Task.Run(async ()=> await DownloadAsync(source, trackId));
 
             }
             catch (Exception exception)

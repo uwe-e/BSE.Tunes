@@ -96,7 +96,7 @@ namespace BSE.Tunes.StoreApp.ViewModels
         #endregion
 
         #region MethodsPrivate
-        private void SaveNewPlaylist()
+        private async void SaveNewPlaylist()
         {
             if (!string.IsNullOrEmpty(this.PlaylistName))
             {
@@ -112,13 +112,12 @@ namespace BSE.Tunes.StoreApp.ViewModels
                     };
                     try
                     {
-                        var task = Task.Run(async () => await this.m_dataService.InsertPlaylist(playlist));
-                        task.Wait();
+                        playlist = await this.m_dataService.InsertPlaylist(playlist);
                         this.ErrorMessage = string.Empty;
                         this.PlaylistName = string.Empty;
                         if (this.PlaylistInserted != null)
                         {
-                            this.PlaylistInserted(this, new PlaylistChangedEventArgs(task.Result));
+                            this.PlaylistInserted(this, new PlaylistChangedEventArgs(playlist));
                         }
                         this.IsOpen = false;
                     }
