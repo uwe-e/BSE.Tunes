@@ -101,9 +101,9 @@ namespace BSE.Tunes.StoreApp.ViewModels
             if (!string.IsNullOrEmpty(this.ServiceUrl))
             {
                 this.m_hostSettingsService.SetServiceUrl(this.ServiceUrl);
-                bool isAccessible = await this.m_dataService.IsHostAccessible();
                 try
                 {
+                    bool isAccessible = await this.m_dataService.IsHostAccessible();
                     if (isAccessible)
                     {
                         this.m_accountService.ServiceUrl = this.m_hostSettingsService.ServiceUrl;
