@@ -20,8 +20,13 @@
     
     <SolidColorBrush x:Key="ComboBoxArrowForegroundThemeBrush" Color="White" />
     <SolidColorBrush x:Key="ListViewItemOverlayBackgroundThemeBrush" Color="#991f5fbc" />
+    <SolidColorBrush x:Key="ListViewItemBackgroundThemeBrush" Color="#FF1f5fbc" />
     <SolidColorBrush x:Key="BigButtonBackgroundThemeBrush" Color="#FF1f5fbc" />
 
+    <Style TargetType="Slider">
+        <Setter Property="Foreground" Value="{StaticResource ListViewItemBackgroundThemeBrush}"/>
+    </Style>
+    
     <Style TargetType="ComboBox">
         <Setter Property="Background" Value="Transparent"/>
         <Setter Property="Foreground" Value="White"/>
@@ -29,7 +34,7 @@
     </Style>
 
     <DataTemplate x:Key="PlaylistItemTemplate">
-        <StackPanel Orientation="Horizontal" Width="320" Height="160" Background="{StaticResource ListViewItemOverlayBackgroundThemeBrush}">
+        <StackPanel Orientation="Horizontal" Width="320" Height="160" Background="{StaticResource ListViewItemBackgroundThemeBrush}">
             <Image Width="160" Source="{Binding ImageSource, Mode=TwoWay}"/>
             <StackPanel Orientation="Vertical" Width="160" Height="160">
                 <TextBlock Text="{Binding Playlist.Name}" FontWeight="Normal" FontSize="22" Margin="10,0,0,0" Height="130" VerticalAlignment="Top" TextTrimming="WordEllipsis" />

@@ -32,7 +32,6 @@ namespace BSE.Tunes.StoreApp.IO
         private bool m_isCanceled;
         private long m_bytesReceived;
         private long m_totalBytesToReceive;
-        private IStorageFile m_storageFile;
         // Track whether Dispose has been called.
         private bool m_bDisposed;
         #endregion
@@ -79,7 +78,6 @@ namespace BSE.Tunes.StoreApp.IO
             }
             this.m_totalBytesToReceive = 0;
             this.m_bytesReceived = 0;
-            this.m_storageFile = null;
             this.m_isCanceled = false;
             bool hasDownloadStarted = false;
 
@@ -135,8 +133,6 @@ namespace BSE.Tunes.StoreApp.IO
             }
             catch (UnauthorizedAccessException unauthorizedAccessException)
             {
-                //System.Threading.Tasks.Task.Run(async () => await LocalStorage.ClearTempFolderAsync());
-                //var test = Task.Run(async ()=> await DownloadAsync(source, trackId));
 
             }
             catch (Exception exception)
@@ -174,10 +170,6 @@ namespace BSE.Tunes.StoreApp.IO
                         this.m_responseStream.Dispose();
                         this.m_responseStream = null;
                     }
-                    if (this.m_storageFile != null)
-                    {
-                        this.m_storageFile = null;
-                    }
                 }
                 this.m_bDisposed = true;
             }
@@ -201,10 +193,28 @@ namespace BSE.Tunes.StoreApp.IO
         #region MethodsPrivate
         private async Task<Stream> CreateStream(Guid trackId)
         {
-            IStorageFolder storageFolder = await LocalStorage.GetTempFolderAsync();
-            this.m_storageFile = await storageFolder.CreateFileAsync(trackId.ToString(), CreationCollisionOption.OpenIfExists) as StorageFile;
-            IRandomAccessStream windowsRuntimeStream = await this.m_storageFile.OpenAsync(FileAccessMode.ReadWrite);
-            return windowsRuntimeStream.AsStream();
+            Stream stream = null;
+            try
+            {
+                await IOUtilities.WrapSharingViolations(async () =>
+                {
+                    IStorageFolder storageFolder = await LocalStorage.GetTempFolderAsync();
+                    var storageFile = await storageFolder.CreateFileAsync(trackId.ToString(), CreationCollisionOption.OpenIfExists) as StorageFile;
+                    IRandomAccessStream windowsRuntimeStream = await storageFile.OpenAsync(FileAccessMode.ReadWrite);
+                    stream = windowsRuntimeStream.AsStream();
+                });
+            }
+            catch (Exception ex)
+            {
+
+            }
+            return stream;
+
+
+            //IStorageFolder storageFolder = await LocalStorage.GetTempFolderAsync();
+            //this.m_storageFile = await storageFolder.CreateFileAsync(trackId.ToString(), CreationCollisionOption.OpenIfExists) as StorageFile;
+            //IRandomAccessStream windowsRuntimeStream = await this.m_storageFile.OpenAsync(FileAccessMode.ReadWrite);
+            //return windowsRuntimeStream.AsStream();
         }
         private async Task<long> GetFileSizeAsync(Uri uri)
         {

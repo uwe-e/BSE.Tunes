@@ -83,6 +83,7 @@ namespace BSE.Tunes.StoreApp.Services
         private bool m_canExecuteNextTrack;
         private bool m_canExecutePreviousTrack;
         private TimeSpan m_playerNaturalDuration = new TimeSpan(0);
+        private TimeSpan m_playerPosition;
         private SystemMediaTransportControls m_mediaControls;
 
         private AudioStreamDownloader m_audioStreamDownloader;
@@ -115,11 +116,16 @@ namespace BSE.Tunes.StoreApp.Services
                 this.m_playerNaturalDuration = value;
             }
         }
+
         public TimeSpan Position
         {
             get
             {
-                return this.m_mediaElement.Position;
+                return this.m_playerPosition;
+            }
+            private set
+            {
+                this.m_playerPosition = value;
             }
         }
         public PlayerState CurrentState
@@ -168,26 +174,26 @@ namespace BSE.Tunes.StoreApp.Services
             this.m_mediaControls = SystemMediaTransportControls.GetForCurrentView();
             this.m_mediaControls.IsEnabled = false;
             this.m_mediaControls.ButtonPressed += (sender, args) =>
+            {
+                switch (args.Button)
                 {
-                    switch (args.Button)
-                    {
-                        case SystemMediaTransportControlsButton.Play:
-                            this.Play();
-                            break;
-                        case SystemMediaTransportControlsButton.Pause:
-                            this.Pause();
-                            break;
-                        case SystemMediaTransportControlsButton.Stop:
-                            this.Stop();
-                            break;
-                        case SystemMediaTransportControlsButton.Previous:
-                            this.PreviousTrack();
-                            break;
-                        case SystemMediaTransportControlsButton.Next:
-                            this.NextTrack();
-                            break;
-                    }
-                };
+                    case SystemMediaTransportControlsButton.Play:
+                        this.Play();
+                        break;
+                    case SystemMediaTransportControlsButton.Pause:
+                        this.Pause();
+                        break;
+                    case SystemMediaTransportControlsButton.Stop:
+                        this.Stop();
+                        break;
+                    case SystemMediaTransportControlsButton.Previous:
+                        this.PreviousTrack();
+                        break;
+                    case SystemMediaTransportControlsButton.Next:
+                        this.NextTrack();
+                        break;
+                }
+            };
             this.m_mediaControls.IsPlayEnabled = true;
             this.m_mediaControls.IsPauseEnabled = true;
             this.m_mediaControls.IsStopEnabled = true;
@@ -362,6 +368,10 @@ namespace BSE.Tunes.StoreApp.Services
                 // check if the sample requested byte offset is within the file size
                 if (this.m_byteOffset + sampleSize <= (ulong)this.m_audioStreamDownloader.TotalBytesToReceive)
                 {
+                    //Calculate the current position within the track
+                    double ratio = (double)this.m_byteOffset / (double)this.m_audioStreamDownloader.TotalBytesToReceive;
+                    this.m_playerPosition = new TimeSpan((long)(this.CurrentTrack.Duration.Ticks * ratio));
+
                     MediaStreamSourceSampleRequestDeferral deferal = request.GetDeferral();
 
                     var inputStream = m_mediaStream.GetInputStreamAt(this.m_byteOffset);
@@ -446,8 +456,9 @@ namespace BSE.Tunes.StoreApp.Services
         private void OnMediaOpened(object sender, Windows.UI.Xaml.RoutedEventArgs e)
         {
             this.m_playerNaturalDuration = this.m_mediaElement.NaturalDuration.TimeSpan;
+            this.m_playerPosition = new TimeSpan();
             this.m_mediaControls.IsEnabled = true;
-            
+
             SystemMediaTransportControlsDisplayUpdater updater = this.m_mediaControls.DisplayUpdater;
             updater.Type = MediaPlaybackType.Music;
             updater.MusicProperties.AlbumArtist = this.CurrentTrack.Album.Artist.Name;
