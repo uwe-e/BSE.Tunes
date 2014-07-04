@@ -20,6 +20,7 @@ using System.IO;
 using BSE.Tunes.StoreApp.IO;
 using Windows.Storage.Streams;
 using Windows.Media.MediaProperties;
+using MediaParsers;
 
 namespace BSE.Tunes.StoreApp.Services
 {
@@ -316,19 +317,25 @@ namespace BSE.Tunes.StoreApp.Services
             this.m_byteOffset = 0;
             this.m_timeOffset = new TimeSpan(0);
 
-            AudioEncodingProperties audioProps = AudioEncodingProperties.CreateMp3(44100, 2, 256000);
-            AudioStreamDescriptor audioDescriptor = new AudioStreamDescriptor(audioProps);
+            if (this.m_audioStreamDownloader.TotalBytesToReceive > 0)
+            {
+                var stream = this.m_audioStreamDownloader.Stream;
+                MpegFrame mpegFrame = stream.ReadPastId3V2Tags();
 
-            this.m_mediaStreamSource = new Windows.Media.Core.MediaStreamSource(audioDescriptor);
-            this.m_mediaStreamSource.CanSeek = true;
-            this.m_mediaStreamSource.Duration = this.m_currentTrack.Duration;
+                AudioEncodingProperties audioProps = AudioEncodingProperties.CreateMp3((uint)mpegFrame.SamplingRate, 2, (uint)mpegFrame.Bitrate);
+                AudioStreamDescriptor audioDescriptor = new AudioStreamDescriptor(audioProps);
 
-            // hooking up the MediaStreamSource event handlers 
-            this.m_mediaStreamSource.Starting += OnStreamSourceStarting;
-            this.m_mediaStreamSource.SampleRequested += OnStreamSourceSampleRequested;
-            this.m_mediaStreamSource.Closed += OnStreamSourceClosed;
+                this.m_mediaStreamSource = new Windows.Media.Core.MediaStreamSource(audioDescriptor);
+                this.m_mediaStreamSource.CanSeek = true;
+                this.m_mediaStreamSource.Duration = this.m_currentTrack.Duration;
 
-            this.m_mediaElement.SetMediaStreamSource(this.m_mediaStreamSource);
+                // hooking up the MediaStreamSource event handlers 
+                this.m_mediaStreamSource.Starting += OnStreamSourceStarting;
+                this.m_mediaStreamSource.SampleRequested += OnStreamSourceSampleRequested;
+                this.m_mediaStreamSource.Closed += OnStreamSourceClosed;
+
+                this.m_mediaElement.SetMediaStreamSource(this.m_mediaStreamSource);
+            }
         }
         private void OnStreamSourceStarting(MediaStreamSource sender, MediaStreamSourceStartingEventArgs args)
         {

@@ -125,7 +125,6 @@
     <Compile Include="Controls\WriteableImage.cs" />
     <Compile Include="Converter\AlbumPageTitleConverter.cs" />
     <Compile Include="Converter\BooleanToVisibilityConverter.cs" />
-    <Compile Include="Converter\ImageSourceConverter .cs" />
     <Compile Include="Converter\PlayerStateToIconConverter.cs" />
     <Compile Include="Converter\StringToVisibilityConverter.cs" />
     <Compile Include="Converter\TrackToVisibilityConverter.cs" />
@@ -140,7 +139,6 @@
     <Compile Include="Extensions\HttpResponseMessageExtensions.cs" />
     <Compile Include="Extensions\ObjectExtensions.cs" />
     <Compile Include="Extensions\ScaledImageFile.cs" />
-    <Compile Include="Extensions\StreamExtensions.cs" />
     <Compile Include="Extensions\WinRtHttpClientHandler.cs" />
     <Compile Include="Extensions\WriteableBitmapLoadExtensions.cs" />
     <Compile Include="Extensions\WriteableBitmapSaveExtensions.cs" />
@@ -148,6 +146,9 @@
     <Compile Include="IO\AudioStreamDownloader.cs" />
     <Compile Include="IO\IOUtilities.cs" />
     <Compile Include="IO\LocalStorage.cs" />
+    <Compile Include="Media\MediaParser\BitTools.cs" />
+    <Compile Include="Media\MediaParser\Mp3MediaStreamExtension.cs" />
+    <Compile Include="Media\MediaParser\MpegFrame.cs" />
     <Compile Include="Messaging\ResetDataMessage.cs" />
     <Compile Include="Services\CacheableBitmapService.cs" />
     <Compile Include="Services\ICacheableBitmapService.cs" />

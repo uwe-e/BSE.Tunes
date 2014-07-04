@@ -10,7 +10,6 @@
         <ResourceDictionary Source="StandardStyles.xaml"/>
     </ResourceDictionary.MergedDictionaries>
 
-    <converter:ImageSourceConverter x:Key="ImageConverter"/>
     <converter:StringToVisibilityConverter x:Key="StringToVisibilityConverter"/>
     <converter:TrackToVisibilityConverter x:Key="TrackToVisibilityConverter"/>
     <converter:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
