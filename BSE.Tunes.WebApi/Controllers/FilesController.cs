@@ -34,7 +34,6 @@ namespace BSE.Tunes.WebApi.Controllers
             this.m_impersonationUser = Settings.ImpersonationUser;
         }
         [AcceptVerbs("GET", "HEAD")]
-        [AllowAnonymous]
         [Route("{id}")]
         public HttpResponseMessage GetAudioFile(string id)
         {
