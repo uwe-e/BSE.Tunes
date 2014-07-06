@@ -20,8 +20,6 @@ namespace BSE.Tunes.Data
         [DataMember]
         public Guid Guid { get; set; }
         [DataMember]
-        public string Path { get; set; }
-        [DataMember]
         public Album Album { get; set; }
     }
 }
