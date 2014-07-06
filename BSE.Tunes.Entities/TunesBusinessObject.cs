@@ -499,7 +499,6 @@ namespace BSE.Tunes.Entities
 										TrackNumber = dataReader.GetInt32("Track", false, 0),
 										Name = dataReader.GetString("Lied", false, string.Empty),
 										Duration = dataReader.GetTimeSpan("Dauer", true, TimeSpan.MinValue),
-										Path = GetTrackFilePath(dataReader, audioDirectory),
 										Guid = dataReader.GetGuid("guid", false, Guid.Empty),
 										Album = new Album
 										{
