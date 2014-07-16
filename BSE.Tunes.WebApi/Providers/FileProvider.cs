@@ -15,19 +15,27 @@ namespace BSE.Tunes.WebApi.Providers
         #endregion
 
         #region MethodsPublic
-
+        /// <summary>
+        /// Gets a value indicating whether a file exists
+        /// </summary>
+        /// <param name="fileName">The fully qualified name of the new file, or the relative file name.</param>
+        /// <returns>true if the file exists; false if the file does not exist.</returns>
         public bool Exists(string fileName)
         {
             FileInfo fileInfo = new FileInfo(fileName);
             return fileInfo.Exists;
         }
-
+        /// <summary>
+        /// Opens a System.IO.FileStream on thé specified path
+        /// </summary>
+        /// <param name="fileName">The file to open. </param>
+        /// <returns>A <see cref="FileStream"/> opened on the specified path</returns>
         public FileStream Open(string fileName)
         {
             this.m_fileStream = null;
             if (this.Exists(fileName))
             {
-                this.m_fileStream = File.Open(fileName, FileMode.Open, FileAccess.Read);
+                this.m_fileStream = new FileStream(fileName, FileMode.Open, FileAccess.Read, FileShare.Read);
             }
             return this.m_fileStream;
 ;
