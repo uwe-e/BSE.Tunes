@@ -60,7 +60,7 @@ namespace BSE.Tunes.StoreApp.Services
                                     {
                                         xPosition = xPosition + innerWidth;
                                     }
-                                    if (index == 2 || index == 3)
+                                    if (index == 1 || index == 3)
                                     {
                                         yPosition = yPosition + innerHeight;
                                     }
