@@ -43,8 +43,8 @@ namespace BSE.Tunes.StoreApp.Services
         public async Task<bool> IsHostAccessible()
         {
             bool isHostAccessible = false;
-
-            using (var httpClient =  this.GetHttpClient())
+            //This is the only request without any security information.
+            using (var httpClient =  new HttpClient())
             {
                 httpClient.BaseAddress = new Uri(string.Format("{0}/", this.ServiceUrl));
                 try
@@ -182,7 +182,7 @@ namespace BSE.Tunes.StoreApp.Services
         public async Task<Windows.Storage.Streams.InMemoryRandomAccessStream> GetAudioStream(Guid guid)
         {
             string strUrl = string.Format("{0}/api/files/{1}/", this.ServiceUrl, guid.ToString());
-            using (var client = await this.GetBearerClient())
+            using (var client = await this.GetHttpClient())
             {
                 try
                 {
@@ -202,7 +202,7 @@ namespace BSE.Tunes.StoreApp.Services
         public async Task<System.IO.Stream> GetAudioFile(Guid guid)
         {
             string strUrl = string.Format("{0}/api/files/{1}/", this.ServiceUrl, guid.ToString());
-            using (var client = await this.GetBearerClient())
+            using (var client = await this.GetHttpClient())
             {
                 try
                 {
@@ -227,6 +227,17 @@ namespace BSE.Tunes.StoreApp.Services
 			return new Uri(strUrl);
 		}
 
+        public async Task<HttpClient> GetHttpClient(bool withRefreshToken = true)
+        {
+            var tokenResponse = this.m_accountService.TokenResponse;
+            if (withRefreshToken)
+            {
+                tokenResponse = await this.m_accountService.RefreshToken();
+            }
+            var client = new HttpClient();
+            client.SetBearerToken(tokenResponse.AccessToken);
+            return client;
+        }
         #endregion
 
         #region MethodsPrivate
@@ -234,7 +245,7 @@ namespace BSE.Tunes.StoreApp.Services
         private async Task<T> GetHttpResponseFromPost<T, U>(Uri uri, U from)
         {
             T result = default(T);
-            using (var client = await this.GetBearerClient())
+            using (var client = await this.GetHttpClient())
             {
                 try
                 {
@@ -252,7 +263,7 @@ namespace BSE.Tunes.StoreApp.Services
         private async Task<T> GetHttpResponse<T>(Uri uri)
         {
             T result = default(T);
-            using (var client = await this.GetBearerClient())
+            using (var client = await this.GetHttpClient())
             {
                 try
                 {
@@ -266,24 +277,6 @@ namespace BSE.Tunes.StoreApp.Services
                 }
             }
             return result;
-        }
-        private async Task<HttpClient> GetBearerClient()
-        {
-            var tokenResponse = await this.m_accountService.RefreshToken();
-            var client = this.GetHttpClient();
-            client.SetBearerToken(tokenResponse.AccessToken);
-            return client;
-        }
-
-        private HttpClient GetHttpClient()
-        {
-            var filter = new Windows.Web.Http.Filters.HttpBaseProtocolFilter();
-            filter.IgnorableServerCertificateErrors.Add(Windows.Security.Cryptography.Certificates.ChainValidationResult.Untrusted);
-            filter.IgnorableServerCertificateErrors.Add(Windows.Security.Cryptography.Certificates.ChainValidationResult.InvalidName);
-            
-            var client = new System.Net.Http.HttpClient(new WindowsRuntime.HttpClientFilters.WinRtHttpClientHandler(filter));
-            client.DefaultRequestHeaders.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json"));
-            return client;
         }
         #endregion
     }

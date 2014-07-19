@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -16,6 +17,7 @@ namespace BSE.Tunes.StoreApp.Services
         string ServiceUrl { get; }
         string UserName { get; }
         Task<bool> IsHostAccessible();
+        Task<HttpClient> GetHttpClient(bool withRefreshToken = true);
         Task<ObservableCollection<Genre>> GetGenres();
         Task<ObservableCollection<Album>> GetAlbums(Query query);
         Task<ObservableCollection<Album>> GetNewestAlbums(int limit);

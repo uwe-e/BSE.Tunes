@@ -10,6 +10,7 @@ namespace BSE.Tunes.StoreApp.Services
 {
     public interface IAccountService
     {
+        TokenResponse TokenResponse { get; }
         string ServiceUrl { get; set; }
         TunesUser User { get; }
 
