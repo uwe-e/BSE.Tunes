@@ -52,32 +52,35 @@ namespace BSE.Tunes.WebApi.Controllers
                             this.m_impersonationUser.Password,
                             this.m_impersonationUser.LogonType))
                         {
-                            if (!this.m_fileProvider.Exists(fileName))
+                            lock (fileName)
                             {
-                                throw new HttpResponseException(HttpStatusCode.NotFound);
-                            }
-                            var fileStream = this.m_fileProvider.Open(fileName);
-                            if (this.Request.Headers.Range != null)
-                            {
-                                try
+                                if (!this.m_fileProvider.Exists(fileName))
                                 {
-                                    responseMessage = Request.CreateResponse(HttpStatusCode.PartialContent);
-                                    responseMessage.Content = new ByteRangeStreamContent(fileStream, Request.Headers.Range, new MediaTypeHeaderValue("application/octet-stream"));
+                                    throw new HttpResponseException(HttpStatusCode.NotFound);
+                                }
+                                var fileStream = this.m_fileProvider.Open(fileName);
+                                if (this.Request.Headers.Range != null)
+                                {
+                                    try
+                                    {
+                                        responseMessage = Request.CreateResponse(HttpStatusCode.PartialContent);
+                                        responseMessage.Content = new ByteRangeStreamContent(fileStream, Request.Headers.Range, new MediaTypeHeaderValue("application/octet-stream"));
+                                        responseMessage.Headers.AcceptRanges.Add("bytes");
+                                        return responseMessage;
+                                    }
+                                    catch (InvalidByteRangeException invalidByteRangeException)
+                                    {
+                                        return Request.CreateErrorResponse(invalidByteRangeException);
+                                    }
+                                }
+                                else
+                                {
+                                    responseMessage = new HttpResponseMessage();
+                                    responseMessage.Content = new StreamContent(fileStream);
                                     responseMessage.Headers.AcceptRanges.Add("bytes");
-                                    return responseMessage;
+                                    responseMessage.Content.Headers.ContentLength = fileStream.Length;
+                                    responseMessage.Content.Headers.ContentType = new MediaTypeHeaderValue("application/octet-stream");
                                 }
-                                catch (InvalidByteRangeException invalidByteRangeException)
-                                {
-                                    return Request.CreateErrorResponse(invalidByteRangeException);
-                                }
-                            }
-                            else
-                            {
-                                responseMessage = new HttpResponseMessage();
-                                responseMessage.Content = new StreamContent(fileStream);
-                                responseMessage.Headers.AcceptRanges.Add("bytes");
-                                responseMessage.Content.Headers.ContentLength = fileStream.Length;
-                                responseMessage.Content.Headers.ContentType = new MediaTypeHeaderValue("application/octet-stream");
                             }
                         }
                     }
