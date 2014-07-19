@@ -13,6 +13,7 @@ using Windows.Storage;
 using Windows.Storage.FileProperties;
 using Windows.Storage.Streams;
 using BSE.Tunes.StoreApp.Extensions;
+using BSE.Tunes.StoreApp.Services;
 
 namespace BSE.Tunes.StoreApp.IO
 {
@@ -28,6 +29,7 @@ namespace BSE.Tunes.StoreApp.IO
         #endregion
 
         #region FieldsPrivate
+        private IDataService m_dataService;
         private Stream m_responseStream;
         private bool m_isCanceled;
         private long m_bytesReceived;
@@ -54,8 +56,9 @@ namespace BSE.Tunes.StoreApp.IO
         #endregion
 
         #region MethodsPublic
-        public AudioStreamDownloader()
+        public AudioStreamDownloader(IDataService dataService)
         {
+            this.m_dataService = dataService;
         }
         // Implement IDisposable.
         // Do not make this method virtual.
@@ -87,6 +90,14 @@ namespace BSE.Tunes.StoreApp.IO
                 this.m_totalBytesToReceive = await this.GetFileSizeAsync(source);
                 if (this.m_totalBytesToReceive > 0)
                 {
+                    //necessary timeout for local connections. This prevents the following System.IO.IOException exception
+                    //
+                    // The process cannot access the file 'C:\mypath\to\myfile.mp3' because it is being used by another process.
+                    //
+                    //on server side. The timeout is necessary only for local connections.
+                    //
+                    //********solved by a lock at server side.*********
+                    //await Task.Delay(new TimeSpan(0, 0, 0, 0, 100));
                     this.m_responseStream = await this.CreateStream(trackId);
                     this.m_bytesReceived = this.m_responseStream.Length;
                     if (this.m_bytesReceived.Equals(this.m_totalBytesToReceive))
@@ -124,9 +135,6 @@ namespace BSE.Tunes.StoreApp.IO
                     }
                 }
             }
-            catch (WebException webException)
-            {
-            }
             catch (HttpRequestException httpRequestException)
             {
                 throw httpRequestException;
@@ -137,7 +145,6 @@ namespace BSE.Tunes.StoreApp.IO
             }
             catch (Exception exception)
             {
-                //return;
             }
         }
         public virtual void Close()
@@ -191,36 +198,41 @@ namespace BSE.Tunes.StoreApp.IO
         #endregion
 
         #region MethodsPrivate
-        private async Task<Stream> CreateStream(Guid trackId)
+        private async Task<Stream> CreateStream(Guid trackId, CreationCollisionOption creationCollisionOption = CreationCollisionOption.OpenIfExists)
         {
             Stream stream = null;
+            bool isUnauthorizedAccess = false;
             try
             {
                 await IOUtilities.WrapSharingViolations(async () =>
                 {
+
                     IStorageFolder storageFolder = await LocalStorage.GetTempFolderAsync();
-                    var storageFile = await storageFolder.CreateFileAsync(trackId.ToString(), CreationCollisionOption.OpenIfExists) as StorageFile;
+                    var storageFile = await storageFolder.CreateFileAsync(trackId.ToString(), creationCollisionOption) as StorageFile;
                     IRandomAccessStream windowsRuntimeStream = await storageFile.OpenAsync(FileAccessMode.ReadWrite);
                     stream = windowsRuntimeStream.AsStream();
                 });
             }
-            catch (Exception ex)
+            catch (UnauthorizedAccessException)
             {
-
+                isUnauthorizedAccess = true;
+            }
+            if (isUnauthorizedAccess)
+            {
+                //When, for example, the new track for playing is the same than the current played track.
+                return await Task<Stream>.Run(() =>
+                {
+                    return CreateStream(trackId, CreationCollisionOption.GenerateUniqueName);
+                });
             }
             return stream;
-
-
-            //IStorageFolder storageFolder = await LocalStorage.GetTempFolderAsync();
-            //this.m_storageFile = await storageFolder.CreateFileAsync(trackId.ToString(), CreationCollisionOption.OpenIfExists) as StorageFile;
-            //IRandomAccessStream windowsRuntimeStream = await this.m_storageFile.OpenAsync(FileAccessMode.ReadWrite);
-            //return windowsRuntimeStream.AsStream();
         }
         private async Task<long> GetFileSizeAsync(Uri uri)
         {
             long contentLength = -1;
-            using (var httpClient = new HttpClient())
+            using(var httpClient = await this.m_dataService.GetHttpClient())
             {
+                httpClient.Timeout = new TimeSpan(0, 0, 0, 12);
                 using (HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Head, uri))
                 {
                     using (HttpResponseMessage response = await httpClient.SendAsync(request))
@@ -239,7 +251,7 @@ namespace BSE.Tunes.StoreApp.IO
             int receivedBytes = -1;
             if (responseStream != null)
             {
-                using (var httpClient = new HttpClient())
+                using (var httpClient = await this.m_dataService.GetHttpClient(false))
                 {
                     httpClient.AddRange(rangeFrom, rangeTo);
                     using (HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Get, uri))
@@ -252,13 +264,16 @@ namespace BSE.Tunes.StoreApp.IO
                             {
                                 try
                                 {
-                                    responseStream.Position = rangeFrom;
-                                    await stream.CopyToAsync(this.m_responseStream, ResponseContentBufferSize);
-                                    responseStream.Flush();
+                                    await IOUtilities.WrapSharingViolations(async () =>
+                                    {
+                                        responseStream.Position = rangeFrom;
+                                        await stream.CopyToAsync(this.m_responseStream, ResponseContentBufferSize);
+                                        responseStream.Flush();
+                                    });
                                 }
                                 catch (Exception e)
                                 {
-                                    throw e;
+                                    //throw e;
                                 }
                             }
                         }
