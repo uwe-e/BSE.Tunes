@@ -19,6 +19,7 @@ namespace BSE.Tunes.StoreApp.Services
         #region FieldsPrivate
         private IResourceService m_resourceService;
         private readonly string m_strUnauthorizedAccessExceptionMessage;
+        private readonly string m_strEncryptedLoginException;
         #endregion
 
         #region Properties
@@ -52,6 +53,8 @@ namespace BSE.Tunes.StoreApp.Services
             this.m_resourceService = resourceService;
             this.m_strUnauthorizedAccessExceptionMessage = this.m_resourceService.GetString(
                 "UnauthorizedAccessExceptionMessage", "The user name or password is incorrect");
+            this.m_strEncryptedLoginException = this.m_resourceService.GetString(
+                "EncryptedLoginException", "There is a login error. Please deactivate the encrypted login.");
         }
         public async Task<TunesUser> VerifyUserCredentials()
         {
@@ -143,6 +146,12 @@ namespace BSE.Tunes.StoreApp.Services
                 }
                 catch (Exception exception)
                 {
+                    NullReferenceException nullReferenceException = exception as NullReferenceException;
+                    if (nullReferenceException != null)
+                    {
+                        //there could be a nullreference exception at account change when the login is encrypted.
+                        throw new UnauthorizedAccessException(this.m_strEncryptedLoginException);
+                    }
                     throw exception;
                 }
             }

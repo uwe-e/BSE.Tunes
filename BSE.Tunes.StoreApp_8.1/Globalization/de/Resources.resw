@@ -288,4 +288,8 @@ Die Registrierung kann nur durch den Betreiber des Servers erfolgen.</value>
   <data name="UnauthorizedAccessExceptionMessage" xml:space="preserve">
     <value>Die Mailadresse oder das Passwort ist falsch</value>
   </data>
+  <data name="EncryptedLoginException" xml:space="preserve">
+    <value>Es liegt ein Fehler bei der Anmeldung vor.
+Bitte schalte die verschlüsselte Anmeldung ab.</value>
+  </data>
 </root>

@@ -288,4 +288,8 @@ A registration can only be done by the operator of the server.</value>
   <data name="UnauthorizedAccessExceptionMessage" xml:space="preserve">
     <value>The email address or password is incorrect</value>
   </data>
+  <data name="EncryptedLoginException" xml:space="preserve">
+    <value>There is a login error.
+Please deactivate the encrypted login.</value>
+  </data>
 </root>
