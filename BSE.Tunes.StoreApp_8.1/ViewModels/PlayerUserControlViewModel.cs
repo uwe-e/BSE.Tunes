@@ -34,6 +34,7 @@ namespace BSE.Tunes.StoreApp.ViewModels
         private RelayCommand m_previousTrackCommand;
         private ICommand m_stopCommand;
         private RelayCommand m_nextTrackCommand;
+        private bool m_trackCommandExecuted;
         private double m_iProgressMaximumValue;
         private double m_iProgressValue;
         private double m_stepFrequency;
@@ -203,11 +204,6 @@ namespace BSE.Tunes.StoreApp.ViewModels
                 RaisePropertyChanged("CurrentTrackDuration");
             }
         }
-        //public override ObservableCollection<MenuItemViewModel> MenuItemsPlaylist
-        //{
-        //	get;
-        //	set;
-        //}
         public ICommand SelectCommand
         {
             get
@@ -237,7 +233,7 @@ namespace BSE.Tunes.StoreApp.ViewModels
             get
             {
                 return this.m_previousTrackCommand ??
-                    (this.m_previousTrackCommand = new RelayCommand(this.m_playerManager.ExecutePreviousTrack, this.m_playerManager.CanExecutePreviousTrack));
+                    (this.m_previousTrackCommand = new RelayCommand(this.ExecutePreviousTrack, this.CanExecutePreviousTrack));
             }
         }
         public RelayCommand NextTrackCommand
@@ -245,9 +241,11 @@ namespace BSE.Tunes.StoreApp.ViewModels
             get
             {
                 return this.m_nextTrackCommand ??
-                    (this.m_nextTrackCommand = new RelayCommand(this.m_playerManager.ExecuteNextTrack, this.m_playerManager.CanExecuteNextTrack));
+                    (this.m_nextTrackCommand = new RelayCommand(this.ExecuteNextTrack, this.CanExecuteNextTrack));
             }
         }
+        
+        
         #endregion
 
         #region MethodsPublic
@@ -288,7 +286,6 @@ namespace BSE.Tunes.StoreApp.ViewModels
         public override void ResetData()
         {
             base.ResetData();
-
         }
         #endregion
 
@@ -343,6 +340,28 @@ namespace BSE.Tunes.StoreApp.ViewModels
                 this.DialogService.ShowDialog(exception.Message);
             }
         }
+        private bool CanExecutePreviousTrack()
+        {
+            return !this.m_trackCommandExecuted && this.m_playerManager.CanExecutePreviousTrack();
+        }
+        private void ExecutePreviousTrack()
+        {
+            this.m_trackCommandExecuted = true;
+            this.PreviousTrackCommand.RaiseCanExecuteChanged();
+            this.NextTrackCommand.RaiseCanExecuteChanged();
+            this.m_playerManager.ExecutePreviousTrack();
+        }
+        private bool CanExecuteNextTrack()
+        {
+            return !this.m_trackCommandExecuted && this.m_playerManager.CanExecuteNextTrack();
+        }
+        private void ExecuteNextTrack()
+        {
+            this.m_trackCommandExecuted = true;
+            this.PreviousTrackCommand.RaiseCanExecuteChanged();
+            this.NextTrackCommand.RaiseCanExecuteChanged();
+            this.m_playerManager.ExecuteNextTrack();
+        }
         private void OnInitializeView(Track track)
         {
             if (track != null)
@@ -351,12 +370,12 @@ namespace BSE.Tunes.StoreApp.ViewModels
                 this.CurrentTrack = track;
                 this.CurrentTitle = track.Name;
                 this.CurrentArtist = track.Album.Artist.Name;
-                //this.Cover = track.Album.Cover;
                 this.CoverSource = this.DataService.GetImage(track.Album.AlbumId);
             }
         }
         private void OnMediaOpened()
         {
+            this.m_trackCommandExecuted = false;
             this.ProgressValue = 0;
             this.CurrentTrack = this.m_playerManager.CurrentTrack;
             this.CurrentTitle = this.CurrentTrack.Name;
