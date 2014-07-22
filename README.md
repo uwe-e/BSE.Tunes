@@ -8,4 +8,4 @@ A sample audio .net solution that contains the following projects.
 - BSE.Tunes.Data - portable data objects
 
 The *BSEtunes* winrt app is available in the Windows Store.
-http://apps.microsoft.com/windows/app/bsetunes/385d719f-f272-4995-844d-0113a7257e04
+(http://apps.microsoft.com/windows/app/bsetunes/385d719f-f272-4995-844d-0113a7257e04)
