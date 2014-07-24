@@ -2,9 +2,9 @@ BSE.Tunes
 =========
 A sample audio .net solution that contains the following projects. 
 
-- BSE.Tunes.StoreApp_8.1 - winrt app,
-- BSE.Tunes.WebApi - webapi service,
-- BSE.Tunes.Entities - ado entity logic,
+- BSE.Tunes.StoreApp_8.1 - c# Windows Store App,
+- BSE.Tunes.WebApi - ASP.NET Web Api service,
+- BSE.Tunes.Entities - ADO.NET Entity business logic,
 - BSE.Tunes.Data - portable data objects
 
 The *BSEtunes* winrt app is available in the Windows Store.
