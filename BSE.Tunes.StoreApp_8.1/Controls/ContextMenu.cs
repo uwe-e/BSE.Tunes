@@ -96,6 +96,7 @@ namespace BSE.Tunes.StoreApp.Controls
             this.m_contextMenuPopup = new Popup();
             this.m_contextMenuPopup.Opacity = 0;
             this.m_contextMenuPopup.Opened += OnContextMenuOpened;
+            this.m_contextMenuPopup.Closed += OnContextMenuClosed;
             this.m_contextMenuPopup.IsLightDismissEnabled = true;
             this.m_contextMenuPopup.Child = this;
         }
@@ -173,7 +174,7 @@ namespace BSE.Tunes.StoreApp.Controls
             this.Measure(new Size(double.PositiveInfinity, double.PositiveInfinity));
 
             UIElement root = Window.Current.Content;
-            if (root != null)
+            if (root != null && this.PlacementTarget != null)
             {
                 GeneralTransform transform = this.PlacementTarget.TransformToVisual(root);
                 Point relativeSourceLocation = transform.TransformPoint(new Point(0, 0));
@@ -221,6 +222,10 @@ namespace BSE.Tunes.StoreApp.Controls
             }
         }
         
+        private void OnContextMenuClosed(object sender, object e)
+        {
+            this.IsOpen = false;
+        }
         private void OnSelectorItemTapped(object sender, TappedRoutedEventArgs e)
         {
             this.m_contextMenuPopup.IsOpen = false;
