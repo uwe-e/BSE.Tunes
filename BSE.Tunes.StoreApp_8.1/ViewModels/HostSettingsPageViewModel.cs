@@ -110,7 +110,7 @@ namespace BSE.Tunes.StoreApp.ViewModels
                         try
                         {
                             TunesUser tunesUser = await this.m_accountService.VerifyUserAuthentication();
-                            this.m_navigationService.Navigate(typeof(MainPage));
+                            this.m_navigationService.Navigate(typeof(MainPage),typeof(MasterPage));
                         }
                         catch (UnauthorizedAccessException)
                         {

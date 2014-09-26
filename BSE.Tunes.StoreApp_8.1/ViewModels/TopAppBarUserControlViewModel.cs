@@ -23,7 +23,7 @@ namespace BSE.Tunes.StoreApp.ViewModels
             get
             {
                 return this.m_homeNavigationCommand ??
-                    (this.m_homeNavigationCommand = new RelayCommand(()=> this.m_navigationService.Navigate(typeof(MainPage))));
+                    (this.m_homeNavigationCommand = new RelayCommand(()=> this.m_navigationService.Navigate(typeof(MainPage), typeof(MasterPage))));
             }
         }
         #endregion

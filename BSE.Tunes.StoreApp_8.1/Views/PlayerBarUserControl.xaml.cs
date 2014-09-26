@@ -1,9 +1,13 @@
-﻿using System;
+﻿using BSE.Tunes.Data.Audio;
+using BSE.Tunes.StoreApp.Services;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
+using Windows.Media;
+using Windows.UI.Core;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
@@ -16,9 +20,9 @@ using Windows.UI.Xaml.Navigation;
 
 namespace BSE.Tunes.StoreApp.Views
 {
-    public sealed partial class NewPlaylistUserControl : UserControl
+    public sealed partial class PlayerBarUserControl : UserControl
     {
-        public NewPlaylistUserControl()
+        public PlayerBarUserControl()
         {
             this.InitializeComponent();
         }

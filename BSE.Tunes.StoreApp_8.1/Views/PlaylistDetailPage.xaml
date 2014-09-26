@@ -8,10 +8,11 @@
     xmlns:common="using:BSE.Tunes.StoreApp.Common"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:toolkit="using:WinRTXamlToolkit.Controls.Extensions"
+    xmlns:toolkit="using:WinRTXamlToolkit.Controls.Extensions"
+    xmlns:behaviours="using:BSE.Tunes.StoreApp.Behaviours"
     xmlns:controls="using:BSE.Tunes.StoreApp.Controls"
-        xmlns:views="using:BSE.Tunes.StoreApp.Views"
-    mc:Ignorable="d">
+    xmlns:views="using:BSE.Tunes.StoreApp.Views"
+    mc:Ignorable="d" FontFamily="Global User Interface">
 
     <Page.Resources>
 
@@ -21,6 +22,40 @@
             <views:TopAppBarUserControl/>
         </AppBar>
     </Page.TopAppBar>
+
+    <Page.BottomAppBar>
+        <AppBar x:Uid="BottomAppBar" IsOpen="{Binding HasSelectedItems, Mode=TwoWay}" IsSticky="{Binding HasSelectedItems}" FontFamily="Global User Interface">
+            <Grid>
+                <StackPanel Orientation="Horizontal" Height="120" HorizontalAlignment="Left">
+                    <AppBarButton x:Uid="ButtonPlaySelection" Icon="Play"
+                                  Command="{Binding PlaySelectedItemsCommand}"
+                                  VerticalAlignment="Top"/>
+                    <controls:DropDownButton Icon="Add"
+                                             x:Name="SelectedToFavoritesButton"
+                                             x:Uid="ButtonSelectedToFavorites"
+                                             IsEnabled="{Binding HasSelectedItems}">
+                        <controls:DropDownButton.ContextMenu>
+                            <controls:ContextMenu ItemsSource="{Binding MenuItemsPlaylist}" toolkit:ListViewExtensions.Command="{Binding SelectedToPlaylistCommand}">
+                                <controls:ContextMenu.ItemTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding Content}" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                                    </DataTemplate>
+                                </controls:ContextMenu.ItemTemplate>
+                            </controls:ContextMenu>
+                        </controls:DropDownButton.ContextMenu>
+                        <FlyoutBase.AttachedFlyout>
+                            <Flyout behaviours:FlyoutExtensions.IsOpen="{Binding NewSelectedToPlaylistViewModel.IsOpen, Mode=TwoWay}"
+                                    behaviours:FlyoutExtensions.Parent="{Binding ElementName=SelectedToFavoritesButton}">
+                                <views:NewPlaylistUserControl DataContext="{Binding NewSelectedToPlaylistViewModel}"/>
+                            </Flyout>
+                        </FlyoutBase.AttachedFlyout>
+                    </controls:DropDownButton>
+                    <AppBarButton x:Uid="ButtonDeleteFromPlaylist"
+                                  Command="{Binding DeleteSelectedEntriesCommand}" VerticalAlignment="Top" Icon="Remove"/>
+                </StackPanel>
+            </Grid>
+        </AppBar>
+    </Page.BottomAppBar>
     <!--
         This grid acts as a root panel for the page that defines two rows:
         * Row 0 contains the back button and page title
@@ -30,7 +65,6 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="140"/>
             <RowDefinition Height="*"/>
-            <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
         <views:ImagePreview Grid.RowSpan="3" Source="{Binding ImageSource, Mode=TwoWay}" ImageOpacity="0.35" Stretch="UniformToFill"/>
         <Grid Grid.Row="1">
@@ -41,11 +75,34 @@
             <Grid Grid.Column="0">
                 <StackPanel>
                     <Image Width="500" Margin="10" Source="{Binding ImageSource, Mode=TwoWay}"/>
+                    <StackPanel Margin="10" Orientation="Horizontal" HorizontalAlignment="Center">
+                        <controls:DropDownButton Icon="Add"
+                                                 x:Name="ButtonAddToPlaylist" x:Uid="ButtonAddToPlaylist"
+                                                 Visibility="{Binding HasEntries, Converter={StaticResource BooleanToVisibilityConverter}}"
+                                                 ToolTipService.ToolTip="Add to" HorizontalAlignment="Center">
+                            <controls:DropDownButton.ContextMenu>
+                                <controls:ContextMenu ItemsSource="{Binding MenuItemsPlaylist}" toolkit:ListViewExtensions.Command="{Binding CompleteToPlaylistCommand}">
+                                    <controls:ContextMenu.ItemTemplate>
+                                        <DataTemplate>
+                                            <TextBlock Text="{Binding Content}" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                                        </DataTemplate>
+                                    </controls:ContextMenu.ItemTemplate>
+                                </controls:ContextMenu>
+                            </controls:DropDownButton.ContextMenu>
+                            <FlyoutBase.AttachedFlyout>
+                                <Flyout behaviours:FlyoutExtensions.IsOpen="{Binding NewCompleteToPlaylistViewModel.IsOpen, Mode=TwoWay}"
+                                        behaviours:FlyoutExtensions.Parent="{Binding ElementName=ButtonAddToPlaylist}">
+                                    <views:NewPlaylistUserControl DataContext="{Binding NewCompleteToPlaylistViewModel}"/>
+                                </Flyout>
+                            </FlyoutBase.AttachedFlyout>
+                        </controls:DropDownButton>
+                        <AppBarButton Icon="Play" Command="{Binding PlayPlaylistCommand}" Visibility="{Binding HasEntries, Converter={StaticResource BooleanToVisibilityConverter}}" ToolTipService.ToolTip="Play Playlist" x:Uid="ButtonPlayPlaylist"/>
+                    </StackPanel>
                 </StackPanel>
             </Grid>
             <ListView Grid.Column="1" ItemsSource="{Binding Entries}" SelectionMode="Extended"
                       AllowDrop="True" CanDragItems="True" CanReorderItems="True"
-                      toolkit:ListViewExtensions.BindableSelection="{Binding SelectedEntries, Mode=TwoWay}"
+                      toolkit:ListViewExtensions.BindableSelection="{Binding SelectedItems, Mode=TwoWay}"
                       HorizontalAlignment="Left" Width="600">
                 <ListView.ItemTemplate>
                     <DataTemplate>
@@ -63,34 +120,8 @@
                     </DataTemplate>
                 </ListView.ItemTemplate>
             </ListView>
-            <views:NewPlaylistUserControl HorizontalAlignment="Left" VerticalAlignment="Bottom" Height="110" Width="300" DataContext="{Binding NewPlaylistViewModel}"/>
         </Grid>
-        <AppBar Grid.Row="2" VerticalAlignment="Bottom" IsOpen="True" Background="#99000000">
-            <Border BorderBrush="{StaticResource AppBarItemForegroundThemeBrush}" BorderThickness="0,2,0,0">
-                <Grid>
-                    <StackPanel Orientation="Horizontal" Height="100" HorizontalAlignment="Left">
-                        <!--<Button Style="{StaticResource AddToFavouritesAppBarButtonStyle}" Command="{Binding NextTrackCommand}" HorizontalAlignment="Left" VerticalAlignment="Top"/>-->
-                        <controls:DropDownButton Style="{StaticResource AddToFavouritesAppBarButtonStyle}" x:Uid="ButtonAddToPlaylist">
-                            <controls:DropDownButton.ContextMenu>
-                                <controls:ContextMenu ItemsSource="{Binding MenuItemsPlaylist}" toolkit:ListViewExtensions.Command="{Binding SelectToPlaylistCommand}">
-                                    <controls:ContextMenu.ItemTemplate>
-                                        <DataTemplate>
-                                            <TextBlock Text="{Binding Content}" HorizontalAlignment="Left" VerticalAlignment="Center"/>
-                                        </DataTemplate>
-                                    </controls:ContextMenu.ItemTemplate>
-                                </controls:ContextMenu>
-                            </controls:DropDownButton.ContextMenu>
-                        </controls:DropDownButton>
-                        <Button Style="{StaticResource RemoveAppBarButtonStyle}" Command="{Binding RemoveSelectedEntriesCommand}" Visibility="{Binding HasSelectedTracks, Converter={StaticResource BooleanToVisibilityConverter}}" HorizontalAlignment="Left" VerticalAlignment="Top"/>
-                        <Button x:Uid="PlaylistDetailPage_BtnRemoveSelection" Style="{StaticResource DeleteAppBarButtonStyle}" Command="{Binding RemoveSelectionCommand}" Visibility="{Binding HasSelectedTracks, Converter={StaticResource BooleanToVisibilityConverter}}" HorizontalAlignment="Left" VerticalAlignment="Top"/>
-                    </StackPanel>
-                    <StackPanel Orientation="Horizontal" Height="100" HorizontalAlignment="Right">
-                        <!--<Button Style="{StaticResource PlayAppBarButtonStyle}" Command="{Binding PlaySelectedEntriesCommand}" Visibility="{Binding IsPlaySelectedEntryCommandVisible, Converter={StaticResource BooleanToVisibilityConverter}}" HorizontalAlignment="Right" VerticalAlignment="Top"/>-->
-                        <Button Style="{StaticResource PlayAppBarButtonStyle}" Command="{Binding PlayPlaylistCommand}" HorizontalAlignment="Right" VerticalAlignment="Top"/>
-                    </StackPanel>
-                </Grid>
-            </Border>
-        </AppBar>
+
         <!-- Back button and page title -->
         <Grid>
             <Grid.ColumnDefinitions>

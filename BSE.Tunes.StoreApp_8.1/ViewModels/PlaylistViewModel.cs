@@ -111,10 +111,14 @@ namespace BSE.Tunes.StoreApp.ViewModels
                     System.Collections.ObjectModel.ObservableCollection<Guid> albumIds = await this.m_dataService.GetPlaylistImageIdsById(this.Playlist.Id, user.UserName, 4);
                     if (albumIds != null)
                     {
-                        this.ImageSource = await this.m_cacheableBitmapService.GetBitmapSource(
-                            new ObservableCollection<Uri>(albumIds.Select(id => this.m_dataService.GetImage(id, true))),
-                            this.Playlist.Guid.ToString(),
-                            160, true);
+                        try
+                        {
+                            this.ImageSource = await this.m_cacheableBitmapService.GetBitmapSource(
+                                new ObservableCollection<Uri>(albumIds.Select(id => this.m_dataService.GetImage(id, true))),
+                                this.Playlist.Guid.ToString(),
+                                160, true);
+                        }
+                        catch { };
                     }
                 }
 			}

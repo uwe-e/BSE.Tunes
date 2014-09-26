@@ -1,4 +1,5 @@
 ﻿using BSE.Tunes.StoreApp.Services;
+using BSE.Tunes.StoreApp.Views;
 using GalaSoft.MvvmLight.Command;
 using System;
 using System.Collections.Generic;
@@ -39,7 +40,7 @@ namespace BSE.Tunes.StoreApp.ViewModels
 		{
 			if (args != null && !string.IsNullOrEmpty(args.QueryText))
 			{
-				this.m_navigationService.Navigate(typeof(BSE.Tunes.StoreApp.Views.SearchResultPage), args.QueryText);
+				this.m_navigationService.Navigate(typeof(BSE.Tunes.StoreApp.Views.SearchResultPage), typeof(MasterPage), args.QueryText);
 			}
 		}
 		#endregion

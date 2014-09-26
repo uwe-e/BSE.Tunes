@@ -17,29 +17,16 @@ using Windows.UI.Xaml.Navigation;
 
 namespace BSE.Tunes.StoreApp.ViewModels
 {
-    public class AlbumDetailPageViewModel : BasePlaylistableViewModel, INavigationAware
+    public class AlbumDetailPageViewModel : BaseTracklistPageViewModel, INavigationAware
     {
         #region FieldsPrivate
-        private INavigationService m_navigationService;
         private Album m_album;
         private Uri m_coverSource;
         private PlayerManager m_playerManager;
         private RelayCommand m_playAlbumCommand;
-        private RelayCommand m_removeSelectionCommand;
-        private ICommand m_goBackCommand;
-        private ObservableCollection<Track> m_selectedTracks;
-        private bool m_hasSelectedTracks;
         #endregion
 
         #region Properties
-        public ICommand GoBackCommand
-        {
-            get
-            {
-                return this.m_goBackCommand ??
-                    (this.m_goBackCommand = new RelayCommand(this.m_navigationService.GoBack));
-            }
-        }
         public Album Album
         {
             get
@@ -64,58 +51,20 @@ namespace BSE.Tunes.StoreApp.ViewModels
                 RaisePropertyChanged("CoverSource");
             }
         }
-        public ObservableCollection<Track> SelectedTracks
-        {
-            get
-            {
-                return this.m_selectedTracks;
-            }
-            set
-            {
-                this.m_selectedTracks = value;
-                RaisePropertyChanged("SelectedTracks");
-            }
-        }
-        public bool HasSelectedTracks
-        {
-            get
-            {
-                return this.m_hasSelectedTracks;
-            }
-            set
-            {
-                this.m_hasSelectedTracks = value;
-                RaisePropertyChanged("HasSelectedTracks");
-            }
-        }
         public RelayCommand PlayAlbumCommand
         {
             get
             {
                 return this.m_playAlbumCommand ??
-                    (this.m_playAlbumCommand = new RelayCommand(PlayAlbum, CanExecutePlayAlbum));
+                    (this.m_playAlbumCommand = new RelayCommand(PlayAlbum, CanPlayAlbum));
             }
         }
-        public RelayCommand RemoveSelectionCommand
-        {
-            get
-            {
-                return this.m_removeSelectionCommand ??
-                    (this.m_removeSelectionCommand = new RelayCommand(RemoveSelection, CanExecuteRemoveSelection));
-            }
-        }
-        //public override ObservableCollection<MenuItemViewModel> MenuItemsPlaylist
-        //{
-        //	get;
-        //	set;
-        //}
         #endregion
 
         #region MethodsPublic
         public AlbumDetailPageViewModel(IDataService dataService, IAccountService accountService, INavigationService navigationService, IResourceService resourceService, PlayerManager playerManager, IDialogService dialogService, ICacheableBitmapService cacheableBitmapService)
-            : base(dataService, accountService, dialogService, resourceService, cacheableBitmapService)
+            : base(dataService, accountService, dialogService, resourceService, cacheableBitmapService, navigationService)
         {
-            this.m_navigationService = navigationService;
             this.m_playerManager = playerManager;
             Messenger.Default.Register<PlaylistChangeMessage>(this, message =>
             {
@@ -123,16 +72,14 @@ namespace BSE.Tunes.StoreApp.ViewModels
             });
         }
 
-        public async void OnNavigatedTo(object navigationParameter, NavigationMode navigationMode)
+        public async override void OnNavigatedTo(object navigationParameter, NavigationMode navigationMode)
         {
+            base.OnNavigatedTo(navigationParameter, navigationMode);
             if (navigationParameter is int)
             {
                 this.Album = await this.DataService.GetAlbumById((int)navigationParameter);
                 this.CoverSource = this.DataService.GetImage(this.Album.AlbumId);
                 this.PlayAlbumCommand.RaiseCanExecuteChanged();
-                this.SelectedTracks = new ObservableCollection<Track>();
-                this.SelectedTracks.CollectionChanged += OnSelectedTrackCollectionChanged;
-                this.RemoveSelectionCommand.RaiseCanExecuteChanged();
                 this.MenuItemsPlaylist = new ObservableCollection<MenuItemViewModel>();
                 try
                 {
@@ -144,31 +91,43 @@ namespace BSE.Tunes.StoreApp.ViewModels
                 }
             }
         }
-        public void OnNavigatedFrom(bool suspending)
+        public override void OnNavigatedFrom(bool suspending)
         {
+            base.OnNavigatedFrom(suspending);
             this.Album = null;
-            if (this.SelectedTracks != null)
-            {
-                this.SelectedTracks.CollectionChanged -= OnSelectedTrackCollectionChanged;
-                this.SelectedTracks = null;
-            }
         }
         #endregion
 
         #region MethodsProtected
-        protected override void CreateMenuItems(ObservableCollection<Playlist> playlists)
+        protected override void PlaySelectedItems()
         {
-            base.CreateMenuItems(playlists);
+            base.PlaySelectedItems();
+            var selectedItems = this.SelectedItems;
+            if (selectedItems != null)
+            {
+                var selectedTracks = new System.Collections.ObjectModel.ObservableCollection<Track>(selectedItems.Cast<Track>());
+                if (selectedTracks != null && selectedTracks.Count() > 0)
+                {
+                    this.PlayTracks(selectedTracks);
+                }
+                this.SelectedItems.Clear();
+            }
         }
         protected override void AddTracksToPlaylist(Playlist playlist)
         {
             if (playlist != null)
             {
-                var tracks = this.SelectedTracks;
-                if (tracks.Count == 0)
+                ObservableCollection<Track> tracks = null;
+                var selectedItems = this.SelectedItems;
+                if (selectedItems.Count == 0)
                 {
                     tracks = new ObservableCollection<Track>(this.Album.Tracks);
                 }
+                else
+                {
+                    tracks = new ObservableCollection<Track>(selectedItems.Cast<Track>());
+                }
+                
                 if (tracks != null)
                 {
                     foreach (var track in tracks)
@@ -186,22 +145,25 @@ namespace BSE.Tunes.StoreApp.ViewModels
                 }
                 base.AddTracksToPlaylist(playlist);
             }
+            this.SelectedItems.Clear();
         }
         #endregion
 
         #region MethodsPrivate
-        private bool CanExecutePlayAlbum()
+        private bool CanPlayAlbum()
         {
             return this.Album != null && this.Album.Tracks != null && this.Album.Tracks.Count() > 0;
         }
         private void PlayAlbum()
         {
             var tracks = new System.Collections.ObjectModel.ObservableCollection<Track>(this.Album.Tracks);
-            var selectedTracks = new System.Collections.ObjectModel.ObservableCollection<Track>(this.SelectedTracks);
-            if (selectedTracks != null && selectedTracks.Count() > 0)
+            if (tracks != null && tracks.Count() > 0)
             {
-                tracks = selectedTracks;
+                this.PlayTracks(tracks);
             }
+        }
+        private void PlayTracks(System.Collections.ObjectModel.ObservableCollection<Track> tracks)
+        {
             if (tracks != null)
             {
                 var trackIds = tracks.Select(track => track.Id);
@@ -211,31 +173,7 @@ namespace BSE.Tunes.StoreApp.ViewModels
                         new System.Collections.ObjectModel.ObservableCollection<int>(trackIds),
                         PlayerMode.CD);
                 }
-                //this.m_playerManager.PlayTracks(tracks, PlayerMode.CD);
-
             }
-        }
-        private bool CanExecuteRemoveSelection()
-        {
-            return this.HasSelectedTracks = this.SelectedTracks != null && this.SelectedTracks.Count > 0;
-        }
-        private void RemoveSelection()
-        {
-            if (this.SelectedTracks != null)
-            {
-                try
-                {
-                    this.SelectedTracks.Clear();
-                }
-                catch (Exception exception)
-                {
-                    this.DialogService.ShowDialog(exception.Message);
-                }
-            }
-        }
-        private void OnSelectedTrackCollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
-        {
-            this.RemoveSelectionCommand.RaiseCanExecuteChanged();
         }
 
         #endregion

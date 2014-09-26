@@ -25,6 +25,7 @@ namespace BSE.Tunes.StoreApp.ViewModels
 
             SimpleIoc.Default.Register<BSE.Tunes.StoreApp.Managers.PlayerManager>();
             SimpleIoc.Default.Register<PlayerUserControlViewModel>();
+            SimpleIoc.Default.Register<PlayerBarUserControlViewModel>();
             SimpleIoc.Default.Register<AlbumsPageViewModel>();
             SimpleIoc.Default.Register<MainPageViewModel>();
             SimpleIoc.Default.Register<PlaylistDetailPageViewModel>();

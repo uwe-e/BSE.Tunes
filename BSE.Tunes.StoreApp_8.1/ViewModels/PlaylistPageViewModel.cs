@@ -142,12 +142,13 @@ namespace BSE.Tunes.StoreApp.ViewModels
         {
             if (playlistViewModel != null && playlistViewModel.Playlist != null)
             {
-                this.m_navigationService.Navigate(typeof(PlaylistDetailPage), playlistViewModel.Playlist.Id);
+                this.m_navigationService.Navigate(typeof(PlaylistDetailPage), typeof(MasterPage), playlistViewModel.Playlist.Id);
             }
         }
         private void OnSelectedPlaylistsCollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
         {
             this.DeleteSelectedPlaylistCommand.RaiseCanExecuteChanged();
+            this.HasSelectedItems = this.SelectedPlaylists.Count > 0;
         }
         private bool CanDeleteSelectedPlaylists()
         {

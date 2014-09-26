@@ -202,7 +202,7 @@ namespace BSE.Tunes.StoreApp.ViewModels
         {
             if (albumViewmodel != null)
             {
-                this.m_navigationService.Navigate(typeof(AlbumDetailPage), albumViewmodel.Album.Id);
+                this.m_navigationService.Navigate(typeof(AlbumDetailPage), typeof(MasterPage), albumViewmodel.Album.Id);
             }
         }
         private async void ExecuteSortOrderSelection()

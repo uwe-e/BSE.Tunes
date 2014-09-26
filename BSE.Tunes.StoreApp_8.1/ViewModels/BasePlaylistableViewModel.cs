@@ -16,8 +16,10 @@ namespace BSE.Tunes.StoreApp.ViewModels
     public abstract class BasePlaylistableViewModel : ViewModelBase
     {
         #region FieldsPrivate
-        private NewPlaylistUserControlViewModel m_newPlaylistViewModel;
-        private ICommand m_selectToPlaylistCommand;
+        private NewPlaylistUserControlViewModel m_newSelectedToPlaylistViewModel;
+        private NewPlaylistUserControlViewModel m_newCompleteToPlaylistViewModel;
+        private ICommand m_selectedToPlaylistCommand;
+        private ICommand m_completeToPlaylistCommand;
         #endregion
 
         #region Properties
@@ -46,31 +48,43 @@ namespace BSE.Tunes.StoreApp.ViewModels
             get;
             private set;
         }
-        //public abstract ObservableCollection<MenuItemViewModel> MenuItemsPlaylist
-        //{
-        //	get;
-        //	set;
-        //}
         public virtual ObservableCollection<MenuItemViewModel> MenuItemsPlaylist
         {
             get;
             set;
         }
-        public ICommand SelectToPlaylistCommand
+        public ICommand SelectedToPlaylistCommand
         {
             get
             {
-                return this.m_selectToPlaylistCommand ??
-                    (this.m_selectToPlaylistCommand = new RelayCommand<MenuItemViewModel>(this.SelectToPlaylist));
+                return this.m_selectedToPlaylistCommand ??
+                    (this.m_selectedToPlaylistCommand = new RelayCommand<MenuItemViewModel>(this.SelectedToPlaylist));
             }
         }
-        public NewPlaylistUserControlViewModel NewPlaylistViewModel
+        public ICommand CompleteToPlaylistCommand
         {
-            get { return this.m_newPlaylistViewModel; }
+            get
+            {
+                return this.m_completeToPlaylistCommand ??
+                    (this.m_completeToPlaylistCommand = new RelayCommand<MenuItemViewModel>(this.CompleteToPlaylist));
+            }
+        }
+        public NewPlaylistUserControlViewModel NewSelectedToPlaylistViewModel
+        {
+            get { return this.m_newSelectedToPlaylistViewModel; }
             set
             {
-                this.m_newPlaylistViewModel = value;
-                RaisePropertyChanged("NewPlaylistViewModel");
+                this.m_newSelectedToPlaylistViewModel = value;
+                RaisePropertyChanged("NewSelectedToPlaylistViewModel");
+            }
+        }
+        public NewPlaylistUserControlViewModel NewCompleteToPlaylistViewModel
+        {
+            get { return this.m_newCompleteToPlaylistViewModel; }
+            set
+            {
+                this.m_newCompleteToPlaylistViewModel = value;
+                RaisePropertyChanged("NewCompleteToPlaylistViewModel");
             }
         }
         #endregion
@@ -116,14 +130,13 @@ namespace BSE.Tunes.StoreApp.ViewModels
                     }
                 }
             }
-            this.MenuItemsPlaylist.Add(new MenuNewPlaylistViewModel { Content = this.ResourceService.GetString("IDS_NewPlaylist_MenuItem_AddNewPlaylist", "New Playlist") });
+            this.MenuItemsPlaylist.Add(
+                new MenuNewPlaylistViewModel
+                {
+                    Content = this.ResourceService.GetString("IDS_NewPlaylist_MenuItem_AddNewPlaylist", "New Playlist")
+                });
         }
-        protected virtual void OpenNewPlaylistDialog()
-        {
-            this.NewPlaylistViewModel = new NewPlaylistUserControlViewModel(this.DataService, this.AccountService, this.ResourceService);
-            this.NewPlaylistViewModel.IsOpen = true;
-            this.NewPlaylistViewModel.PlaylistInserted += OnNewPlaylistInserted;
-        }
+
         protected virtual void AddTracksToPlaylist(Playlist playlist)
         {
             AppendToPlaylist(playlist);
@@ -151,13 +164,26 @@ namespace BSE.Tunes.StoreApp.ViewModels
         #endregion
 
         #region MethodsPrivate
-        private void SelectToPlaylist(MenuItemViewModel menuItem)
+        private void CompleteToPlaylist(MenuItemViewModel menuItem)
         {
             MenuNewPlaylistViewModel menuNewPlaylistViewModel = menuItem as MenuNewPlaylistViewModel;
             if (menuNewPlaylistViewModel != null)
             {
-                this.OpenNewPlaylistDialog();
+                this.NewCompleteToPlaylistViewModel = this.CreateNewPlaylistModel();
             }
+            this.AddTracksToNewPlaylist(menuItem);
+        }
+        private void SelectedToPlaylist(MenuItemViewModel menuItem)
+        {
+            MenuNewPlaylistViewModel menuNewPlaylistViewModel = menuItem as MenuNewPlaylistViewModel;
+            if (menuNewPlaylistViewModel != null)
+            {
+                this.NewSelectedToPlaylistViewModel = this.CreateNewPlaylistModel();
+            }
+            this.AddTracksToNewPlaylist(menuItem);
+        }
+        private void AddTracksToNewPlaylist(MenuItemViewModel menuItem)
+        {
             MenuPlaylistViewModel menuPlaylistViewModel = menuItem as MenuPlaylistViewModel;
             if (menuPlaylistViewModel != null && menuPlaylistViewModel.Playlist != null)
             {
@@ -166,16 +192,28 @@ namespace BSE.Tunes.StoreApp.ViewModels
         }
         private void OnNewPlaylistInserted(object sender, Event.PlaylistChangedEventArgs e)
         {
-            this.NewPlaylistViewModel.PlaylistInserted -= OnNewPlaylistInserted;
-            this.NewPlaylistViewModel.IsOpen = false;
-            this.NewPlaylistViewModel = null;
-            //Refreshing all the playlist views
-            Messenger.Default.Send<PlaylistChangeMessage>(new PlaylistChangeMessage());
+            var model = sender as NewPlaylistUserControlViewModel;
+            if (model != null)
+            {
+                model.IsOpen = false;
+                model.PlaylistInserted -= OnNewPlaylistInserted;
+            }
+            
             Playlist playlist = e.Playlist;
             if (playlist != null)
             {
+                Messenger.Default.Send<PlaylistChangeMessage>(new PlaylistChangeMessage());
                 this.AddTracksToPlaylist(playlist);
             }
+        }
+        private NewPlaylistUserControlViewModel CreateNewPlaylistModel()
+        {
+            var newPlaylistViewModel = new NewPlaylistUserControlViewModel(this.DataService, this.AccountService, this.ResourceService)
+            {
+                IsOpen = true
+            };
+            newPlaylistViewModel.PlaylistInserted += this.OnNewPlaylistInserted;
+            return newPlaylistViewModel;
         }
         #endregion
     }

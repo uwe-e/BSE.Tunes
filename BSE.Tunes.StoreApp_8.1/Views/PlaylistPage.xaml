@@ -17,6 +17,16 @@
         </AppBar>
     </Page.TopAppBar>
     
+    <Page.BottomAppBar>
+        <AppBar x:Uid="BottomAppBar" IsOpen="{Binding HasSelectedItems, Mode=TwoWay}" IsSticky="{Binding HasSelectedItems}">
+                <Grid>
+                    <StackPanel Orientation="Horizontal" Height="100" HorizontalAlignment="Left">
+                        <Button Style="{StaticResource DeleteAppBarButtonStyle}" Command="{Binding DeleteSelectedPlaylistCommand}" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+                    </StackPanel>
+                </Grid>
+        </AppBar>
+    </Page.BottomAppBar>
+    
     <Grid Style="{StaticResource LayoutRootStyle}">
         <Grid.Background>
             <ImageBrush ImageSource="/Assets/BSEBackground620x300.png" Opacity="0.35" Stretch="UniformToFill"/>
@@ -40,7 +50,7 @@
                     </ItemsPanelTemplate>
                 </GridView.ItemsPanel>
             </GridView>
-            <Grid VerticalAlignment="Bottom" Visibility="{Binding HasSelectedItems, Converter={StaticResource BooleanToVisibilityConverter}}" Background="#99000000">
+            <!--<Grid VerticalAlignment="Bottom" Visibility="{Binding HasSelectedItems, Converter={StaticResource BooleanToVisibilityConverter}}" Background="#99000000">
                 <Border BorderBrush="{StaticResource AppBarItemForegroundThemeBrush}" BorderThickness="0,2,0,0">
                     <Grid>
                         <StackPanel Orientation="Horizontal" Height="100" HorizontalAlignment="Left">
@@ -48,7 +58,7 @@
                         </StackPanel>
                     </Grid>
                 </Border>
-            </Grid>
+            </Grid>-->
         </Grid>
         
         <Grid>

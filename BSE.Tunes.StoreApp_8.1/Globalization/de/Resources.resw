@@ -117,7 +117,7 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="AlbumDetailPage_BtnRemoveSelection.[using:Windows.UI.Xaml.Automation]AutomationProperties.Name" xml:space="preserve">
+  <data name="ButtonRemoveSelection.Label" xml:space="preserve">
     <value>Auswahl löschen</value>
   </data>
   <data name="AlbumsGroupUserControl_GroupHeader.Text" xml:space="preserve">
@@ -126,7 +126,7 @@
   <data name="AlbumsPage_TxtPageTitle.Text" xml:space="preserve">
     <value>Alben</value>
   </data>
-  <data name="ButtonAddToPlaylist.[using:Windows.UI.Xaml.Automation]AutomationProperties.Name" xml:space="preserve">
+  <data name="ButtonSelectedToFavorites.Label" xml:space="preserve">
     <value>Hinzufügen zu</value>
   </data>
   <data name="CboAlbums.Content" xml:space="preserve">
@@ -291,5 +291,23 @@ Die Registrierung kann nur durch den Betreiber des Servers erfolgen.</value>
   <data name="EncryptedLoginException" xml:space="preserve">
     <value>Es liegt ein Fehler bei der Anmeldung vor.
 Bitte schalte die verschlüsselte Anmeldung ab.</value>
+  </data>
+  <data name="ButtonAddToPlaylist.[using:Windows.UI.Xaml.Controls]ToolTipService.ToolTip" xml:space="preserve">
+    <value>Hinzufügen zu</value>
+  </data>
+  <data name="ButtonPlayAlbum.[using:Windows.UI.Xaml.Controls]ToolTipService.ToolTip" xml:space="preserve">
+    <value>Album wiedergeben</value>
+  </data>
+  <data name="NewPlaylistDialog_ButtonPlaylistSave.Content" xml:space="preserve">
+    <value>Speichern</value>
+  </data>
+  <data name="ButtonDeleteFromPlaylist.Label" xml:space="preserve">
+    <value>Aus Wiedergabeliste entfernen</value>
+  </data>
+  <data name="ButtonPlaySelection.Label" xml:space="preserve">
+    <value>Ausgewählte wiedergeben</value>
+  </data>
+  <data name="ButtonPlayPlaylist.[using:Windows.UI.Xaml.Controls]ToolTipService.ToolTip" xml:space="preserve">
+    <value>Wiedergeben</value>
   </data>
 </root>

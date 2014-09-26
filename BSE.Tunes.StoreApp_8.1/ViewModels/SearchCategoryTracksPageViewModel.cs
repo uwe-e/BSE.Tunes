@@ -146,7 +146,7 @@ namespace BSE.Tunes.StoreApp.ViewModels
                 Track track = dataItem.Data as Track;
                 if (track != null)
                 {
-                    this.m_navigationService.Navigate(typeof(AlbumDetailPage), track.Album.Id);
+                    this.m_navigationService.Navigate(typeof(AlbumDetailPage), typeof(MasterPage), track.Album.Id);
                 }
             }
         }

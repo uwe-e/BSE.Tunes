@@ -14,7 +14,8 @@ using Windows.UI.Xaml.Media;
 
 namespace BSE.Tunes.StoreApp.Controls
 {
-    public class DropDownButton : Button
+    //public class DropDownButton : Button
+    public class DropDownButton : AppBarButton
     {
         #region DependencyProperties
         /// <summary>
@@ -67,9 +68,6 @@ namespace BSE.Tunes.StoreApp.Controls
                 this.ContextMenu.IsOpen = true;
             }
         }
-        #endregion
-
-        #region MethodsPrivate
         #endregion
     }
 }

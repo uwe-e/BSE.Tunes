@@ -11,7 +11,8 @@
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
       mc:Ignorable="d">
 
-    <Grid Style="{StaticResource LayoutRootStyle}">
+    <!--<Grid Style="{StaticResource LayoutRootStyle}">-->
+    <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="140"/>
             <RowDefinition Height="*"/>
@@ -20,11 +21,11 @@
         <view:ImagePreview Grid.RowSpan="2" Source="{Binding CoverSource}" ImageOpacity="0.35"  Stretch="UniformToFill"/>
 
         <Hub Grid.Row="2" Grid.RowSpan="2">
-            <HubSection>
+            <!--<HubSection>
                 <DataTemplate>
                     <view:PlayerUserControl/>
                 </DataTemplate>
-            </HubSection>
+            </HubSection>-->
             <HubSection>
                 <DataTemplate>
                     <view:RandomPlayerUserControl/>

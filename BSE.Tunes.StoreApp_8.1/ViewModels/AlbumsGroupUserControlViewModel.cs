@@ -42,7 +42,7 @@ namespace BSE.Tunes.StoreApp.ViewModels
         }
         public override void OnSelectGroupHeader()
         {
-            this.m_navigationService.Navigate(typeof(AlbumsPage));
+            this.m_navigationService.Navigate(typeof(AlbumsPage), typeof(MasterPage));
         }
         public override void ResetData()
         {
@@ -59,7 +59,8 @@ namespace BSE.Tunes.StoreApp.ViewModels
                 Album album = dataItem.Data as Album;
                 if (album != null)
                 {
-                    this.m_navigationService.Navigate(typeof(AlbumDetailPage), album.Id);
+                    this.m_navigationService.Navigate(typeof(AlbumDetailPage),typeof(MasterPage), album.Id);
+                    //this.m_navigationService.Navigate(typeof(AlbumDetailPage), album.Id);
                 }
             }
         }

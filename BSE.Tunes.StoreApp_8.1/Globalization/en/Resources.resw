@@ -117,7 +117,7 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="AlbumDetailPage_BtnRemoveSelection.[using:Windows.UI.Xaml.Automation]AutomationProperties.Name" xml:space="preserve">
+  <data name="ButtonRemoveSelection.Label" xml:space="preserve">
     <value>Delete Selection</value>
   </data>
   <data name="AlbumsGroupUserControl_GroupHeader.Text" xml:space="preserve">
@@ -126,7 +126,7 @@
   <data name="AlbumsPage_TxtPageTitle.Text" xml:space="preserve">
     <value>Albums</value>
   </data>
-  <data name="ButtonAddToPlaylist.[using:Windows.UI.Xaml.Automation]AutomationProperties.Name" xml:space="preserve">
+  <data name="ButtonSelectedToFavorites.Label" xml:space="preserve">
     <value>Add to</value>
   </data>
   <data name="CboAlbums.Content" xml:space="preserve">
@@ -291,5 +291,23 @@ A registration can only be done by the operator of the server.</value>
   <data name="EncryptedLoginException" xml:space="preserve">
     <value>There is a login error.
 Please deactivate the encrypted login.</value>
+  </data>
+  <data name="ButtonAddToPlaylist.[using:Windows.UI.Xaml.Controls]ToolTipService.ToolTip" xml:space="preserve">
+    <value>Add to</value>
+  </data>
+  <data name="ButtonPlayAlbum.[using:Windows.UI.Xaml.Controls]ToolTipService.ToolTip" xml:space="preserve">
+    <value>Play Album</value>
+  </data>
+  <data name="NewPlaylistDialog_ButtonPlaylistSave.Content" xml:space="preserve">
+    <value>Save</value>
+  </data>
+  <data name="ButtonDeleteFromPlaylist.Label" xml:space="preserve">
+    <value>Remove from playlist</value>
+  </data>
+  <data name="ButtonPlaySelection.Label" xml:space="preserve">
+    <value>Play selected</value>
+  </data>
+  <data name="ButtonPlayPlaylist.[using:Windows.UI.Xaml.Controls]ToolTipService.ToolTip" xml:space="preserve">
+    <value>Play</value>
   </data>
 </root>

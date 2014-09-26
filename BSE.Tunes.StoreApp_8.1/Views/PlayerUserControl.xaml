@@ -87,7 +87,7 @@
                     <controls:DropDownButton Style="{StaticResource AddToFavouritesAppBarButtonStyle}" x:Uid="ButtonAddToPlaylist" VerticalAlignment="Center"
                                              Visibility="{Binding CurrentTrack, Mode=OneWay, Converter={StaticResource TrackToVisibilityConverter}}">
                         <controls:DropDownButton.ContextMenu>
-                            <controls:ContextMenu ItemsSource="{Binding MenuItemsPlaylist}" toolkit:ListViewExtensions.Command="{Binding SelectToPlaylistCommand}">
+                            <controls:ContextMenu ItemsSource="{Binding MenuItemsPlaylist}" toolkit:ListViewExtensions.Command="{Binding SelectTracksToPlaylistCommand}">
                                 <controls:ContextMenu.ItemTemplate>
                                     <DataTemplate>
                                         <TextBlock Text="{Binding Content}" HorizontalAlignment="Left" VerticalAlignment="Center"/>

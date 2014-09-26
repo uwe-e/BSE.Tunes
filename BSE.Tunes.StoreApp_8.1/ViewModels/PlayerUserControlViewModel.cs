@@ -17,6 +17,7 @@ using BSE.Tunes.StoreApp.Managers;
 using GalaSoft.MvvmLight.Messaging;
 using BSE.Tunes.StoreApp.Messaging;
 using BSE.Tunes.StoreApp.Extensions;
+using BSE.Tunes.StoreApp.Views;
 
 namespace BSE.Tunes.StoreApp.ViewModels
 {
@@ -311,7 +312,7 @@ namespace BSE.Tunes.StoreApp.ViewModels
         {
             if (this.CurrentTrack != null && this.CurrentTrack.Album != null)
             {
-                this.m_navigationService.Navigate(typeof(BSE.Tunes.StoreApp.Views.AlbumDetailPage), this.CurrentTrack.Album.Id);
+                this.m_navigationService.Navigate(typeof(AlbumDetailPage), typeof(MasterPage), this.CurrentTrack.Album.Id);
             }
         }
         private void Play()

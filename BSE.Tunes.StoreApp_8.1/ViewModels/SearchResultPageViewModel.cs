@@ -180,12 +180,12 @@ namespace BSE.Tunes.StoreApp.ViewModels
                 Album album = dataItem.Data as Album;
                 if (album != null)
                 {
-                    this.m_navigationService.Navigate(typeof(AlbumDetailPage), album.Id);
+                    this.m_navigationService.Navigate(typeof(AlbumDetailPage), typeof(MasterPage), album.Id);
                 }
                 Track track = dataItem.Data as Track;
                 if (track != null)
                 {
-                    this.m_navigationService.Navigate(typeof(AlbumDetailPage), track.Album.Id);
+                    this.m_navigationService.Navigate(typeof(AlbumDetailPage), typeof(MasterPage), track.Album.Id);
                 }
             }
         }
@@ -195,11 +195,11 @@ namespace BSE.Tunes.StoreApp.ViewModels
             {
                 if (searchCategory.Mode == DataModel.FilterMode.Tracks)
                 {
-                    this.m_navigationService.Navigate(typeof(SearchCategoryTracksPage), searchCategory.Query);
+                    this.m_navigationService.Navigate(typeof(SearchCategoryTracksPage), typeof(MasterPage), searchCategory.Query);
                 }
                 if (searchCategory.Mode == DataModel.FilterMode.Albbums)
                 {
-                    this.m_navigationService.Navigate(typeof(SearchCategoryAlbumsPage), searchCategory.Query);
+                    this.m_navigationService.Navigate(typeof(SearchCategoryAlbumsPage), typeof(MasterPage), searchCategory.Query);
                 }
             }
         }

@@ -53,7 +53,7 @@ namespace BSE.Tunes.StoreApp.Controls
         public static readonly DependencyProperty IsOpenProperty =
             DependencyProperty.Register("IsOpen", typeof(Boolean), typeof(ContextMenu), new PropertyMetadata(false, OnIsOpenChanged));
         /// <summary>
-        /// An implementation of <see cref="Boolean"/> designed to be used as is open.
+        /// Gets or sets whether the popup is currently displayed on the screen.
         /// </summary>
         public Boolean IsOpen
         {

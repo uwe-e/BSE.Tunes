@@ -112,6 +112,7 @@
     <Compile Include="Attributes\DataTemplateName.cs" />
     <Compile Include="Attributes\GridItemColumnSpan.cs" />
     <Compile Include="Attributes\GridItemRowSpan.cs" />
+    <Compile Include="Behaviours\FlyoutExtensions.cs" />
     <Compile Include="Behaviours\ListViewExtensions.cs" />
     <Compile Include="Behaviours\SelectorExtensions.cs" />
     <Compile Include="Collections\IncrementalObservableCollection1.cs" />
@@ -151,6 +152,7 @@
     <Compile Include="Media\MediaParser\Mp3MediaStreamExtension.cs" />
     <Compile Include="Media\MediaParser\MpegFrame.cs" />
     <Compile Include="Messaging\ResetDataMessage.cs" />
+    <Compile Include="Navigation\PageStackEntry.cs" />
     <Compile Include="Services\CacheableBitmapService.cs" />
     <Compile Include="Services\ICacheableBitmapService.cs" />
     <Compile Include="Managers\IPlayerManager.cs" />
@@ -210,6 +212,7 @@
     <Compile Include="ViewModels\AlbumsPageViewModel.cs" />
     <Compile Include="ViewModels\AlbumsViewModel.cs" />
     <Compile Include="ViewModels\BasePlaylistableViewModel.cs" />
+    <Compile Include="ViewModels\BaseTracklistPageViewModel.cs" />
     <Compile Include="ViewModels\BigDataItemViewModel.cs" />
     <Compile Include="ViewModels\DataGroupViewModel.cs" />
     <Compile Include="ViewModels\DataItemViewModel.cs" />
@@ -223,6 +226,7 @@
     <Compile Include="ViewModels\MenuNewPlaylistViewModel.cs" />
     <Compile Include="ViewModels\MenuPlaylistViewModel.cs" />
     <Compile Include="ViewModels\NewPlaylistUserControlViewModel.cs" />
+    <Compile Include="ViewModels\PlayerBarUserControlViewModel.cs" />
     <Compile Include="ViewModels\PlayerUserControlViewModel.cs" />
     <Compile Include="ViewModels\PlaylistDetailPageViewModel.cs" />
     <Compile Include="ViewModels\PlaylistGroupUserControlViewModel.cs" />
@@ -260,8 +264,14 @@
     <Compile Include="Views\MainPage.xaml.cs">
       <DependentUpon>MainPage.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\MasterPage.xaml.cs">
+      <DependentUpon>MasterPage.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\NewPlaylistUserControl.xaml.cs">
       <DependentUpon>NewPlaylistUserControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\PlayerBarUserControl.xaml.cs">
+      <DependentUpon>PlayerBarUserControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\PlayerUserControl.xaml.cs">
       <DependentUpon>PlayerUserControl.xaml</DependentUpon>
@@ -336,10 +346,6 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Common\LightTheme.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
     <Page Include="Common\StandardStyles.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -376,7 +382,15 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Page Include="Views\MasterPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\NewPlaylistUserControl.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\PlayerBarUserControl.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -437,14 +451,15 @@
     <Reference Include="Callisto">
       <HintPath>..\packages\Callisto.1.4.0\lib\netcore451\Callisto.dll</HintPath>
     </Reference>
-    <Reference Include="GalaSoft.MvvmLight.Extras.Win8">
-      <HintPath>..\packages\MvvmLightLibs.4.2.30.0\lib\netcore45\GalaSoft.MvvmLight.Extras.Win8.dll</HintPath>
+    <Reference Include="GalaSoft.MvvmLight">
+      <HintPath>..\packages\MvvmLightLibs.4.4.32.1\lib\netcore45\GalaSoft.MvvmLight.dll</HintPath>
     </Reference>
-    <Reference Include="GalaSoft.MvvmLight.Win8">
-      <HintPath>..\packages\MvvmLightLibs.4.2.30.0\lib\netcore45\GalaSoft.MvvmLight.Win8.dll</HintPath>
+    <Reference Include="GalaSoft.MvvmLight.Extras">
+      <HintPath>..\packages\MvvmLightLibs.4.4.32.1\lib\netcore45\GalaSoft.MvvmLight.Extras.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.Practices.ServiceLocation">
-      <HintPath>..\packages\MvvmLightLibs.4.2.30.0\lib\netcore45\Microsoft.Practices.ServiceLocation.dll</HintPath>
+    <Reference Include="Microsoft.Practices.ServiceLocation, Version=1.3.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\CommonServiceLocator.1.3\lib\portable-net4+sl5+netcore45+wpa81+wp8\Microsoft.Practices.ServiceLocation.dll</HintPath>
     </Reference>
     <Reference Include="Newtonsoft.Json">
       <HintPath>..\packages\Newtonsoft.Json.6.0.1\lib\netcore45\Newtonsoft.Json.dll</HintPath>

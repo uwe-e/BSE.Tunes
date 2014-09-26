@@ -62,7 +62,7 @@ namespace BSE.Tunes.StoreApp.ViewModels
         }
         public override void OnSelectGroupHeader()
         {
-            this.m_navigationService.Navigate(typeof(PlaylistPage));
+            this.m_navigationService.Navigate(typeof(PlaylistPage), typeof(MasterPage));
         }
         public override void ResetData()
         {
@@ -103,7 +103,7 @@ namespace BSE.Tunes.StoreApp.ViewModels
         {
             if (playlistViewModel != null && playlistViewModel.Playlist != null)
             {
-                this.m_navigationService.Navigate(typeof(PlaylistDetailPage), playlistViewModel.Playlist.Id);
+                this.m_navigationService.Navigate(typeof(PlaylistDetailPage), typeof(MasterPage), playlistViewModel.Playlist.Id);
             }
         }
         #endregion

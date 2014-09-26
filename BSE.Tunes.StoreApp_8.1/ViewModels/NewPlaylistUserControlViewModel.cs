@@ -121,17 +121,13 @@ namespace BSE.Tunes.StoreApp.ViewModels
                         }
                         this.IsOpen = false;
                     }
-                    catch (AggregateException aggregateException)
+                    catch (PlaylistExistsException)
                     {
-                        foreach (var innerException in aggregateException.Flatten().InnerExceptions)
-                        {
-                            PlaylistExistsException playlistExistsException = innerException as PlaylistExistsException;
-                            if (playlistExistsException != null)
-                            {
-                                this.ErrorMessage = string.Format(CultureInfo.CurrentCulture, this.m_resourceService.GetString("IDS_NewPlaylistDialog_PlayListAlreadyExistsExceptionMessage"), this.PlaylistName);
-                                return;
-                            }
-                        }
+                        this.ErrorMessage = string.Format(CultureInfo.CurrentCulture, this.m_resourceService.GetString("IDS_NewPlaylistDialog_PlayListAlreadyExistsExceptionMessage"), this.PlaylistName);
+                    }
+                    catch (Exception exception)
+                    {
+                        this.ErrorMessage = exception.Message;
                     }
                 }
             }
