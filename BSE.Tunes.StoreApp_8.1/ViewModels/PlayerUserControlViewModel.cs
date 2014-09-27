@@ -257,6 +257,9 @@ namespace BSE.Tunes.StoreApp.ViewModels
             this.m_navigationService = navigationService;
             this.PlayerMode = Data.Audio.PlayerMode.Random;
             this.PlayerState = Data.Audio.PlayerState.Closed;
+            //This prevents the alignment right of the slider´s thumb at start-up.
+            this.ProgressMaximumValue = 100;
+            this.ProgressValue = 0;
             Messenger.Default.Register<BSE.Tunes.Data.Audio.PlayerState>(this, playerState =>
             {
                 this.OnPlayerStateChanged(playerState);

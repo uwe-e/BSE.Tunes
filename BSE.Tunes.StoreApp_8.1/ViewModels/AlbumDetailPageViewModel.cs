@@ -95,6 +95,7 @@ namespace BSE.Tunes.StoreApp.ViewModels
         {
             base.OnNavigatedFrom(suspending);
             this.Album = null;
+            this.CoverSource = null;
         }
         #endregion
 

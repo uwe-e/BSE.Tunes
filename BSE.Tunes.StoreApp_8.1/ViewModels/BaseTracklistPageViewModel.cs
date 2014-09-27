@@ -93,7 +93,6 @@ namespace BSE.Tunes.StoreApp.ViewModels
                 this.SelectedItems.CollectionChanged += OnSelectedItemsCollectionChanged;
             }
         }
-
         
         public virtual void OnNavigatedFrom(bool suspending)
         {
@@ -102,6 +101,7 @@ namespace BSE.Tunes.StoreApp.ViewModels
                 this.SelectedItems.CollectionChanged -= OnSelectedItemsCollectionChanged;
                 this.SelectedItems = null;
             }
+            this.HasSelectedItems = false;
         }
         #endregion
 

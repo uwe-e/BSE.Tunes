@@ -231,6 +231,7 @@ namespace BSE.Tunes.StoreApp.ViewModels
                 this.Entries.CollectionChanged -= OnEntryCollectionChanged;
                 this.Entries = null;
             }
+            this.ImageSource = null;
             this.Playlist = null;
         }
         #endregion
