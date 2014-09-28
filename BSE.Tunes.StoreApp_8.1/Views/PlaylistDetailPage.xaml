@@ -24,7 +24,7 @@
     </Page.TopAppBar>
 
     <Page.BottomAppBar>
-        <AppBar x:Uid="BottomAppBar" IsOpen="{Binding HasSelectedItems, Mode=TwoWay}" IsSticky="{Binding HasSelectedItems}" FontFamily="Global User Interface">
+        <AppBar x:Uid="BottomAppBar" IsOpen="{Binding IsToolbarOpen, Mode=TwoWay}" IsSticky="{Binding IsToolbarOpen}" FontFamily="Global User Interface">
             <Grid>
                 <StackPanel Orientation="Horizontal" Height="120" HorizontalAlignment="Left">
                     <AppBarButton x:Uid="ButtonPlaySelection" Icon="Play"

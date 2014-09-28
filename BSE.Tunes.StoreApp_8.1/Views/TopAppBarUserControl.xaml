@@ -9,12 +9,10 @@
     mc:Ignorable="d"
     d:DesignHeight="100"
     d:DesignWidth="400">
-    
+
     <Grid>
-        <Border BorderBrush="{StaticResource AppBarItemForegroundThemeBrush}" BorderThickness="0,0,0,2">
-            <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" Height="100">
-                <Button Style="{StaticResource HomeAppBarButtonStyle}" Command="{Binding HomeNavigationCommand}" HorizontalAlignment="Left" VerticalAlignment="Top"/>
-            </StackPanel>
-        </Border>
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" Height="100">
+            <AppBarButton Icon="Home" Command="{Binding HomeNavigationCommand}" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+        </StackPanel>
     </Grid>
 </UserControl>

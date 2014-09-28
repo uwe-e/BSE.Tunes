@@ -101,25 +101,20 @@ namespace BSE.Tunes.StoreApp.ViewModels
         #endregion
 
         #region Methodsprotected
-        protected virtual void LoadPlaylists()
+        protected virtual async void CreatePlaylistMenu()
         {
+            this.MenuItemsPlaylist = new ObservableCollection<MenuItemViewModel>();
             if (this.AccountService.User != null && !string.IsNullOrEmpty(this.AccountService.User.UserName))
             {
-                var taskPlaylist = Task.Run(async () => await this.DataService.GetPlaylistsByUserName(this.AccountService.User.UserName));
-                try
+                var playlists = await this.DataService.GetPlaylistsByUserName(this.AccountService.User.UserName);
+                if (playlists != null)
                 {
-                    taskPlaylist.Wait();
-                    CreateMenuItems(taskPlaylist.Result);
-                }
-                catch (Exception exception)
-                {
-                    this.DialogService.ShowDialog(exception.Message);
+                    this.CreateMenuItems(playlists);
                 }
             }
         }
         protected virtual void CreateMenuItems(ObservableCollection<Playlist> playlists)
         {
-            this.MenuItemsPlaylist.Clear();
             if (playlists != null)
             {
                 foreach (var playlist in playlists)

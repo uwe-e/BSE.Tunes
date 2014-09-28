@@ -282,10 +282,9 @@ namespace BSE.Tunes.StoreApp.ViewModels
             });
             Messenger.Default.Register<PlaylistChangeMessage>(this, message =>
             {
-                this.LoadPlaylists();
+                this.CreatePlaylistMenu();
             });
-            this.MenuItemsPlaylist = new ObservableCollection<MenuItemViewModel>();
-            this.LoadPlaylists();
+            this.CreatePlaylistMenu();
         }
         public override void ResetData()
         {

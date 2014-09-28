@@ -123,6 +123,15 @@ namespace BSE.Tunes.StoreApp.ViewModels
             : base(dataService, accountService, dialogService, resourceService, cacheableBitmapService, navigationService)
         {
             this.m_playerManager = playerManager;
+            Messenger.Default.Register<PlaylistEntryChangeMessage>(this, message =>
+                {
+                    Playlist changedPlaylist = message.Playlist;
+                    if (changedPlaylist != null && changedPlaylist.Equals(this.Playlist))
+                    {
+                        //add code for reloading the current playlist when it´s changed by an update
+                        //within the playerbar.
+                    }
+                });
         }
 
         public async override void OnNavigatedTo(object navigationParameter, NavigationMode navigationMode)
@@ -139,42 +148,42 @@ namespace BSE.Tunes.StoreApp.ViewModels
                         Collection<Uri> imageUris = null;
                         
                         this.Playlist = await this.DataService.GetPlaylistById((int)navigationParameter, user.UserName);
-
-                        this.PageTitle = string.Format(CultureInfo.CurrentCulture,
-                            this.ResourceService.GetString("IDS_PlaylistPage_PageTitle", "Playlist {0}"), this.Playlist.Name);
-
-                        if (this.Playlist != null && this.Playlist.Entries != null)
+                        if (this.Playlist != null)
                         {
-                            
-                            foreach (var entry in this.Playlist.Entries.OrderBy(pe => pe.SortOrder))
+                            this.PageTitle = string.Format(CultureInfo.CurrentCulture,
+                                this.ResourceService.GetString("IDS_PlaylistPage_PageTitle", "Playlist {0}"), this.Playlist.Name);
+
+                            if (this.Playlist.Entries != null)
                             {
-                                if (entry != null)
+                                foreach (var entry in this.Playlist.Entries.OrderBy(pe => pe.SortOrder))
                                 {
-                                    if (this.Entries == null)
+                                    if (entry != null)
                                     {
-                                        this.Entries = new ObservableCollection<PlaylistEntry>();
-                                        imageUris = new Collection<Uri>();
+                                        if (this.Entries == null)
+                                        {
+                                            this.Entries = new ObservableCollection<PlaylistEntry>();
+                                            imageUris = new Collection<Uri>();
+                                        }
+                                        this.Entries.Add(entry);
+                                        imageUris.Add(this.DataService.GetImage(entry.AlbumId));
                                     }
-                                    this.Entries.Add(entry);
-                                    imageUris.Add(this.DataService.GetImage(entry.AlbumId));
+                                }
+                                if (imageUris != null)
+                                {
+                                    this.ImageSource = await this.CacheableBitmapService.GetBitmapSource(
+                                        new ObservableCollection<Uri>(imageUris.Take(4)),
+                                        this.Playlist.Guid.ToString(),
+                                        500);
                                 }
                             }
-                            if (imageUris != null)
+                            if (this.Entries != null)
                             {
-                                this.ImageSource = await this.CacheableBitmapService.GetBitmapSource(
-                                    new ObservableCollection<Uri>(imageUris.Take(4)),
-                                    this.Playlist.Guid.ToString(),
-                                    500);
+                                this.PlayPlaylistCommand.RaiseCanExecuteChanged();
+                                this.HasEntries = this.Entries.Count > 0;
+                                this.Entries.CollectionChanged += OnEntryCollectionChanged;
                             }
+                            this.CreatePlaylistMenu();
                         }
-                        if (this.Entries != null)
-                        {
-                            this.PlayPlaylistCommand.RaiseCanExecuteChanged();
-                            this.HasEntries = this.Entries.Count > 0;
-                            this.Entries.CollectionChanged += OnEntryCollectionChanged;
-                        }
-                        this.MenuItemsPlaylist = new ObservableCollection<MenuItemViewModel>();
-                        this.LoadPlaylists();
                     }
                     catch (Exception exception)
                     {
@@ -288,7 +297,6 @@ namespace BSE.Tunes.StoreApp.ViewModels
         }
         protected override void CreateMenuItems(ObservableCollection<Playlist> playlists)
         {
-            this.MenuItemsPlaylist.Clear();
             if (playlists != null)
             {
                 foreach (var playlist in playlists)

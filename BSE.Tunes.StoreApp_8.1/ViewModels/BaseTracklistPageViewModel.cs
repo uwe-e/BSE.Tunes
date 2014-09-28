@@ -16,6 +16,7 @@ namespace BSE.Tunes.StoreApp.ViewModels
     {
         #region FieldsPrivate
         private bool m_hasSelectedItems;
+        private bool m_isToolbarOpen;
         private INavigationService m_navigationService;
         private ObservableCollection<object> m_selectedItems;
         private RelayCommand m_playSelectedItemsCommand;
@@ -24,6 +25,9 @@ namespace BSE.Tunes.StoreApp.ViewModels
         #endregion
 
         #region Properties
+        /// <summary>
+        /// Gets or sets an value indication whether the tracklist has at the minimum one selected item.
+        /// </summary>
         public virtual bool HasSelectedItems
         {
             get
@@ -38,6 +42,22 @@ namespace BSE.Tunes.StoreApp.ViewModels
                     RaisePropertyChanged("HasSelectedItems");
                 }
                 catch { }
+            }
+        }
+        /// <summary>
+        /// Gets or sets a value indicating whether the the toolbar for the playlist related content is open.
+        /// </summary>
+        /// <remarks>Because it´s a twoway bound property in xaml the <see cref="HasSelectedItems"/> property can not used.</remarks>
+        public virtual bool IsToolbarOpen
+        {
+            get
+            {
+                return this.m_isToolbarOpen;
+            }
+            set
+            {
+                this.m_isToolbarOpen = value;
+                RaisePropertyChanged("IsToolbarOpen");
             }
         }
         public ObservableCollection<object> SelectedItems
@@ -102,6 +122,7 @@ namespace BSE.Tunes.StoreApp.ViewModels
                 this.SelectedItems = null;
             }
             this.HasSelectedItems = false;
+            this.IsToolbarOpen = false;
         }
         #endregion
 
@@ -131,6 +152,7 @@ namespace BSE.Tunes.StoreApp.ViewModels
         protected virtual void OnSelectedItemsCollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
         {
             this.HasSelectedItems = this.SelectedItems.Count > 0;
+            this.IsToolbarOpen = this.HasSelectedItems;
             this.PlaySelectedItemsCommand.RaiseCanExecuteChanged();
             this.ClearSelectionCommand.RaiseCanExecuteChanged();
         }

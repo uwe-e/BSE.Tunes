@@ -27,7 +27,7 @@
     </Page.TopAppBar>
 
     <Page.BottomAppBar>
-        <AppBar x:Uid="BottomAppBar" IsOpen="{Binding HasSelectedItems, Mode=TwoWay}" IsSticky="{Binding HasSelectedItems}" FontFamily="Global User Interface">
+        <AppBar x:Uid="BottomAppBar" IsOpen="{Binding IsToolbarOpen, Mode=TwoWay}" IsSticky="{Binding IsToolbarOpen}" FontFamily="Global User Interface">
             <Grid>
                 <StackPanel Orientation="Horizontal" Height="120" HorizontalAlignment="Left">
                     <AppBarButton x:Uid="ButtonPlaySelection" Icon="Play"
@@ -35,7 +35,8 @@
                             VerticalAlignment="Top"/>
                     <controls:DropDownButton Icon="Add"
                                              x:Name="SelectedToFavoritesButton"
-                                             x:Uid="ButtonSelectedToFavorites">
+                                             x:Uid="ButtonSelectedToFavorites"
+                                             IsEnabled="{Binding HasSelectedItems}">
                         <controls:DropDownButton.ContextMenu>
                             <controls:ContextMenu ItemsSource="{Binding MenuItemsPlaylist}" toolkit:ListViewExtensions.Command="{Binding SelectedToPlaylistCommand}">
                                 <controls:ContextMenu.ItemTemplate>

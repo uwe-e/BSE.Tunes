@@ -68,7 +68,7 @@ namespace BSE.Tunes.StoreApp.ViewModels
             this.m_playerManager = playerManager;
             Messenger.Default.Register<PlaylistChangeMessage>(this, message =>
             {
-                this.LoadPlaylists();
+                this.CreatePlaylistMenu();
             });
         }
 
@@ -80,10 +80,9 @@ namespace BSE.Tunes.StoreApp.ViewModels
                 this.Album = await this.DataService.GetAlbumById((int)navigationParameter);
                 this.CoverSource = this.DataService.GetImage(this.Album.AlbumId);
                 this.PlayAlbumCommand.RaiseCanExecuteChanged();
-                this.MenuItemsPlaylist = new ObservableCollection<MenuItemViewModel>();
                 try
                 {
-                    this.LoadPlaylists();
+                    this.CreatePlaylistMenu();
                 }
                 catch (Exception exception)
                 {
