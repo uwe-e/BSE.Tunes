@@ -72,10 +72,11 @@
                                        TextTrimming="WordEllipsis" HorizontalAlignment="Left" 
                                        Opacity="0.49"/>
                 </StackPanel>
-                <!--<controls:DropDownButton Style="{StaticResource AddToFavouritesPlayerButtonStyle}" x:Uid="ButtonAddToPlaylist" VerticalAlignment="Center"
-                                             Visibility="{Binding CurrentTrack, Mode=OneWay, Converter={StaticResource TrackToVisibilityConverter}}">
+                <controls:DropDownButton Style="{StaticResource AddToFavouritesButtonStyle}"
+                                             x:Name="SelectedToFavoritesButton"
+                                             x:Uid="ButtonSelectedToFavorites">
                     <controls:DropDownButton.ContextMenu>
-                        <controls:ContextMenu ItemsSource="{Binding MenuItemsPlaylist}" toolkit:ListViewExtensions.Command="{Binding SelectTracksToPlaylistCommand}">
+                        <controls:ContextMenu ItemsSource="{Binding MenuItemsPlaylist}" toolkit:ListViewExtensions.Command="{Binding SelectedToPlaylistCommand}">
                             <controls:ContextMenu.ItemTemplate>
                                 <DataTemplate>
                                     <TextBlock Text="{Binding Content}" HorizontalAlignment="Left" VerticalAlignment="Center"/>
@@ -83,8 +84,13 @@
                             </controls:ContextMenu.ItemTemplate>
                         </controls:ContextMenu>
                     </controls:DropDownButton.ContextMenu>
+                    <FlyoutBase.AttachedFlyout>
+                        <Flyout behaviours:FlyoutExtensions.IsOpen="{Binding NewSelectedToPlaylistViewModel.IsOpen, Mode=TwoWay}"
+                                    behaviours:FlyoutExtensions.Parent="{Binding ElementName=SelectedToFavoritesButton}">
+                            <views:NewPlaylistUserControl DataContext="{Binding NewSelectedToPlaylistViewModel}"/>
+                        </Flyout>
+                    </FlyoutBase.AttachedFlyout>
                 </controls:DropDownButton>
-                <views:NewPlaylistUserControl Height="110" Width="300" DataContext="{Binding NewPlaylistViewModel}"/>-->
             </StackPanel>
             <Grid Grid.Column="1" Margin="10,0,10,0">
                 <Grid.ColumnDefinitions>
