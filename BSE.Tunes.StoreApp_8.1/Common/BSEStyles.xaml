@@ -6,7 +6,7 @@
     xmlns:controls="using:BSE.Tunes.StoreApp.Controls"
     xmlns:views="using:BSE.Tunes.StoreApp.Views"
     xmlns:callisto="using:Callisto.Controls">
-    
+
     <ResourceDictionary.MergedDictionaries>
         <ResourceDictionary Source="StandardStyles.xaml"/>
     </ResourceDictionary.MergedDictionaries>
@@ -127,11 +127,9 @@
                                     <ColumnDefinition Width="*" />
                                 </Grid.ColumnDefinitions>
                                 <Grid.RowDefinitions>
-                                    <!--<RowDefinition Height="17" />-->
                                     <RowDefinition Height="3" />
                                     <RowDefinition Height="Auto" />
                                     <RowDefinition Height="3" />
-                                    <!--<RowDefinition Height="32" />-->
                                 </Grid.RowDefinitions>
 
                                 <Rectangle x:Name="HorizontalTrackRect"
@@ -141,27 +139,6 @@
                                 <Rectangle x:Name="HorizontalDecreaseRect"
                                           Fill="{TemplateBinding Foreground}"
                                           Grid.Row="1" Height="{StaticResource SliderTrackBarThemeHeight}"/>
-                                <!--<TickBar x:Name="TopTickBar"
-                                        Visibility="Collapsed"
-                                        Fill="{ThemeResource SliderTickmarkOutsideBackgroundThemeBrush}"
-                                        Height="{ThemeResource SliderOutsideTickBarThemeHeight}"
-                                        VerticalAlignment="Bottom"
-                                        Margin="0,0,0,2"
-                                        Grid.ColumnSpan="3" />
-                                <TickBar x:Name="HorizontalInlineTickBar"
-                                        Visibility="Collapsed"
-                                        Fill="{ThemeResource SliderTickMarkInlineBackgroundThemeBrush}"
-                                        Height="{ThemeResource SliderTrackThemeHeight}"
-                                        Grid.Row="1"
-                                        Grid.ColumnSpan="3" />
-                                <TickBar x:Name="BottomTickBar"
-                                        Visibility="Collapsed"
-                                        Fill="{ThemeResource SliderTickmarkOutsideBackgroundThemeBrush}"
-                                        Height="{ThemeResource SliderOutsideTickBarThemeHeight}"
-                                        VerticalAlignment="Top"
-                                        Margin="0,2,0,0"
-                                        Grid.Row="2"
-                                        Grid.ColumnSpan="3" />-->
                                 <Thumb x:Name="HorizontalThumb"
                                       Background="{ThemeResource SliderThumbBackgroundThemeBrush}"
                                       Style="{StaticResource SliderThumbStyle}"
@@ -172,29 +149,6 @@
                                        Grid.RowSpan="3"
                                       Grid.Column="1" 
                                       AutomationProperties.AccessibilityView="Raw"/>
-                                <!--<Rectangle x:Name="HorizontalBorder"
-                                          Stroke="{TemplateBinding BorderBrush}"
-                                          StrokeThickness="{TemplateBinding BorderThickness}"
-                                          Grid.Row="1"
-                                          Grid.ColumnSpan="3" />
-                                <Rectangle x:Name="FocusVisualWhiteHorizontal"
-                                          IsHitTestVisible="False"
-                                          Stroke="{ThemeResource FocusVisualWhiteStrokeThemeBrush}"
-                                          StrokeEndLineCap="Square"
-                                          StrokeDashArray="1,1"
-                                          Opacity="0"
-                                          StrokeDashOffset="1.5"
-                                          Grid.RowSpan="3"
-                                          Grid.ColumnSpan="3" />
-                                <Rectangle x:Name="FocusVisualBlackHorizontal"
-                                          IsHitTestVisible="False"
-                                          Stroke="{ThemeResource FocusVisualBlackStrokeThemeBrush}"
-                                          StrokeEndLineCap="Square"
-                                          StrokeDashArray="1,1"
-                                          Opacity="0"
-                                          StrokeDashOffset="0.5"
-                                          Grid.RowSpan="3"
-                                          Grid.ColumnSpan="3" />-->
                             </Grid>
                         </Grid>
                     </Grid>
@@ -202,7 +156,7 @@
             </Setter.Value>
         </Setter>
     </Style>
-    
+
     <Style TargetType="ComboBox">
         <Setter Property="Background" Value="Transparent"/>
         <Setter Property="Foreground" Value="White"/>
@@ -218,8 +172,8 @@
             </StackPanel>
         </StackPanel>
     </DataTemplate>
-    
-    
+
+
     <DataTemplate x:Key="Standard200x200ItemTemplate">
         <Grid HorizontalAlignment="Left" Width="200" Height="200">
             <Border Background="{StaticResource ListViewItemPlaceholderBackgroundThemeBrush}">
@@ -266,15 +220,8 @@
             <Setter.Value>
                 <ControlTemplate TargetType="Frame">
                     <Grid>
-                        <!--<Grid.RowDefinitions>
-                            <RowDefinition Height="*"/>
-                            <RowDefinition Height="82"/>
-                        </Grid.RowDefinitions>-->
                         <MediaElement x:Name="AudioMediaElement" services:PlayerService.RegisterAsMediaService="True"/>
                         <ContentPresenter />
-                        <!--<Border Grid.Row="1">
-                            <views:PlayerBarUserControl/>
-                        </Border>-->
                     </Grid>
                 </ControlTemplate>
             </Setter.Value>
@@ -293,15 +240,12 @@
             <Setter.Value>
                 <ControlTemplate TargetType="ButtonBase">
                     <Grid x:Name="RootGrid" Width="160" Height="160" Background="{StaticResource BigButtonBackgroundThemeBrush}">
-                        <!--<StackPanel VerticalAlignment="Bottom"  Background="{StaticResource ListViewItemOverlayBackgroundThemeBrush}">-->
-                            <!--<TextBlock Text="{Binding Title}" Foreground="{StaticResource ListViewItemOverlayForegroundThemeBrush}" Style="{StaticResource TitleTextStyle}" Height="22" Margin="15,0,15,0"/>-->
-                            <ContentPresenter x:Name="ContentPresenter"
+                        <ContentPresenter x:Name="ContentPresenter"
                                           Content="{TemplateBinding Content}"
                                           ContentTransitions="{TemplateBinding ContentTransitions}"
                                           ContentTemplate="{TemplateBinding ContentTemplate}"
                                           Margin="{TemplateBinding Padding}"
                                           VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
-                        <!--</StackPanel>-->
                     </Grid>
                 </ControlTemplate>
             </Setter.Value>
@@ -632,7 +576,7 @@
         <Setter Property="AutomationProperties.Name" Value=""/>
         <Setter Property="Foreground" Value="{StaticResource LightAppBarItemForegroundThemeBrush}"/>
     </Style>
-    
+
     <Style TargetType="Hub">
         <Setter Property="HorizontalContentAlignment" Value="Left"/>
         <Setter Property="Padding" Value="140,0,140,0"/>
