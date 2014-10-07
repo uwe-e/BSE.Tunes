@@ -54,6 +54,7 @@
     <Compile Include="Artist.cs" />
     <Compile Include="Audio\PlayerMode.cs" />
     <Compile Include="Audio\PlayerState.cs" />
+    <Compile Include="Comparers\PlaylistEntryComparer.cs" />
     <Compile Include="CoverImage.cs" />
     <Compile Include="Exceptions\BSEtunesException.cs" />
     <Compile Include="Exceptions\PlaylistExistsException.cs" />
