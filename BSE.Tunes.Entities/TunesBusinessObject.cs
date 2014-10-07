@@ -1191,7 +1191,7 @@ namespace BSE.Tunes.Entities
                     }
                 }
             }
-            return playlist;
+            return playlist = this.GetPlaylistById(playlist.Id, playlist.UserName);
         }
 
         public bool UpdatePlaylistEntries(Playlist playlist)
