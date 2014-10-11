@@ -44,11 +44,11 @@
             <Setter Property="Content" Value="&#xE100;"/>
         </Style>
 
-        <Style x:Key="AddToFavouritesPlayerButtonStyle" TargetType="ButtonBase" BasedOn="{StaticResource PlayerBarButtonStyle}">
+        <!--<Style x:Key="AddToFavouritesPlayerButtonStyle" TargetType="ButtonBase" BasedOn="{StaticResource PlayerBarButtonStyle}">
             <Setter Property="AutomationProperties.AutomationId" Value="AddAppBarButton"/>
             <Setter Property="AutomationProperties.Name" Value="Add To Favourites"/>
             <Setter Property="Content" Value="&#xE109;"/>
-        </Style>
+        </Style>-->
 
     </UserControl.Resources>
     <Grid Background="#101010">
@@ -63,7 +63,7 @@
                     <!--<Image Source="/SampleImage.png" Stretch="UniformToFill"/>-->
                     <controls:CrossfadingImage Height="60" Source="{Binding CoverSource}" Stretch="Uniform" Command="{Binding SelectCommand}"/>
                 </Border>
-                <StackPanel Orientation="Vertical" VerticalAlignment="Top" Margin="0,10,0,0">
+                <StackPanel Orientation="Vertical" Margin="0,10,0,0">
                     <TextBlock Text="{Binding CurrentTitle}" 
                                        Margin="10,0,0,0" Width="240" Height="26" FontSize="16" FontWeight="Semilight" 
                                        TextTrimming="WordEllipsis" TextWrapping="Wrap" HorizontalAlignment="Left"/>

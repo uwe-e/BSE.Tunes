@@ -280,10 +280,10 @@ namespace BSE.Tunes.StoreApp.ViewModels
                     this.OnInitializeView(track);
                 }
             });
-            Messenger.Default.Register<PlaylistChangeMessage>(this, message =>
-            {
-                this.CreatePlaylistMenu();
-            });
+            //Messenger.Default.Register<PlaylistChangeMessage>(this, message =>
+            //{
+            //    this.CreatePlaylistMenu();
+            //});
             this.CreatePlaylistMenu();
         }
         public override void ResetData()
@@ -293,7 +293,7 @@ namespace BSE.Tunes.StoreApp.ViewModels
         #endregion
 
         #region MethodsProtected
-        protected override void AddTracksToPlaylist(Playlist playlist)
+        protected override void AddSelectedToPlaylist(Playlist playlist)
         {
             if (playlist != null)
             {
@@ -304,7 +304,7 @@ namespace BSE.Tunes.StoreApp.ViewModels
                     TrackId = this.CurrentTrack.Id,
                     Guid = Guid.NewGuid()
                 });
-                base.AddTracksToPlaylist(playlist);
+                this.AppendToPlaylist(playlist);
             }
         }
         #endregion

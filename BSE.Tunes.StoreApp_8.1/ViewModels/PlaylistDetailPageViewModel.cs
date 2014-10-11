@@ -128,8 +128,21 @@ namespace BSE.Tunes.StoreApp.ViewModels
                     Playlist changedPlaylist = message.Playlist;
                     if (changedPlaylist != null && changedPlaylist.Equals(this.Playlist))
                     {
-                        //add code for reloading the current playlist when it´s changed by an update
+                        //TODO: add code for reloading the current playlist when it´s changed by an update
                         //within the playerbar.
+                        var newEntries = changedPlaylist.Entries.Except(this.Playlist.Entries, new BSE.Tunes.Data.Comparers.PlaylistEntryComparer());
+                        if (newEntries != null)
+                        {
+                            this.Entries.CollectionChanged -= OnEntryCollectionChanged;
+                            foreach(var playlistEntry in newEntries)
+                            {
+                                if (playlistEntry != null)
+                                {
+                                    this.Entries.Add(playlistEntry);
+                                }
+                            }
+                            this.Entries.CollectionChanged += OnEntryCollectionChanged;
+                        }
                     }
                 });
         }
@@ -263,7 +276,14 @@ namespace BSE.Tunes.StoreApp.ViewModels
                 this.SelectedItems.Clear();
             }
         }
-        protected override void AddTracksToPlaylist(Playlist playlist)
+        protected override void AddAllToPlaylist(Playlist playlist)
+        {
+            if (playlist != null)
+            {
+                this.AddEntriesToPlaylist(playlist, this.Entries);
+            }
+        }
+        protected override void AddSelectedToPlaylist(Playlist playlist)
         {
             if (playlist != null)
             {
@@ -271,26 +291,10 @@ namespace BSE.Tunes.StoreApp.ViewModels
                 if (selectedItems != null)
                 {
                     var playlistEntries = new ObservableCollection<PlaylistEntry>(selectedItems.Cast<PlaylistEntry>());
-                    if (playlistEntries.Count == 0)
-                    {
-                        playlistEntries = this.Entries;
-                    }
                     if (playlistEntries != null)
                     {
-                        foreach (var entry in playlistEntries)
-                        {
-                            if (entry != null)
-                            {
-                                playlist.Entries.Add(new PlaylistEntry
-                                {
-                                    PlaylistId = playlist.Id,
-                                    TrackId = entry.TrackId,
-                                    Guid = Guid.NewGuid()
-                                });
-                            }
-                        }
+                        this.AddEntriesToPlaylist(playlist, playlistEntries);
                     }
-                    base.AddTracksToPlaylist(playlist);
                 }
             }
             this.SelectedItems.Clear();
@@ -318,6 +322,25 @@ namespace BSE.Tunes.StoreApp.ViewModels
 
 
         #region MethodsPrivate
+        private void AddEntriesToPlaylist(Playlist playlist, ObservableCollection<PlaylistEntry> playlistEntries)
+        {
+            if (playlist != null && playlistEntries != null)
+            {
+                foreach (var entry in playlistEntries)
+                {
+                    if (entry != null)
+                    {
+                        playlist.Entries.Add(new PlaylistEntry
+                        {
+                            PlaylistId = playlist.Id,
+                            TrackId = entry.TrackId,
+                            Guid = Guid.NewGuid()
+                        });
+                    }
+                }
+                this.AppendToPlaylist(playlist);
+            }
+        }
         private bool CanDeleteSelection()
         {
             return this.SelectedItems != null && this.SelectedItems.Count > 0;

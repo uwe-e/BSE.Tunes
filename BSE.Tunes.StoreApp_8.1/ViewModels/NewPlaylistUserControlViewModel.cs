@@ -1,5 +1,6 @@
 ﻿using BSE.Tunes.Data;
 using BSE.Tunes.Data.Exceptions;
+using BSE.Tunes.StoreApp.DataModel;
 using BSE.Tunes.StoreApp.Event;
 using BSE.Tunes.StoreApp.Services;
 using GalaSoft.MvvmLight.Command;
@@ -32,6 +33,14 @@ namespace BSE.Tunes.StoreApp.ViewModels
         #endregion
 
         #region Properties
+        /// <summary>
+        /// Gets or sets the possible insert modes for inserting tracks into a newly created playlist.
+        /// </summary>
+        public InsertMode InsertMode
+        {
+            get;
+            set;
+        }
         public bool IsOpen
         {
             get
@@ -101,7 +110,7 @@ namespace BSE.Tunes.StoreApp.ViewModels
             if (!string.IsNullOrEmpty(this.PlaylistName))
             {
                 this.ErrorMessage = string.Empty;
-                TunesUser user = this.m_accountService.User;
+                BSE.Tunes.Data.TunesUser user = this.m_accountService.User;
                 if (user != null && !string.IsNullOrEmpty(user.UserName))
                 {
                     Playlist playlist = new Playlist

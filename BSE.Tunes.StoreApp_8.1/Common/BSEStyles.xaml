@@ -11,6 +11,12 @@
         <ResourceDictionary Source="StandardStyles.xaml"/>
     </ResourceDictionary.MergedDictionaries>
 
+    <!-- necessary for the dropdownbutton. if this color is not set the dropdownbutton control
+    is invisible when clicked -->
+    <SolidColorBrush x:Key="AppBarItemForegroundThemeBrush" Color="#FFFFFFFF" />
+    <SolidColorBrush x:Key="AppBarItemPointerOverBackgroundThemeBrush" Color="#21FFFFFF" />
+    <SolidColorBrush x:Key="AppBarItemPointerOverForegroundThemeBrush" Color="#FFFFFFFF" />
+
     <converter:StringToVisibilityConverter x:Key="StringToVisibilityConverter"/>
     <converter:TrackToVisibilityConverter x:Key="TrackToVisibilityConverter"/>
     <converter:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>

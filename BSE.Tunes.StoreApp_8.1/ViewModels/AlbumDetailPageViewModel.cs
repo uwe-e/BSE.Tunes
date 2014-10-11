@@ -66,10 +66,6 @@ namespace BSE.Tunes.StoreApp.ViewModels
             : base(dataService, accountService, dialogService, resourceService, cacheableBitmapService, navigationService)
         {
             this.m_playerManager = playerManager;
-            Messenger.Default.Register<PlaylistChangeMessage>(this, message =>
-            {
-                this.CreatePlaylistMenu();
-            });
         }
 
         public async override void OnNavigatedTo(object navigationParameter, NavigationMode navigationMode)
@@ -113,43 +109,55 @@ namespace BSE.Tunes.StoreApp.ViewModels
                 this.SelectedItems.Clear();
             }
         }
-        protected override void AddTracksToPlaylist(Playlist playlist)
+        protected override void AddAllToPlaylist(Playlist playlist)
         {
             if (playlist != null)
             {
-                ObservableCollection<Track> tracks = null;
-                var selectedItems = this.SelectedItems;
-                if (selectedItems.Count == 0)
-                {
-                    tracks = new ObservableCollection<Track>(this.Album.Tracks);
-                }
-                else
-                {
-                    tracks = new ObservableCollection<Track>(selectedItems.Cast<Track>());
-                }
-                
+                var tracks = new ObservableCollection<Track>(this.Album.Tracks);
                 if (tracks != null)
                 {
-                    foreach (var track in tracks)
+                    this.AddTracksToPlaylist(playlist, tracks);
+                }
+            }
+        }
+        protected override void AddSelectedToPlaylist(Playlist playlist)
+        {
+            if (playlist != null)
+            {
+                var selectedItems = this.SelectedItems;
+                if (selectedItems != null)
+                {
+                    var tracks = new ObservableCollection<Track>(selectedItems.Cast<Track>());
+                    if (tracks != null)
                     {
-                        if (track != null)
-                        {
-                            playlist.Entries.Add(new PlaylistEntry
-                            {
-                                PlaylistId = playlist.Id,
-                                TrackId = track.Id,
-                                Guid = Guid.NewGuid()
-                            });
-                        }
+                        this.AddTracksToPlaylist(playlist, tracks);
                     }
                 }
-                base.AddTracksToPlaylist(playlist);
             }
             this.SelectedItems.Clear();
         }
         #endregion
 
         #region MethodsPrivate
+        private void AddTracksToPlaylist(Playlist playlist, ObservableCollection<Track> tracks)
+        {
+            if (playlist != null && tracks != null)
+            {
+                foreach (var track in tracks)
+                {
+                    if (track != null)
+                    {
+                        playlist.Entries.Add(new PlaylistEntry
+                        {
+                            PlaylistId = playlist.Id,
+                            TrackId = track.Id,
+                            Guid = Guid.NewGuid()
+                        });
+                    }
+                }
+                this.AppendToPlaylist(playlist);
+            }
+        }
         private bool CanPlayAlbum()
         {
             return this.Album != null && this.Album.Tracks != null && this.Album.Tracks.Count() > 0;

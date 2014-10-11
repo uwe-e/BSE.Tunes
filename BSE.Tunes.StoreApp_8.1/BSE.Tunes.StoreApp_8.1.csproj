@@ -131,6 +131,7 @@
     <Compile Include="Converter\StringToVisibilityConverter.cs" />
     <Compile Include="Converter\TrackToVisibilityConverter.cs" />
     <Compile Include="DataModel\FilterMode.cs" />
+    <Compile Include="DataModel\InsertMode.cs" />
     <Compile Include="DataModel\SearchCategory.cs" />
     <Compile Include="DataModel\TunesUser.cs" />
     <Compile Include="Event\PlaylistChangedEventArgs.cs" />
@@ -151,6 +152,7 @@
     <Compile Include="Media\MediaParser\BitTools.cs" />
     <Compile Include="Media\MediaParser\Mp3MediaStreamExtension.cs" />
     <Compile Include="Media\MediaParser\MpegFrame.cs" />
+    <Compile Include="Messaging\PlaylistAddedMessage.cs" />
     <Compile Include="Messaging\ResetDataMessage.cs" />
     <Compile Include="Navigation\PageStackEntry.cs" />
     <Compile Include="Services\CacheableBitmapService.cs" />

@@ -149,7 +149,7 @@ namespace BSE.Tunes.StoreApp.ViewModels
                 {
                     TunesUser tunesUser = await this.m_accoutService.SignInUser(this.UserName, this.Password, this.UseSecureLogin);
                     Messenger.Default.Send<ResetDataMessage>(new ResetDataMessage());
-                    this.m_navigationService.Navigate(typeof(MainPage));
+                    this.m_navigationService.Navigate(typeof(MainPage), typeof(MasterPage));
                 }
                 catch (Exception exception)
                 {

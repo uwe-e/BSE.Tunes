@@ -1,8 +1,10 @@
 ﻿using BSE.Tunes.Data;
 using BSE.Tunes.StoreApp.Interfaces;
+using BSE.Tunes.StoreApp.Messaging;
 using BSE.Tunes.StoreApp.Services;
 using BSE.Tunes.StoreApp.Views;
 using GalaSoft.MvvmLight.Command;
+using GalaSoft.MvvmLight.Messaging;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -97,6 +99,15 @@ namespace BSE.Tunes.StoreApp.ViewModels
             this.m_navigationService = navigationService;
             this.m_resourceService = resourceService;
             this.m_cacheableBitmapService = cacheableBitmapService;
+
+            Messenger.Default.Register<PlaylistChangeMessage>(this, message =>
+            {
+                PlaylistAddedMessage playlistMessage = message as PlaylistAddedMessage;
+                if (playlistMessage != null && message.Playlist != null)
+                {
+                    this.Playlists.Add(new PlaylistViewModel(this.m_dataService, this.m_accountService, this.m_resourceService, this.m_cacheableBitmapService, message.Playlist.Id));
+                }
+            });
         }
         public void OnNavigatedTo(object navigationParameter, NavigationMode navigationMode)
         {
@@ -176,8 +187,8 @@ namespace BSE.Tunes.StoreApp.ViewModels
                                     await this.m_cacheableBitmapService.RemoveCache(playlistViewModel.Playlist.Guid.ToString());
                                 }
                             }
-                            GalaSoft.MvvmLight.Messaging.Messenger.Default.Send<BSE.Tunes.StoreApp.Messaging.PlaylistChangeMessage>(
-                                new BSE.Tunes.StoreApp.Messaging.PlaylistChangeMessage());
+                            Messenger.Default.Send<PlaylistChangeMessage>(
+                                new PlaylistChangeMessage());
                         }
                     }
                 }
