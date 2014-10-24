@@ -48,13 +48,31 @@ namespace BSE.Tunes.WebApi.Providers
                     context.Options.AuthenticationType);
                 ClaimsIdentity cookiesIdentity = await userManager.CreateIdentityAsync(user,
                     CookieAuthenticationDefaults.AuthenticationType);
-                AuthenticationProperties properties = CreateProperties(user.UserName);
+
+                var properties = new AuthenticationProperties(new Dictionary<string, string>
+                {
+                    {
+                        "as:client_id", (context.ClientId == null) ? string.Empty : context.ClientId
+                    },
+                    {
+                        "userName", user.UserName
+                    }
+                });
+                
+                
+                //AuthenticationProperties properties = CreateProperties(user.UserName);
+                
+                
+                
                 AuthenticationTicket ticket = new AuthenticationTicket(oAuthIdentity, properties);
                 context.Validated(ticket);
                 context.Request.Context.Authentication.SignIn(cookiesIdentity);
             }
         }
-
+        public override Task GrantRefreshToken(OAuthGrantRefreshTokenContext context)
+        {
+            return base.GrantRefreshToken(context);
+        }
         public override Task TokenEndpoint(OAuthTokenEndpointContext context)
         {
             foreach (KeyValuePair<string, string> property in context.Properties.Dictionary)
@@ -67,12 +85,20 @@ namespace BSE.Tunes.WebApi.Providers
 
         public override Task ValidateClientAuthentication(OAuthValidateClientAuthenticationContext context)
         {
+            string clientId = string.Empty;
+            string clientSecret = string.Empty;
+
+            if (!context.TryGetBasicCredentials(out clientId, out clientSecret))
+            {
+                context.TryGetFormCredentials(out clientId, out clientSecret);
+            }
+
+            //Multiapplication handling should be added
             // Resource owner password credentials does not provide a client ID.
-            if (context.ClientId == null)
+            //if (context.ClientId == null)
             {
                 context.Validated();
             }
-
             return Task.FromResult<object>(null);
         }
 
