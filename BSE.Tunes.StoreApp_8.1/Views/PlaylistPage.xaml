@@ -20,7 +20,7 @@
     <Page.BottomAppBar>
         <AppBar x:Uid="BottomAppBar" IsOpen="{Binding HasSelectedItems, Mode=TwoWay}" IsSticky="{Binding HasSelectedItems}">
                 <Grid>
-                    <StackPanel Orientation="Horizontal" Height="100" HorizontalAlignment="Left">
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
                         <Button Style="{StaticResource DeleteAppBarButtonStyle}" Command="{Binding DeleteSelectedPlaylistCommand}" HorizontalAlignment="Left" VerticalAlignment="Top"/>
                     </StackPanel>
                 </Grid>

@@ -29,7 +29,7 @@
     <Page.BottomAppBar>
         <AppBar x:Uid="BottomAppBar" IsOpen="{Binding IsToolbarOpen, Mode=TwoWay}" IsSticky="{Binding IsToolbarOpen}" FontFamily="Global User Interface">
             <Grid>
-                <StackPanel Orientation="Horizontal" Height="120" HorizontalAlignment="Left">
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
                     <AppBarButton x:Uid="ButtonPlaySelection" Icon="Play"
                             Command="{Binding PlaySelectedItemsCommand}"
                             VerticalAlignment="Top"/>
@@ -110,10 +110,10 @@
             </Grid>
             <ListView Grid.Column="1" ItemsSource="{Binding Album.Tracks}" SelectionMode="Extended"
                       toolkit:ListViewExtensions.BindableSelection="{Binding SelectedItems, Mode=TwoWay}"
-                      HorizontalAlignment="Left" Width="600">
+                      HorizontalAlignment="Left" Width="600" Margin="0,0,0,10">
                 <ListView.ItemTemplate>
                     <DataTemplate>
-                        <StackPanel Orientation="Horizontal" Width="550" Height="40">
+                        <StackPanel Orientation="Horizontal" Width="550" Height="48" Margin="0">
                             <TextBlock Text="{Binding TrackNumber}" Width="40" FontSize="20" FontWeight="Semilight" 
                                        Margin="10,0,0,0" Style="{StaticResource BasicTextStyle}" HorizontalAlignment="Left"
                                        VerticalAlignment="Center"/>

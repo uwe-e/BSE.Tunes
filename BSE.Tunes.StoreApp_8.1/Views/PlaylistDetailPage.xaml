@@ -26,7 +26,7 @@
     <Page.BottomAppBar>
         <AppBar x:Uid="BottomAppBar" IsOpen="{Binding IsToolbarOpen, Mode=TwoWay}" IsSticky="{Binding IsToolbarOpen}" FontFamily="Global User Interface">
             <Grid>
-                <StackPanel Orientation="Horizontal" Height="120" HorizontalAlignment="Left">
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
                     <AppBarButton x:Uid="ButtonPlaySelection" Icon="Play"
                                   Command="{Binding PlaySelectedItemsCommand}"
                                   VerticalAlignment="Top"/>
@@ -103,7 +103,7 @@
             <ListView Grid.Column="1" ItemsSource="{Binding Entries}" SelectionMode="Extended"
                       AllowDrop="True" CanDragItems="True" CanReorderItems="True"
                       toolkit:ListViewExtensions.BindableSelection="{Binding SelectedItems, Mode=TwoWay}"
-                      HorizontalAlignment="Left" Width="600">
+                      HorizontalAlignment="Left" Width="600" Margin="0,0,0,10">
                 <ListView.ItemTemplate>
                     <DataTemplate>
                         <StackPanel Orientation="Horizontal" Width="550" Height="40">
