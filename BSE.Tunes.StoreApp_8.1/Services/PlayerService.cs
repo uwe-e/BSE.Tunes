@@ -226,7 +226,7 @@ namespace BSE.Tunes.StoreApp.Services
                     Guid guid = this.m_currentTrack.Guid;
                     if (guid != null && !guid.Equals(Guid.Empty))
                     {
-                        string strUrl = string.Format("{0}/api/files/{1}/", this.m_dataService.ServiceUrl, guid.ToString());
+                        string strUrl = string.Format("{0}/api/files/{1}", this.m_dataService.ServiceUrl, guid.ToString());
 
                         this.m_audioStreamDownloader = new AudioStreamDownloader(this.m_dataService);
                         this.m_audioStreamDownloader.DownloadProgessStarted += OnDownloadProgessStarted;
