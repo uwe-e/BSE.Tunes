@@ -29,6 +29,10 @@
     <!-- The foreground color of a appbar item within a light themed control-->
     <SolidColorBrush x:Key="LightAppBarItemForegroundThemeBrush" Color="#FF000000" />
 
+    <Style x:Key="BasicLightTextStyle" TargetType="TextBlock" BasedOn="{StaticResource BasicTextStyle}">
+        <Setter Property="Foreground" Value="#FF000000"/>
+    </Style>
+
     <SolidColorBrush x:Key="ComboBoxArrowForegroundThemeBrush" Color="White" />
     <SolidColorBrush x:Key="ListViewItemOverlayBackgroundThemeBrush" Color="#991f5fbc" />
     <SolidColorBrush x:Key="ListViewItemBackgroundThemeBrush" Color="#FF1f5fbc" />
