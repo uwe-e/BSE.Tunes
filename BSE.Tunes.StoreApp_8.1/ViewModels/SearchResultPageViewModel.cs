@@ -22,6 +22,7 @@ namespace BSE.Tunes.StoreApp.ViewModels
         private IDataService m_dataService;
         private INavigationService m_navigationService;
         private IResourceService m_resourceService;
+		private IDialogService m_dialogservice;
         private ObservableCollection<DataGroupViewModel> m_searchResultGroups;
         private ICommand m_groupHeaderClickCommand;
         private ICommand m_selectCommand;
@@ -78,11 +79,12 @@ namespace BSE.Tunes.StoreApp.ViewModels
         #endregion
 
         #region MethodsPublic
-        public SearchResultPageViewModel(IDataService dataService, INavigationService navigationService, IResourceService resourceService)
+        public SearchResultPageViewModel(IDataService dataService, INavigationService navigationService, IResourceService resourceService, IDialogService dialogService)
         {
             this.m_dataService = dataService;
             this.m_navigationService = navigationService;
             this.m_resourceService = resourceService;
+			this.m_dialogservice = dialogService;
         }
         public async void OnNavigatedTo(object navigationParameter, NavigationMode navigationMode)
         {
@@ -157,9 +159,19 @@ namespace BSE.Tunes.StoreApp.ViewModels
                 }
                 catch (AggregateException aggregateException)
                 {
+					string errorMessage = string.Empty;
                     foreach (var innerException in aggregateException.Flatten().InnerExceptions)
                     {
+						if (innerException != null && !string.IsNullOrEmpty(innerException.Message))
+						{
+							errorMessage += innerException.Message + Environment.NewLine;
+						}
                     }
+					if (!string.IsNullOrEmpty(errorMessage))
+					{
+						this.m_dialogservice.ShowDialog(errorMessage);
+					}
+
                 }
             }
         }
