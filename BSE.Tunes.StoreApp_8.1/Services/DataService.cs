@@ -79,23 +79,23 @@ namespace BSE.Tunes.StoreApp.Services
 
         public async Task<ObservableCollection<Album>> GetAlbums(Query query)
         {
-            string strUrl = string.Format("{0}/api/tunes/GetAlbums", this.ServiceUrl);
+            string strUrl = string.Format("{0}/api/albums", this.ServiceUrl);
             return await GetHttpResponseFromPost<ObservableCollection<Album>, Query>(new Uri(strUrl), query);
         }
         public async Task<ObservableCollection<Album>> GetNewestAlbums(int limit)
         {
-            string strUrl = string.Format("{0}/api/tunes/GetNewestAlbums/{1}", this.ServiceUrl, limit);
+			string strUrl = string.Format("{0}/api/albums/{1}/newest", this.ServiceUrl, limit);
             return await GetHttpResponse<ObservableCollection<Album>>(new Uri(strUrl));
         }
         public async Task<int> GetNumberOfPlayableAlbums()
         {
-            string strUrl = string.Format("{0}/api/tunes/GetNumberOfPlayableAlbums", this.ServiceUrl);
+			string strUrl = string.Format("{0}/api/albums/number", this.ServiceUrl);
             return await GetHttpResponse<int>(new Uri(strUrl));
         }
 
         public async Task<Album> GetAlbumById(int albumId)
         {
-            string strUrl = string.Format("{0}/api/tunes/GetAlbumById/{1}", this.ServiceUrl, albumId);
+			string strUrl = string.Format("{0}/api/albums/{1}", this.ServiceUrl, albumId);
             return await GetHttpResponse<Album>(new Uri(strUrl));
         }
 
@@ -116,22 +116,22 @@ namespace BSE.Tunes.StoreApp.Services
         }
         public async Task<SearchResult> GetSearchResults(Query query)
         {
-            string strUrl = string.Format("{0}/api/tunes/GetSearchResults", this.ServiceUrl);
+            string strUrl = string.Format("{0}/api/search", this.ServiceUrl);
             return await GetHttpResponseFromPost<SearchResult, Query>(new Uri(strUrl), query);
         }
         public async Task<ObservableCollection<Album>> GetAlbumSearchResults(Query query)
         {
-            string strUrl = string.Format("{0}/api/tunes/GetAlbumSearchResults", this.ServiceUrl);
+            string strUrl = string.Format("{0}/api/search/albums", this.ServiceUrl);
             return await GetHttpResponseFromPost<ObservableCollection<Album>, Query>(new Uri(strUrl), query);
         }
         public async Task<ObservableCollection<Track>> GetTrackSearchResults(Query query)
         {
-            string strUrl = string.Format("{0}/api/tunes/GetTrackSearchResults", this.ServiceUrl);
+            string strUrl = string.Format("{0}/api/search/tracks", this.ServiceUrl);
             return await GetHttpResponseFromPost<ObservableCollection<Track>, Query>(new Uri(strUrl), query);
         }
         public async Task<Playlist> InsertPlaylist(Playlist playlist)
         {
-            string strUrl = string.Format("{0}/api/tunes/InsertPlaylist", this.ServiceUrl);
+            string strUrl = string.Format("{0}/api/playlist/insert", this.ServiceUrl);
             return await GetHttpResponseFromPost<Playlist, Playlist>(new Uri(strUrl), playlist);
         }
         public async Task<bool> UpdateHistory(History history)
@@ -141,50 +141,50 @@ namespace BSE.Tunes.StoreApp.Services
         }
 		public async Task<ObservableCollection<Guid>> GetPlaylistImageIdsById(int playlistId, string userName, int limit)
 		{
-			string strUrl = string.Format("{0}/api/tunes/GetPlaylistImageIdsById/{1}/{2}/{3}", this.ServiceUrl, playlistId, this.UserName, limit);
+			string strUrl = string.Format("{0}/api/playlist/GetPlaylistImageIdsById/{1}/{2}/{3}", this.ServiceUrl, playlistId, this.UserName, limit);
 			return await this.GetHttpResponse<ObservableCollection<Guid>>(new Uri(strUrl));
 		}
 		public async Task<Playlist> GetPlaylistById(int playlistId, string userName)
         {
-            string strUrl = string.Format("{0}/api/tunes/GetPlaylistById/{1}/{2}/", this.ServiceUrl, playlistId, this.UserName);
+			string strUrl = string.Format("{0}/api/playlist/{1}/{2}/", this.ServiceUrl, playlistId, this.UserName);
             return await this.GetHttpResponse<Playlist>(new Uri(strUrl));
         }
         public async Task<ObservableCollection<Playlist>> GetPlaylistsByUserName(string userName)
         {
-            string strUrl = string.Format("{0}/api/tunes/GetPlaylistsByUserName/{1}/", this.ServiceUrl, this.UserName);
+			string strUrl = string.Format("{0}/api/playlist/{1}/playlists", this.ServiceUrl, this.UserName);
             return await this.GetHttpResponse<ObservableCollection<Playlist>>(new Uri(strUrl));
         }
         public async Task<ObservableCollection<Playlist>> GetPlaylistsByUserName(string userName, int limit)
         {
-            string strUrl = string.Format("{0}/api/tunes/GetPlaylistsByUserName/{1}/{2}", this.ServiceUrl, this.UserName ,limit);
+            string strUrl = string.Format("{0}/api/playlist/{1}/{2}/playlists", this.ServiceUrl, this.UserName ,limit);
             return await this.GetHttpResponse<ObservableCollection<Playlist>>(new Uri(strUrl));
         }
         public async Task<Playlist> GetPlaylistByIdWithNumberOfEntries(int playlistId, string userName)
         {
-            string strUrl = string.Format("{0}/api/tunes/GetPlaylistByIdWithNumberOfEntries/{1}/{2}/", this.ServiceUrl, playlistId, this.UserName);
+			string strUrl = string.Format("{0}/api/playlist/GetPlaylistByIdWithNumberOfEntries/{1}/{2}/", this.ServiceUrl, playlistId, this.UserName);
             return await this.GetHttpResponse<Playlist>(new Uri(strUrl));
         }
         public async Task<Playlist> AppendToPlaylist(Playlist playlist)
         {
-            string strUrl = string.Format("{0}/api/tunes/AppendToPlaylist/", this.ServiceUrl);
+            string strUrl = string.Format("{0}/api/playlist/append", this.ServiceUrl);
             return await GetHttpResponseFromPost<Playlist, Playlist>(new Uri(strUrl), playlist);
         }
         public async Task<bool> UpdatePlaylistEntries(Playlist playlist)
         {
-            string strUrl = string.Format("{0}/api/tunes/UpdatePlaylistEntries", this.ServiceUrl);
+            string strUrl = string.Format("{0}/api/playlist/update", this.ServiceUrl);
             return await GetHttpResponseFromPost<bool, Playlist>(new Uri(strUrl), playlist);
         }
         public async Task<bool> DeletePlaylists(ObservableCollection<Playlist> playlists)
         {
-            string strUrl = string.Format("{0}/api/tunes/DeletePlaylists", this.ServiceUrl);
+			string strUrl = string.Format("{0}/api/playlist/delete", this.ServiceUrl);
             return await GetHttpResponseFromPost<bool, ObservableCollection<Playlist>>(new Uri(strUrl), playlists);
         }
 		public Uri GetImage(Guid imageId, bool asThumbnail = false )
 		{
-			string strUrl = string.Format("{0}/api/files/getimage/{1}", this.ServiceUrl, imageId.ToString());
+			string strUrl = string.Format("{0}/api/files/image/{1}", this.ServiceUrl, imageId.ToString());
 			if (asThumbnail)
 			{
-				strUrl = string.Format("{0}/api/files/getimage/{1}/true", this.ServiceUrl, imageId.ToString());
+				strUrl = string.Format("{0}/api/files/image/{1}/true", this.ServiceUrl, imageId.ToString());
 			}
 			return new Uri(strUrl);
 		}
