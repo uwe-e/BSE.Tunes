@@ -10,9 +10,11 @@
     d:DesignWidth="300">
     <Grid RequestedTheme="Light" Width="300">
         <StackPanel>
-            <TextBlock TextWrapping="Wrap" x:Uid="NewPlaylistDialog_LblNewPlaylist" Text="Diese Wiedergabeliste benennen"/>
+            <TextBlock TextWrapping="Wrap" x:Uid="NewPlaylistDialog_LblNewPlaylist" Text="Diese Wiedergabeliste benennen" Style="{StaticResource BasicLightTextStyle}"/>
             <TextBox TextWrapping="NoWrap" x:Name="TxtPlaylistName" x:Uid="NewPlaylistDialog_TxtNewPlaylist" Text="{Binding PlaylistName, Mode=TwoWay}"/>
-            <TextBlock TextWrapping="Wrap" Text="{Binding ErrorMessage}" Visibility="{Binding ErrorMessage, Mode=OneWay, Converter={StaticResource StringToVisibilityConverter}}"/>
+            <TextBlock TextWrapping="Wrap" Text="{Binding ErrorMessage}" 
+                       Visibility="{Binding ErrorMessage, Mode=OneWay, Converter={StaticResource StringToVisibilityConverter}}"
+                       Style="{StaticResource BasicLightTextStyle}"/>
             <Button Content="Speichern" x:Uid="NewPlaylistDialog_ButtonPlaylistSave" HorizontalAlignment="Right"
                         Command="{Binding SaveNewPlaylistCommand}" Style="{StaticResource DialogButtonStyle}"/>
         </StackPanel>
