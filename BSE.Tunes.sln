@@ -13,6 +13,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BSE.Tunes.WebApi", "BSE.Tun
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BSE.Tunes.StoreApp_8.1", "BSE.Tunes.StoreApp_8.1\BSE.Tunes.StoreApp_8.1.csproj", "{448802D9-A658-47F4-B252-DF39A742C320}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BSE.Tunes.WebApi2", "BSE.Tunes.WebApi2\BSE.Tunes.WebApi2.csproj", "{1CCFA4C1-D848-4A88-94D5-96609A43DC1E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -103,6 +105,16 @@ Global
 		{448802D9-A658-47F4-B252-DF39A742C320}.Release|x86.ActiveCfg = Release|x86
 		{448802D9-A658-47F4-B252-DF39A742C320}.Release|x86.Build.0 = Release|x86
 		{448802D9-A658-47F4-B252-DF39A742C320}.Release|x86.Deploy.0 = Release|x86
+		{1CCFA4C1-D848-4A88-94D5-96609A43DC1E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1CCFA4C1-D848-4A88-94D5-96609A43DC1E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1CCFA4C1-D848-4A88-94D5-96609A43DC1E}.Debug|ARM.ActiveCfg = Debug|Any CPU
+		{1CCFA4C1-D848-4A88-94D5-96609A43DC1E}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{1CCFA4C1-D848-4A88-94D5-96609A43DC1E}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{1CCFA4C1-D848-4A88-94D5-96609A43DC1E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1CCFA4C1-D848-4A88-94D5-96609A43DC1E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1CCFA4C1-D848-4A88-94D5-96609A43DC1E}.Release|ARM.ActiveCfg = Release|Any CPU
+		{1CCFA4C1-D848-4A88-94D5-96609A43DC1E}.Release|x64.ActiveCfg = Release|Any CPU
+		{1CCFA4C1-D848-4A88-94D5-96609A43DC1E}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
