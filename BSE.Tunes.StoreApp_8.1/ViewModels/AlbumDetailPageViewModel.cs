@@ -71,20 +71,21 @@ namespace BSE.Tunes.StoreApp.ViewModels
         public async override void OnNavigatedTo(object navigationParameter, NavigationMode navigationMode)
         {
             base.OnNavigatedTo(navigationParameter, navigationMode);
-            if (navigationParameter is int)
-            {
-                this.Album = await this.DataService.GetAlbumById((int)navigationParameter);
-                this.CoverSource = this.DataService.GetImage(this.Album.AlbumId);
-                this.PlayAlbumCommand.RaiseCanExecuteChanged();
-                try
-                {
-                    this.CreatePlaylistMenu();
-                }
-                catch (Exception exception)
-                {
-                    this.DialogService.ShowDialog(exception.Message);
-                }
-            }
+			if (navigationParameter is int)
+			{
+				try
+				{
+					this.Album = await this.DataService.GetAlbumById((int)navigationParameter);
+					this.CoverSource = this.DataService.GetImage(this.Album.AlbumId);
+					this.PlayAlbumCommand.RaiseCanExecuteChanged();
+
+					this.CreatePlaylistMenu();
+				}
+				catch (Exception exception)
+				{
+					this.DialogService.ShowDialog(exception.Message);
+				}
+			}
         }
         public override void OnNavigatedFrom(bool suspending)
         {
