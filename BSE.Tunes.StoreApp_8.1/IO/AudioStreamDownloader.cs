@@ -137,6 +137,10 @@ namespace BSE.Tunes.StoreApp.IO
 						}
 						catch (HttpRequestException httpRequestException)
 						{
+							if (exceptionAttempt == 13)
+							{
+								throw httpRequestException;
+							}
 							//If the used server a windows 8 computer, than we get sometimes a StatusCode 404 exception.
 							//After a few seconds the communication with the server works again
 							if (this.m_httpStatusCode == HttpStatusCode.NotFound)
@@ -144,10 +148,6 @@ namespace BSE.Tunes.StoreApp.IO
 								delayAttempt += 1;
 							}
 							exceptionAttempt += 1;
-							if (exceptionAttempt == 13)
-							{
-								throw httpRequestException;
-							}
 						}
 						catch (Exception)
 						{
