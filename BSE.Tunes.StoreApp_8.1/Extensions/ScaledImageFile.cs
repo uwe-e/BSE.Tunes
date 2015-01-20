@@ -23,7 +23,7 @@ namespace WinRTXamlToolkit.IO
             if (!mainResourceMap.ContainsKey(resourceKey))
                 return null;
 
-            return await mainResourceMap[resourceKey].Resolve().GetValueAsFileAsync();
+            return await mainResourceMap[resourceKey].Resolve(ResourceContext.GetForCurrentView()).GetValueAsFileAsync();
         }
     }
 }
