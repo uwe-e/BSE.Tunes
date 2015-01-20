@@ -13,129 +13,136 @@ using Windows.UI.Xaml.Navigation;
 
 namespace BSE.Tunes.StoreApp.ViewModels
 {
-    public class HostSettingsPageViewModel : ViewModelBase, INavigationAware
-    {
-        #region FieldsPrivate
-        private IDataService m_dataService;
-        private IHostsettingsService m_hostSettingsService;
-        private INavigationService m_navigationService;
-        private IResourceService m_resourceService;
-        private IAccountService m_accountService;
-        private RelayCommand m_saveHostCommand;
-        private ICommand m_cancelCommand;
-        private string m_strServiceUrl;
-        private string m_errorMessage;
-        #endregion
+	public class HostSettingsPageViewModel : ViewModelBase, INavigationAware
+	{
+		#region FieldsPrivate
+		private IDataService m_dataService;
+		private IHostsettingsService m_hostSettingsService;
+		private INavigationService m_navigationService;
+		private IResourceService m_resourceService;
+		private IAccountService m_accountService;
+		private RelayCommand m_saveHostCommand;
+		private ICommand m_cancelCommand;
+		private string m_strServiceUrl;
+		private string m_errorMessage;
+		#endregion
 
-        #region Properties
-        public string ServiceUrl
-        {
-            get
-            {
-                return this.m_strServiceUrl;
-            }
-            set
-            {
-                this.m_strServiceUrl = value;
-                this.RaisePropertyChanged("ServiceUrl");
-                this.SaveHostCommand.RaiseCanExecuteChanged();
-            }
-        }
-        public string ErrorMessage
-        {
-            get
-            {
-                return this.m_errorMessage;
-            }
-            set
-            {
-                this.m_errorMessage = value;
-                RaisePropertyChanged("ErrorMessage");
-            }
-        }
-        public RelayCommand SaveHostCommand
-        {
-            get
-            {
-                return this.m_saveHostCommand ??
-                    (this.m_saveHostCommand = new RelayCommand(this.SaveHost, this.CanExecuteSaveHostCommand));
-            }
-        }
-        public ICommand CancelCommand
-        {
-            get
-            {
-                return this.m_cancelCommand ??
-                    (this.m_cancelCommand = new RelayCommand(() =>
-                        this.m_navigationService.GoBack()));
-            }
-        }
-        #endregion
+		#region Properties
+		public string ServiceUrl
+		{
+			get
+			{
+				return this.m_strServiceUrl;
+			}
+			set
+			{
+				this.m_strServiceUrl = value;
+				this.RaisePropertyChanged("ServiceUrl");
+				this.SaveHostCommand.RaiseCanExecuteChanged();
+			}
+		}
+		public string ErrorMessage
+		{
+			get
+			{
+				return this.m_errorMessage;
+			}
+			set
+			{
+				this.m_errorMessage = value;
+				RaisePropertyChanged("ErrorMessage");
+			}
+		}
+		public RelayCommand SaveHostCommand
+		{
+			get
+			{
+				return this.m_saveHostCommand ??
+					(this.m_saveHostCommand = new RelayCommand(this.SaveHost, this.CanExecuteSaveHostCommand));
+			}
+		}
+		public ICommand CancelCommand
+		{
+			get
+			{
+				return this.m_cancelCommand ??
+					(this.m_cancelCommand = new RelayCommand(() =>
+						this.m_navigationService.GoBack()));
+			}
+		}
+		#endregion
 
-        #region MethodsPublic
-        public HostSettingsPageViewModel(IDataService dataService, IHostsettingsService hostSettingsService, IAccountService accountService, INavigationService navigationService, IResourceService resourceService)
-        {
-            this.m_dataService = dataService;
-            this.m_accountService = accountService;
-            this.m_navigationService = navigationService;
-            this.m_hostSettingsService = hostSettingsService;
-            this.m_resourceService = resourceService;
-            this.ServiceUrl = this.m_hostSettingsService.ServiceUrl;
-        }
-        public void OnNavigatedTo(object navigationParameter, NavigationMode navigationMode)
-        {
-        }
-        public void OnNavigatedFrom(bool suspending)
-        {
-        }
-        #endregion
+		#region MethodsPublic
+		public HostSettingsPageViewModel(IDataService dataService, IHostsettingsService hostSettingsService, IAccountService accountService, INavigationService navigationService, IResourceService resourceService)
+		{
+			this.m_dataService = dataService;
+			this.m_accountService = accountService;
+			this.m_navigationService = navigationService;
+			this.m_hostSettingsService = hostSettingsService;
+			this.m_resourceService = resourceService;
+			this.ServiceUrl = this.m_hostSettingsService.ServiceUrl;
+		}
+		public void OnNavigatedTo(object navigationParameter, NavigationMode navigationMode)
+		{
+		}
+		public void OnNavigatedFrom(bool suspending)
+		{
+		}
+		#endregion
 
-        #region MethodsPrivate
-        private bool CanExecuteSaveHostCommand()
-        {
-            return !string.IsNullOrEmpty(this.ServiceUrl);
-        }
-        private async void SaveHost()
-        {
-            this.ErrorMessage = null;
-            if (!string.IsNullOrEmpty(this.ServiceUrl))
-            {
-                this.m_hostSettingsService.SetServiceUrl(this.ServiceUrl);
-                try
-                {
-                    bool isAccessible = await this.m_dataService.IsHostAccessible();
-                    if (isAccessible)
-                    {
-                        this.m_accountService.ServiceUrl = this.m_hostSettingsService.ServiceUrl;
-                        try
-                        {
-                            TunesUser tunesUser = await this.m_accountService.VerifyUserAuthentication();
-                            this.m_navigationService.Navigate(typeof(MainPage),typeof(MasterPage));
-                        }
-                        catch (UnauthorizedAccessException)
-                        {
-                            this.m_navigationService.Navigate(typeof(SignInSettingsPage));
-                        }
-                    }
-                }
-                catch (AggregateException ae)
-                {
-                    string errorMessage = string.Empty;
-                    foreach (var e in ae.Flatten().InnerExceptions)
-                    {
-                        if (e != null && !string.IsNullOrEmpty(e.Message))
-                        {
-                            errorMessage += e.Message + Environment.NewLine;
-                        }
-                    }
-                    ErrorMessage = this.m_resourceService.GetString("HostNotAvailableExceptionMessage", errorMessage);
-                }
-                catch (Exception exception)
-                {
-                    ErrorMessage = this.m_resourceService.GetString("HostNotAvailableExceptionMessage", exception.Message);
-                }
-            }
-        }
-        #endregion
-    }
+		#region MethodsPrivate
+		private bool CanExecuteSaveHostCommand()
+		{
+			return !string.IsNullOrEmpty(this.ServiceUrl);
+		}
+		private async void SaveHost()
+		{
+			this.ErrorMessage = null;
+			if (!string.IsNullOrEmpty(this.ServiceUrl))
+			{
+				this.m_hostSettingsService.SetServiceUrl(this.ServiceUrl);
+				try
+				{
+					bool isAccessible = await this.m_dataService.IsHostAccessible();
+					if (isAccessible)
+					{
+						this.m_accountService.ServiceUrl = this.m_hostSettingsService.ServiceUrl;
+						try
+						{
+							TunesUser tunesUser = await this.m_accountService.VerifyUserAuthentication();
+							if (tunesUser == null)
+							{
+								this.m_navigationService.Navigate(typeof(SignInSettingsPage));
+							}
+							else
+							{
+								this.m_navigationService.Navigate(typeof(MainPage), typeof(MasterPage));
+							}
+						}
+						catch (UnauthorizedAccessException)
+						{
+							this.m_navigationService.Navigate(typeof(SignInSettingsPage));
+						}
+					}
+				}
+				catch (AggregateException ae)
+				{
+					string errorMessage = string.Empty;
+					foreach (var e in ae.Flatten().InnerExceptions)
+					{
+						if (e != null && !string.IsNullOrEmpty(e.Message))
+						{
+							errorMessage += e.Message + Environment.NewLine;
+						}
+					}
+					ErrorMessage = this.m_resourceService.GetString("HostNotAvailableExceptionMessage", errorMessage);
+				}
+				catch (Exception exception)
+				{
+					ErrorMessage = this.m_resourceService.GetString("HostNotAvailableExceptionMessage", exception.Message);
+				}
+			}
+		}
+		#endregion
+	}
 }
