@@ -1,7 +1,9 @@
-﻿using System;
+﻿using BSE.Tunes.WebApi.Web.Http.Tracing;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web.Http;
+using System.Web.Http.ExceptionHandling;
 
 namespace BSE.Tunes.WebApi
 {
@@ -9,9 +11,6 @@ namespace BSE.Tunes.WebApi
 	{
 		public static void Register(HttpConfiguration config)
 		{
-			System.Web.Http.Tracing.SystemDiagnosticsTraceWriter traceWriter = config.EnableSystemDiagnosticsTracing();
-			traceWriter.IsVerbose = true;
-			traceWriter.MinimumLevel = System.Web.Http.Tracing.TraceLevel.Warn;
 
 			config.IncludeErrorDetailPolicy = IncludeErrorDetailPolicy.Always;
 			// Web API routes
@@ -19,7 +18,7 @@ namespace BSE.Tunes.WebApi
 			// Web API configuration and services
 			// Configure the custom exceptions.
 			config.Filters.Add(new BSE.Tunes.WebApi.Filters.ExceptionFilter());
-			config.Services.Add(typeof(System.Web.Http.ExceptionHandling.IExceptionLogger), new BSE.Tunes.WebApi.Web.Http.TraceExceptionLogger());
+			config.Services.Add(typeof(IExceptionLogger), new TraceExceptionLogger());
 
 			config.Routes.MapHttpRoute(
 				name: "FilesApi",

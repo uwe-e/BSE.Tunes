@@ -10,6 +10,7 @@ using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Web.Http;
+using System.Web.Http.Tracing;
 
 namespace BSE.Tunes.WebApi.Controllers
 {
@@ -31,61 +32,57 @@ namespace BSE.Tunes.WebApi.Controllers
 			this.m_fileProvider = new FileProvider();
 			this.m_impersonationUser = Settings.ImpersonationUser;
 		}
-
 		[AcceptVerbs("GET", "HEAD")]
 		[Route("audio/{id:guid}")]
 		public HttpResponseMessage GetAudioFile(Guid id)
 		{
 			HttpResponseMessage responseMessage = null;
 			string fileName = this.TunesService.GetAudioFileNameByGuid(id);
-			if (!string.IsNullOrEmpty(fileName))
+			if (string.IsNullOrEmpty(fileName))
 			{
-				using (var impersonator = new Impersonator(
-					this.m_impersonationUser.Username,
-					this.m_impersonationUser.Domain,
-					this.m_impersonationUser.Password,
-					this.m_impersonationUser.LogonType))
-				{
-					lock (fileName)
-					{
-						if (!this.m_fileProvider.Exists(fileName))
-						{
-							throw new HttpResponseException(HttpStatusCode.NotFound);
-						}
-						var fileStream = this.m_fileProvider.Open(fileName);
-						if (this.Request.Headers.Range != null)
-						{
-							try
-							{
-								responseMessage = Request.CreateResponse(HttpStatusCode.PartialContent);
-								responseMessage.Content = new ByteRangeStreamContent(fileStream, Request.Headers.Range, new MediaTypeHeaderValue("application/octet-stream"));
-								responseMessage.Headers.AcceptRanges.Add("bytes");
-								return responseMessage;
-							}
-							catch (InvalidByteRangeException invalidByteRangeException)
-							{
-								return Request.CreateErrorResponse(invalidByteRangeException);
-							}
-						}
-						else
-						{
-							responseMessage = new HttpResponseMessage();
-							responseMessage.Content = new StreamContent(fileStream);
-							responseMessage.Headers.AcceptRanges.Add("bytes");
-							responseMessage.Content.Headers.ContentLength = fileStream.Length;
-							responseMessage.Content.Headers.ContentType = new MediaTypeHeaderValue("application/octet-stream");
-						}
-					}
-				}
-			}
-			else
-			{
+				FileNotFoundException notFoundException = new FileNotFoundException(string.Format("No audio file with ID {0} found", id));
+				Configuration.Services.GetTraceWriter().Error(this.Request, this.ControllerContext.ControllerDescriptor.ControllerType.FullName, notFoundException);
+
 				var response = new HttpResponseMessage(HttpStatusCode.NotFound)
 				{
-					Content = new StringContent(string.Format("No audio file with ID = {0}", id)),
+					Content = new StringContent(notFoundException.Message),
 					ReasonPhrase = "Audio ID Not Found"
 				};
+
 				throw new HttpResponseException(response);
+			}
+			using (var impersonator = new Impersonator(
+				this.m_impersonationUser.Username,
+				this.m_impersonationUser.Domain,
+				this.m_impersonationUser.Password,
+				this.m_impersonationUser.LogonType))
+			{
+				lock (fileName)
+				{
+					var fileStream = this.m_fileProvider.Open(fileName);
+					if (this.Request.Headers.Range != null)
+					{
+						try
+						{
+							responseMessage = Request.CreateResponse(HttpStatusCode.PartialContent);
+							responseMessage.Content = new ByteRangeStreamContent(fileStream, Request.Headers.Range, new MediaTypeHeaderValue("application/octet-stream"));
+							responseMessage.Headers.AcceptRanges.Add("bytes");
+							return responseMessage;
+						}
+						catch (InvalidByteRangeException invalidByteRangeException)
+						{
+							return Request.CreateErrorResponse(invalidByteRangeException);
+						}
+					}
+					else
+					{
+						responseMessage = new HttpResponseMessage();
+						responseMessage.Content = new StreamContent(fileStream);
+						responseMessage.Headers.AcceptRanges.Add("bytes");
+						responseMessage.Content.Headers.ContentLength = fileStream.Length;
+						responseMessage.Content.Headers.ContentType = new MediaTypeHeaderValue("application/octet-stream");
+					}
+				}
 			}
 			return responseMessage;
 		}

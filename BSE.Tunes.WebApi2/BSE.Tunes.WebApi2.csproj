@@ -80,6 +80,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\Newtonsoft.Json.6.0.4\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
+    <Reference Include="NLog">
+      <HintPath>..\packages\NLog.3.2.0.0\lib\net45\NLog.dll</HintPath>
+    </Reference>
     <Reference Include="Owin">
       <HintPath>..\packages\Owin.1.0\lib\net40\Owin.dll</HintPath>
     </Reference>
@@ -151,6 +154,7 @@
   <ItemGroup>
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\Startup.Auth.cs" />
+    <Compile Include="App_Start\TraceConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Configuration\Settings.cs" />
     <Compile Include="Configuration\TunesConfiguration.cs" />
@@ -178,7 +182,8 @@
     <Compile Include="Startup.cs" />
     <Compile Include="Web\Http\HttpError.cs" />
     <Compile Include="Web\Http\HttpErrorKeys.cs" />
-    <Compile Include="Web\Http\TraceExceptionLogger.cs" />
+    <Compile Include="Web\Http\Tracing\NLogTraceWriter.cs" />
+    <Compile Include="Web\Http\Tracing\TraceExceptionLogger.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config">
@@ -194,6 +199,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Logs\" />
     <Folder Include="Models\" />
   </ItemGroup>
   <ItemGroup>
