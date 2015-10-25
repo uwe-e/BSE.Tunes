@@ -122,6 +122,11 @@ namespace BSE.Tunes.StoreApp.ViewModels
                     this.CreateMenuItems(playlists);
                 }
             }
+			this.MenuItemsPlaylist.Add(
+				new MenuNewPlaylistViewModel
+				{
+					Content = this.ResourceService.GetString("IDS_NewPlaylist_MenuItem_AddNewPlaylist", "New Playlist")
+				});
         }
         protected virtual void CreateMenuItems(ObservableCollection<Playlist> playlists)
         {
@@ -135,11 +140,6 @@ namespace BSE.Tunes.StoreApp.ViewModels
                     }
                 }
             }
-            this.MenuItemsPlaylist.Add(
-                new MenuNewPlaylistViewModel
-                {
-                    Content = this.ResourceService.GetString("IDS_NewPlaylist_MenuItem_AddNewPlaylist", "New Playlist")
-                });
         }
 
         protected virtual void AddSelectedToPlaylist(Playlist playlist)
