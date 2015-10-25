@@ -283,34 +283,6 @@ namespace BSE.Tunes.StoreApp.Services
         #endregion
 
         #region MethodsPrivate
-        private void Reset()
-        {
-            if (this.m_audioStreamDownloader != null)
-            {
-                this.m_audioStreamDownloader.DownloadProgessStarted -= OnDownloadProgessStarted;
-                this.m_audioStreamDownloader.Close();
-                this.m_audioStreamDownloader.Dispose();
-                this.m_audioStreamDownloader = null;
-            }
-            if (this.m_mediaStream != null)
-            {
-                this.m_mediaStream.Dispose();
-                this.m_mediaStream = null;
-            }
-            if (this.m_mediaStreamSource != null)
-            {
-                try
-                {
-                    this.m_mediaStreamSource.SampleRequested -= OnStreamSourceSampleRequested;
-                    this.m_mediaStreamSource.Starting -= OnStreamSourceStarting;
-                    this.m_mediaStreamSource.Closed -= OnStreamSourceClosed;
-                }
-                catch (Exception ex)
-                {
-                }
-                this.m_mediaStreamSource = null;
-            }
-        }
         private void OnDownloadProgessStarted(object sender, EventArgs e)
         {
             // initialize Parsing Variables
@@ -325,6 +297,9 @@ namespace BSE.Tunes.StoreApp.Services
                 AudioEncodingProperties audioProps = AudioEncodingProperties.CreateMp3((uint)mpegFrame.SamplingRate, 2, (uint)mpegFrame.Bitrate);
                 AudioStreamDescriptor audioDescriptor = new AudioStreamDescriptor(audioProps);
 
+                //close the MediaStreamSource and remove the MediaStreamSource event handlers
+                CloseMediaStreamSource(this.m_mediaStreamSource);
+
                 this.m_mediaStreamSource = new Windows.Media.Core.MediaStreamSource(audioDescriptor);
                 this.m_mediaStreamSource.CanSeek = true;
                 this.m_mediaStreamSource.Duration = this.m_currentTrack.Duration;
@@ -337,6 +312,11 @@ namespace BSE.Tunes.StoreApp.Services
                 this.m_mediaElement.SetMediaStreamSource(this.m_mediaStreamSource);
             }
         }
+        /// <summary>
+        /// Occurs when the MediaStreamSource is ready to start requesting MediaStreamSample objects.
+        /// </summary>
+        /// <param name="sender">Represents a media source that delivers media samples directly to the media pipeline.</param>
+        /// <param name="args">Provides data for the MediaStreamSource.Starting event.</param>
         private void OnStreamSourceStarting(MediaStreamSource sender, MediaStreamSourceStartingEventArgs args)
         {
             MediaStreamSourceStartingRequest request = args.Request;
@@ -354,11 +334,14 @@ namespace BSE.Tunes.StoreApp.Services
                 {
                     this.m_mediaStream = this.m_audioStreamDownloader.Stream;
                     request.SetActualStartPosition(new TimeSpan());
-                    deferal.Complete();
                 }
-                catch (Exception ex)
+                catch (Exception)
                 {
-
+                    throw;
+                }
+                finally
+                {
+                    deferal.Complete();
                 }
             }
             else
@@ -366,23 +349,26 @@ namespace BSE.Tunes.StoreApp.Services
                 request.SetActualStartPosition(m_timeOffset);
             }
         }
-
+        /// <summary>
+        /// Occurs when the MediaStreamSource request a MediaStreamSample for a specified stream.
+        /// </summary>
+        /// <param name="sender">Represents a media source that delivers media samples directly to the media pipeline.</param>
+        /// <param name="args">Provides the data for the SampleRequested event.</param>
         private async void OnStreamSourceSampleRequested(MediaStreamSource sender, MediaStreamSourceSampleRequestedEventArgs args)
         {
-            try
+            MediaStreamSourceSampleRequest request = args.Request;
+            // check if the sample requested byte offset is within the file size
+            if (this.m_byteOffset + sampleSize <= (ulong)this.m_audioStreamDownloader.TotalBytesToReceive)
             {
-                MediaStreamSourceSampleRequest request = args.Request;
-                // check if the sample requested byte offset is within the file size
-                if (this.m_byteOffset + sampleSize <= (ulong)this.m_audioStreamDownloader.TotalBytesToReceive)
+                //Calculate the current position within the track
+                double ratio = (double)this.m_byteOffset / (double)this.m_audioStreamDownloader.TotalBytesToReceive;
+                this.m_playerPosition = new TimeSpan((long)(this.CurrentTrack.Duration.Ticks * ratio));
+
+                MediaStreamSourceSampleRequestDeferral deferal = request.GetDeferral();
+
+                var inputStream = m_mediaStream.GetInputStreamAt(this.m_byteOffset);
+                if (inputStream != null)
                 {
-                    //Calculate the current position within the track
-                    double ratio = (double)this.m_byteOffset / (double)this.m_audioStreamDownloader.TotalBytesToReceive;
-                    this.m_playerPosition = new TimeSpan((long)(this.CurrentTrack.Duration.Ticks * ratio));
-
-                    MediaStreamSourceSampleRequestDeferral deferal = request.GetDeferral();
-
-                    var inputStream = m_mediaStream.GetInputStreamAt(this.m_byteOffset);
-
                     // create the MediaStreamSample and assign to the request object. 
                     // You could also create the MediaStreamSample using createFromBuffer(...)
                     MediaStreamSample sample = await MediaStreamSample.CreateFromStreamAsync(inputStream, sampleSize, m_timeOffset);
@@ -393,19 +379,27 @@ namespace BSE.Tunes.StoreApp.Services
                     this.m_byteOffset += sampleSize;
                     this.m_timeOffset = this.m_timeOffset.Add(sampleDuration);
                     request.Sample = sample;
-                    deferal.Complete();
                 }
-                else
-                {
-
-                }
-            }
-            catch (Exception exc)
-            {
+                deferal.Complete();
             }
         }
-
+        /// <summary>
+        /// Occurs when the MediaStreamSource is shutting down.
+        /// </summary>
+        /// <param name="sender">Represents a media source that delivers media samples directly to the media pipeline.</param>
+        /// <param name="args">Provides data for the MediaStreamSource.Closed event.</param>
         private void OnStreamSourceClosed(MediaStreamSource sender, MediaStreamSourceClosedEventArgs args)
+        {
+            if (sender == m_mediaStreamSource)
+            {
+                CloseMediaStreamSource(sender);
+            }
+        }
+        /// <summary>
+        /// Close the MediaStreamSource and remove the MediaStreamSource event handlers
+        /// </summary>
+        /// <param name="mediaStreamSource"></param>
+        private void CloseMediaStreamSource(MediaStreamSource mediaStreamSource)
         {
             // close the MediaStreamSource and remove the MediaStreamSource event handlers
             if (this.m_mediaStream != null)
@@ -413,13 +407,11 @@ namespace BSE.Tunes.StoreApp.Services
                 this.m_mediaStream.Dispose();
                 this.m_mediaStream = null;
             }
-
-            sender.SampleRequested -= OnStreamSourceSampleRequested;
-            sender.Starting -= OnStreamSourceStarting;
-            sender.Closed -= OnStreamSourceClosed;
-
-            if (sender == m_mediaStreamSource)
+            if (mediaStreamSource != null)
             {
+                mediaStreamSource.SampleRequested -= OnStreamSourceSampleRequested;
+                mediaStreamSource.Starting -= OnStreamSourceStarting;
+                mediaStreamSource.Closed -= OnStreamSourceClosed;
                 m_mediaStreamSource = null;
             }
         }
