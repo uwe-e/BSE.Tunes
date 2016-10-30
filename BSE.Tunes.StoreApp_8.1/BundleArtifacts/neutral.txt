@@ -1,3 +1,3 @@
-MainPackage=C:\Git\BSE.Tunes\BSE.Tunes.StoreApp_8.1\bin\Release\BSE.Tunes.StoreApp_8.1_1.1.0.13_Bundle\BSE.Tunes.StoreApp_8.1_1.1.0.13_AnyCPU.appx
-SymbolPackage=C:\Git\BSE.Tunes\BSE.Tunes.StoreApp_8.1\AppPackages\BSE.Tunes.StoreApp_8.1_1.1.0.13_Test\BSE.Tunes.StoreApp_8.1_1.1.0.13_AnyCPU.appxsym
-ResourcePack=C:\Git\BSE.Tunes\BSE.Tunes.StoreApp_8.1\bin\Release\BSE.Tunes.StoreApp_8.1_1.1.0.13_Bundle\BSE.Tunes.StoreApp_8.1_1.1.0.13_language-de.appx
+MainPackage=C:\Git\BSE.Tunes\BSE.Tunes.StoreApp_8.1\bin\Debug\BSE.Tunes.StoreApp_8.1_1.1.0.20_AnyCPU_Debug.appx
+SymbolPackage=C:\Git\BSE.Tunes\BSE.Tunes.StoreApp_8.1\AppPackages\BSE.Tunes.StoreApp_8.1_1.1.0.20_Debug_Test\BSE.Tunes.StoreApp_8.1_1.1.0.20_AnyCPU_Debug.appxsym
+ResourcePack=C:\Git\BSE.Tunes\BSE.Tunes.StoreApp_8.1\bin\Debug\BSE.Tunes.StoreApp_8.1_1.1.0.20_language-de.appx
