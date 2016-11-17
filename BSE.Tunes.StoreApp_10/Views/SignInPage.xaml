@@ -1,0 +1,33 @@
+﻿<Page
+    x:Class="BSE.Tunes.StoreApp.Views.SignInPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:BSE.Tunes.StoreApp.Views"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:vm="using:BSE.Tunes.StoreApp.ViewModels"
+    mc:Ignorable="d">
+
+    <Page.DataContext>
+        <vm:SignInPageViewModel x:Name="ViewModel"/>
+    </Page.DataContext>
+
+    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+        <StackPanel Orientation="Vertical" VerticalAlignment="Center">
+            <TextBlock x:Uid="SignInSettingsPage_Header" TextAlignment="Center" Margin="4" Text="Account Settings"/>
+            <TextBlock x:Uid="SignInSettingsPage_TxtAccountInfo" Text="Due to copyright of the music..." TextAlignment="Center" TextWrapping="Wrap"/>
+            <TextBlock x:Uid="SignInSettingsPage_TxtAcountDescription" Text="Login with your account" TextAlignment="Center" Width="300" TextWrapping="Wrap"/>
+            <TextBox x:Uid="SignInSettingsPage_TxtUserName" AutomationProperties.LabeledBy="{Binding ElementName=TxtUserName}" InputScope="EmailSmtpAddress"
+                     AutomationProperties.IsRequiredForForm="True"
+                     Text="{Binding UserName, Mode=TwoWay}" Width="300"
+                     Margin="4"/>
+            <PasswordBox x:Uid="SignInSettingsPage_TxtPassword" AutomationProperties.LabeledBy="{Binding ElementName=TxtPassword}"
+                     AutomationProperties.IsRequiredForForm="True"
+                     Password="{Binding Password, Mode=TwoWay}" Width="300"
+                         Margin="4"/>
+            <TextBlock x:Uid="SignInSettingsPage_TxtUseSecureLogin" Text="Use an encrypted login if the webserver allows that?" TextAlignment="Center"/>
+            <ToggleSwitch x:Uid="SignInSettingsPage_TSUseSecureLogin" IsOn="{Binding UseSecureLogin, Mode=TwoWay}" HorizontalAlignment="Center"/>
+            <Button x:Uid="SignInSettingsPage_ButtonSave" Content="Speichern" Command="{x:Bind ViewModel.AuthenticateCommand}" Background="DodgerBlue" Foreground="White" Width="80" HorizontalAlignment="Center" Margin="0,20"/>
+        </StackPanel>
+    </Grid>
+</Page>
