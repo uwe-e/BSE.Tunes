@@ -10,11 +10,12 @@ using System.Threading.Tasks;
 
 namespace BSE.Tunes.StoreApp.ViewModels
 {
-    public class SignInPageViewModel : ViewModelBase
+    public class SignInWizzardPageViewModel : ViewModelBase
     {
         #region FieldsPrivate
-        private IAuthenticationHandler m_authenticationHandler;
+        private IAuthenticationService m_authenticationService;
         private IDialogService m_dialogSService;
+        private SettingsService m_settingsService;
         private RelayCommand m_authenticateCommand;
         private string m_userName;
         private string m_password;
@@ -48,18 +49,6 @@ namespace BSE.Tunes.StoreApp.ViewModels
                 this.RaisePropertyChanged("Password");
             }
         }
-        public bool UseSecureLogin
-        {
-            get
-            {
-                return this.m_useSecureLogin;
-            }
-            set
-            {
-                this.m_useSecureLogin = value;
-                this.RaisePropertyChanged("UseSecureLogin");
-            }
-        }
         public RelayCommand AuthenticateCommand
         {
             get
@@ -71,13 +60,14 @@ namespace BSE.Tunes.StoreApp.ViewModels
         #endregion
 
         #region MethodsPublic
-        public SignInPageViewModel()
+        public SignInWizzardPageViewModel()
         {
-            m_authenticationHandler = AuthenticationHandler.Instance;
+            m_authenticationService = AuthenticationService.Instance;
             m_dialogSService = DialogService.Instance;
+            m_settingsService = SettingsService.Instance;
+            UserName = m_settingsService.User?.UserName; 
         }
         #endregion
-
 
         #region MethodsPrivate
         private bool CanExecuteAuthenticateCommand()
@@ -88,12 +78,13 @@ namespace BSE.Tunes.StoreApp.ViewModels
         {
             try
             {
-                User user = await this.m_authenticationHandler.AuthenticateAsync(UserName, Password, UseSecureLogin);
+                User user = await this.m_authenticationService.AuthenticateAsync(UserName, Password);
+                m_settingsService.IsFullScreen = false;
                 await NavigationService.NavigateAsync(typeof(Views.MainPage));
             }
             catch (Exception exception)
             {
-                await m_dialogSService.ShowAsync(exception.Message, "Fähler");
+                await m_dialogSService.ShowAsync(exception.Message, ResourceService.GetString("ExceptionMessageDialogHeader", "Error"));
             }
         }
         #endregion

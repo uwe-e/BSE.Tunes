@@ -17,7 +17,7 @@ namespace BSE.Tunes.StoreApp.Views
 
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
-            var index = int.Parse(_SerializationService.Deserialize(e.Parameter?.ToString()).ToString());
+            var index = int.Parse(_SerializationService.Deserialize(e.Parameter?.ToString()). ToString());
             MyPivot.SelectedIndex = index;
         }
     }

@@ -12,7 +12,6 @@ namespace BSE.Tunes.StoreApp.Services
         public static DialogService Instance { get; } = new DialogService();
         public async Task ShowAsync(string content, string title = default(string))
         {
-            //AlertDialog.Builder alert = new AlertDialog.Builder(Application.Context);
             var dialog = (title == default(string)) ? new MessageDialog(content) : new MessageDialog(content, title);
             await dialog.ShowAsync();
         }

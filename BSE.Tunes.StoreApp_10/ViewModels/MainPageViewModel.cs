@@ -58,8 +58,11 @@ namespace BSE.Tunes.StoreApp.ViewModels
         public void GotoDetailsPage() =>
             NavigationService.Navigate(typeof(Views.DetailPage), Value);
 
-        public void GotoSettings() =>
-            NavigationService.Navigate(typeof(Views.SettingsPage), 0);
+        public async void GotoSettings()
+        {
+await NavigationService.NavigateAsync(typeof(Views.SettingsMainPage));
+        }
+            
 
         public void GotoPrivacy() =>
             NavigationService.Navigate(typeof(Views.SettingsPage), 1);

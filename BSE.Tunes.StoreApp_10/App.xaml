@@ -8,6 +8,7 @@
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="Styles\Custom.xaml" />
+                <ResourceDictionary Source="Styles\AppStyles.xaml"/>
             </ResourceDictionary.MergedDictionaries>
             <vm:ViewModelLocator x:Key="Locator" />
             <!--  custom resources go here  -->

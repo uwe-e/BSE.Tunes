@@ -10,7 +10,7 @@ using Windows.Security.Credentials;
 
 namespace BSE.Tunes.StoreApp.Services
 {
-    public class AuthenticationHandler : IAuthenticationHandler
+    public class AuthenticationService : IAuthenticationService
     {
         #region Constants
         private const string PasswordVaultResourceName = "7a55257a-b621-4027-a266-af900c21c256";
@@ -32,25 +32,103 @@ namespace BSE.Tunes.StoreApp.Services
                 return string.Format("{0}/token", m_settingsService.ServiceUrl);
             }
         }
+        public TokenResponse TokenResponse
+        {
+            get;
+            private set;
+        }
         #endregion
 
         #region MethodsPublic
-        public static AuthenticationHandler Instance
+        public static AuthenticationService Instance
         {
             get
             {
-                return ServiceLocator.Current.GetInstance<IAuthenticationHandler>() as AuthenticationHandler;
+                return ServiceLocator.Current.GetInstance<IAuthenticationService>() as AuthenticationService;
             }
+        }
+        public async Task<User> AuthenticateAsync(string userName, string password, bool useSecureLogin = false)
+        {
+            User user = null;
+            if (!string.IsNullOrEmpty(userName) && !string.IsNullOrEmpty(password))
+            {
+                var client = this.GetHttpClient(useSecureLogin);
+                try
+                {
+                    TokenResponse = await client.RequestResourceOwnerPasswordAsync(userName, password);
+                    if (TokenResponse != null)
+                    {
+                        if (TokenResponse.IsError)
+                        {
+                            throw new UnauthorizedAccessException(this.m_strUnauthorizedAccessExceptionMessage);
+                        }
+
+                        Windows.Storage.ApplicationData.Current.RoamingSettings.Values["username"] = userName;
+                        Windows.Storage.ApplicationData.Current.RoamingSettings.Values["usesecurelogin"] = useSecureLogin;
+
+                        Windows.Security.Credentials.PasswordVault vault = new Windows.Security.Credentials.PasswordVault();
+                        PasswordCredential passwordCredential = new PasswordCredential(PasswordVaultResourceName, userName, password);
+                        vault.Add(passwordCredential);
+
+                        if (passwordCredential != null)
+                        {
+                            user = new User
+                            {
+                                UserName = userName,
+                                UseSecureLogin = useSecureLogin
+                            };
+                            m_settingsService.User = user;
+                        }
+                    }
+                }
+                catch (UnauthorizedAccessException)
+                {
+                    throw new UnauthorizedAccessException(this.m_strUnauthorizedAccessExceptionMessage);
+                }
+                catch (Exception exception)
+                {
+                    NullReferenceException nullReferenceException = exception as NullReferenceException;
+                    if (nullReferenceException != null)
+                    {
+                        //there could be a nullreference exception at account change when the login is encrypted.
+                        throw new UnauthorizedAccessException(this.m_strEncryptedLoginException);
+                    }
+                    throw exception;
+                }
+            }
+            else
+            {
+                throw new UnauthorizedAccessException(this.m_strUnauthorizedAccessExceptionMessage);
+            }
+            return user;
+        }
+        public async Task LogoutAsync()
+        {
+            await Task.Run(() =>
+            {
+                var vault = new PasswordVault();
+                var credential = vault.RetrieveAll().FirstOrDefault();
+                if (credential != null)
+                {
+                    m_settingsService.User = null;
+                }
+            });
+        }
+        public async Task<TokenResponse> RefreshToken()
+        {
+            var client = this.GetHttpClient(false);
+            this.TokenResponse = await client.RequestRefreshTokenAsync(this.TokenResponse.RefreshToken);
+            return this.TokenResponse;
         }
         public async Task<User> VerifyUserCredentialsAsync()
         {
-            User user = null;
+            User user = m_settingsService.User;
             PasswordVault vault = new PasswordVault();
             try
             {
                 await Task.Run(() =>
                 {
-                    var userName = (string)Windows.Storage.ApplicationData.Current.RoamingSettings.Values["username"];
+                    var userName = m_settingsService.User?.UserName;
                     if (!string.IsNullOrEmpty(userName))
                     {
                         var passwordCredential = vault.Retrieve(PasswordVaultResourceName, userName);
@@ -92,65 +170,11 @@ namespace BSE.Tunes.StoreApp.Services
             }
             return user;
         }
-        public async Task<User> AuthenticateAsync(string userName, string password, bool useSecureLogin)
-        {
-            User user = null;
-            if (!string.IsNullOrEmpty(userName) && !string.IsNullOrEmpty(password))
-            {
-                var client = this.GetHttpClient(useSecureLogin);
-                try
-                {
-                    var tokenResponse = await client.RequestResourceOwnerPasswordAsync(userName, password);
-                    if (tokenResponse != null)
-                    {
-                        if (tokenResponse.IsError)
-                        {
-                            throw new UnauthorizedAccessException(this.m_strUnauthorizedAccessExceptionMessage);
-                        }
 
-                        Windows.Storage.ApplicationData.Current.RoamingSettings.Values["username"] = userName;
-                        Windows.Storage.ApplicationData.Current.RoamingSettings.Values["usesecurelogin"] = useSecureLogin;
-
-                        Windows.Security.Credentials.PasswordVault vault = new Windows.Security.Credentials.PasswordVault();
-                        PasswordCredential passwordCredential = new PasswordCredential(PasswordVaultResourceName, userName, password);
-                        vault.Add(passwordCredential);
-
-                        if (passwordCredential != null)
-                        {
-                            user = new User
-                            {
-                                UserName = userName,
-                                Password = vault.Retrieve(PasswordVaultResourceName, passwordCredential.UserName).Password,
-                                UseSecureLogin = useSecureLogin
-                            };
-                        }
-                    }
-                }
-                catch (UnauthorizedAccessException)
-                {
-                    throw new UnauthorizedAccessException(this.m_strUnauthorizedAccessExceptionMessage);
-                }
-                catch (Exception exception)
-                {
-                    NullReferenceException nullReferenceException = exception as NullReferenceException;
-                    if (nullReferenceException != null)
-                    {
-                        //there could be a nullreference exception at account change when the login is encrypted.
-                        throw new UnauthorizedAccessException(this.m_strEncryptedLoginException);
-                    }
-                    throw exception;
-                }
-            }
-            else
-            {
-                throw new UnauthorizedAccessException(this.m_strUnauthorizedAccessExceptionMessage);
-            }
-            return user;
-        }
         #endregion
 
         #region MethodsPrivate
-        public AuthenticationHandler()
+        public AuthenticationService()
         {
             m_settingsService = SettingsService.Instance;
             m_resourceService = ResourceService.Instance;

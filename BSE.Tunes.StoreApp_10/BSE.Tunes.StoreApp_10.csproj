@@ -101,24 +101,59 @@
     <Compile Include="Controls\PlayerBar.xaml.cs">
       <DependentUpon>PlayerBar.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Controls\RandomPlayerPanel.xaml.cs">
+      <DependentUpon>RandomPlayerPanel.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\ServiceUrl.xaml.cs">
+      <DependentUpon>ServiceUrl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\SignOut.xaml.cs">
+      <DependentUpon>SignOut.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Extensions\HttpClientExtensions.cs" />
+    <Compile Include="Extensions\HttpContentExtensions.cs" />
+    <Compile Include="Extensions\HttpResponseMessageExtensions.cs" />
+    <Compile Include="Extensions\NavigationServiceExtension.cs" />
+    <Compile Include="IO\AudioStreamDownloader.cs" />
+    <Compile Include="IO\IOUtilities.cs" />
+    <Compile Include="IO\LocalStorage.cs" />
+    <Compile Include="Managers\IPlayerManager.cs" />
+    <Compile Include="Managers\PlayerManager.cs" />
+    <Compile Include="Media\MediaParsers\BitTools.cs" />
+    <Compile Include="Media\MediaParsers\Mp3MediaStreamExtension.cs" />
+    <Compile Include="Media\MediaParsers\MpegFrame.cs" />
     <Compile Include="Models\User.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Services\AuthenticationHandler.cs" />
+    <Compile Include="Services\AuthenticationService.cs" />
     <Compile Include="Services\DataService.cs" />
     <Compile Include="Services\DialogService.cs" />
-    <Compile Include="Services\IAuthenticationHandler.cs" />
+    <Compile Include="Services\IAuthenticationService.cs" />
     <Compile Include="Services\IDataService.cs" />
     <Compile Include="Services\IDialogService.cs" />
+    <Compile Include="Services\NavigationService\INavigationService.cs" />
+    <Compile Include="Services\IPlayerService.cs" />
     <Compile Include="Services\IResourceService.cs" />
+    <Compile Include="Services\NavigationService\NavigationService.cs" />
+    <Compile Include="Services\PlayerService.cs" />
     <Compile Include="Services\ResourceService.cs" />
     <Compile Include="Services\SettingsService.cs" />
-    <Compile Include="ValueConverters\BooleanToVisibilityConverter.cs" />
-    <Compile Include="ViewModels\HostSettingsPageViewModel.cs" />
+    <Compile Include="Converters\BooleanToVisibilityConverter.cs" />
+    <Compile Include="ViewModels\SignOutSettingsPageViewModel.cs" />
+    <Compile Include="ViewModels\SystemSettingsItemViewModel.cs" />
+    <Compile Include="ViewModels\SignOutSettingsItemViewModel.cs" />
+    <Compile Include="ViewModels\ServiceUrlSettingsPageViewModel.cs" />
+    <Compile Include="ViewModels\ServiceUrlWizzardPageViewModel.cs" />
+    <Compile Include="ViewModels\ISettingsItemViewModel.cs" />
     <Compile Include="ViewModels\MainPageViewModel.cs" />
     <Compile Include="ViewModels\DetailPageViewModel.cs" />
+    <Compile Include="ViewModels\PlayerBarViewModel.cs" />
+    <Compile Include="ViewModels\RandomPlayerViewModel.cs" />
+    <Compile Include="ViewModels\ServiceUrlSettingsItemViewModel.cs" />
+    <Compile Include="ViewModels\SettingsItemViewModel.cs" />
+    <Compile Include="ViewModels\SettingsMainPageViewModel.cs" />
     <Compile Include="ViewModels\SettingsPageViewModel.cs" />
     <Compile Include="Mvvm\ViewModelBase.cs" />
-    <Compile Include="ViewModels\SignInPageViewModel.cs" />
+    <Compile Include="ViewModels\SignInWizzardPageViewModel.cs" />
     <Compile Include="ViewModels\ViewModelLocator.cs" />
     <Compile Include="Views\Busy.xaml.cs">
       <DependentUpon>Busy.xaml</DependentUpon>
@@ -126,11 +161,17 @@
     <Compile Include="Views\DetailPage.xaml.cs">
       <DependentUpon>DetailPage.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\HostSettingsPage.xaml.cs">
-      <DependentUpon>HostSettingsPage.xaml</DependentUpon>
+    <Compile Include="Views\ServiceUrlSettingsPage.xaml.cs">
+      <DependentUpon>ServiceUrlSettingsPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\ServiceUrlWizzardPage.xaml.cs">
+      <DependentUpon>ServiceUrlWizzardPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\MainPage.xaml.cs">
       <DependentUpon>MainPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\SettingsMainPage.xaml.cs">
+      <DependentUpon>SettingsMainPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\SettingsPage.xaml.cs">
       <DependentUpon>SettingsPage.xaml</DependentUpon>
@@ -138,8 +179,11 @@
     <Compile Include="Views\Shell.xaml.cs">
       <DependentUpon>Shell.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\SignInPage.xaml.cs">
-      <DependentUpon>SignInPage.xaml</DependentUpon>
+    <Compile Include="Views\SignOutSettingsPage.xaml.cs">
+      <DependentUpon>SignOutSettingsPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\SignInWizzardPage.xaml.cs">
+      <DependentUpon>SignInWizzardPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\Splash.xaml.cs">
       <DependentUpon>Splash.xaml</DependentUpon>
@@ -172,6 +216,22 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Controls\RandomPlayerPanel.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\ServiceUrl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\SignOut.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Styles\AppStyles.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Styles\Custom.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -185,13 +245,21 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\HostSettingsPage.xaml">
+    <Page Include="Views\ServiceUrlSettingsPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\ServiceUrlWizzardPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\MainPage.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\SettingsMainPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\SettingsPage.xaml">
       <SubType>Designer</SubType>
@@ -201,7 +269,11 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\SignInPage.xaml">
+    <Page Include="Views\SignOutSettingsPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\SignInWizzardPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

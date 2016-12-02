@@ -156,4 +156,40 @@ A registration can only be done by the operator of the server.</value>
   <data name="SignInSettingsPage_TxtUseSecureLogin.Text" xml:space="preserve">
     <value>Should the login be encrypted if the webserver supports that?</value>
   </data>
+  <data name="IDS_SignInSettingsDescription" xml:space="preserve">
+    <value>Your account at BSEtunes.</value>
+  </data>
+  <data name="IDS_SignInSettingsHeader" xml:space="preserve">
+    <value>Account Settings</value>
+  </data>
+  <data name="SignOutSettingsPage_ButtonSignOut.Content" xml:space="preserve">
+    <value>Sign Out</value>
+  </data>
+  <data name="ExceptionMessageDialogHeader" xml:space="preserve">
+    <value>Error</value>
+  </data>
+  <data name="ServiceUrlNotAvailableExceptionMessage" xml:space="preserve">
+    <value>The address of your webserver was entered incorrectly or the webserver is not available.</value>
+  </data>
+  <data name="IDS_ServiceUrlSettingsDescription" xml:space="preserve">
+    <value>The address of the webserver that contains the services</value>
+  </data>
+  <data name="IDS_ServiceUrlSettingsHeader" xml:space="preserve">
+    <value>Service Address</value>
+  </data>
+  <data name="ServiceUrlSettingsPage_ButtonRemove.Content" xml:space="preserve">
+    <value>Remove Address</value>
+  </data>
+  <data name="ServiceUrlSettingsPage_PageHeader.Content" xml:space="preserve">
+    <value>Service Address</value>
+  </data>
+  <data name="ServiceUrlSettingsPage_TxtServiceHostDescription.Text" xml:space="preserve">
+    <value>The address of the webserver that contains the audio service</value>
+  </data>
+  <data name="SignOutSettingsPage_PageHeader.Content" xml:space="preserve">
+    <value>Account Settings</value>
+  </data>
+  <data name="SignOutSettingsPage_TxtAcountDescription.Text" xml:space="preserve">
+    <value>Your account</value>
+  </data>
 </root>

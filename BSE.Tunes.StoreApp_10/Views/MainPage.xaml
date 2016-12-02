@@ -107,9 +107,10 @@
                        RelativePanel.AlignLeftWith="parameterResizer"
                        RelativePanel.Below="parameterResizer"
                        Text="Current Visual State" />
-
+<usercontrols:RandomPlayerPanel/>
+            
         </RelativePanel>
- 
+        
     </RelativePanel>
 </Page>
 

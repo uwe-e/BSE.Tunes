@@ -1,6 +1,9 @@
-﻿using System;
+﻿using BSE.Tunes.Data;
+using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
+using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -8,6 +11,18 @@ namespace BSE.Tunes.StoreApp.Services
 {
     public interface IDataService
     {
+        /// <summary>
+        /// Gets the url that contains the web api service.
+        /// </summary>
+        string ServiceUrl
+        {
+            get;
+        }
         Task<bool> IsHostAccessible();
+        Task<bool> IsHostAccessible(string serviceUrl);
+
+        Task<HttpClient> GetHttpClient(bool withRefreshToken = true);
+        Task<Track> GetTrackById(int trackId);
+        Task<ObservableCollection<int>> GetTrackIdsByFilters(Filter filter);
     }
 }

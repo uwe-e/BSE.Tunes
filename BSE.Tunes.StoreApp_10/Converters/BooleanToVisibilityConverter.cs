@@ -2,7 +2,7 @@
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Data;
 
-namespace BSE.Tunes.StoreApp.ValueConverters
+namespace BSE.Tunes.StoreApp.Converters
 {
     /// <summary>
     /// Value converter that translates true to <see cref="Visibility.Visible"/> and false to

@@ -8,14 +8,16 @@ using Thinktecture.IdentityModel.Client;
 
 namespace BSE.Tunes.StoreApp.Services
 {
-    public interface IAuthenticationHandler
+    public interface IAuthenticationService
     {
-        //TokenResponse TokenResponse
-        //{
-        //    get;
-        //}
-        Task<User> AuthenticateAsync(string userName, string password, bool useSecureLogin);
+        TokenResponse TokenResponse
+        {
+            get;
+        }
+        Task<User> AuthenticateAsync(string userName, string password, bool useSecureLogin = false);
+        Task LogoutAsync();
         Task<User> VerifyUserAuthenticationAsync();
         Task<User> VerifyUserCredentialsAsync();
+        Task<TokenResponse> RefreshToken();
     }
 }

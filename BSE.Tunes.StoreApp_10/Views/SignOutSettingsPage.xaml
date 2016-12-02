@@ -1,0 +1,46 @@
+﻿<Page
+    x:Class="BSE.Tunes.StoreApp.Views.SignOutSettingsPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:BSE.Tunes.StoreApp.Views"
+    xmlns:controls="using:Template10.Controls"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:vm="using:BSE.Tunes.StoreApp.ViewModels"
+    xmlns:usercontrols="using:BSE.Tunes.StoreApp.Controls"
+    mc:Ignorable="d">
+
+    <Page.DataContext>
+        <vm:SignOutSettingsPageViewModel x:Name="ViewModel"/>
+    </Page.DataContext>
+
+    <RelativePanel Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+
+        <!--  header  -->
+        <controls:PageHeader x:Name="pageHeader"
+                             x:Uid="SignOutSettingsPage_PageHeader"
+                             Content="Settings Page"
+                             Frame="{x:Bind Frame}"
+                             RelativePanel.AlignLeftWithPanel="True"
+                             RelativePanel.AlignRightWithPanel="True"
+                             RelativePanel.AlignTopWithPanel="True" />
+
+        <RelativePanel EntranceNavigationTransitionInfo.IsTargetElement="True"
+                       RelativePanel.AlignBottomWithPanel="True"
+                       RelativePanel.AlignLeftWithPanel="True"
+                       RelativePanel.AlignRightWithPanel="True"
+                       RelativePanel.Below="pageHeader" Margin="12,14,0,13">
+            
+            <ScrollViewer Margin="0,12,-12,0" HorizontalContentAlignment="Left" VerticalScrollBarVisibility="Auto">
+                <RelativePanel>
+                    <TextBlock x:Uid="SignOutSettingsPage_TxtAcountDescription"
+                       x:Name="TextBlockAccountDescription" Text="Your account" Width="300" TextWrapping="Wrap" RelativePanel.AlignTopWithPanel="True"/>
+                    <TextBlock x:Name="TextBlockUserName"
+                       Text="{Binding UserName}" Margin="0,12,0,0"
+                       RelativePanel.Below="TextBlockAccountDescription"/>
+                    <Button x:Uid="SignOutSettingsPage_ButtonSignOut" Content="Sign Out" Command="{x:Bind ViewModel.SignOutCommand}" Width="80" Margin="0,12,0,0" RelativePanel.Below="TextBlockUserName" RelativePanel.AlignRightWith="TextBlockUserName"/>
+                </RelativePanel>
+            </ScrollViewer>
+        </RelativePanel>
+    </RelativePanel>
+</Page>

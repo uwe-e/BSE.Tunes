@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using BSE.Tunes.StoreApp.Services;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -41,6 +42,14 @@ namespace BSE.Tunes.StoreApp.Mvvm
         public Template10.Common.IStateItems SessionState
         {
             get; set;
+        }
+        [JsonIgnore]
+        public IResourceService ResourceService
+        {
+            get
+            {
+                return BSE.Tunes.StoreApp.Services.ResourceService.Instance;
+            }
         }
     }
 }

@@ -58,7 +58,7 @@
             <!--  settingspage button  -->
             <Controls:HamburgerButtonInfo x:Name="SettingsButton"
                                           PageParameter="0"
-                                          PageType="views:SettingsPage">
+                                          PageType="views:SettingsMainPage">
                 <Controls:HamburgerButtonInfo.NavigationTransitionInfo>
                     <SuppressNavigationTransitionInfo />
                 </Controls:HamburgerButtonInfo.NavigationTransitionInfo>
@@ -74,7 +74,7 @@
         </Controls:HamburgerMenu.SecondaryButtons>
 
     </Controls:HamburgerMenu>
-        <usercontrols:PlayerBar Grid.Row="1"/>
+        <usercontrols:PlayerBar Grid.Row="1" Height="60"/>
 </Grid>
 </Page>
 

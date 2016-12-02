@@ -10,6 +10,7 @@ using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Controls;
 using Microsoft.Practices.ServiceLocation;
 using BSE.Tunes.StoreApp.Models;
+using BSE.Tunes.StoreApp.IO;
 
 namespace BSE.Tunes.StoreApp
 {
@@ -44,6 +45,8 @@ namespace BSE.Tunes.StoreApp
         public override UIElement CreateRootElement(IActivatedEventArgs e)
         {
             var service = NavigationServiceFactory(BackButton.Attach, ExistingContent.Exclude);
+            //The style resource contains the mediaelement and registers the player service
+            service.Frame.Style = Resources["RootFrameStyle"] as Style;
             return new ModalDialog
             {
                 DisableBackButtonWhenModal = true,
@@ -62,7 +65,7 @@ namespace BSE.Tunes.StoreApp
                 bool isAccessible = isAccessibleTask.Result;
                 if (isAccessible)
                 {
-                    IAuthenticationHandler authenticationHandler = ServiceLocator.Current.GetInstance<IAuthenticationHandler>();
+                    IAuthenticationService authenticationHandler = ServiceLocator.Current.GetInstance<IAuthenticationService>();
                     Task<User> verifyUserTask = Task.Run(async () => await authenticationHandler.VerifyUserAuthenticationAsync());
                     try
                     {
@@ -70,21 +73,29 @@ namespace BSE.Tunes.StoreApp
                         User user = verifyUserTask.Result;
                         if (user != null)
                         {
+                            //Deletes the tmp download folder with its files from the local store.
+                            await LocalStorage.ClearTempFolderAsync();
+
                             m_settingsService.IsFullScreen = false;
                             await NavigationService.NavigateAsync(typeof(Views.MainPage));
+                        }
+                        else
+                        {
+                            m_settingsService.IsFullScreen = true;
+                            await NavigationService.NavigateAsync(typeof(Views.SignInWizzardPage));
                         }
                     }
                     catch (Exception exception)
                     {
                         m_settingsService.IsFullScreen = true;
-                        await NavigationService.NavigateAsync(typeof(Views.SignInPage), exception);
+                        await NavigationService.NavigateAsync(typeof(Views.SignInWizzardPage), exception);
                     }
                 }
             }
             catch (Exception)
             {
                 m_settingsService.IsFullScreen = true;
-                await NavigationService.NavigateAsync(typeof(Views.HostSettingsPage));
+                await NavigationService.NavigateAsync(typeof(Views.ServiceUrlWizzardPage));
             }
         }
     }

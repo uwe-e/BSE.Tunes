@@ -28,12 +28,12 @@ namespace BSE.Tunes.StoreApp.Views
             m_settings = SettingsService.Instance;
         }
 
-        public Shell(INavigationService navigationService) : this()
+        public Shell(Template10.Services.NavigationService.INavigationService navigationService) : this()
         {
             SetNavigationService(navigationService);
         }
 
-        public void SetNavigationService(INavigationService navigationService)
+        public void SetNavigationService(Template10.Services.NavigationService.INavigationService navigationService)
         {
             MyHamburgerMenu.NavigationService = navigationService;
             HamburgerMenu.RefreshStyles(m_settings.AppTheme, true);

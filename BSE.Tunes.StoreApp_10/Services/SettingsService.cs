@@ -1,3 +1,4 @@
+using BSE.Tunes.StoreApp.Models;
 using System;
 using Template10.Common;
 using Template10.Utils;
@@ -97,6 +98,17 @@ namespace BSE.Tunes.StoreApp.Services
             set
             {
                 m_settingsHelper.Write(nameof(ServiceUrl), value);
+            }
+        }
+        public User User
+        {
+            get
+            {
+                return m_settingsHelper.Read<User>(nameof(User), null);
+            }
+            set
+            {
+                m_settingsHelper.Write(nameof(User), value);
             }
         }
     }
