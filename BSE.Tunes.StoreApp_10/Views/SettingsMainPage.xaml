@@ -75,20 +75,24 @@
                 <ListView x:Name="listView" ItemsSource="{x:Bind ViewModel.SettingItems}" Visibility="Collapsed" Margin="0,0,12,0">
                     <ListView.ItemTemplate>
                         <DataTemplate>
-                            <StackPanel Orientation="Horizontal">
-                                <Viewbox MaxHeight="30" MaxWidth="30">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <Viewbox Grid.Column="0" MaxHeight="30" MaxWidth="30">
                                     <SymbolIcon Symbol="{Binding Icon}" Foreground="DodgerBlue"/>
                                 </Viewbox>
-                                <StackPanel Orientation="Vertical" Margin="10,0">
-                                    <TextBlock Text="{Binding Title}" TextWrapping="WrapWholeWords" TextTrimming="WordEllipsis" Style="{StaticResource SubtitleTextBlockStyle}" />
-                                    <TextBlock Text="{Binding Description}" FontWeight="SemiLight" x:Name="description" TextWrapping="NoWrap" TextTrimming="WordEllipsis" FontSize="12" Margin="0,6,0,0" />
+                                <StackPanel Orientation="Vertical" Grid.Column="1" Margin="10,0">
+                                    <TextBlock Text="{Binding Title}" TextWrapping="NoWrap" TextTrimming="WordEllipsis" Style="{StaticResource SubtitleTextBlockStyle}" />
+                                    <TextBlock Text="{Binding Description}" FontWeight="SemiLight" x:Name="description" TextWrapping="NoWrap" TextTrimming="WordEllipsis" FontSize="12"/>
                                 </StackPanel>
                                 <interactivity:Interaction.Behaviors>
                                     <core:EventTriggerBehavior EventName="Tapped">
                                         <core:InvokeCommandAction Command="{Binding NavigationCommand}" CommandParameter="{Binding}"/>
                                     </core:EventTriggerBehavior>
                                 </interactivity:Interaction.Behaviors>
-                            </StackPanel>
+                            </Grid>
                         </DataTemplate>
                     </ListView.ItemTemplate>
                     
@@ -102,7 +106,7 @@
                                 </Viewbox>
                                 <StackPanel Orientation="Vertical">
                                     <TextBlock Text="{Binding Title}" TextWrapping="WrapWholeWords" TextAlignment="Center" TextTrimming="WordEllipsis" x:Name="title"  Style="{StaticResource SubtitleTextBlockStyle}" />
-                                    <TextBlock Text="{Binding Description}" FontWeight="SemiLight" TextAlignment="Center" x:Name="description" TextWrapping="WrapWholeWords" MaxLines="2" TextTrimming="WordEllipsis" FontSize="14" Margin="0,6,0,0" />
+                                    <TextBlock Text="{Binding Description}" FontWeight="SemiLight" TextAlignment="Center" x:Name="description" TextWrapping="WrapWholeWords" MaxLines="2" TextTrimming="WordEllipsis" FontSize="14"/>
                                 </StackPanel>
                                 <interactivity:Interaction.Behaviors>
                                     <core:EventTriggerBehavior EventName="Tapped">

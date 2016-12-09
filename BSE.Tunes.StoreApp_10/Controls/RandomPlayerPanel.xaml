@@ -14,9 +14,11 @@
         <vm:RandomPlayerViewModel x:Name="ViewModel"/>
     </UserControl.DataContext>
     
-    <Grid Background="DodgerBlue">
-        <Button Command="{Binding PlayRandomTracksCommand}" >
-            <TextBlock Text="play random"/>
-        </Button>
+    <Grid>
+        <Border Margin="20" Background="#FF005A9E" Padding="20">
+            <Button Command="{Binding PlayRandomTracksCommand}" >
+                <TextBlock Text="play random"/>
+            </Button>
+        </Border>
     </Grid>
 </UserControl>

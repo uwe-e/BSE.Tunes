@@ -165,21 +165,21 @@ namespace BSE.Tunes.StoreApp.Managers
         }
         public async void ExecuteNextTrack()
         {
-    //        if (this.CanExecuteNextTrack())
-    //        {
-				//if (this.m_navigableTrackIds.MoveNext())
-				//{
-				//	var trackId = this.m_navigableTrackIds.Current;
-				//	if (trackId > 0)
-				//	{
-				//		Track track = await this.m_dataService.GetTrackById(trackId);
-				//		if (track != null)
-				//		{
-				//			await this.SetTrackAsync(track);
-				//		}
-				//	}
-				//}
-    //        }
+            if (this.CanExecuteNextTrack())
+            {
+                if (this.m_navigableTrackIds.MoveNext())
+                {
+                    var trackId = this.m_navigableTrackIds.Current;
+                    if (trackId > 0)
+                    {
+                        Track track = await this.m_dataService.GetTrackById(trackId);
+                        if (track != null)
+                        {
+                            await this.SetTrackAsync(track);
+                        }
+                    }
+                }
+            }
         }
         public bool CanExecutePreviousTrack()
         {

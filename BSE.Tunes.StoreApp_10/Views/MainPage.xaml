@@ -87,9 +87,9 @@
                         </Behaviors:KeyBehavior>
 
                         <!--  focus on textbox when page loads  -->
-                        <Core:EventTriggerBehavior>
+                        <!--<Core:EventTriggerBehavior>
                             <Behaviors:FocusAction />
-                        </Core:EventTriggerBehavior>
+                        </Core:EventTriggerBehavior>-->
 
                     </Interactivity:Interaction.Behaviors>
                 </TextBox>
@@ -107,7 +107,11 @@
                        RelativePanel.AlignLeftWith="parameterResizer"
                        RelativePanel.Below="parameterResizer"
                        Text="Current Visual State" />
-<usercontrols:RandomPlayerPanel/>
+            <Grid RelativePanel.Below="stateTextBox" RelativePanel.AlignLeftWithPanel="True" RelativePanel.AlignRightWithPanel="True">
+                <usercontrols:RandomPlayerPanel  />
+            </Grid>
+            
+            
             
         </RelativePanel>
         

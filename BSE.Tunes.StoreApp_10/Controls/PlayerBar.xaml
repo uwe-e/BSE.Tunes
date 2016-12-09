@@ -4,9 +4,10 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="using:BSE.Tunes.StoreApp.Controls"
     xmlns:vm="using:BSE.Tunes.StoreApp.ViewModels"
+    xmlns:converter="using:BSE.Tunes.StoreApp.Converter"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    mc:Ignorable="d"
+    mc:Ignorable="d" Visibility="{Binding IsVisible, Converter={StaticResource BooleanToVisibilityConverter}}"
     d:DesignHeight="300"
     d:DesignWidth="400">
 
@@ -31,19 +32,32 @@
             <Setter Property="AutomationProperties.AutomationId" Value="PreviousAppBarButton"/>
             <Setter Property="Content" Value="&#xE100;"/>
         </Style>
+        <converter:PlayerStateToIconConverter x:Key="PlayerStateToIconConverter"/>
     </UserControl.Resources>
-    
+
     <Grid>
-        <RelativePanel>
-            <StackPanel Orientation="Horizontal">
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+            <StackPanel Orientation="Horizontal" x:Name="TitleInfo" Grid.Column="0" Background="#FF8B8541">
                 <TextBlock Text="currently played title"/>
             </StackPanel>
-            <Slider Maximum="100" Value="68" RelativePanel.AlignHorizontalCenterWithPanel="True"/>
-            <StackPanel Orientation="Horizontal" RelativePanel.AlignRightWithPanel="True">
+            <Grid x:Name="Slider" Grid.Column="1" Background="#FF8B8541">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="60" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="60" />
+                </Grid.ColumnDefinitions>
+                <Slider Grid.Column="1" Maximum="100" Value="68" VerticalAlignment="Center"/>
+            </Grid>
+            <StackPanel Orientation="Horizontal" x:Name="PlayerButtons" Grid.Column="2" Background="#FF8B8541">
                 <Button Command="{Binding PreviousTrackCommand}" Style="{StaticResource PreviousPlayerButtonStyle}" VerticalAlignment="Center"/>
-                <Button x:Name="ButtonPlay" Command="{Binding PlayCommand}" Style="{StaticResource PlayPlayerButtonStyle}" VerticalAlignment="Center"/>
+                <Button x:Name="ButtonPlay" Command="{Binding PlayCommand}" Style="{StaticResource PlayPlayerButtonStyle}" Content="{Binding PlayerState, Converter={StaticResource PlayerStateToIconConverter}}" VerticalAlignment="Center"/>
                 <Button Command="{Binding NextTrackCommand}" Style="{StaticResource NextPlayerButtonStyle}" VerticalAlignment="Center"/>
             </StackPanel>
-        </RelativePanel>
+        </Grid>
     </Grid>
 </UserControl>

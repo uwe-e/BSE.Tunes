@@ -1,8 +1,10 @@
 ﻿using BSE.Tunes.Data.Audio;
 using BSE.Tunes.StoreApp.Managers;
 using BSE.Tunes.StoreApp.Mvvm;
+using BSE.Tunes.StoreApp.Mvvm.Messaging;
 using BSE.Tunes.StoreApp.Services;
 using GalaSoft.MvvmLight.Command;
+using GalaSoft.MvvmLight.Messaging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -22,10 +24,26 @@ namespace BSE.Tunes.StoreApp.ViewModels
         private ICommand m_stopCommand;
         private RelayCommand m_nextTrackCommand;
         private PlayerState m_playerState = PlayerState.Closed;
+        private double m_iProgressValue;
+        private double m_iProgressMaximumValue;
+        private string m_currentProgressTime;
+        private bool m_isVisible;
         #endregion
 
         #region MethodsPublic
         #region Properties
+        public bool IsVisible
+        {
+            get
+            {
+                return m_isVisible;
+            }
+            set
+            {
+                m_isVisible = value;
+                RaisePropertyChanged("IsVisible");
+            }
+        }
         public PlayerState PlayerState
         {
             get
@@ -36,6 +54,42 @@ namespace BSE.Tunes.StoreApp.ViewModels
             {
                 this.m_playerState = value;
                 RaisePropertyChanged("PlayerState");
+            }
+        }
+        public double ProgressValue
+        {
+            get
+            {
+                return this.m_iProgressValue;
+            }
+            set
+            {
+                this.m_iProgressValue = value;
+                RaisePropertyChanged("ProgressValue");
+            }
+        }
+        public double ProgressMaximumValue
+        {
+            get
+            {
+                return this.m_iProgressMaximumValue;
+            }
+            set
+            {
+                this.m_iProgressMaximumValue = value;
+                RaisePropertyChanged("ProgressMaximumValue");
+            }
+        }
+        public string CurrentProgressTime
+        {
+            get
+            {
+                return this.m_currentProgressTime;
+            }
+            set
+            {
+                this.m_currentProgressTime = value;
+                RaisePropertyChanged("CurrentProgressTime");
             }
         }
         public ICommand PlayCommand
@@ -78,9 +132,23 @@ namespace BSE.Tunes.StoreApp.ViewModels
             {
                 m_playerManager = PlayerManager.Instance;
                 m_dialogService = DialogService.Instance;
+
+                //This prevents the alignment right of the slider´s thumb at start-up.
+                this.ProgressMaximumValue = 100;
+                this.ProgressValue = 0;
+
+                //The event when the IsFullScreen property changes.
+                Messenger.Default.Register<ScreenChangedArgs>(this, args =>
+                {
+                    IsVisible = !args.IsFullScreen;
+                });
+                Messenger.Default.Register<BSE.Tunes.Data.Audio.PlayerState>(this, playerState =>
+                {
+                    this.OnPlayerStateChanged(playerState);
+                });
             }
         }
-        
+
         #endregion
 
         #region MethodsPrivate
@@ -133,6 +201,25 @@ namespace BSE.Tunes.StoreApp.ViewModels
             this.PreviousTrackCommand.RaiseCanExecuteChanged();
             this.NextTrackCommand.RaiseCanExecuteChanged();
             this.m_playerManager.ExecuteNextTrack();
+        }
+
+        private void OnPlayerStateChanged(PlayerState playerState)
+        {
+            this.PlayerState = playerState;
+            //this.IsPlaying = false;
+            switch (this.PlayerState)
+            {
+                case Data.Audio.PlayerState.Stopped:
+                case Data.Audio.PlayerState.Paused:
+                    //this.m_progressTimer.Stop();
+                    break;
+                case PlayerState.Playing:
+                    //this.IsPlaying = true;
+                    //this.m_progressTimer.Start();
+                    this.PreviousTrackCommand.RaiseCanExecuteChanged();
+                    this.NextTrackCommand.RaiseCanExecuteChanged();
+                    break;
+            }
         }
         #endregion
     }

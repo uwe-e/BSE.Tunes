@@ -11,8 +11,8 @@
     <AssemblyName>BSE.Tunes.StoreApp_10</AssemblyName>
     <DefaultLanguage>en-US</DefaultLanguage>
     <TargetPlatformIdentifier>UAP</TargetPlatformIdentifier>
-    <TargetPlatformVersion>10.0.10586.0</TargetPlatformVersion>
-    <TargetPlatformMinVersion>10.0.10240.0</TargetPlatformMinVersion>
+    <TargetPlatformVersion>10.0.14393.0</TargetPlatformVersion>
+    <TargetPlatformMinVersion>10.0.14393.0</TargetPlatformMinVersion>
     <MinimumVisualStudioVersion>14</MinimumVisualStudioVersion>
     <EnableDotNetNativeCompatibleProfile>true</EnableDotNetNativeCompatibleProfile>
     <FileAlignment>512</FileAlignment>
@@ -104,12 +104,7 @@
     <Compile Include="Controls\RandomPlayerPanel.xaml.cs">
       <DependentUpon>RandomPlayerPanel.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Controls\ServiceUrl.xaml.cs">
-      <DependentUpon>ServiceUrl.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Controls\SignOut.xaml.cs">
-      <DependentUpon>SignOut.xaml</DependentUpon>
-    </Compile>
+    <Compile Include="Converters\PlayerStateToIconConverter.cs" />
     <Compile Include="Extensions\HttpClientExtensions.cs" />
     <Compile Include="Extensions\HttpContentExtensions.cs" />
     <Compile Include="Extensions\HttpResponseMessageExtensions.cs" />
@@ -123,6 +118,7 @@
     <Compile Include="Media\MediaParsers\Mp3MediaStreamExtension.cs" />
     <Compile Include="Media\MediaParsers\MpegFrame.cs" />
     <Compile Include="Models\User.cs" />
+    <Compile Include="Mvvm\Messaging\ScreenChangedArgs.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\AuthenticationService.cs" />
     <Compile Include="Services\DataService.cs" />
@@ -217,14 +213,6 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Controls\RandomPlayerPanel.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Controls\ServiceUrl.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Controls\SignOut.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

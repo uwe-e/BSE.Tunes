@@ -1,4 +1,6 @@
 using BSE.Tunes.StoreApp.Models;
+using BSE.Tunes.StoreApp.Mvvm.Messaging;
+using GalaSoft.MvvmLight.Messaging;
 using System;
 using Template10.Common;
 using Template10.Utils;
@@ -84,6 +86,7 @@ namespace BSE.Tunes.StoreApp.Services
             {
                 m_settingsHelper.Write(nameof(IsFullScreen), value);
                 Views.Shell.HamburgerMenu.IsFullScreen = value;
+                Messenger.Default.Send(new ScreenChangedArgs(value));
             }
         }
         /// <summary>
