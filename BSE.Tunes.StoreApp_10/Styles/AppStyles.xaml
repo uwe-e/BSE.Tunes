@@ -34,7 +34,7 @@
         <Setter Property="Foreground" Value="{StaticResource AppBarItemForegroundThemeBrush}"/>
         <Setter Property="VerticalAlignment" Value="Stretch"/>
         <Setter Property="FontFamily" Value="Segoe MDL2 Assets"/>
-        <Setter Property="FontSize" Value="18"/>
+        <Setter Property="FontSize" Value="20"/>
         <Setter Property="AutomationProperties.ItemType" Value="App Bar Button"/>
         <Setter Property="Template">
             <Setter.Value>
@@ -143,14 +143,10 @@
             </Setter.Value>
         </Setter>
     </Style>
-
+    <SolidColorBrush x:Key="SliderTrackBackgroundThemeBrush" Color="White" />
     <Style TargetType="Slider">
-        <Setter Property="Background" Value="{ThemeResource SliderTrackBackgroundThemeBrush}" />
+        <Setter Property="Background" Value="Lime" />
         <Setter Property="Foreground" Value="{ThemeResource SliderThumbBorderThemeBrush}"/>
-        <Setter Property="BorderThickness" Value="{ThemeResource SliderBorderThemeThickness}" />
-        <!--<Setter Property="Foreground" Value="{ThemeResource SystemControlHighlightAccentBrush}" />-->
-        <Setter Property="FontFamily" Value="{ThemeResource ContentControlThemeFontFamily}" />
-        <Setter Property="FontSize" Value="{ThemeResource ControlContentThemeFontSize}" />
         <Setter Property="ManipulationMode" Value="None" />
         <Setter Property="UseSystemFocusVisuals" Value="True" />
         <Setter Property="Template">
@@ -160,12 +156,10 @@
                         <Grid.Resources>
                             <Style TargetType="Thumb" x:Key="SliderThumbStyle">
                                 <Setter Property="BorderThickness" Value="2" />
-                                <Setter Property="BorderBrush" Value="{ThemeResource SliderThumbBorderThemeBrush}" />
-                                <Setter Property="Background" Value="{ThemeResource SliderThumbBackgroundThemeBrush}" />
                                 <Setter Property="Template">
                                     <Setter.Value>
                                         <ControlTemplate TargetType="Thumb">
-                                            <Border BorderBrush="{TemplateBinding BorderBrush}"
+                                            <Border Background="Transparent" BorderBrush="{TemplateBinding Foreground}"
                                                     BorderThickness="{TemplateBinding BorderThickness}"
                                                     CornerRadius="9" />
                                         </ControlTemplate>
@@ -226,13 +220,9 @@
                                 </VisualState>
                                 <VisualState x:Name="PointerOver">
                                     <Storyboard>
-                                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="HorizontalTrackRect"
-                                           Storyboard.TargetProperty="Fill">
-                                            <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource SystemControlForegroundBaseMediumBrush}" />
-                                        </ObjectAnimationUsingKeyFrames>
                                         <ObjectAnimationUsingKeyFrames Storyboard.TargetName="HorizontalThumb"
-                                           Storyboard.TargetProperty="Background">
-                                            <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource SystemControlHighlightChromeAltLowBrush}" />
+                                           Storyboard.TargetProperty="Opacity">
+                                            <DiscreteObjectKeyFrame KeyTime="0" Value="0.89" />
                                         </ObjectAnimationUsingKeyFrames>
                                     </Storyboard>
                                 </VisualState>
@@ -248,7 +238,7 @@
                                           FontWeight="{ThemeResource SliderHeaderThemeFontWeight}"
                                           TextWrapping="Wrap" />
                         <Grid x:Name="SliderContainer" Background="Transparent" Grid.Row="1" Control.IsTemplateFocusTarget="True">
-                            <Grid x:Name="HorizontalTemplate" MinHeight="44">
+                            <Grid x:Name="HorizontalTemplate">
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="Auto" />
                                     <ColumnDefinition Width="Auto" />
@@ -260,15 +250,16 @@
                                     <RowDefinition Height="3" />
                                 </Grid.RowDefinitions>
                                 <Rectangle x:Name="HorizontalTrackRect"
-                                           Fill="{TemplateBinding Background}"
+                                           Fill="{TemplateBinding Foreground}"
+                                           Opacity="0.5"
                                            Height="{ThemeResource SliderTrackThemeHeight}"
                                            Grid.Row="1"
-                                           Grid.ColumnSpan="3" />
+                                           Grid.Column="2" />
                                 <Rectangle x:Name="HorizontalDecreaseRect"
                                            Fill="{TemplateBinding Foreground}"
+                                           Opacity="0.89"
                                            Grid.Row="1" />
                                 <Thumb x:Name="HorizontalThumb"
-                                       Background="{ThemeResource SystemControlForegroundAccentBrush}"
                                        Style="{StaticResource SliderThumbStyle}"
                                        DataContext="{TemplateBinding Value}"
                                        Height="18"

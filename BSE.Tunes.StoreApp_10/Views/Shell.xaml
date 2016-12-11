@@ -25,10 +25,10 @@
                     <StackPanel Orientation="Horizontal">
                         <SymbolIcon Width="48"
                                 Height="48"
-                                Symbol="Home" />
+                                Symbol="ViewAll" />
                         <TextBlock Margin="12,0,0,0"
                                VerticalAlignment="Center"
-                               Text="Home" />
+                               Text="Explore" />
                     </StackPanel>
                 </Controls:HamburgerButtonInfo>
             </Controls:HamburgerMenu.PrimaryButtons>

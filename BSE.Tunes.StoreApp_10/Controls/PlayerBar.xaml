@@ -16,44 +16,77 @@
     </UserControl.DataContext>
 
     <UserControl.Resources>
+
+        <SolidColorBrush x:Key="ControlBackGroundColorBrush" Color="#AA8B8541" />
+        <SolidColorBrush x:Key="ForeGroundColorBrush" Color="White" />
+        <SolidColorBrush x:Key="SliderTrackBackgroundThemeBrush" Color="White" />
+
         <Style x:Key="PlayPlayerButtonStyle" TargetType="ButtonBase" BasedOn="{StaticResource PlayerBarButtonStyle}">
             <Setter Property="AutomationProperties.AutomationId" Value="PlayAppBarButton"/>
+            <Setter Property="Foreground" Value="{StaticResource ForeGroundColorBrush}"/>
             <Setter Property="Content" Value="&#xE102;"/>
         </Style>
         <Style x:Key="PausePlayerButtonStyle" TargetType="ButtonBase" BasedOn="{StaticResource PlayerBarButtonStyle}">
             <Setter Property="AutomationProperties.AutomationId" Value="PauseAppBarButton"/>
+            <Setter Property="Foreground" Value="{StaticResource ForeGroundColorBrush}"/>
             <Setter Property="Content" Value="&#xE103;"/>
         </Style>
         <Style x:Key="NextPlayerButtonStyle" TargetType="ButtonBase" BasedOn="{StaticResource PlayerBarButtonStyle}">
             <Setter Property="AutomationProperties.AutomationId" Value="NextAppBarButton"/>
+            <Setter Property="Foreground" Value="{StaticResource ForeGroundColorBrush}"/>
             <Setter Property="Content" Value="&#xE101;"/>
         </Style>
         <Style x:Key="PreviousPlayerButtonStyle" TargetType="ButtonBase" BasedOn="{StaticResource PlayerBarButtonStyle}">
             <Setter Property="AutomationProperties.AutomationId" Value="PreviousAppBarButton"/>
             <Setter Property="Content" Value="&#xE100;"/>
         </Style>
+        
         <converter:PlayerStateToIconConverter x:Key="PlayerStateToIconConverter"/>
     </UserControl.Resources>
 
-    <Grid>
+    <Grid Background="{StaticResource ControlBackGroundColorBrush}">
+        <VisualStateManager.VisualStateGroups>
+                <VisualStateGroup x:Name="AdaptiveVisualStateGroup">
+                    <VisualState x:Name="VisualStateNarrow">
+                        <VisualState.StateTriggers>
+                            <AdaptiveTrigger MinWindowWidth="{StaticResource NarrowMinWidth}" />
+                        </VisualState.StateTriggers>
+                        <VisualState.Setters>
+                            <Setter Target="slider.Visibility" Value="Collapsed"/>
+                        </VisualState.Setters>
+                    </VisualState>
+                    <VisualState x:Name="VisualStateNormal">
+                        <VisualState.StateTriggers>
+                            <AdaptiveTrigger MinWindowWidth="{StaticResource NormalMinWidth}" />
+                        </VisualState.StateTriggers>
+                        <VisualState.Setters>
+                            <Setter Target="slider.Visibility" Value="Visible"/>
+                        </VisualState.Setters>
+                    </VisualState>
+                </VisualStateGroup>
+            </VisualStateManager.VisualStateGroups>
         <Grid>
+            
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="Auto"/>
             </Grid.ColumnDefinitions>
-            <StackPanel Orientation="Horizontal" x:Name="TitleInfo" Grid.Column="0" Background="#FF8B8541">
-                <TextBlock Text="currently played title"/>
+            <StackPanel Orientation="Horizontal" x:Name="TitleInfo" Grid.Column="0">
+                <TextBlock Text="current title"/>
             </StackPanel>
-            <Grid x:Name="Slider" Grid.Column="1" Background="#FF8B8541">
+            <Grid x:Name="slider" Grid.Column="1">
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="60" />
+                    <ColumnDefinition Width="50" />
                     <ColumnDefinition Width="*" />
-                    <ColumnDefinition Width="60" />
+                    <ColumnDefinition Width="50" />
                 </Grid.ColumnDefinitions>
-                <Slider Grid.Column="1" Maximum="100" Value="68" VerticalAlignment="Center"/>
+                <TextBlock Grid.Column="0" Text="01:23" FontSize="12" Opacity="0.89" VerticalAlignment="Center" HorizontalAlignment="Left" Foreground="{StaticResource ForeGroundColorBrush}"/>
+                <Slider Grid.Column="1" StepFrequency="{Binding StepFrequency}"
+                        Maximum="{Binding ProgressMaximumValue}" Value="{Binding ProgressValue, Mode=TwoWay}" VerticalAlignment="Center" Foreground="{StaticResource ForeGroundColorBrush}"/>
+                <TextBlock Grid.Column="2" Text="03:34" FontSize="12" HorizontalAlignment="Right" VerticalAlignment="Center" Foreground="{StaticResource ForeGroundColorBrush}"/>
             </Grid>
-            <StackPanel Orientation="Horizontal" x:Name="PlayerButtons" Grid.Column="2" Background="#FF8B8541">
+            <StackPanel Orientation="Horizontal" x:Name="PlayerButtons" Grid.Column="2">
                 <Button Command="{Binding PreviousTrackCommand}" Style="{StaticResource PreviousPlayerButtonStyle}" VerticalAlignment="Center"/>
                 <Button x:Name="ButtonPlay" Command="{Binding PlayCommand}" Style="{StaticResource PlayPlayerButtonStyle}" Content="{Binding PlayerState, Converter={StaticResource PlayerStateToIconConverter}}" VerticalAlignment="Center"/>
                 <Button Command="{Binding NextTrackCommand}" Style="{StaticResource NextPlayerButtonStyle}" VerticalAlignment="Center"/>
