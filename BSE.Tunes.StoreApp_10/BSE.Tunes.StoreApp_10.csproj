@@ -117,7 +117,12 @@
     <Compile Include="Media\MediaParsers\BitTools.cs" />
     <Compile Include="Media\MediaParsers\Mp3MediaStreamExtension.cs" />
     <Compile Include="Media\MediaParsers\MpegFrame.cs" />
+    <Compile Include="Models\MediaState.cs" />
+    <Compile Include="Models\PlayerMode.cs" />
+    <Compile Include="Models\PlayerState.cs" />
     <Compile Include="Models\User.cs" />
+    <Compile Include="Mvvm\Messaging\MediaStateChangedArgs.cs" />
+    <Compile Include="Mvvm\Messaging\PlayerStateChangedArgs.cs" />
     <Compile Include="Mvvm\Messaging\ScreenChangedArgs.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\AuthenticationService.cs" />

@@ -1,5 +1,5 @@
 ﻿using BSE.Tunes.Data;
-using BSE.Tunes.Data.Audio;
+using BSE.Tunes.StoreApp.Models;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;

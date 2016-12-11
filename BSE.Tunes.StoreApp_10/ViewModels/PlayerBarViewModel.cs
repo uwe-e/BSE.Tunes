@@ -1,8 +1,8 @@
-﻿using BSE.Tunes.Data.Audio;
-using BSE.Tunes.StoreApp.Managers;
+﻿using BSE.Tunes.StoreApp.Managers;
 using BSE.Tunes.StoreApp.Mvvm;
 using BSE.Tunes.StoreApp.Mvvm.Messaging;
 using BSE.Tunes.StoreApp.Services;
+using BSE.Tunes.StoreApp.Models;
 using GalaSoft.MvvmLight.Command;
 using GalaSoft.MvvmLight.Messaging;
 using System;
@@ -11,6 +11,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using Windows.UI.Xaml;
+using BSE.Tunes.Data;
 
 namespace BSE.Tunes.StoreApp.ViewModels
 {
@@ -28,10 +30,39 @@ namespace BSE.Tunes.StoreApp.ViewModels
         private double m_iProgressMaximumValue;
         private string m_currentProgressTime;
         private bool m_isVisible;
+        private bool m_bIsPlaying;
+        private double m_stepFrequency;
+        private DispatcherTimer m_progressTimer;
+        private Track m_currentTrack;
+        private string m_currentTrackDuration;
         #endregion
 
-        #region MethodsPublic
         #region Properties
+        public Track CurrentTrack
+        {
+            get
+            {
+                return this.m_currentTrack;
+            }
+            set
+            {
+                Track oldValue = this.m_currentTrack;
+                this.m_currentTrack = value;
+                RaisePropertyChanged<Track>(() => this.CurrentTrack, oldValue, value, true);
+            }
+        }
+        public bool IsPlaying
+        {
+            get
+            {
+                return this.m_bIsPlaying;
+            }
+            set
+            {
+                this.m_bIsPlaying = value;
+                RaisePropertyChanged("IsPlaying");
+            }
+        }
         public bool IsVisible
         {
             get
@@ -80,6 +111,18 @@ namespace BSE.Tunes.StoreApp.ViewModels
                 RaisePropertyChanged("ProgressMaximumValue");
             }
         }
+        public double StepFrequency
+        {
+            get
+            {
+                return this.m_stepFrequency;
+            }
+            set
+            {
+                this.m_stepFrequency = value;
+                RaisePropertyChanged("StepFrequency");
+            }
+        }
         public string CurrentProgressTime
         {
             get
@@ -92,40 +135,25 @@ namespace BSE.Tunes.StoreApp.ViewModels
                 RaisePropertyChanged("CurrentProgressTime");
             }
         }
-        public ICommand PlayCommand
+        public string CurrentTrackDuration
         {
             get
             {
-                return this.m_playCommand ??
-                    (this.m_playCommand = new RelayCommand<object>(vm => Play()));
+                return this.m_currentTrackDuration;
             }
-        }
-        public ICommand StopCommand
-        {
-            get
+            set
             {
-                return this.m_stopCommand ??
-                    (this.m_stopCommand = new RelayCommand<object>(vm => this.m_playerManager.Stop()));
+                this.m_currentTrackDuration = value;
+                RaisePropertyChanged("CurrentTrackDuration");
             }
         }
-        public RelayCommand PreviousTrackCommand
-        {
-            get
-            {
-                return this.m_previousTrackCommand ??
-                    (this.m_previousTrackCommand = new RelayCommand(this.ExecutePreviousTrack, this.CanExecutePreviousTrack));
-            }
-        }
-        public RelayCommand NextTrackCommand
-        {
-            get
-            {
-                return this.m_nextTrackCommand ??
-                    (this.m_nextTrackCommand = new RelayCommand(this.ExecuteNextTrack, this.CanExecuteNextTrack));
-            }
-        }
+        public ICommand PlayCommand => m_playCommand ?? (m_playCommand = new RelayCommand<object>(vm => Play()));
+        public ICommand StopCommand => m_stopCommand ?? (this.m_stopCommand = new RelayCommand<object>(vm => this.m_playerManager.Stop()));
+        public RelayCommand PreviousTrackCommand => m_previousTrackCommand ?? (m_previousTrackCommand = new RelayCommand(ExecutePreviousTrack, CanExecutePreviousTrack));
+        public RelayCommand NextTrackCommand => m_nextTrackCommand ?? (m_nextTrackCommand = new RelayCommand(ExecuteNextTrack, CanExecuteNextTrack));
         #endregion
 
+        #region MethodsPublic
         public PlayerBarViewModel()
         {
             if (!Windows.ApplicationModel.DesignMode.DesignModeEnabled)
@@ -142,13 +170,24 @@ namespace BSE.Tunes.StoreApp.ViewModels
                 {
                     IsVisible = !args.IsFullScreen;
                 });
-                Messenger.Default.Register<BSE.Tunes.Data.Audio.PlayerState>(this, playerState =>
+                Messenger.Default.Register<PlayerStateChangedArgs>(this, args =>
                 {
-                    this.OnPlayerStateChanged(playerState);
+                    OnPlayerStateChanged(args.PlayerState);
+                });
+                Messenger.Default.Register<MediaStateChangedArgs>(this, args =>
+                {
+                    switch (args.MediaState)
+                    {
+                        case MediaState.Opened:
+                            OnMediaOpened();
+                            break;
+                        case MediaState.Ended:
+                            OnMediaEnded();
+                            break;
+                    }
                 });
             }
         }
-
         #endregion
 
         #region MethodsPrivate
@@ -158,17 +197,17 @@ namespace BSE.Tunes.StoreApp.ViewModels
             {
                 switch (this.PlayerState)
                 {
-                    case Data.Audio.PlayerState.Stopped:
-                    case Data.Audio.PlayerState.Closed:
+                    case PlayerState.Stopped:
+                    case PlayerState.Closed:
                         if (this.m_playerManager.CanExecutePlay())
                         {
                             this.m_playerManager.ReplayPlayTracks();
                         }
                         break;
-                    case Data.Audio.PlayerState.Playing:
+                    case PlayerState.Playing:
                         this.m_playerManager.Pause();
                         break;
-                    case Data.Audio.PlayerState.Paused:
+                    case PlayerState.Paused:
                         this.m_playerManager.Play();
                         break;
                 }
@@ -206,20 +245,81 @@ namespace BSE.Tunes.StoreApp.ViewModels
         private void OnPlayerStateChanged(PlayerState playerState)
         {
             this.PlayerState = playerState;
-            //this.IsPlaying = false;
+            this.IsPlaying = false;
             switch (this.PlayerState)
             {
-                case Data.Audio.PlayerState.Stopped:
-                case Data.Audio.PlayerState.Paused:
-                    //this.m_progressTimer.Stop();
+                case PlayerState.Stopped:
+                case PlayerState.Paused:
+                    this.m_progressTimer?.Stop();
                     break;
                 case PlayerState.Playing:
-                    //this.IsPlaying = true;
-                    //this.m_progressTimer.Start();
+                    this.IsPlaying = true;
+                    this.m_progressTimer?.Start();
                     this.PreviousTrackCommand.RaiseCanExecuteChanged();
                     this.NextTrackCommand.RaiseCanExecuteChanged();
                     break;
             }
+        }
+        private void OnMediaOpened()
+        {
+            this.ProgressValue = 0;
+            this.CurrentProgressTime = TimeSpan.FromMinutes(0).ToString();
+            this.CurrentTrack = this.m_playerManager.CurrentTrack;
+            this.ProgressMaximumValue = this.m_playerManager.Duration.TotalSeconds;
+            this.CurrentTrackDuration = this.m_playerManager.Duration.ToString();
+            this.StepFrequency = this.SliderFrequency(this.m_playerManager.Duration);
+
+            this.m_progressTimer = new DispatcherTimer();
+            this.m_progressTimer.Interval = TimeSpan.FromSeconds(this.StepFrequency);
+            this.m_progressTimer.Tick += OnProgressTimerTick;
+            this.m_progressTimer.Start();
+        }
+
+        
+
+        private void OnMediaEnded()
+        {
+            m_progressTimer.Stop();
+            m_progressTimer.Tick -= OnProgressTimerTick;
+            m_progressTimer = null;
+            ProgressMaximumValue = 100;
+            ProgressValue = 0;
+        }
+        private void OnProgressTimerTick(object sender, object e)
+        {
+            this.ProgressValue = this.m_playerManager.Position.TotalSeconds;
+            TimeSpan position = new TimeSpan(0, this.m_playerManager.Position.Hours, this.m_playerManager.Position.Minutes, this.m_playerManager.Position.Seconds);
+            this.CurrentProgressTime = position.ToString();
+        }
+        private double SliderFrequency(TimeSpan timeSpan)
+        {
+            double stepfrequency = -1;
+
+            double absvalue = (int)Math.Round(timeSpan.TotalSeconds, MidpointRounding.AwayFromZero);
+            stepfrequency = (int)(Math.Round(absvalue / 100));
+
+            if (timeSpan.TotalMinutes >= 10 && timeSpan.TotalMinutes < 30)
+            {
+                stepfrequency = 10;
+            }
+            else if (timeSpan.TotalMinutes >= 30 && timeSpan.TotalMinutes < 60)
+            {
+                stepfrequency = 30;
+            }
+            else if (timeSpan.TotalHours >= 1)
+            {
+                stepfrequency = 60;
+            }
+
+            if (stepfrequency == 0)
+                stepfrequency += 1;
+
+            if (stepfrequency == 1)
+            {
+                stepfrequency = absvalue / 100;
+            }
+
+            return stepfrequency;
         }
         #endregion
     }

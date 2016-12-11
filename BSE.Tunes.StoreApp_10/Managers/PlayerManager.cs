@@ -1,8 +1,9 @@
 ﻿using BSE.Tunes.Data;
-using BSE.Tunes.Data.Audio;
 using BSE.Tunes.Data.Extensions;
 using BSE.Tunes.Data.Collections;
 using BSE.Tunes.StoreApp.Services;
+using BSE.Tunes.StoreApp.Mvvm.Messaging;
+using BSE.Tunes.StoreApp.Models;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -13,6 +14,7 @@ using GalaSoft.MvvmLight.Messaging;
 using BSE.Tunes.StoreApp.ViewModels;
 using System.Globalization;
 using Microsoft.Practices.ServiceLocation;
+
 
 namespace BSE.Tunes.StoreApp.Managers
 {
@@ -88,63 +90,53 @@ namespace BSE.Tunes.StoreApp.Managers
             this.PlayerService = playerService;
             this.m_dialogService = dialogservice;
             this.m_resourceService = resourceService;
-            //Messenger.Default.Register<MediaOpenedMessage>(this, message =>
-            //{
-            //    this.OnMediaOpened();
-            //});
-            //Messenger.Default.Register<MediaEndedMessage>(this, message =>
-            //{
-            //    this.OnMediaEnded();
-            //});
-            //Messenger.Default.Register<MediaNextPressedMessage>(this, message =>
-            //{
-            //    if (this.CanExecuteNextTrack())
-            //    {
-            //        this.ExecuteNextTrack();
-            //    }
-            //});
-            //Messenger.Default.Register<MediaPreviousPressedMessage>(this, message =>
-            //{
-            //    if (this.CanExecutePreviousTrack())
-            //    {
-            //        this.ExecutePreviousTrack();
-            //    }
-            //});
+            Messenger.Default.Register<MediaStateChangedArgs>(this, args =>
+            {
+                switch (args.MediaState)
+                {
+                    case MediaState.Opened:
+                        OnMediaOpened();
+                        break;
+                    case MediaState.Ended:
+                        this.OnMediaEnded();
+                        break;
+                    case MediaState.NextPressed:
+                        ExecuteNextTrack();
+                        break;
+                    case MediaState.PreviosPressed:
+                        ExecutePreviousTrack();
+                        break;
+                }
+            });
         }
         public async void ReplayPlayTracks()
         {
-            if (this.TrackIds != null)
+            this.m_navigableTrackIds = this.TrackIds?.ToNavigableCollection();
+            int trackId = this.m_navigableTrackIds?.FirstOrDefault() ?? 0;
+            if (trackId > 0)
             {
-                this.m_navigableTrackIds = this.TrackIds.ToNavigableCollection();
-                var trackId = this.m_navigableTrackIds.FirstOrDefault();
-                if (trackId > 0)
+                Track track = await this.m_dataService.GetTrackById(trackId);
+                if (track != null)
                 {
-                    Track track = await this.m_dataService.GetTrackById(trackId);
-                    if (track != null)
-                    {
-                        await SetTrackAsync(track);
-                    }
+                    await SetTrackAsync(track);
                 }
             }
         }
-		public async void PlayTracks(ObservableCollection<int> trackIds, PlayerMode playerMode)
-		{
-			//this.PlayerMode = playerMode;
-			//this.TrackIds = trackIds;
-			//if (this.TrackIds != null)
-			//{
-			//	this.m_navigableTrackIds = this.TrackIds.ToNavigableCollection();
-			//	var trackId = this.m_navigableTrackIds.FirstOrDefault();
-			//	if (trackId > 0)
-			//	{
-			//		var track = await this.m_dataService.GetTrackById(trackId);
-			//		if (track != null)
-			//		{
-			//			await this.SetTrackAsync(track);
-			//		}
-			//	}
-			//}
-		}
+        public async void PlayTracks(ObservableCollection<int> trackIds, PlayerMode playerMode)
+        {
+            this.PlayerMode = playerMode;
+            this.TrackIds = trackIds;
+            this.m_navigableTrackIds = this.TrackIds?.ToNavigableCollection();
+            int trackId = this.m_navigableTrackIds?.FirstOrDefault() ?? 0;
+            if (trackId > 0)
+            {
+                var track = await this.m_dataService.GetTrackById(trackId);
+                if (track != null)
+                {
+                    await this.SetTrackAsync(track);
+                }
+            }
+        }
         public async Task SetTrackAsync(Track track)
         {
             if (track != null)
@@ -161,7 +153,7 @@ namespace BSE.Tunes.StoreApp.Managers
         }
         public bool CanExecuteNextTrack()
         {
-			return this.m_navigableTrackIds != null ? this.m_navigableTrackIds.CanMoveNext : false;
+			return this.m_navigableTrackIds?.CanMoveNext ?? false;
         }
         public async void ExecuteNextTrack()
         {
@@ -183,29 +175,29 @@ namespace BSE.Tunes.StoreApp.Managers
         }
         public bool CanExecutePreviousTrack()
         {
-			return this.m_navigableTrackIds != null ? this.m_navigableTrackIds.CanMovePrevious : false;
+			return this.m_navigableTrackIds?.CanMovePrevious ?? false;
         }
         public async void ExecutePreviousTrack()
         {
-    //        if (this.CanExecutePreviousTrack())
-    //        {
-				//if (this.m_navigableTrackIds.MovePrevious())
-				//{
-				//	var trackId = this.m_navigableTrackIds.Current;
-				//	if (trackId > 0)
-				//	{
-				//		var track = await this.m_dataService.GetTrackById(trackId);
-				//		if (track != null)
-				//		{
-				//			await this.SetTrackAsync(track);
-				//		}
-				//	}
-				//}
-    //        }
+            if (this.CanExecutePreviousTrack())
+            {
+                if (this.m_navigableTrackIds.MovePrevious())
+                {
+                    var trackId = this.m_navigableTrackIds.Current;
+                    if (trackId > 0)
+                    {
+                        var track = await this.m_dataService.GetTrackById(trackId);
+                        if (track != null)
+                        {
+                            await this.SetTrackAsync(track);
+                        }
+                    }
+                }
+            }
         }
         public bool CanExecutePlay()
         {
-			return this.TrackIds != null && this.TrackIds.Count > 0;
+			return this.TrackIds?.Count > 0;
         }
         public void Play()
         {
@@ -224,20 +216,17 @@ namespace BSE.Tunes.StoreApp.Managers
         #region MethodsPrivate
         private void OnMediaEnded()
         {
-            if (this.PlayerMode != Data.Audio.PlayerMode.None)
+            if (this.PlayerMode != PlayerMode.None)
             {
-                if (this.CanExecuteNextTrack())
-                {
-                    this.ExecuteNextTrack();
-                }
+                this.ExecuteNextTrack();
             }
         }
         private void OnMediaOpened()
         {
             try
             {
-                //this.PlayerService.CanExecuteNextTrack = this.CanExecuteNextTrack();
-                //this.PlayerService.CanExecutePreviousTrack = this.CanExecutePreviousTrack();
+                PlayerService.CanExecuteNextTrack = this.CanExecuteNextTrack();
+                PlayerService.CanExecutePreviousTrack = this.CanExecutePreviousTrack();
 
                 //string userName = "unknown";
                 //TunesUser user = this.m_accountService.User;

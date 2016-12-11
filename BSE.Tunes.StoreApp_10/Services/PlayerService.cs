@@ -1,5 +1,4 @@
 ﻿using BSE.Tunes.Data;
-using BSE.Tunes.Data.Audio;
 using GalaSoft.MvvmLight.Messaging;
 using Microsoft.Practices.ServiceLocation;
 using System;
@@ -13,6 +12,8 @@ using Windows.Storage.Streams;
 using Windows.Media.MediaProperties;
 using BSE.Tunes.StoreApp.IO;
 using MediaParsers;
+using BSE.Tunes.StoreApp.Models;
+using BSE.Tunes.StoreApp.Mvvm.Messaging;
 
 namespace BSE.Tunes.StoreApp.Services
 {
@@ -160,7 +161,7 @@ namespace BSE.Tunes.StoreApp.Services
         #region MethodsPublic
         public PlayerService(IDataService dataService, IAuthenticationService accountService)
         {
-            this.CurrentState = Data.Audio.PlayerState.Closed;
+            this.CurrentState = PlayerState.Closed;
 
             this.m_dataService = dataService;
             //m_settingsService = SettingsService.Instance;
@@ -258,20 +259,22 @@ namespace BSE.Tunes.StoreApp.Services
         {
             if (this.CanExecuteNextTrack)
             {
-                //await this.m_mediaElement.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
-                //{
-                //    Messenger.Default.Send(new BSE.Tunes.StoreApp.Messaging.MediaNextPressedMessage());
-                //});
+                await this.m_mediaElement.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
+                {
+                    //Messenger.Default.Send(new BSE.Tunes.StoreApp.Messaging.MediaNextPressedMessage());
+                    Messenger.Default.Send(new MediaStateChangedArgs(MediaState.NextPressed));
+                });
             }
         }
         public async void PreviousTrack()
         {
             if (this.CanExecutePreviousTrack)
             {
-                //await this.m_mediaElement.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
-                //{
-                //    Messenger.Default.Send(new BSE.Tunes.StoreApp.Messaging.MediaPreviousPressedMessage());
-                //});
+                await this.m_mediaElement.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
+                {
+                    //Messenger.Default.Send(new BSE.Tunes.StoreApp.Messaging.MediaPreviousPressedMessage());
+                    Messenger.Default.Send(new MediaStateChangedArgs(MediaState.PreviosPressed));
+                });
             }
         }
         #endregion
@@ -439,7 +442,7 @@ namespace BSE.Tunes.StoreApp.Services
                     this.m_mediaControls.PlaybackStatus = MediaPlaybackStatus.Closed;
                     break;
             }
-            Messenger.Default.Send<BSE.Tunes.Data.Audio.PlayerState>(this.CurrentState);
+            Messenger.Default.Send(new Mvvm.Messaging.PlayerStateChangedArgs(this.CurrentState));
         }
 
         private void OnMediaFailed(object sender, Windows.UI.Xaml.ExceptionRoutedEventArgs e)
@@ -463,7 +466,7 @@ namespace BSE.Tunes.StoreApp.Services
             this.m_mediaControls.IsPauseEnabled = true;
             this.m_mediaControls.IsNextEnabled = false;
             this.m_mediaControls.IsPreviousEnabled = false;
-            //.Default.Send(new BSE.Tunes.StoreApp.Messaging.MediaOpenedMessage());
+            Messenger.Default.Send(new MediaStateChangedArgs(MediaState.Opened));
         }
         private void OnMediaEnded(object sender, Windows.UI.Xaml.RoutedEventArgs e)
         {
