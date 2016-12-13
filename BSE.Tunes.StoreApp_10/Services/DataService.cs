@@ -74,6 +74,15 @@ namespace BSE.Tunes.StoreApp.Services
             }
             return isHostAccessible;
         }
+        public Uri GetImage(Guid imageId, bool asThumbnail = false)
+        {
+            string strUrl = string.Format("{0}/api/files/image/{1}", m_settingsService.ServiceUrl, imageId.ToString());
+            if (asThumbnail)
+            {
+                strUrl = string.Format("{0}/api/files/image/{1}/true", m_settingsService.ServiceUrl, imageId.ToString());
+            }
+            return new Uri(strUrl);
+        }
         public async Task<Track> GetTrackById(int trackId)
         {
             string strUrl = string.Format("{0}/api/tunes/GetTrackById/{1}", m_settingsService.ServiceUrl, trackId);

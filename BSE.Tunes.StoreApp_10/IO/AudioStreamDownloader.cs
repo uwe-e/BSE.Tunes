@@ -12,8 +12,9 @@ namespace BSE.Tunes.StoreApp.IO
 {
 	internal class AudioStreamDownloader : IDisposable
 	{
-		#region Events
-		public event EventHandler<EventArgs> DownloadStarting;
+        #region Events
+        public event EventHandler<EventArgs> DownloadComplete;
+        public event EventHandler<EventArgs> DownloadStarting;
 		public event EventHandler<EventArgs> DownloadProgessStarted;
 		#endregion
 
@@ -114,6 +115,7 @@ namespace BSE.Tunes.StoreApp.IO
 									hasDownloadStarted = true;
 									this.OnDownloadProgessStarted();
 								}
+                                OnDownloadComplete();
 							}
 							else
 							{
@@ -125,7 +127,11 @@ namespace BSE.Tunes.StoreApp.IO
 									hasDownloadStarted = true;
 									this.OnDownloadProgessStarted();
 								}
-								exceptionAttempt = 0;
+                                if (this.m_bytesReceived.Equals(this.m_totalBytesToReceive))
+                                {
+                                    OnDownloadComplete();
+                                }
+                                exceptionAttempt = 0;
 							}
 						}
 						catch (HttpRequestException httpRequestException)
@@ -197,6 +203,13 @@ namespace BSE.Tunes.StoreApp.IO
 				this.m_bDisposed = true;
 			}
 		}
+        protected virtual void OnDownloadComplete()
+        {
+            if (this.DownloadComplete != null)
+            {
+                this.DownloadComplete(this, EventArgs.Empty);
+            }
+        }
 		protected virtual void OnDownloadStarting()
 		{
 			if (this.DownloadStarting != null)
@@ -220,10 +233,11 @@ namespace BSE.Tunes.StoreApp.IO
 			bool isUnauthorizedAccess = false;
 			try
 			{
-				await IOUtilities.WrapSharingViolations(async () =>
+                await LocalStorage.ReleaseCacheAsync(24100224);
+                await IOUtilities.WrapSharingViolations(async () =>
 				{
 					IStorageFolder storageFolder = await LocalStorage.GetTempFolderAsync();
-					var storageFile = await storageFolder.CreateFileAsync(trackId.ToString(), creationCollisionOption) as StorageFile;
+                    var storageFile = await storageFolder.CreateFileAsync(trackId.ToString(), creationCollisionOption) as StorageFile;
 					IRandomAccessStream windowsRuntimeStream = await storageFile.OpenAsync(FileAccessMode.ReadWrite);
 					stream = windowsRuntimeStream.AsStream();
 				});

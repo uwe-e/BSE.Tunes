@@ -57,6 +57,12 @@ namespace BSE.Tunes.StoreApp
 
         public override async Task OnStartAsync(StartKind startKind, IActivatedEventArgs args)
         {
+            if (Windows.Foundation.Metadata.ApiInformation.IsTypePresent("Windows.UI.ViewManagement.StatusBar"))
+            {
+                Windows.UI.ViewManagement.StatusBar.GetForCurrentView().BackgroundColor = Windows.UI.Color.FromArgb(100, 230, 74, 25);
+                Windows.UI.ViewManagement.StatusBar.GetForCurrentView().BackgroundOpacity = 1;
+                Windows.UI.ViewManagement.StatusBar.GetForCurrentView().ForegroundColor = Windows.UI.Colors.White;
+            }
             IDataService dataService = ServiceLocator.Current.GetInstance<IDataService>();
             Task<bool> isAccessibleTask = Task.Run(async () => await dataService.IsHostAccessible());
             try

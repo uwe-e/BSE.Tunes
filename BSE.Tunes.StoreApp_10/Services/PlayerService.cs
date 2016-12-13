@@ -203,7 +203,7 @@ namespace BSE.Tunes.StoreApp.Services
                 this.m_mediaElement = mediaElement;
                 //The property AreTransportControlsEnabled causes in an additional displaying of mediaplayer content.
                 //this.m_mediaElement.AreTransportControlsEnabled = true;
-                this.m_mediaElement.AudioCategory = Windows.UI.Xaml.Media.AudioCategory.BackgroundCapableMedia;
+                //this.m_mediaElement.AudioCategory = Windows.UI.Xaml.Media.AudioCategory.BackgroundCapableMedia;
                 this.m_mediaElement.MediaOpened += OnMediaOpened;
                 this.m_mediaElement.MediaEnded += OnMediaEnded;
                 this.m_mediaElement.MediaFailed += OnMediaFailed;
@@ -224,7 +224,8 @@ namespace BSE.Tunes.StoreApp.Services
                         string strUrl = string.Format("{0}/api/files/audio/{1}", m_dataService.ServiceUrl, guid.ToString());
 
                         this.m_audioStreamDownloader = new AudioStreamDownloader(this.m_dataService);
-                       this.m_audioStreamDownloader.DownloadProgessStarted += OnDownloadProgessStarted;
+                        this.m_audioStreamDownloader.DownloadProgessStarted += OnDownloadProgessStarted;
+                        m_audioStreamDownloader.DownloadComplete += OnDownloadComplete;
                         await m_audioStreamDownloader.DownloadAsync(new Uri(strUrl), guid);
                     }
                 }
@@ -261,7 +262,6 @@ namespace BSE.Tunes.StoreApp.Services
             {
                 await this.m_mediaElement.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
                 {
-                    //Messenger.Default.Send(new BSE.Tunes.StoreApp.Messaging.MediaNextPressedMessage());
                     Messenger.Default.Send(new MediaStateChangedArgs(MediaState.NextPressed));
                 });
             }
@@ -272,7 +272,6 @@ namespace BSE.Tunes.StoreApp.Services
             {
                 await this.m_mediaElement.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
                 {
-                    //Messenger.Default.Send(new BSE.Tunes.StoreApp.Messaging.MediaPreviousPressedMessage());
                     Messenger.Default.Send(new MediaStateChangedArgs(MediaState.PreviosPressed));
                 });
             }
@@ -308,6 +307,10 @@ namespace BSE.Tunes.StoreApp.Services
 
                 this.m_mediaElement.SetMediaStreamSource(this.m_mediaStreamSource);
             }
+        }
+        private void OnDownloadComplete(object sender, EventArgs e)
+        {
+
         }
         /// <summary>
         /// Occurs when the MediaStreamSource is ready to start requesting MediaStreamSample objects.
@@ -459,7 +462,7 @@ namespace BSE.Tunes.StoreApp.Services
             updater.Type = MediaPlaybackType.Music;
             updater.MusicProperties.AlbumArtist = this.CurrentTrack.Album.Artist.Name;
             updater.MusicProperties.Title = this.CurrentTrack.Name;
-            //updater.Thumbnail = Windows.Storage.Streams.RandomAccessStreamReference.CreateFromUri(this.m_dataService.GetImage(this.CurrentTrack.Album.AlbumId, true));
+            updater.Thumbnail = Windows.Storage.Streams.RandomAccessStreamReference.CreateFromUri(this.m_dataService.GetImage(this.CurrentTrack.Album.AlbumId, true));
             updater.Update();
 
             this.m_mediaControls.IsPlayEnabled = true;
@@ -470,7 +473,7 @@ namespace BSE.Tunes.StoreApp.Services
         }
         private void OnMediaEnded(object sender, Windows.UI.Xaml.RoutedEventArgs e)
         {
-            //Messenger.Default.Send(new BSE.Tunes.StoreApp.Messaging.MediaEndedMessage());
+            Messenger.Default.Send(new MediaStateChangedArgs(MediaState.Ended));
         }
         #endregion
     }

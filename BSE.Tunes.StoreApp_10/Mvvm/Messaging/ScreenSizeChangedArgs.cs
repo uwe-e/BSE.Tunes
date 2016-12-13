@@ -7,13 +7,13 @@ using System.Threading.Tasks;
 
 namespace BSE.Tunes.StoreApp.Mvvm.Messaging
 {
-    public class ScreenChangedArgs : MessageBase
+    public class ScreenSizeChangedArgs : MessageBase
     {
         public bool IsFullScreen
         {
             get; set;
         }
-        public ScreenChangedArgs(bool isFullScreen)
+        public ScreenSizeChangedArgs(bool isFullScreen)
         {
             IsFullScreen = isFullScreen;
         }

@@ -22,7 +22,7 @@ namespace BSE.Tunes.StoreApp.IO
 		/// <returns>The main storage folder.</returns>
 		public static async Task<StorageFolder> GetCacheFolderAsync()
 		{
-			return await ApplicationData.Current.LocalFolder.CreateFolderAsync(CacheFolderName, CreationCollisionOption.OpenIfExists);
+			return await ApplicationData.Current.TemporaryFolder.CreateFolderAsync(CacheFolderName, CreationCollisionOption.OpenIfExists);
 		}
 		/// <summary>
 		/// Gets the images storage folder.
@@ -51,6 +51,33 @@ namespace BSE.Tunes.StoreApp.IO
 			var storageFolder = await GetTempFolderAsync();
 			await storageFolder.DeleteAsync();
 		}
-		#endregion
-	}
+        public static async Task ReleaseCacheAsync(ulong maxFileSize = 50000000)
+        {
+            IStorageFolder storageFolder = await LocalStorage.GetTempFolderAsync();
+            System.Collections.Generic.IReadOnlyList<StorageFile> fileList = await storageFolder.GetFilesAsync();
+            ulong totalFileSize = 0;
+            //order the files
+            List<StorageFile> files = fileList?.OrderBy(itm => itm.DateCreated).ToList();
+            //get the total size of all files
+            foreach (StorageFile file in files)
+            {
+                totalFileSize += (await file.GetBasicPropertiesAsync()).Size;
+            }
+
+            if (totalFileSize > maxFileSize)
+            {
+                for (int i = 0; i < files.Count; i++)
+                {
+                    if (totalFileSize < maxFileSize)
+                    {
+                        break;
+                    }
+                    var storageFile = files[i];
+                    totalFileSize -= (await storageFile.GetBasicPropertiesAsync()).Size;
+                    await storageFile.DeleteAsync(StorageDeleteOption.PermanentDelete);
+                }
+            }
+        }
+        #endregion
+    }
 }

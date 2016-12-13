@@ -86,7 +86,7 @@ namespace BSE.Tunes.StoreApp.Services
             {
                 m_settingsHelper.Write(nameof(IsFullScreen), value);
                 Views.Shell.HamburgerMenu.IsFullScreen = value;
-                Messenger.Default.Send(new ScreenChangedArgs(value));
+                Messenger.Default.Send(new ScreenSizeChangedArgs(value));
             }
         }
         /// <summary>

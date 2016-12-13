@@ -1,10 +1,7 @@
-<?xml version="1.0" encoding="utf-8"?>
-<Package xmlns="http://schemas.microsoft.com/appx/manifest/foundation/windows10" xmlns:mp="http://schemas.microsoft.com/appx/2014/phone/manifest" xmlns:uap="http://schemas.microsoft.com/appx/manifest/uap/windows10" IgnorableNamespaces="uap mp">
-  <Identity
-    Name="f522c5bd-cd5c-4446-9c74-65c8ae3915df"
-    Publisher = "CN=uwe"
-    Version = "1.0.0.0" /> 
-  <mp:PhoneIdentity PhoneProductId="f522c5bd-cd5c-4446-9c74-65c8ae3915df" PhonePublisherId="00000000-0000-0000-0000-000000000000"/>
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Package xmlns="http://schemas.microsoft.com/appx/manifest/foundation/windows10" xmlns:mp="http://schemas.microsoft.com/appx/2014/phone/manifest" xmlns:uap="http://schemas.microsoft.com/appx/manifest/uap/windows10" xmlns:uap3="http://schemas.microsoft.com/appx/manifest/uap/windows10/3" IgnorableNamespaces="uap mp uap3">
+  <Identity Name="f522c5bd-cd5c-4446-9c74-65c8ae3915df" Publisher="CN=uwe" Version="1.0.0.0" />
+  <mp:PhoneIdentity PhoneProductId="f522c5bd-cd5c-4446-9c74-65c8ae3915df" PhonePublisherId="00000000-0000-0000-0000-000000000000" />
   <Properties>
     <DisplayName>BSE.Tunes.StoreApp</DisplayName>
     <PublisherDisplayName>uwe</PublisherDisplayName>
@@ -18,7 +15,7 @@
   </Resources>
   <Applications>
     <Application Id="App" Executable="$targetnametoken$.exe" EntryPoint="BSE.Tunes.StoreApp.App">
-      <uap:VisualElements DisplayName="BSE.Tunes.StoreApp.App" Square150x150Logo="Assets\Square150x150Logo.png" Square44x44Logo="Assets\Square44x44Logo.png" Description="Sample" BackgroundColor="transparent">
+      <uap:VisualElements DisplayName="BSEtunes" Square150x150Logo="Assets\Square150x150Logo.png" Square44x44Logo="Assets\Square44x44Logo.png" Description="Sample" BackgroundColor="transparent">
         <uap:DefaultTile Wide310x150Logo="Assets\Wide310x150Logo.png">
         </uap:DefaultTile>
         <uap:SplashScreen Image="Assets\SplashScreen.png" />
@@ -28,5 +25,6 @@
   <Capabilities>
     <Capability Name="internetClient" />
     <uap:Capability Name="userAccountInformation" />
+    <uap3:Capability Name="backgroundMediaPlayback" />
   </Capabilities>
 </Package>
