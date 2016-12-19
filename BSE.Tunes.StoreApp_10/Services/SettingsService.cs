@@ -16,40 +16,17 @@ namespace BSE.Tunes.StoreApp.Services
         {
             m_settingsHelper = new Template10.Services.SettingsService.SettingsHelper();
         }
-
-        public bool UseShellBackButton
+        public bool UseLightTheme
         {
             get
             {
-                return m_settingsHelper.Read<bool>(nameof(UseShellBackButton), true);
+                return m_settingsHelper.Read<bool>(nameof(UseLightTheme), false);
             }
             set
             {
-                m_settingsHelper.Write(nameof(UseShellBackButton), value);
-                BootStrapper.Current.NavigationService.GetDispatcherWrapper().Dispatch(() =>
-                {
-                    BootStrapper.Current.ShowShellBackButton = value;
-                    BootStrapper.Current.UpdateShellBackButton();
-                });
+                m_settingsHelper.Write(nameof(UseLightTheme), value);
             }
         }
-
-        public ApplicationTheme AppTheme
-        {
-            get
-            {
-                var theme = ApplicationTheme.Light;
-                var value = m_settingsHelper.Read<string>(nameof(AppTheme), theme.ToString());
-                return Enum.TryParse<ApplicationTheme>(value, out theme) ? theme : ApplicationTheme.Dark;
-            }
-            set
-            {
-                m_settingsHelper.Write(nameof(AppTheme), value.ToString());
-                (Window.Current.Content as FrameworkElement).RequestedTheme = value.ToElementTheme();
-                Views.Shell.HamburgerMenu.RefreshStyles(value, true);
-            }
-        }
-
         public TimeSpan CacheMaxDuration
         {
             get
@@ -62,20 +39,6 @@ namespace BSE.Tunes.StoreApp.Services
                 BootStrapper.Current.CacheMaxDuration = value;
             }
         }
-
-        public bool ShowHamburgerButton
-        {
-            get
-            {
-                return m_settingsHelper.Read<bool>(nameof(ShowHamburgerButton), true);
-            }
-            set
-            {
-                m_settingsHelper.Write(nameof(ShowHamburgerButton), value);
-                Views.Shell.HamburgerMenu.HamburgerButtonVisibility = value ? Visibility.Visible : Visibility.Collapsed;
-            }
-        }
-
         public bool IsFullScreen
         {
             get

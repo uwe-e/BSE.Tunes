@@ -11,6 +11,7 @@ using Windows.UI.Xaml.Controls;
 using Microsoft.Practices.ServiceLocation;
 using BSE.Tunes.StoreApp.Models;
 using BSE.Tunes.StoreApp.IO;
+using Windows.UI.ViewManagement;
 
 namespace BSE.Tunes.StoreApp
 {
@@ -32,9 +33,8 @@ namespace BSE.Tunes.StoreApp
 
             // some settings must be set in app.constructor
             m_settingsService = SettingsService.Instance;
-            RequestedTheme = m_settingsService.AppTheme;
+            RequestedTheme = m_settingsService.UseLightTheme ? ApplicationTheme.Light : ApplicationTheme.Dark;
             CacheMaxDuration = m_settingsService.CacheMaxDuration;
-            ShowShellBackButton = m_settingsService.UseShellBackButton;
             AutoSuspendAllFrames = true;
             AutoRestoreAfterTerminated = true;
             AutoExtendExecutionSession = true;
@@ -57,11 +57,28 @@ namespace BSE.Tunes.StoreApp
 
         public override async Task OnStartAsync(StartKind startKind, IActivatedEventArgs args)
         {
+            if (Windows.Foundation.Metadata.ApiInformation.IsTypePresent("Windows.UI.ViewManagement.ApplicationView"))
+            {
+                var titleBar = ApplicationView.GetForCurrentView().TitleBar;
+                if (titleBar != null)
+                {
+                    titleBar.ButtonBackgroundColor = (Windows.UI.Color)Current.Resources["SystemAltHighColor"];
+                    titleBar.ButtonForegroundColor = (Windows.UI.Color)Current.Resources["SystemBaseHighColor"];
+                    titleBar.ButtonHoverBackgroundColor = (Windows.UI.Color)Current.Resources["SystemChromeMediumLowColor"];
+                    titleBar.ButtonHoverForegroundColor = (Windows.UI.Color)Current.Resources["SystemAccentColor"];
+                    titleBar.BackgroundColor = (Windows.UI.Color)Current.Resources["SystemAltHighColor"];
+                    titleBar.ForegroundColor = (Windows.UI.Color)Current.Resources["SystemBaseHighColor"];
+                }
+            }
             if (Windows.Foundation.Metadata.ApiInformation.IsTypePresent("Windows.UI.ViewManagement.StatusBar"))
             {
-                Windows.UI.ViewManagement.StatusBar.GetForCurrentView().BackgroundColor = Windows.UI.Color.FromArgb(100, 230, 74, 25);
-                Windows.UI.ViewManagement.StatusBar.GetForCurrentView().BackgroundOpacity = 1;
-                Windows.UI.ViewManagement.StatusBar.GetForCurrentView().ForegroundColor = Windows.UI.Colors.White;
+                var statusBar = StatusBar.GetForCurrentView();
+                if (statusBar != null)
+                {
+                    statusBar.BackgroundColor = (Windows.UI.Color)Current.Resources["SystemChromeLowColor"];
+                    statusBar.BackgroundOpacity = 1;
+                    statusBar.ForegroundColor = (Windows.UI.Color)Current.Resources["SystemBaseHighColor"];
+                }
             }
             IDataService dataService = ServiceLocator.Current.GetInstance<IDataService>();
             Task<bool> isAccessibleTask = Task.Run(async () => await dataService.IsHostAccessible());

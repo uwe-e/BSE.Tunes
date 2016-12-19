@@ -16,8 +16,12 @@ namespace BSE.Tunes.StoreApp.ViewModels
 
     public class SettingsPartViewModel : ViewModelBase
     {
+        #region FieldsPrivate
         SettingsService m_settings;
+        private bool m_themeSelectionHasChanged;
+        #endregion
 
+        #region Properties
         public SettingsPartViewModel()
         {
             if (Windows.ApplicationModel.DesignMode.DesignModeEnabled)
@@ -27,19 +31,6 @@ namespace BSE.Tunes.StoreApp.ViewModels
             else
             {
                 m_settings = SettingsService.Instance;
-            }
-        }
-
-        public bool ShowHamburgerButton
-        {
-            get
-            {
-                return m_settings.ShowHamburgerButton;
-            }
-            set
-            {
-                m_settings.ShowHamburgerButton = value;
-                base.RaisePropertyChanged();
             }
         }
 
@@ -53,67 +44,51 @@ namespace BSE.Tunes.StoreApp.ViewModels
             {
                 m_settings.IsFullScreen = value;
                 base.RaisePropertyChanged();
-                if (value)
-                {
-                    ShowHamburgerButton = false;
-                }
-                else
-                {
-                    ShowHamburgerButton = true;
-                }
             }
         }
 
-        public bool UseShellBackButton
+        public bool ThemeSelectionHasChanged
         {
             get
             {
-                return m_settings.UseShellBackButton;
+                return m_themeSelectionHasChanged;
             }
             set
             {
-                m_settings.UseShellBackButton = value;
+                m_themeSelectionHasChanged = value;
                 base.RaisePropertyChanged();
             }
         }
 
-        public bool UseLightThemeButton
+        public bool UseLightTheme
         {
             get
             {
-                return m_settings.AppTheme.Equals(ApplicationTheme.Light);
+                return m_settings.UseLightTheme;
             }
             set
             {
-                m_settings.AppTheme = value ? ApplicationTheme.Light : ApplicationTheme.Dark;
+                m_settings.UseLightTheme = value;
+                ThemeSelectionHasChanged = true;
                 base.RaisePropertyChanged();
             }
         }
 
-        private string _BusyText = "Please wait...";
-        public string BusyText
+        public bool UseDarkTheme
         {
             get
             {
-                return _BusyText;
+                return !UseLightTheme;
             }
             set
             {
-                Set(ref _BusyText, value);
-                _ShowBusyCommand.RaiseCanExecuteChanged();
+                UseLightTheme = !value;
             }
         }
-
-        RelayCommand _ShowBusyCommand;
-        public RelayCommand ShowBusyCommand
-            => _ShowBusyCommand ?? (_ShowBusyCommand = new RelayCommand(async () =>
-            {
-                Views.Busy.SetBusy(true, _BusyText);
-                await Task.Delay(5000);
-                Views.Busy.SetBusy(false);
-            }, () => !string.IsNullOrEmpty(BusyText)));
+        #endregion
+       
     }
-
+    
     public class AboutPartViewModel : ViewModelBase
     {
         public Uri Logo => Windows.ApplicationModel.Package.Current.Logo;

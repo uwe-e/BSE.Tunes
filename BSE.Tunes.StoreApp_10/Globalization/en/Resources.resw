@@ -192,4 +192,10 @@ A registration can only be done by the operator of the server.</value>
   <data name="SignOutSettingsPage_TxtAcountDescription.Text" xml:space="preserve">
     <value>Your account</value>
   </data>
+  <data name="SettingsPage_TxtModeChangedMessage.Text" xml:space="preserve">
+    <value>You'll see your change the next time you start the app</value>
+  </data>
+  <data name="SettingsPage_TxtModeTitle.Text" xml:space="preserve">
+    <value>Mode</value>
+  </data>
 </root>

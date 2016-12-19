@@ -79,7 +79,7 @@ namespace BSE.Tunes.StoreApp.Services
         private bool m_canExecutePreviousTrack;
         private TimeSpan m_playerNaturalDuration = new TimeSpan(0);
         private TimeSpan m_playerPosition;
-        private SystemMediaTransportControls m_mediaControls;
+        private SystemMediaTransportControls m_systemMediaControls;
 
         private AudioStreamDownloader m_audioStreamDownloader;
         private MediaStreamSource m_mediaStreamSource;
@@ -167,9 +167,9 @@ namespace BSE.Tunes.StoreApp.Services
             //m_settingsService = SettingsService.Instance;
             this.m_accountService = accountService;
 
-            this.m_mediaControls = SystemMediaTransportControls.GetForCurrentView();
-            this.m_mediaControls.IsEnabled = false;
-            this.m_mediaControls.ButtonPressed += (sender, args) =>
+            this.m_systemMediaControls = SystemMediaTransportControls.GetForCurrentView();
+            this.m_systemMediaControls.IsEnabled = false;
+            this.m_systemMediaControls.ButtonPressed += (sender, args) =>
             {
                 switch (args.Button)
                 {
@@ -190,10 +190,10 @@ namespace BSE.Tunes.StoreApp.Services
                         break;
                 }
             };
-            this.m_mediaControls.IsPlayEnabled = true;
-            this.m_mediaControls.IsPauseEnabled = true;
-            this.m_mediaControls.IsStopEnabled = true;
-            this.m_mediaControls.PlaybackStatus = MediaPlaybackStatus.Closed;
+            this.m_systemMediaControls.IsPlayEnabled = true;
+            this.m_systemMediaControls.IsPauseEnabled = true;
+            this.m_systemMediaControls.IsStopEnabled = true;
+            this.m_systemMediaControls.PlaybackStatus = MediaPlaybackStatus.Closed;
         }
 
         public void RegisterAsMediaService(MediaElement mediaElement)
@@ -203,7 +203,8 @@ namespace BSE.Tunes.StoreApp.Services
                 this.m_mediaElement = mediaElement;
                 //The property AreTransportControlsEnabled causes in an additional displaying of mediaplayer content.
                 //this.m_mediaElement.AreTransportControlsEnabled = true;
-                //this.m_mediaElement.AudioCategory = Windows.UI.Xaml.Media.AudioCategory.BackgroundCapableMedia;
+
+                this.m_mediaElement.AudioCategory = Windows.UI.Xaml.Media.AudioCategory.BackgroundCapableMedia;
                 this.m_mediaElement.MediaOpened += OnMediaOpened;
                 this.m_mediaElement.MediaEnded += OnMediaEnded;
                 this.m_mediaElement.MediaFailed += OnMediaFailed;
@@ -428,21 +429,21 @@ namespace BSE.Tunes.StoreApp.Services
                     break;
                 case Windows.UI.Xaml.Media.MediaElementState.Paused:
                     this.CurrentState = PlayerState.Paused;
-                    this.m_mediaControls.PlaybackStatus = MediaPlaybackStatus.Paused;
+                    this.m_systemMediaControls.PlaybackStatus = MediaPlaybackStatus.Paused;
                     break;
                 case Windows.UI.Xaml.Media.MediaElementState.Playing:
                     this.CurrentState = PlayerState.Playing;
-                    this.m_mediaControls.PlaybackStatus = MediaPlaybackStatus.Playing;
-                    this.m_mediaControls.IsNextEnabled = this.CanExecuteNextTrack;
-                    this.m_mediaControls.IsPreviousEnabled = this.CanExecutePreviousTrack;
+                    this.m_systemMediaControls.PlaybackStatus = MediaPlaybackStatus.Playing;
+                    this.m_systemMediaControls.IsNextEnabled = this.CanExecuteNextTrack;
+                    this.m_systemMediaControls.IsPreviousEnabled = this.CanExecutePreviousTrack;
                     break;
                 case Windows.UI.Xaml.Media.MediaElementState.Stopped:
                     this.CurrentState = PlayerState.Stopped;
-                    this.m_mediaControls.PlaybackStatus = MediaPlaybackStatus.Stopped;
+                    this.m_systemMediaControls.PlaybackStatus = MediaPlaybackStatus.Stopped;
                     break;
                 default:
                     this.CurrentState = PlayerState.Closed;
-                    this.m_mediaControls.PlaybackStatus = MediaPlaybackStatus.Closed;
+                    this.m_systemMediaControls.PlaybackStatus = MediaPlaybackStatus.Closed;
                     break;
             }
             Messenger.Default.Send(new Mvvm.Messaging.PlayerStateChangedArgs(this.CurrentState));
@@ -456,19 +457,21 @@ namespace BSE.Tunes.StoreApp.Services
         {
             this.m_playerNaturalDuration = this.m_mediaElement.NaturalDuration.TimeSpan;
             this.m_playerPosition = new TimeSpan();
-            this.m_mediaControls.IsEnabled = true;
+            this.m_systemMediaControls.IsEnabled = true;
 
-            SystemMediaTransportControlsDisplayUpdater updater = this.m_mediaControls.DisplayUpdater;
+            SystemMediaTransportControlsDisplayUpdater updater = this.m_systemMediaControls.DisplayUpdater;
             updater.Type = MediaPlaybackType.Music;
+            updater.MusicProperties.Artist = this.CurrentTrack.Album.Artist.Name;
             updater.MusicProperties.AlbumArtist = this.CurrentTrack.Album.Artist.Name;
+            updater.MusicProperties.AlbumTitle = this.CurrentTrack.Album.Title;
             updater.MusicProperties.Title = this.CurrentTrack.Name;
             updater.Thumbnail = Windows.Storage.Streams.RandomAccessStreamReference.CreateFromUri(this.m_dataService.GetImage(this.CurrentTrack.Album.AlbumId, true));
             updater.Update();
 
-            this.m_mediaControls.IsPlayEnabled = true;
-            this.m_mediaControls.IsPauseEnabled = true;
-            this.m_mediaControls.IsNextEnabled = false;
-            this.m_mediaControls.IsPreviousEnabled = false;
+            this.m_systemMediaControls.IsPlayEnabled = true;
+            this.m_systemMediaControls.IsPauseEnabled = true;
+            this.m_systemMediaControls.IsNextEnabled = false;
+            this.m_systemMediaControls.IsPreviousEnabled = false;
             Messenger.Default.Send(new MediaStateChangedArgs(MediaState.Opened));
         }
         private void OnMediaEnded(object sender, Windows.UI.Xaml.RoutedEventArgs e)

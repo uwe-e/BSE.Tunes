@@ -36,9 +36,9 @@ namespace BSE.Tunes.StoreApp.Views
         public void SetNavigationService(Template10.Services.NavigationService.INavigationService navigationService)
         {
             MyHamburgerMenu.NavigationService = navigationService;
-            HamburgerMenu.RefreshStyles(m_settings.AppTheme, true);
+            //HamburgerMenu.RefreshStyles(m_settings.AppTheme, true);
             HamburgerMenu.IsFullScreen = m_settings.IsFullScreen;
-            HamburgerMenu.HamburgerButtonVisibility = m_settings.ShowHamburgerButton ? Visibility.Visible : Visibility.Collapsed;
+            //HamburgerMenu.HamburgerButtonVisibility = m_settings.ShowHamburgerButton ? Visibility.Visible : Visibility.Collapsed;
         }
     }
 }

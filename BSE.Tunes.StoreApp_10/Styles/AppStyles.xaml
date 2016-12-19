@@ -3,11 +3,14 @@
                     xmlns:converter="using:BSE.Tunes.StoreApp.Converters"
                     xmlns:services="using:BSE.Tunes.StoreApp.Services"
                     xmlns:controls="using:BSE.Tunes.StoreApp.Controls"
+                    xmlns:template10="using:Template10.Controls"
                     xmlns:views="using:BSE.Tunes.StoreApp.Views">
+    
+    
     
     <!-- The global converters --> 
     <converter:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
-    
+
     <!--
     RootFrameStyle is used as a style extension for the frame pages. This extension hosts the mediaelement
     as source for the player service.
@@ -24,6 +27,7 @@
             </Setter.Value>
         </Setter>
     </Style>
+    
 
     <!--
         AppBarButtonStyle is used to style a Button (or ToggleButton) for use in an App Bar.  Content will be centered 
@@ -258,6 +262,62 @@
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
+    </Style>
+
+    
+    <Color x:Key="TitleBarBackground">#FFF2F2F2</Color>
+    <Color x:Key="TitleBarForeground">#FF000000</Color>
+    
+    <x:Double x:Key="NarrowMinWidth">0</x:Double>
+    <x:Double x:Key="NormalMinWidth">521</x:Double>
+    <x:Double x:Key="WideMinWidth">1200</x:Double>
+
+    <!-- Part Template10 Hamburger Menu-->
+    <SolidColorBrush x:Key="NavAreaBackgroundThemeBrush" Color="{StaticResource NavAreaBackground}"/>
+    <SolidColorBrush x:Key="HamburgerBackgroundThemeBrush" Color="{StaticResource HamburgerBackground}"/>
+    <SolidColorBrush x:Key="HamburgerForegroundThemeBrush" Color="{StaticResource HamburgerForeground}"/>
+    <SolidColorBrush x:Key="NavButtonBackgroundThemeBrush" Color="{StaticResource NavButtonBackground}"/>
+    <SolidColorBrush x:Key="NavButtonForegroundThemeBrush" Color="{StaticResource NavButtonForeground}"/>
+    <SolidColorBrush x:Key="NavButtonHoverBackgroundThemeBrush" Color="{StaticResource NavButtonHoverBackground}"/>
+    <SolidColorBrush x:Key="NavButtonHoverForegroundThemeBrush" Color="{StaticResource NavButtonHoverForeground}"/>
+    <SolidColorBrush x:Key="NavButtonCheckedIndicatorThemeBrush" Color="{ThemeResource SystemAccentColor}"/>
+    <SolidColorBrush x:Key="NavButtonCheckedBackgroundThemeBrush" Color="{StaticResource NavButtonCheckedBackground}"/>
+    <SolidColorBrush x:Key="NavButtonCheckedForegroundThemeBrush" Color="{ThemeResource SystemAccentColor}"/>
+    <SolidColorBrush x:Key="NavButtonPressedBackgroundThemeBrush" Color="{StaticResource NavButtonPressedBackground}"/>
+    <SolidColorBrush x:Key="NavButtonPressedForegroundThemeBrush" Color="{StaticResource NavButtonPressedForeground}"/>
+
+    <Style TargetType="template10:HamburgerMenu">
+        <Setter Property="HamburgerBackground" Value="{StaticResource HamburgerBackgroundThemeBrush}" />
+        <Setter Property="HamburgerForeground" Value="{StaticResource HamburgerForegroundThemeBrush}" />
+        <Setter Property="NavAreaBackground" Value="{StaticResource NavAreaBackgroundThemeBrush}" />
+        <Setter Property="NavButtonForeground" Value="{StaticResource NavButtonForegroundThemeBrush}" />
+        <Setter Property="NavButtonBackground" Value="{StaticResource NavButtonBackgroundThemeBrush}" />
+        <Setter Property="NavButtonHoverForeground" Value="{StaticResource NavButtonHoverForegroundThemeBrush}" />
+        <Setter Property="NavButtonHoverBackground" Value="{StaticResource NavButtonHoverBackgroundThemeBrush}" />
+        <Setter Property="NavButtonPressedForeground" Value="{StaticResource NavButtonPressedForegroundThemeBrush}" />
+        <Setter Property="NavButtonPressedBackground" Value="{StaticResource NavButtonPressedBackgroundThemeBrush}" />
+        <Setter Property="NavButtonCheckedForeground" Value="{StaticResource NavButtonCheckedForegroundThemeBrush}" />
+        <Setter Property="NavButtonCheckedBackground" Value="{StaticResource NavButtonCheckedBackgroundThemeBrush}" />
+        <Setter Property="NavButtonCheckedIndicatorBrush" Value="{StaticResource NavButtonCheckedIndicatorThemeBrush}" />
+
+        
+                <!--Windows 10 2015 (1511) Hamburger Menu Style
+                Simply replace your color and brush properties with the AccentColor.
+        <Setter Property="AccentColor" Value="{StaticResource CustomColor}" />-->
+        
+        
+        
+        <Setter Property="VisualStateNarrowMinWidth" Value="{StaticResource NarrowMinWidth}" />
+        <Setter Property="VisualStateNormalMinWidth" Value="{StaticResource NormalMinWidth}" />
+        <Setter Property="VisualStateWideMinWidth" Value="{StaticResource WideMinWidth}" />
+    </Style>
+
+    <!--- Part Template10 PageHeader-->
+    <Style TargetType="template10:PageHeader">
+        <Setter Property="Background" Value="{StaticResource PageHeaderBackground}" />
+        <Setter Property="Foreground" Value="{StaticResource PageHeaderForeground}" />
+        <Setter Property="VisualStateNarrowMinWidth" Value="{StaticResource NarrowMinWidth}" />
+        <Setter Property="VisualStateNormalMinWidth" Value="{StaticResource NormalMinWidth}" />
     </Style>
 
 </ResourceDictionary>
