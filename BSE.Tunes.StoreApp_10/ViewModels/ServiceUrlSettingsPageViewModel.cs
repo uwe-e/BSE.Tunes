@@ -16,7 +16,6 @@ namespace BSE.Tunes.StoreApp.ViewModels
         #region FieldsPrivate
         private SettingsService m_settingsService;
         private IDialogService m_dialogSService;
-        private IDataService m_dataService;
         private IAuthenticationService m_authenticationHandler;
         private ICommand m_removeUrlCommand;
         private string m_strServiceUrl;
@@ -43,7 +42,6 @@ namespace BSE.Tunes.StoreApp.ViewModels
             {
                 m_settingsService = SettingsService.Instance;
                 m_dialogSService = DialogService.Instance;
-                m_dataService = DataService.Instance;
                 m_authenticationHandler = AuthenticationService.Instance;
                 ServiceUrl = m_settingsService.ServiceUrl;
             }

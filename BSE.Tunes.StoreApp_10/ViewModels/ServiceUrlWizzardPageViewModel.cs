@@ -15,7 +15,6 @@ namespace BSE.Tunes.StoreApp.ViewModels
         #region FieldsPrivate
         private SettingsService m_settingsService;
         private IDialogService m_dialogSService;
-        private IDataService m_dataService;
         private IAuthenticationService m_authenticationHandler;
         private RelayCommand m_saveHostCommand;
         private string m_strServiceUrl;
@@ -44,7 +43,6 @@ namespace BSE.Tunes.StoreApp.ViewModels
             {
                 m_settingsService = SettingsService.Instance;
                 m_dialogSService = DialogService.Instance;
-                m_dataService = DataService.Instance;
                 m_authenticationHandler = AuthenticationService.Instance;
                 ServiceUrl = m_settingsService.ServiceUrl;
             }
@@ -64,7 +62,7 @@ namespace BSE.Tunes.StoreApp.ViewModels
                     serviceUrl = uriBuilder.Uri.AbsoluteUri;
                 }
 
-                await this.m_dataService.IsHostAccessible(serviceUrl);
+                await DataService.IsHostAccessible(serviceUrl);
                 m_settingsService.ServiceUrl = serviceUrl;
                 User user = await m_authenticationHandler.VerifyUserAuthenticationAsync();
                 if (user == null)

@@ -22,6 +22,7 @@ namespace BSE.Tunes.StoreApp.Services
         Task<bool> IsHostAccessible(string serviceUrl);
         Uri GetImage(Guid imageId, bool asThumbnail = false);
         Task<HttpClient> GetHttpClient(bool withRefreshToken = true);
+        Task<ObservableCollection<Album>> GetNewestAlbums(int limit);
         Task<Track> GetTrackById(int trackId);
         Task<ObservableCollection<int>> GetTrackIdsByFilters(Filter filter);
     }

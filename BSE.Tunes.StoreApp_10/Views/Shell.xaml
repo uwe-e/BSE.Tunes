@@ -28,7 +28,7 @@
                                 Symbol="ViewAll" />-->
                         <FontIcon Width="48"
                                   Height="48"
-                                  Glyph="&#xE713;"/>
+                                  Glyph="&#xE80F;"/>
                         <TextBlock Margin="12,0,0,0"
                                VerticalAlignment="Center"
                                Text="Explore" />

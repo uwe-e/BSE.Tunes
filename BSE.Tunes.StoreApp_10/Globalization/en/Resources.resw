@@ -198,4 +198,7 @@ A registration can only be done by the operator of the server.</value>
   <data name="SettingsPage_TxtModeTitle.Text" xml:space="preserve">
     <value>Mode</value>
   </data>
+  <data name="AlbumSection_SectionHeader.Text" xml:space="preserve">
+    <value>New Albums</value>
+  </data>
 </root>

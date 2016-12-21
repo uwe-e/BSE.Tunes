@@ -98,6 +98,9 @@
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Controls\AlbumSection.xaml.cs">
+      <DependentUpon>AlbumSection.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Controls\PlayerBar.xaml.cs">
       <DependentUpon>PlayerBar.xaml</DependentUpon>
     </Compile>
@@ -139,6 +142,9 @@
     <Compile Include="Services\ResourceService.cs" />
     <Compile Include="Services\SettingsService.cs" />
     <Compile Include="Converters\BooleanToVisibilityConverter.cs" />
+    <Compile Include="ViewModels\AlbumSectionViewModel.cs" />
+    <Compile Include="ViewModels\ItemsGroupViewModel.cs" />
+    <Compile Include="ViewModels\ItemViewModel.cs" />
     <Compile Include="ViewModels\SignOutSettingsPageViewModel.cs" />
     <Compile Include="ViewModels\SystemSettingsItemViewModel.cs" />
     <Compile Include="ViewModels\SignOutSettingsItemViewModel.cs" />
@@ -218,6 +224,10 @@
     </ApplicationDefinition>
   </ItemGroup>
   <ItemGroup>
+    <Page Include="Controls\AlbumSection.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Controls\PlayerBar.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

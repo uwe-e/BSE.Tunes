@@ -51,5 +51,13 @@ namespace BSE.Tunes.StoreApp.Mvvm
                 return BSE.Tunes.StoreApp.Services.ResourceService.Instance;
             }
         }
+        [JsonIgnore]
+        public IDataService DataService
+        {
+            get
+            {
+                return BSE.Tunes.StoreApp.Services.DataService.Instance;
+            }
+        }
     }
 }

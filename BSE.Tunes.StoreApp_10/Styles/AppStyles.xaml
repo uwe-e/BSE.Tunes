@@ -264,6 +264,16 @@
         </Setter>
     </Style>
 
+    <Style x:Key="SectionSubtitleTextBlockStyle" TargetType="TextBlock" BasedOn="{StaticResource SubtitleTextBlockStyle}">
+        <Setter Property="FontSize" Value="18"/>
+        <!--<Setter Property="FontWeight" Value="SemiBold"/>-->
+    </Style>
+    
+    <Style x:Key="SectionTextBlockButtonStyle" TargetType="Button" BasedOn="{StaticResource TextBlockButtonStyle}">
+        <Setter Property="FontSize" Value="12"/>
+        <!--<Setter Property="FontWeight" Value="SemiBold"/>-->
+    </Style>
+    
     
     <Color x:Key="TitleBarBackground">#FFF2F2F2</Color>
     <Color x:Key="TitleBarForeground">#FF000000</Color>
@@ -320,4 +330,12 @@
         <Setter Property="VisualStateNormalMinWidth" Value="{StaticResource NormalMinWidth}" />
     </Style>
 
+
+    <DataTemplate x:Key="PictureSmallTemplate">
+        <RelativePanel HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+            <Image x:Name="image" RelativePanel.AlignTopWithPanel="True" RelativePanel.AlignLeftWithPanel="True" RelativePanel.AlignRightWithPanel="True" Stretch="Uniform" Source="{Binding Path=ImageSource}" />
+            <TextBlock RelativePanel.Below="image" Grid.Row="1" Margin="0,4,0,0" Text="{Binding Title}" MaxLines="1" TextTrimming="CharacterEllipsis" FontFamily="Segoe UI Light" FontSize="14" FontWeight="SemiBold" x:Name="title"/>
+            <TextBlock Margin="0,6,0,0" Text="{Binding Subtitle}" FontFamily="Segoe UI Light" FontSize="12" RelativePanel.Below="title" />
+        </RelativePanel>
+    </DataTemplate>
 </ResourceDictionary>

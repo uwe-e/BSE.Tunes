@@ -16,7 +16,6 @@ namespace BSE.Tunes.StoreApp.ViewModels
     {
         #region FieldsPrivate
         private IPlayerManager m_playerManager;
-        private IDataService m_dataService;
         private ObservableCollection<int> m_filteredTrackIds;
         #endregion
 
@@ -39,7 +38,6 @@ namespace BSE.Tunes.StoreApp.ViewModels
         public RandomPlayerViewModel()
         {
             m_playerManager = PlayerManager.Instance;
-            m_dataService = DataService.Instance;
             LoadData();
         }
         #endregion
@@ -47,7 +45,7 @@ namespace BSE.Tunes.StoreApp.ViewModels
         #region MethodsPrivate
         private async void LoadData()
         {
-            ObservableCollection<int> trackIds = await this.m_dataService.GetTrackIdsByFilters(new Filter());
+            ObservableCollection<int> trackIds = await DataService.GetTrackIdsByFilters(new Filter());
             if (trackIds != null)
             {
                 this.FilteredTrackIds = trackIds.ToRandomCollection();
