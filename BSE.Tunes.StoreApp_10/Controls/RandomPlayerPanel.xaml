@@ -15,7 +15,7 @@
     </UserControl.DataContext>
     
     <Grid>
-        <Border Margin="20" Background="#FF005A9E" Padding="20">
+        <Border Margin="20" Background="{ThemeResource SystemAccentColor}" Padding="20">
             <Button Command="{Binding PlayRandomTracksCommand}" >
                 <TextBlock Text="play random"/>
             </Button>

@@ -69,7 +69,11 @@
                        RelativePanel.AlignLeftWithPanel="True"
                        RelativePanel.AlignRightWithPanel="True">
 
-            <Grid x:Name="randomPlayer" RelativePanel.AlignLeftWithPanel="True" RelativePanel.AlignRightWithPanel="True">
+            <Grid MaxHeight="240" x:Name="flipView" RelativePanel.AlignLeftWithPanel="True" RelativePanel.AlignRightWithPanel="True" RelativePanel.AlignTopWithPanel="True" >
+                <usercontrols:FeaturedItems/>
+            </Grid>
+
+            <Grid x:Name="randomPlayer" RelativePanel.AlignLeftWithPanel="True" RelativePanel.AlignRightWithPanel="True" RelativePanel.Below="flipView">
                 <usercontrols:RandomPlayerPanel  />
             </Grid>
 

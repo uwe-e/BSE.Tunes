@@ -98,8 +98,12 @@
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Collections\IncrementalObservableCollection.cs" />
     <Compile Include="Controls\AlbumSection.xaml.cs">
       <DependentUpon>AlbumSection.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\FeaturedItems.xaml.cs">
+      <DependentUpon>FeaturedItems.xaml</DependentUpon>
     </Compile>
     <Compile Include="Controls\PlayerBar.xaml.cs">
       <DependentUpon>PlayerBar.xaml</DependentUpon>
@@ -143,6 +147,7 @@
     <Compile Include="Services\SettingsService.cs" />
     <Compile Include="Converters\BooleanToVisibilityConverter.cs" />
     <Compile Include="ViewModels\AlbumSectionViewModel.cs" />
+    <Compile Include="ViewModels\FeaturedItemsViewModel.cs" />
     <Compile Include="ViewModels\ItemsGroupViewModel.cs" />
     <Compile Include="ViewModels\ItemViewModel.cs" />
     <Compile Include="ViewModels\SignOutSettingsPageViewModel.cs" />
@@ -162,6 +167,9 @@
     <Compile Include="Mvvm\ViewModelBase.cs" />
     <Compile Include="ViewModels\SignInWizzardPageViewModel.cs" />
     <Compile Include="ViewModels\ViewModelLocator.cs" />
+    <Compile Include="Views\AlbumsPage.xaml.cs">
+      <DependentUpon>AlbumsPage.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\Busy.xaml.cs">
       <DependentUpon>Busy.xaml</DependentUpon>
     </Compile>
@@ -228,6 +236,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Controls\FeaturedItems.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Controls\PlayerBar.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -244,6 +256,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Page>
+    <Page Include="Views\AlbumsPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\Busy.xaml">
       <Generator>MSBuild:Compile</Generator>

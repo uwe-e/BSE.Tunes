@@ -23,17 +23,26 @@
                 <!--  mainpage button  -->
                 <Controls:HamburgerButtonInfo ClearHistory="True" PageType="views:MainPage">
                     <StackPanel Orientation="Horizontal">
-                        <!--<SymbolIcon Width="48"
-                                Height="48"
-                                Symbol="ViewAll" />-->
                         <FontIcon Width="48"
                                   Height="48"
-                                  Glyph="&#xE80F;"/>
-                        <TextBlock Margin="12,0,0,0"
+                                  Glyph="&#xE7F6;"/>
+                        <TextBlock x:Uid="Shell_TxtHome" Margin="12,0,0,0"
                                VerticalAlignment="Center"
                                Text="Explore" />
                     </StackPanel>
                 </Controls:HamburgerButtonInfo>
+
+                <Controls:HamburgerButtonInfo ClearHistory="False" PageType="views:AlbumsPage">
+                    <StackPanel Orientation="Horizontal">
+                        <FontIcon Width="48"
+                                  Height="48"
+                                  Glyph="&#xE93C;"/>
+                        <TextBlock x:Uid="Shell_TxtAlbums" Margin="12,0,0,0"
+                               VerticalAlignment="Center"
+                               Text="Albums" />
+                    </StackPanel>
+                </Controls:HamburgerButtonInfo>
+
             </Controls:HamburgerMenu.PrimaryButtons>
 
             <Controls:HamburgerMenu.SecondaryButtons>

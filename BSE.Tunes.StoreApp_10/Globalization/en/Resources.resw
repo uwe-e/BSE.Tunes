@@ -201,4 +201,10 @@ A registration can only be done by the operator of the server.</value>
   <data name="AlbumSection_SectionHeader.Text" xml:space="preserve">
     <value>New Albums</value>
   </data>
+  <data name="Shell_TxtAlbums.Text" xml:space="preserve">
+    <value>Albums</value>
+  </data>
+  <data name="Shell_TxtHome.Text" xml:space="preserve">
+    <value>Your BSEtunes</value>
+  </data>
 </root>
