@@ -17,9 +17,9 @@
 
     <UserControl.Resources>
 
-        <SolidColorBrush x:Key="ControlBackGroundColorBrush" Color="#AA8B8541" />
-        <SolidColorBrush x:Key="ForeGroundColorBrush" Color="White" />
-        <SolidColorBrush x:Key="SliderTrackBackgroundThemeBrush" Color="White" />
+        <SolidColorBrush x:Key="ControlBackGroundColorBrush" Color="{ThemeResource SystemChromeLowColor}" />
+        <SolidColorBrush x:Key="ForeGroundColorBrush" Color="{ThemeResource SystemBaseHighColor}" />
+        <SolidColorBrush x:Key="SliderTrackBackgroundThemeBrush" Color="{ThemeResource SystemBaseHighColor}" />
 
         <Style x:Key="PlayPlayerButtonStyle" TargetType="ButtonBase" BasedOn="{StaticResource PlayerBarButtonStyle}">
             <Setter Property="AutomationProperties.AutomationId" Value="PlayAppBarButton"/>
