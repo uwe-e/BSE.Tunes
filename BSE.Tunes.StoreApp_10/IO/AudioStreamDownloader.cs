@@ -14,6 +14,7 @@ namespace BSE.Tunes.StoreApp.IO
 	{
         #region Events
         public event EventHandler<EventArgs> DownloadComplete;
+        public event EventHandler<EventArgs> PreloadComplete;
         public event EventHandler<EventArgs> DownloadStarting;
 		public event EventHandler<EventArgs> DownloadProgessStarted;
 		#endregion
@@ -27,7 +28,6 @@ namespace BSE.Tunes.StoreApp.IO
 		private Stream m_responseStream;
 		private bool m_isCanceled;
 		private HttpStatusCode m_httpStatusCode;
-		private long m_bytesReceived;
 		private long m_totalBytesToReceive;
 		// Track whether Dispose has been called.
 		private bool m_bDisposed;
@@ -75,7 +75,8 @@ namespace BSE.Tunes.StoreApp.IO
 				throw new ArgumentNullException("source");
 			}
 			this.m_totalBytesToReceive = -1;
-			this.m_bytesReceived = 0;
+            long totalBytesToReceive = -1;
+            long bytesReceived = 0;
 			this.m_isCanceled = false;
 			bool hasDownloadStarted = false;
 			int exceptionAttempt = 0;
@@ -85,95 +86,127 @@ namespace BSE.Tunes.StoreApp.IO
 			{
 				this.OnDownloadStarting();
 				this.m_responseStream = await this.CreateStream(trackId);
-				this.m_bytesReceived = this.m_responseStream.Length;
+				bytesReceived = this.m_responseStream.Length;
 
-				do
-				{
-					if (this.m_isCanceled)
-					{
-						return;
-					}
-					else
-					{
-						if (delayAttempt == 3)
-						{
-							await Task.Delay(10000);
-							delayAttempt = 0;
-						}
-						
-						try
-						{
-							//Initialize a new download
-							if (this.m_totalBytesToReceive == -1)
-							{
-								this.m_totalBytesToReceive = await this.GetFileSizeAsync(source);
-							}
-							if (this.m_bytesReceived.Equals(this.m_totalBytesToReceive))
-							{
-								if (!hasDownloadStarted)
-								{
-									hasDownloadStarted = true;
-									this.OnDownloadProgessStarted();
-								}
-                                OnDownloadComplete();
-							}
-							else
-							{
-								long newTo = this.m_bytesReceived + (ResponseContentBufferSize - 1);
-								int receivedBytes = await this.GetReceivedBytes(this.m_responseStream, source, this.m_bytesReceived, newTo);
-								this.m_bytesReceived += (long)receivedBytes;
-								if (!hasDownloadStarted)
-								{
-									hasDownloadStarted = true;
-									this.OnDownloadProgessStarted();
-								}
-                                if (this.m_bytesReceived.Equals(this.m_totalBytesToReceive))
-                                {
-                                    OnDownloadComplete();
-                                }
-                                exceptionAttempt = 0;
-							}
-						}
-						catch (HttpRequestException httpRequestException)
-						{
-							if (exceptionAttempt == 13)
-							{
-								throw httpRequestException;
-							}
-							//If the used server a windows 8 computer, than we get sometimes a StatusCode 404 exception.
-							//After a few seconds the communication with the server works again
-							if (this.m_httpStatusCode == HttpStatusCode.NotFound)
-							{
-								delayAttempt += 1;
-							}
-							exceptionAttempt += 1;
-						}
-						catch (Exception)
-						{
-							throw;
-						}
-						continue;
-					}
-				}
-				while (this.m_bytesReceived != this.m_totalBytesToReceive);
-			}
+                do
+                {
+                    if (this.m_isCanceled)
+                    {
+                        return;
+                    }
+                    if (delayAttempt == 3)
+                    {
+                        await Task.Delay(10000);
+                        delayAttempt = 0;
+                    }
+
+                    try
+                    {
+                        //When a track was preloaded or comes from the cache
+                        if (bytesReceived > 0 && totalBytesToReceive == -1)
+                        {
+                            m_totalBytesToReceive = bytesReceived;
+                            hasDownloadStarted = true;
+                            this.OnDownloadProgessStarted();
+                        }
+
+                        //Initialize a new download
+                        if (totalBytesToReceive == -1)
+                        {
+                            this.m_totalBytesToReceive = await this.GetFileSizeAsync(source);
+                            totalBytesToReceive = this.m_totalBytesToReceive;
+                        }
+
+                        if (bytesReceived < this.m_totalBytesToReceive)
+                        {
+                            long newTo = bytesReceived + (ResponseContentBufferSize - 1);
+                            int receivedBytes = await this.GetReceivedBytes(this.m_responseStream, source, bytesReceived, newTo);
+                            bytesReceived += (long)receivedBytes;
+                            if (!hasDownloadStarted)
+                            {
+                                hasDownloadStarted = true;
+                                this.OnDownloadProgessStarted();
+                            }
+                            exceptionAttempt = 0;
+                        }
+                    }
+                    catch (HttpRequestException httpRequestException)
+                    {
+                        if (exceptionAttempt == 13)
+                        {
+                            throw httpRequestException;
+                        }
+                        //If the used server a windows 8 computer, than we get sometimes a StatusCode 404 exception.
+                        //After a few seconds the communication with the server works again
+                        if (this.m_httpStatusCode == HttpStatusCode.NotFound)
+                        {
+                            delayAttempt += 1;
+                        }
+                        exceptionAttempt += 1;
+                    }
+                    catch (Exception)
+                    {
+                        throw;
+                    }
+                    continue;
+                }
+                while (bytesReceived != this.m_totalBytesToReceive);
+                OnDownloadComplete();
+            }
 			catch (HttpRequestException httpRequestException)
 			{
 				throw httpRequestException;
 			}
-			catch (UnauthorizedAccessException unauthorizedAccessException)
-			{
-
-			}
-			catch (Exception exception)
+			catch (Exception)
 			{
 			}
 		}
-		public virtual void Close()
+        public async Task PreloadAsync(Uri source, Guid trackId)
+        {
+            this.m_isCanceled = false;
+            try
+            {
+                long totalFileSize = 0;
+                long maxFileSize = 3 * ResponseContentBufferSize;
+                var responseStream = await this.CreateStream(trackId);
+                var bytesReceived = responseStream.Length;
+                do
+                {
+                    if (this.m_isCanceled)
+                    {
+                        return;
+                    }
+                    if (totalFileSize == 0)
+                    {
+                        totalFileSize = await this.GetFileSizeAsync(source);
+                        if (totalFileSize < maxFileSize)
+                        {
+                            maxFileSize = totalFileSize;
+                        }
+                    }
+                    if (bytesReceived < maxFileSize)
+                    {
+                        long newTo = bytesReceived + (ResponseContentBufferSize - 1);
+                        int receivedBytes = await this.GetReceivedBytes(responseStream, source, bytesReceived, newTo);
+                        bytesReceived += (long)receivedBytes;
+                    }
+                }
+                while (bytesReceived != maxFileSize);
+                OnPreloadComplete();
+            }
+            catch (Exception)
+            {
+            }
+        }
+        public virtual void Close()
 		{
 			this.m_isCanceled = true;
 			this.m_responseStream = null;
 		}
+        public virtual void Cancel()
+        {
+            this.m_isCanceled = true;
+        }
 		#endregion
 
 		#region MethodsProtected
@@ -224,6 +257,13 @@ namespace BSE.Tunes.StoreApp.IO
 				this.DownloadProgessStarted(this, EventArgs.Empty);
 			}
 		}
+        protected virtual void OnPreloadComplete()
+        {
+            if (this.PreloadComplete != null)
+            {
+                this.PreloadComplete(this, EventArgs.Empty);
+            }
+        }
 		#endregion
 
 		#region MethodsPrivate
@@ -288,7 +328,6 @@ namespace BSE.Tunes.StoreApp.IO
 						{
 							this.m_httpStatusCode = responseMessage.StatusCode;
 							responseMessage.EnsureSuccessStatusCode();
-							this.m_totalBytesToReceive = responseMessage.Content.Headers.ContentRange.Length.Value;
 							receivedBytes = (int)responseMessage.Content.Headers.ContentLength.GetValueOrDefault(0);
 							using (var stream = await responseMessage.Content.ReadAsStreamAsync())
 							{
@@ -297,8 +336,8 @@ namespace BSE.Tunes.StoreApp.IO
 									await IOUtilities.WrapSharingViolations(async () =>
 									{
 										responseStream.Position = rangeFrom;
-										await stream.CopyToAsync(this.m_responseStream, ResponseContentBufferSize);
-										responseStream.Flush();
+                                        await stream.CopyToAsync(responseStream, ResponseContentBufferSize);
+                                        responseStream.Flush();
 									});
 								}
 								catch (Exception)

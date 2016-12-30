@@ -82,6 +82,7 @@ namespace BSE.Tunes.StoreApp.Services
         private SystemMediaTransportControls m_systemMediaControls;
 
         private AudioStreamDownloader m_audioStreamDownloader;
+        private AudioStreamDownloader m_audioStreamPreloader;
         private MediaStreamSource m_mediaStreamSource;
         private UInt64 m_byteOffset;
         private TimeSpan m_timeOffset;
@@ -227,6 +228,7 @@ namespace BSE.Tunes.StoreApp.Services
                         this.m_audioStreamDownloader = new AudioStreamDownloader(this.m_dataService);
                         this.m_audioStreamDownloader.DownloadProgessStarted += OnDownloadProgessStarted;
                         m_audioStreamDownloader.DownloadComplete += OnDownloadComplete;
+                        m_audioStreamPreloader?.Cancel();
                         await m_audioStreamDownloader.DownloadAsync(new Uri(strUrl), guid);
                     }
                 }
@@ -236,6 +238,27 @@ namespace BSE.Tunes.StoreApp.Services
                 throw;
             }
         }
+        public async Task PrepareTrack(Track track)
+        {
+            try
+            {
+                Guid guid = track.Guid;
+                if (guid != null && !guid.Equals(Guid.Empty))
+                {
+                    string strUrl = string.Format("{0}/api/files/audio/{1}", m_dataService.ServiceUrl, guid.ToString());
+                    m_audioStreamPreloader = new AudioStreamDownloader(this.m_dataService);
+                    m_audioStreamPreloader.PreloadComplete += OnPreloadComplete;
+                    await m_audioStreamPreloader.PreloadAsync(new Uri(strUrl), guid);
+                }
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+        }
+
+        
+
         public async void Play()
         {
             await this.m_mediaElement.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
@@ -263,7 +286,7 @@ namespace BSE.Tunes.StoreApp.Services
             {
                 await this.m_mediaElement.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
                 {
-                    Messenger.Default.Send(new MediaStateChangedArgs(MediaState.NextPressed));
+                    Messenger.Default.Send(new MediaStateChangedArgs(MediaState.NextRequested));
                 });
             }
         }
@@ -273,7 +296,7 @@ namespace BSE.Tunes.StoreApp.Services
             {
                 await this.m_mediaElement.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
                 {
-                    Messenger.Default.Send(new MediaStateChangedArgs(MediaState.PreviosPressed));
+                    Messenger.Default.Send(new MediaStateChangedArgs(MediaState.PreviousRequested));
                 });
             }
         }
@@ -311,7 +334,21 @@ namespace BSE.Tunes.StoreApp.Services
         }
         private void OnDownloadComplete(object sender, EventArgs e)
         {
-
+            AudioStreamDownloader downloader = sender as AudioStreamDownloader;
+            if (downloader != null)
+            {
+                downloader.DownloadComplete -= OnDownloadComplete;
+            }
+            Messenger.Default.Send(new MediaStateChangedArgs(MediaState.DownloadCompleted));
+        }
+        private void OnPreloadComplete(object sender, EventArgs e)
+        {
+            AudioStreamDownloader downloader = sender as AudioStreamDownloader;
+            if (downloader != null)
+            {
+                downloader.PreloadComplete -= OnPreloadComplete;
+                downloader.Dispose();
+            }
         }
         /// <summary>
         /// Occurs when the MediaStreamSource is ready to start requesting MediaStreamSample objects.

@@ -20,6 +20,7 @@ namespace BSE.Tunes.StoreApp.Services
         bool CanExecutePreviousTrack { get; set; }
         void RegisterAsMediaService(MediaElement mediaElement);
         Task SetTrackAsync(Track track);
+        Task PrepareTrack(Track track);
         void Play();
         void Pause();
         void Stop();

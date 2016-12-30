@@ -1,4 +1,5 @@
 ﻿using BSE.Tunes.Data;
+using BSE.Tunes.Data.Collections;
 using BSE.Tunes.StoreApp.Models;
 using System;
 using System.Collections.Generic;
@@ -11,7 +12,7 @@ namespace BSE.Tunes.StoreApp.Managers
 {
     public interface IPlayerManager
     {
-        ObservableCollection<int> TrackIds
+        NavigableCollection<int> Playlist
         {
             get;set;
         }
@@ -25,6 +26,7 @@ namespace BSE.Tunes.StoreApp.Managers
         void ExecuteNextTrack();
         void ExecutePreviousTrack();
         Task SetTrackAsync(Track track);
+        void PrepareNextTrack();
         void Play();
         void Pause();
         void Stop();

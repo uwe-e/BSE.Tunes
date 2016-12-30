@@ -58,7 +58,8 @@ namespace BSE.Tunes.StoreApp.ViewModels
                 //        //Messenger.Default.Send<TrackMessage>(new TrackMessage(track));
                 //    }
                 //}
-                this.m_playerManager.TrackIds = new ObservableCollection<int>(this.FilteredTrackIds);
+                //this.m_playerManager.TrackIds = new ObservableCollection<int>(this.FilteredTrackIds);
+                this.m_playerManager.Playlist = this.FilteredTrackIds.ToNavigableCollection();
                 //this.PlayRandomTracksCommand.RaiseCanExecuteChanged();
             }
         }

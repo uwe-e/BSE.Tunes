@@ -11,7 +11,8 @@ namespace BSE.Tunes.StoreApp.Models
         None = 0,
         Opened = 1,
         Ended = 2,
-        NextPressed = 3,
-        PreviosPressed = 4
+        NextRequested = 3,
+        PreviousRequested = 4,
+        DownloadCompleted = 5
     }
 }

@@ -25,8 +25,6 @@ namespace BSE.Tunes.StoreApp.Managers
         private IAuthenticationService m_accountService;
         private IDialogService m_dialogService;
         private IResourceService m_resourceService;
-		private NavigableCollection<int> m_navigableTrackIds;
-		private ObservableCollection<int> m_trackIds;
         #endregion
 
         #region Properties
@@ -35,17 +33,10 @@ namespace BSE.Tunes.StoreApp.Managers
             get;
             private set;
         }
-		public ObservableCollection<int> TrackIds
-		{
-			get
-			{
-				return this.m_trackIds;
-			}
-			set
-			{
-				this.m_trackIds = value;
-			}
-		}
+        public NavigableCollection<int> Playlist
+        {
+            get;set;
+        }
         public Track CurrentTrack
         {
             get
@@ -100,19 +91,21 @@ namespace BSE.Tunes.StoreApp.Managers
                     case MediaState.Ended:
                         this.OnMediaEnded();
                         break;
-                    case MediaState.NextPressed:
+                    case MediaState.NextRequested:
                         ExecuteNextTrack();
                         break;
-                    case MediaState.PreviosPressed:
+                    case MediaState.PreviousRequested:
                         ExecutePreviousTrack();
+                        break;
+                    case MediaState.DownloadCompleted:
+                        PrepareNextTrack();
                         break;
                 }
             });
         }
         public async void ReplayPlayTracks()
         {
-            this.m_navigableTrackIds = this.TrackIds?.ToNavigableCollection();
-            int trackId = this.m_navigableTrackIds?.FirstOrDefault() ?? 0;
+            int trackId = this.Playlist?.FirstOrDefault() ?? 0;
             if (trackId > 0)
             {
                 Track track = await this.m_dataService.GetTrackById(trackId);
@@ -125,9 +118,8 @@ namespace BSE.Tunes.StoreApp.Managers
         public async void PlayTracks(ObservableCollection<int> trackIds, PlayerMode playerMode)
         {
             this.PlayerMode = playerMode;
-            this.TrackIds = trackIds;
-            this.m_navigableTrackIds = this.TrackIds?.ToNavigableCollection();
-            int trackId = this.m_navigableTrackIds?.FirstOrDefault() ?? 0;
+            this.Playlist = trackIds?.ToNavigableCollection();
+            int trackId = this.Playlist?.FirstOrDefault() ?? 0;
             if (trackId > 0)
             {
                 var track = await this.m_dataService.GetTrackById(trackId);
@@ -153,15 +145,15 @@ namespace BSE.Tunes.StoreApp.Managers
         }
         public bool CanExecuteNextTrack()
         {
-			return this.m_navigableTrackIds?.CanMoveNext ?? false;
+			return this.Playlist?.CanMoveNext ?? false;
         }
         public async void ExecuteNextTrack()
         {
             if (this.CanExecuteNextTrack())
             {
-                if (this.m_navigableTrackIds.MoveNext())
+                if (this.Playlist.MoveNext())
                 {
-                    var trackId = this.m_navigableTrackIds.Current;
+                    var trackId = this.Playlist.Current;
                     if (trackId > 0)
                     {
                         Track track = await this.m_dataService.GetTrackById(trackId);
@@ -175,15 +167,15 @@ namespace BSE.Tunes.StoreApp.Managers
         }
         public bool CanExecutePreviousTrack()
         {
-			return this.m_navigableTrackIds?.CanMovePrevious ?? false;
+			return this.Playlist?.CanMovePrevious ?? false;
         }
         public async void ExecutePreviousTrack()
         {
             if (this.CanExecutePreviousTrack())
             {
-                if (this.m_navigableTrackIds.MovePrevious())
+                if (this.Playlist.MovePrevious())
                 {
-                    var trackId = this.m_navigableTrackIds.Current;
+                    var trackId = this.Playlist.Current;
                     if (trackId > 0)
                     {
                         var track = await this.m_dataService.GetTrackById(trackId);
@@ -195,9 +187,26 @@ namespace BSE.Tunes.StoreApp.Managers
                 }
             }
         }
+
+        public async void PrepareNextTrack()
+        {
+            if (this.CanExecuteNextTrack())
+            {
+                var trackId = this.Playlist[Playlist.Index + 1];
+                if (trackId > 0)
+                {
+                    var track = await this.m_dataService.GetTrackById(trackId);
+                    if (track != null)
+                    {
+                        await PlayerService.PrepareTrack(track);
+                        //await this.SetTrackAsync(track);
+                    }
+                }
+            }
+        }
         public bool CanExecutePlay()
         {
-			return this.TrackIds?.Count > 0;
+			return this.Playlist?.Count > 0;
         }
         public void Play()
         {
