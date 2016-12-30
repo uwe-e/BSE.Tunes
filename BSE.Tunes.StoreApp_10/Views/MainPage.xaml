@@ -15,9 +15,7 @@
     <Page.DataContext>
         <vm:MainPageViewModel x:Name="ViewModel" />
     </Page.DataContext>
-    
     <RelativePanel Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
-
         <VisualStateManager.VisualStateGroups>
             <VisualStateGroup x:Name="AdaptiveVisualStateGroup">
                 <VisualState x:Name="VisualStateNarrow">
@@ -55,34 +53,41 @@
                 </VisualState>
             </VisualStateGroup>
         </VisualStateManager.VisualStateGroups>
-
+        <!--  header  -->
         <controls:PageHeader x:Name="pageHeader"
+                             x:Uid="MainPage_Header"
+                             Frame="{x:Bind Frame}"
                              RelativePanel.AlignLeftWithPanel="True"
                              RelativePanel.AlignRightWithPanel="True"
                              RelativePanel.AlignTopWithPanel="True"
                              Text="Explore"
-                             Visibility="Collapsed">
-        </controls:PageHeader>
-        
-        <RelativePanel x:Name="hubContainer" EntranceNavigationTransitionInfo.IsTargetElement="True"
+                             Visibility="Collapsed"/>
+
+        <ScrollViewer EntranceNavigationTransitionInfo.IsTargetElement="True"
+                      RelativePanel.AlignBottomWithPanel="True"
+                      RelativePanel.AlignLeftWithPanel="True"
+                      RelativePanel.AlignRightWithPanel="True"
+                      RelativePanel.Below="pageHeader">
+            
+            <RelativePanel x:Name="hubContainer" EntranceNavigationTransitionInfo.IsTargetElement="True"
                        RelativePanel.AlignTopWithPanel="True"
                        RelativePanel.AlignLeftWithPanel="True"
                        RelativePanel.AlignRightWithPanel="True">
 
-            <Grid MaxHeight="240" x:Name="flipView" RelativePanel.AlignLeftWithPanel="True" RelativePanel.AlignRightWithPanel="True" RelativePanel.AlignTopWithPanel="True" >
-                <usercontrols:FeaturedItems/>
-            </Grid>
+                <Grid MaxHeight="240" x:Name="flipView" RelativePanel.AlignLeftWithPanel="True" RelativePanel.AlignRightWithPanel="True" RelativePanel.AlignTopWithPanel="True" >
+                    <usercontrols:FeaturedItems/>
+                </Grid>
 
-            <Grid x:Name="randomPlayer" RelativePanel.AlignLeftWithPanel="True" RelativePanel.AlignRightWithPanel="True" RelativePanel.Below="flipView">
-                <usercontrols:RandomPlayerPanel  />
-            </Grid>
+                <Grid x:Name="randomPlayer" RelativePanel.AlignLeftWithPanel="True" RelativePanel.AlignRightWithPanel="True" RelativePanel.Below="flipView">
+                    <usercontrols:RandomPlayerPanel  />
+                </Grid>
 
-            <Grid RelativePanel.AlignLeftWithPanel="True" RelativePanel.AlignRightWithPanel="True" RelativePanel.Below="randomPlayer">
-                <usercontrols:AlbumSection  />
-            </Grid>
+                <Grid RelativePanel.AlignLeftWithPanel="True" RelativePanel.AlignRightWithPanel="True" RelativePanel.Below="randomPlayer">
+                    <usercontrols:AlbumSection  />
+                </Grid>
 
-        </RelativePanel>
-        
+            </RelativePanel>
+        </ScrollViewer>
     </RelativePanel>
 </Page>
 

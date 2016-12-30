@@ -25,6 +25,7 @@ namespace BSE.Tunes.StoreApp.Views
         public AlbumsPage()
         {
             this.InitializeComponent();
+            NavigationCacheMode = NavigationCacheMode.Enabled;
         }
     }
 }

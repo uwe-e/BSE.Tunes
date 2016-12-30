@@ -9,7 +9,10 @@ namespace BSE.Tunes.StoreApp.ViewModels
 {
     public class AlbumSectionViewModel : ViewModelBase
     {
+        #region FieldsPrivate
         private ItemsGroupViewModel m_itemsGroup;
+        #endregion
+
         #region Properties
         public ItemsGroupViewModel ItemsGroup
         {

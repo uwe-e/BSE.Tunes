@@ -20,6 +20,8 @@ namespace BSE.Tunes.StoreApp.Services
         }
         Task<bool> IsHostAccessible();
         Task<bool> IsHostAccessible(string serviceUrl);
+        Task<ObservableCollection<Album>> GetAlbums(Query query);
+        Task<int> GetNumberOfPlayableAlbums();
         Uri GetImage(Guid imageId, bool asThumbnail = false);
         Task<HttpClient> GetHttpClient(bool withRefreshToken = true);
         Task<ObservableCollection<Album>> GetNewestAlbums(int limit);

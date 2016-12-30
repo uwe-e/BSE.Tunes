@@ -74,6 +74,12 @@ namespace BSE.Tunes.StoreApp.Services
             }
             return isHostAccessible;
         }
+        public async Task<ObservableCollection<Album>> GetAlbums(Query query)
+        {
+            string strUrl = string.Format("{0}/api/albums", this.ServiceUrl);
+            return await GetHttpResponseFromPost<ObservableCollection<Album>, Query>(new Uri(strUrl), query);
+        }
+
         public Uri GetImage(Guid imageId, bool asThumbnail = false)
         {
             string strUrl = string.Format("{0}/api/files/image/{1}", m_settingsService.ServiceUrl, imageId.ToString());
@@ -87,6 +93,11 @@ namespace BSE.Tunes.StoreApp.Services
         {
             string strUrl = string.Format("{0}/api/albums/{1}/newest", this.ServiceUrl, limit);
             return await GetHttpResponse<ObservableCollection<Album>>(new Uri(strUrl));
+        }
+        public async Task<int> GetNumberOfPlayableAlbums()
+        {
+            string strUrl = string.Format("{0}/api/albums/number", this.ServiceUrl);
+            return await GetHttpResponse<int>(new Uri(strUrl));
         }
         public async Task<Track> GetTrackById(int trackId)
         {

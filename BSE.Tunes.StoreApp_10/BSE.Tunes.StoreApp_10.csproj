@@ -147,6 +147,8 @@
     <Compile Include="Services\SettingsService.cs" />
     <Compile Include="Converters\BooleanToVisibilityConverter.cs" />
     <Compile Include="ViewModels\AlbumSectionViewModel.cs" />
+    <Compile Include="ViewModels\AlbumsPageViewModel.cs" />
+    <Compile Include="ViewModels\AlbumsViewModel.cs" />
     <Compile Include="ViewModels\FeaturedItemsViewModel.cs" />
     <Compile Include="ViewModels\ItemsGroupViewModel.cs" />
     <Compile Include="ViewModels\ItemViewModel.cs" />
