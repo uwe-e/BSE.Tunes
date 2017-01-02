@@ -29,7 +29,7 @@
 
     <RelativePanel Padding="20,10,20,10">
         <TextBlock x:Uid="AlbumSection_SectionHeader" TextTrimming="CharacterEllipsis" Style="{StaticResource SectionSubtitleTextBlockStyle}" Text="Albums" x:Name="sectionName"/>
-        <Button x:Name="sectionButton" Background="Transparent" Style="{StaticResource SectionTextBlockButtonStyle}" RelativePanel.AlignRightWithPanel="True" RelativePanel.AlignVerticalCenterWith="sectionName">
+        <Button x:Name="sectionButton" Background="Transparent" Style="{StaticResource SectionTextBlockButtonStyle}" RelativePanel.AlignRightWithPanel="True" RelativePanel.AlignVerticalCenterWith="sectionName" Command="{Binding NavigateToPageCommand}">
             <Button.Content>
                 <StackPanel Orientation="Horizontal" >
                     <TextBlock Text="&#xE8A9;" FontFamily="Segoe MDL2 Assets" VerticalAlignment="Center" Margin="0,0,6,0"/>

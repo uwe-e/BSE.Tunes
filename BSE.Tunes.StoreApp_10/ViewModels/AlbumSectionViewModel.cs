@@ -1,9 +1,11 @@
 ﻿using BSE.Tunes.StoreApp.Mvvm;
+using GalaSoft.MvvmLight.Command;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Input;
 
 namespace BSE.Tunes.StoreApp.ViewModels
 {
@@ -11,6 +13,7 @@ namespace BSE.Tunes.StoreApp.ViewModels
     {
         #region FieldsPrivate
         private ItemsGroupViewModel m_itemsGroup;
+        private ICommand m_navigateToPageCommand;
         #endregion
 
         #region Properties
@@ -26,6 +29,7 @@ namespace BSE.Tunes.StoreApp.ViewModels
                 RaisePropertyChanged("ItemsGroup");
             }
         }
+        public ICommand NavigateToPageCommand => m_navigateToPageCommand ?? (m_navigateToPageCommand = new RelayCommand<object>(vm => NavigateTo()));
         #endregion
 
         #region MethodsPublic
@@ -33,8 +37,13 @@ namespace BSE.Tunes.StoreApp.ViewModels
         {
             if (!Windows.ApplicationModel.DesignMode.DesignModeEnabled)
             {
+                NavigationService = NavigationService ?? Template10.Common.WindowWrapper.Current().NavigationServices.FirstOrDefault();
                 LoadData();
             }
+        }
+        public virtual void NavigateTo()
+        {
+            NavigationService.NavigateAsync(typeof(Views.AlbumsPage));
         }
         #endregion
 

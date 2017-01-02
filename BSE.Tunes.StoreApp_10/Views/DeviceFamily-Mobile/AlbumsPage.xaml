@@ -36,6 +36,7 @@
                     </VisualState.StateTriggers>
                     <VisualState.Setters>
                         <Setter Target="pageHeader.Visibility" Value="Visible"/>
+                        <!--<Setter Target="listView.Visibility" Value="Visible" />-->
                     </VisualState.Setters>
                 </VisualState>
                 <VisualState x:Name="VisualStateNormal">
@@ -44,6 +45,7 @@
                     </VisualState.StateTriggers>
                     <VisualState.Setters>
                         <Setter Target="pageHeader.Visibility" Value="Collapsed"/>
+                        <!--<Setter Target="listView.Visibility" Value="Collapsed" />-->
                     </VisualState.Setters>
                 </VisualState>
                 <VisualState x:Name="VisualStateWide">
@@ -67,19 +69,19 @@
                              Text="Albums"
                              Visibility="Collapsed"/>
 
-        <Grid Padding="24,10,24,10" RelativePanel.AlignBottomWithPanel="True"
+        <Grid Margin="0" RelativePanel.AlignBottomWithPanel="True"
                       RelativePanel.AlignLeftWithPanel="True"
                       RelativePanel.AlignRightWithPanel="True"
                       RelativePanel.Below="pageHeader">
-            <GridView ItemsSource="{Binding Albums}" DataFetchSize="1" ItemTemplate="{StaticResource PictureTemplate}">
-                <!--<ListView.ItemContainerStyle>
+            <ListView x:Name="listView" ItemsSource="{Binding Albums}" DataFetchSize="1">
+                <ListView.ItemContainerStyle>
                     <Style TargetType="ListViewItem">
                         <Setter Property="Padding" Value="0,4"/>
                     </Style>
-                </ListView.ItemContainerStyle>-->
-                <!--<ListView.ItemTemplate>
+                </ListView.ItemContainerStyle>
+                <ListView.ItemTemplate>
                         <DataTemplate>
-                            <Grid Margin="0,6,0,6">
+                            <Grid Margin="12,6,0,6">
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="Auto"/>
                                     <ColumnDefinition Width="*"/>
@@ -91,8 +93,8 @@
                                 </StackPanel>
                             </Grid>
                         </DataTemplate>
-                    </ListView.ItemTemplate>-->
-                </GridView>
+                    </ListView.ItemTemplate>
+                </ListView>
             </Grid>
 
     </RelativePanel>

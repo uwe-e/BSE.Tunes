@@ -2,7 +2,9 @@
 using BSE.Tunes.Data.Extensions;
 using BSE.Tunes.StoreApp.Managers;
 using BSE.Tunes.StoreApp.Mvvm;
+using BSE.Tunes.StoreApp.Mvvm.Messaging;
 using BSE.Tunes.StoreApp.Services;
+using GalaSoft.MvvmLight.Messaging;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -50,17 +52,15 @@ namespace BSE.Tunes.StoreApp.ViewModels
             {
                 this.FilteredTrackIds = trackIds.ToRandomCollection();
                 int trackId = this.FilteredTrackIds.FirstOrDefault();
-                //if (trackId > 0)
-                //{
-                //    Track track = await this.m_dataService.GetTrackById(trackId);
-                //    if (track != null)
-                //    {
-                //        //Messenger.Default.Send<TrackMessage>(new TrackMessage(track));
-                //    }
-                //}
-                //this.m_playerManager.TrackIds = new ObservableCollection<int>(this.FilteredTrackIds);
+                if (trackId > 0)
+                {
+                    Track track = await DataService.GetTrackById(trackId);
+                    if (track != null)
+                    {
+                        Messenger.Default.Send(new TrackChangedArgs(track));
+                    }
+                }
                 this.m_playerManager.Playlist = this.FilteredTrackIds.ToNavigableCollection();
-                //this.PlayRandomTracksCommand.RaiseCanExecuteChanged();
             }
         }
         #endregion

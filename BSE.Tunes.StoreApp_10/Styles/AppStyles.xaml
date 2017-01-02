@@ -338,4 +338,16 @@
             <TextBlock Margin="0,6,0,0" Text="{Binding Subtitle}" FontFamily="Segoe UI Light" FontSize="12" RelativePanel.Below="title" />
         </RelativePanel>
     </DataTemplate>
+
+    <DataTemplate x:Key="PictureTemplate">
+        <RelativePanel Width="150" >
+            <Grid x:Name="image" RelativePanel.AlignTopWithPanel="True" Height="150" RelativePanel.AlignLeftWithPanel="True" RelativePanel.AlignRightWithPanel="True" Padding="1">
+                <Image VerticalAlignment="Top" Source="{Binding Path=ImageSource}" HorizontalAlignment="Center" Stretch="UniformToFill" />
+            </Grid>
+            <RelativePanel RelativePanel.Below="image" Padding="8" Grid.Row="1">
+                <TextBlock Text="{Binding Title}" TextWrapping="WrapWholeWords" TextTrimming="WordEllipsis" MaxLines="2" x:Name="title" FontWeight="SemiBold"/>
+                <TextBlock Text="{Binding Subtitle}" FontWeight="SemiLight"  x:Name="description" RelativePanel.Below="title" TextTrimming="WordEllipsis" FontSize="12"/>
+            </RelativePanel>
+        </RelativePanel>
+    </DataTemplate>
 </ResourceDictionary>

@@ -35,9 +35,23 @@ namespace BSE.Tunes.StoreApp.ViewModels
         private DispatcherTimer m_progressTimer;
         private Track m_currentTrack;
         private string m_currentTrackDuration;
+        private Uri m_coverSource;
         #endregion
 
         #region Properties
+        public Uri CoverSource
+        {
+            get
+            {
+                return this.m_coverSource;
+            }
+            set
+            {
+                Uri oldValue = this.m_coverSource;
+                this.m_coverSource = value;
+                RaisePropertyChanged<Uri>(() => this.CoverSource, oldValue, value, true);
+            }
+        }
         public Track CurrentTrack
         {
             get
@@ -186,6 +200,11 @@ namespace BSE.Tunes.StoreApp.ViewModels
                             break;
                     }
                 });
+                Messenger.Default.Register<TrackChangedArgs>(this, args =>
+                {
+                    CurrentTrack = args.Track;
+                    LoadCoverSource(args.Track);
+                });
             }
         }
         #endregion
@@ -269,14 +288,14 @@ namespace BSE.Tunes.StoreApp.ViewModels
             this.CurrentTrackDuration = this.m_playerManager.Duration.ToString();
             this.StepFrequency = this.SliderFrequency(this.m_playerManager.Duration);
 
+            LoadCoverSource(this.CurrentTrack);
+
             this.m_progressTimer = new DispatcherTimer();
             this.m_progressTimer.Interval = TimeSpan.FromSeconds(this.StepFrequency);
             this.m_progressTimer.Tick += OnProgressTimerTick;
             this.m_progressTimer.Start();
         }
-
         
-
         private void OnMediaEnded()
         {
             m_progressTimer.Stop();
@@ -320,6 +339,17 @@ namespace BSE.Tunes.StoreApp.ViewModels
             }
 
             return stepfrequency;
+        }
+        private void LoadCoverSource(Track track)
+        {
+            if (track != null)
+            {
+                Uri coverSource = this.DataService.GetImage(track.Album.AlbumId);
+                if (coverSource != null && !coverSource.Equals(this.CoverSource))
+                {
+                    this.CoverSource = coverSource;
+                }
+            }
         }
         #endregion
     }
