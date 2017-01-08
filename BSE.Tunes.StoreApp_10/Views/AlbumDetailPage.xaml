@@ -1,0 +1,129 @@
+﻿<Page
+    x:Class="BSE.Tunes.StoreApp.Views.AlbumDetailPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:BSE.Tunes.StoreApp.Views"
+    xmlns:controls="using:Template10.Controls"
+    xmlns:usercontrols="using:BSE.Tunes.StoreApp.Controls"
+    xmlns:vm="using:BSE.Tunes.StoreApp.ViewModels"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d">
+
+    <Page.DataContext>
+        <vm:AlbumDetailPageViewModel x:Name="ViewModel" />
+    </Page.DataContext>
+
+    <RelativePanel Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+        <VisualStateManager.VisualStateGroups>
+            <VisualStateGroup x:Name="AdaptiveVisualStateGroup">
+                <VisualState x:Name="VisualStateNarrow">
+                    <VisualState.StateTriggers>
+                        <AdaptiveTrigger MinWindowWidth="{StaticResource NarrowMinWidth}" />
+                    </VisualState.StateTriggers>
+                    <VisualState.Setters>
+                        <Setter Target="pageHeader.Visibility" Value="Visible"/>
+                        <Setter Target="albumHeader.Orientation" Value="Vertical"/>
+                        <Setter Target="albumCover.Width" Value="160"/>
+                        <Setter Target="actionRow.Height" Value="Auto"/>
+                        <Setter Target="albumProperties.Height" Value="Auto"/>
+                        <Setter Target="albumTitle.HorizontalAlignment" Value="Center"/>
+                        <Setter Target="albumName.HorizontalAlignment" Value="Center"/>
+                        <Setter Target="albumGenre.HorizontalAlignment" Value="Center"/>
+                        <Setter Target="albumAction.HorizontalAlignment" Value="Center"/>
+                    </VisualState.Setters>
+                </VisualState>
+                <VisualState x:Name="VisualStateNormal">
+                    <VisualState.StateTriggers>
+                        <AdaptiveTrigger MinWindowWidth="{StaticResource NormalMinWidth}" />
+                    </VisualState.StateTriggers>
+                    <VisualState.Setters>
+                        <Setter Target="pageHeader.Visibility" Value="Collapsed"/>
+                    </VisualState.Setters>
+                </VisualState>
+                <VisualState x:Name="VisualStateWide">
+                    <VisualState.StateTriggers>
+                        <AdaptiveTrigger MinWindowWidth="{StaticResource WideMinWidth}" />
+                    </VisualState.StateTriggers>
+                    <VisualState.Setters>
+                        <!--  TODO: change properties for wide view  -->
+                        <!--<Setter Target="stateTextBox.Text" Value="Wide Visual State" />-->
+                    </VisualState.Setters>
+                </VisualState>
+            </VisualStateGroup>
+        </VisualStateManager.VisualStateGroups>
+        
+        <controls:PageHeader x:Name="pageHeader"
+                             x:Uid="AlbumsDetailPage_Header"
+                             Frame="{x:Bind Frame}"
+                             RelativePanel.AlignLeftWithPanel="True"
+                             RelativePanel.AlignRightWithPanel="True"
+                             RelativePanel.AlignTopWithPanel="True"
+                             Text="Album"
+                             Visibility="Collapsed"/>
+
+        <ScrollViewer EntranceNavigationTransitionInfo.IsTargetElement="True"
+                      RelativePanel.AlignBottomWithPanel="True"
+                      RelativePanel.AlignLeftWithPanel="True"
+                      RelativePanel.AlignRightWithPanel="True"
+                      RelativePanel.Below="pageHeader">
+            <RelativePanel EntranceNavigationTransitionInfo.IsTargetElement="True"
+                       RelativePanel.AlignTopWithPanel="True"
+                       RelativePanel.AlignLeftWithPanel="True"
+                       RelativePanel.AlignRightWithPanel="True">
+
+                <Grid x:Name="albumInfo" RelativePanel.AlignLeftWithPanel="True" RelativePanel.AlignRightWithPanel="True" RelativePanel.AlignTopWithPanel="True">
+                    <StackPanel x:Name="albumHeader" Orientation="Horizontal">
+                        <StackPanel.Background>
+                            <ImageBrush ImageSource="{Binding CoverSource}" Stretch="UniformToFill" Opacity="0.2"/>
+                        </StackPanel.Background>
+                        <Image x:Name="albumCover" Source="{Binding CoverSource}" Width="240" Height="{Binding Path=Width, RelativeSource={RelativeSource Mode=Self}}" Margin="10" Stretch="UniformToFill"/>
+                        <Grid x:Name="albumProperties" Margin="10" Height="240">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition x:Name="actionRow" Height="*"/>
+                            </Grid.RowDefinitions>
+                            <TextBlock x:Name="albumTitle" Text="{Binding Album.Title}" TextTrimming="WordEllipsis" Style="{StaticResource SubheaderTextBlockStyle}" Grid.Row="0"/>
+                            <TextBlock x:Name="albumName" Text="{Binding Album.Artist.Name}" TextTrimming="WordEllipsis" Grid.Row="1"/>
+                            <TextBlock x:Name="albumGenre" TextTrimming="WordEllipsis" Grid.Row="2">
+                                <Run Text="{Binding Album.Year}" FontSize="12"/>
+                                <Run Text="&#xE7C8;" FontFamily="Segoe MDL2 Assets" FontSize="8"/>
+                                <Run Text="{Binding Album.Genre.Name}" FontSize="12"/>
+                            </TextBlock>
+                            <StackPanel x:Name="albumAction" Orientation="Horizontal" Grid.Row="3" VerticalAlignment="Bottom">
+                            <Button Command="{Binding PlayAlbumCommand}"   VerticalContentAlignment="Bottom">
+                                <StackPanel Orientation="Horizontal">
+                                    <FontIcon Glyph="&#xE102;"/>
+                                    <TextBlock Text="Alle wiedergeben"/>
+                                </StackPanel>
+                            </Button>
+                            </StackPanel>
+                        </Grid>
+                    </StackPanel>
+                </Grid>
+
+                <ListView RelativePanel.AlignLeftWithPanel="True" RelativePanel.AlignRightWithPanel="True" RelativePanel.Below="albumInfo" ItemsSource="{Binding Album.Tracks}" SelectionMode="Extended">
+                    <ListView.ItemTemplate>
+                        <DataTemplate>
+                            <StackPanel Orientation="Horizontal" Height="48" Margin="0">
+                                <TextBlock Text="{Binding TrackNumber}" Width="40"
+                                       Margin="10,0,0,0" HorizontalAlignment="Left"/>
+                                <TextBlock Text="{Binding Name}"
+                                       Margin="10,0,0,0" Width="300" TextTrimming="WordEllipsis" 
+                                       HorizontalAlignment="Left"/>
+                                <!--<TextBlock Text="{Binding Path=Album.Id, RelativeSource={RelativeSource Mode=None}}"
+                                       Margin="10,0,0,0" Width="300" TextTrimming="WordEllipsis" 
+                                       HorizontalAlignment="Left"/>-->
+                                <TextBlock Text="{Binding Duration}" Width="80" 
+                                       Margin="10,0,0,0" 
+                                       HorizontalAlignment="Right" VerticalAlignment="Center"/>
+                            </StackPanel>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
+            </RelativePanel>
+        </ScrollViewer>
+    </RelativePanel>
+</Page>

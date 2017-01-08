@@ -1,12 +1,14 @@
 ﻿using BSE.Tunes.Data;
 using BSE.Tunes.StoreApp.Collections;
 using BSE.Tunes.StoreApp.Mvvm;
+using GalaSoft.MvvmLight.Command;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Input;
 
 namespace BSE.Tunes.StoreApp.ViewModels
 {
@@ -14,6 +16,7 @@ namespace BSE.Tunes.StoreApp.ViewModels
     {
         #region FieldsPrivate
         private IncrementalObservableCollection<AlbumViewModel> m_albums;
+        private ICommand m_selectItemCommand;
         #endregion
 
         #region Properties
@@ -30,6 +33,7 @@ namespace BSE.Tunes.StoreApp.ViewModels
                 RaisePropertyChanged("Albums");
             }
         }
+        public ICommand SelectItemCommand => m_selectItemCommand ?? (m_selectItemCommand = new RelayCommand<AlbumViewModel>(SelectItem));
         #endregion
 
         #region MethodsPublic
@@ -99,7 +103,10 @@ namespace BSE.Tunes.StoreApp.ViewModels
             //};
             return new Query();
         }
-
+        private void SelectItem(AlbumViewModel item)
+        {
+            NavigationService.NavigateAsync(typeof(Views.AlbumDetailPage), item.Album);
+        }
         #endregion
     }
 }

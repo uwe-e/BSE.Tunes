@@ -4,8 +4,11 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="using:BSE.Tunes.StoreApp.Controls"
     xmlns:vm="using:BSE.Tunes.StoreApp.ViewModels"
+    xmlns:interactivity="using:Microsoft.Xaml.Interactivity"
+    xmlns:core="using:Microsoft.Xaml.Interactions.Core"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:controlextensions="using:BSE.Tunes.StoreApp.Controls.Extensions"
     mc:Ignorable="d"
     d:DesignHeight="300"
     d:DesignWidth="400">
@@ -13,7 +16,7 @@
     <UserControl.DataContext>
         <vm:AlbumSectionViewModel x:Name="ViewModel"/>
     </UserControl.DataContext>
-    
+
     <UserControl.Resources>
         <Style x:Key="NormalView" TargetType="GridViewItem">
             <Setter Property="Margin" Value="0,0,12,0"/>
@@ -39,15 +42,46 @@
         </Button>
         <GridView Margin="0,12,0,0" x:Name="list" Padding="0" 
                   SelectionMode="None"
+                  IsItemClickEnabled="True"
                   ItemTemplate="{StaticResource PictureSmallTemplate}"
                   ItemContainerStyle="{StaticResource NormalView}"
                   ItemsSource="{Binding ItemsGroup.Items}" RelativePanel.Below="sectionName"  ScrollViewer.VerticalScrollMode="Disabled"
-                  ScrollViewer.HorizontalScrollBarVisibility="Hidden" ScrollViewer.HorizontalScrollMode="Enabled" ScrollViewer.IsHorizontalRailEnabled="True" >
+                  ScrollViewer.HorizontalScrollBarVisibility="Hidden" ScrollViewer.HorizontalScrollMode="Enabled" ScrollViewer.IsHorizontalRailEnabled="True"
+                  controlextensions:ListViewExtensions.Command="{Binding SelectItemCommand}"
+                  controlextensions:ListViewExtensions.RightTappedCommand="{Binding RightTappedCommand}">
             <GridView.ItemsPanel>
                 <ItemsPanelTemplate>
                     <ItemsWrapGrid MaximumRowsOrColumns="1" Orientation="Vertical" />
                 </ItemsPanelTemplate>
             </GridView.ItemsPanel>
+            <!--<GridView.Resources>
+                <FlyoutBase.AttachedFlyout>
+                    <MenuFlyout>
+                        <MenuFlyout.Items>
+                            <MenuFlyoutItem x:Name="Edit"  Text="Edit"/>
+                            <MenuFlyoutItem x:Name="Remove" Text="Remove"/>
+                        </MenuFlyout.Items>
+                    </MenuFlyout>
+                </FlyoutBase.AttachedFlyout>
+            </GridView.Resources>-->
+            <FlyoutBase.AttachedFlyout>
+                <MenuFlyout controlextensions:FlyoutExtensions.IsOpen="{Binding IsOpen}">
+                    <MenuFlyout.Items>
+                        <MenuFlyoutItem x:Name="Edit"  Text="Edit"/>
+                        <MenuFlyoutItem x:Name="Remove" Text="Remove"/>
+                    </MenuFlyout.Items>
+                </MenuFlyout>
+            </FlyoutBase.AttachedFlyout>
+            <!--<interactivity:Interaction.Behaviors>
+                <core:EventTriggerBehavior EventName="ItemClick">
+                    <core:InvokeCommandAction Command="{Binding SelectItemCommand}"/>
+                </core:EventTriggerBehavior>
+                -->
+            <!--<core:EventTriggerBehavior EventName="RightTapped">
+                    <core:
+                </core:EventTriggerBehavior>-->
+            <!--
+            </interactivity:Interaction.Behaviors>-->
         </GridView>
     </RelativePanel>
 </UserControl>

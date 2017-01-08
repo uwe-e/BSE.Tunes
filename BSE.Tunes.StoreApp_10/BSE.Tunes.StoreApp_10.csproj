@@ -98,6 +98,8 @@
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Controls\Extensions\FlyoutExtensions.cs" />
+    <Compile Include="Controls\Extensions\ListViewExtensions.cs" />
     <Compile Include="Collections\IncrementalObservableCollection.cs" />
     <Compile Include="Controls\AlbumSection.xaml.cs">
       <DependentUpon>AlbumSection.xaml</DependentUpon>
@@ -148,6 +150,7 @@
     <Compile Include="Services\ResourceService.cs" />
     <Compile Include="Services\SettingsService.cs" />
     <Compile Include="Converters\BooleanToVisibilityConverter.cs" />
+    <Compile Include="ViewModels\AlbumDetailPageViewModel.cs" />
     <Compile Include="ViewModels\AlbumSectionViewModel.cs" />
     <Compile Include="ViewModels\AlbumsPageViewModel.cs" />
     <Compile Include="ViewModels\AlbumsViewModel.cs" />
@@ -171,6 +174,9 @@
     <Compile Include="Mvvm\ViewModelBase.cs" />
     <Compile Include="ViewModels\SignInWizzardPageViewModel.cs" />
     <Compile Include="ViewModels\ViewModelLocator.cs" />
+    <Compile Include="Views\AlbumDetailPage.xaml.cs">
+      <DependentUpon>AlbumDetailPage.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\AlbumsPage.xaml.cs">
       <DependentUpon>AlbumsPage.xaml</DependentUpon>
     </Compile>
@@ -269,6 +275,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Page>
+    <Page Include="Views\AlbumDetailPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\AlbumsPage.xaml">
       <SubType>Designer</SubType>

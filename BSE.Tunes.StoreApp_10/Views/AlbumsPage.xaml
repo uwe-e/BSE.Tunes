@@ -4,6 +4,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="using:BSE.Tunes.StoreApp.Views"
     xmlns:controls="using:Template10.Controls"
+    xmlns:controlextensions="using:BSE.Tunes.StoreApp.Controls.Extensions"
     xmlns:vm="using:BSE.Tunes.StoreApp.ViewModels"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
@@ -13,20 +14,6 @@
         <vm:AlbumsPageViewModel x:Name="ViewModel" />
     </Page.DataContext>
 
-    <Page.Resources>
-        <DataTemplate x:Key="C9VideoTemplate">
-            <RelativePanel>
-                <Grid x:Name="image"  RelativePanel.AlignTopWithPanel="True" Height="150" RelativePanel.AlignLeftWithPanel="True" RelativePanel.AlignRightWithPanel="True" Padding="1">
-                    <Image VerticalAlignment="Top" Source="{Binding Path=ImageSource}" HorizontalAlignment="Center" Stretch="UniformToFill"  />
-                </Grid>
-                <RelativePanel RelativePanel.Below="image" Padding="8" Grid.Row="1">
-                    <TextBlock Text="{Binding Title}" TextWrapping="WrapWholeWords" TextTrimming="WordEllipsis" MaxLines="2" x:Name="title"  Style="{StaticResource SubtitleTextBlockStyle}" />
-                    <TextBlock Text="{Binding Subtitle}" FontWeight="SemiLight"  x:Name="description" RelativePanel.Below="title" TextWrapping="WrapWholeWords" TextTrimming="WordEllipsis" MaxLines="3" FontSize="14" Margin="0,12,0,0" />
-                </RelativePanel>
-            </RelativePanel>
-        </DataTemplate>
-    </Page.Resources>
-    
     <RelativePanel Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
         <VisualStateManager.VisualStateGroups>
             <VisualStateGroup x:Name="AdaptiveVisualStateGroup">
@@ -71,7 +58,7 @@
                       RelativePanel.AlignLeftWithPanel="True"
                       RelativePanel.AlignRightWithPanel="True"
                       RelativePanel.Below="pageHeader">
-            <GridView ItemsSource="{Binding Albums}" DataFetchSize="1" ItemTemplate="{StaticResource PictureTemplate}">
+            <GridView ItemsSource="{Binding Albums}" DataFetchSize="1" ItemTemplate="{StaticResource PictureTemplate}"  IsItemClickEnabled="True" controlextensions:ListViewExtensions.Command="{Binding SelectItemCommand}">
                 <!--<ListView.ItemContainerStyle>
                     <Style TargetType="ListViewItem">
                         <Setter Property="Padding" Value="0,4"/>

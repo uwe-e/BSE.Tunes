@@ -1,4 +1,5 @@
-﻿using BSE.Tunes.StoreApp.Mvvm;
+﻿using BSE.Tunes.Data;
+using BSE.Tunes.StoreApp.Mvvm;
 using GalaSoft.MvvmLight.Command;
 using System;
 using System.Collections.Generic;
@@ -14,9 +15,24 @@ namespace BSE.Tunes.StoreApp.ViewModels
         #region FieldsPrivate
         private ItemsGroupViewModel m_itemsGroup;
         private ICommand m_navigateToPageCommand;
+        private ICommand m_selectItemCommand;
+        private ICommand m_rightTappedCommand;
+        private bool m_isOpen;
         #endregion
 
         #region Properties
+        public bool IsOpen
+        {
+            get
+            {
+                return this.m_isOpen;
+            }
+            set
+            {
+                this.m_isOpen = value;
+                RaisePropertyChanged("IsOpen");
+            }
+        }
         public ItemsGroupViewModel ItemsGroup
         {
             get
@@ -30,6 +46,8 @@ namespace BSE.Tunes.StoreApp.ViewModels
             }
         }
         public ICommand NavigateToPageCommand => m_navigateToPageCommand ?? (m_navigateToPageCommand = new RelayCommand<object>(vm => NavigateTo()));
+        public ICommand SelectItemCommand => m_selectItemCommand ?? (m_selectItemCommand = new RelayCommand<ItemViewModel>(SelectItem));
+        public ICommand RightTappedCommand => m_rightTappedCommand ?? (m_rightTappedCommand = new RelayCommand<ItemViewModel>(TestFunction));
         #endregion
 
         #region MethodsPublic
@@ -67,8 +85,16 @@ namespace BSE.Tunes.StoreApp.ViewModels
                         });
                     }
                 }
-//                this.IsBusy = false;
+                //                this.IsBusy = false;
             }
+        }
+        private void SelectItem(ItemViewModel item)
+        {
+            NavigationService.NavigateAsync(typeof(Views.AlbumDetailPage), item.Data);
+        }
+        private void TestFunction(ItemViewModel item)
+        {
+            this.IsOpen = true;
         }
         #endregion
     }
