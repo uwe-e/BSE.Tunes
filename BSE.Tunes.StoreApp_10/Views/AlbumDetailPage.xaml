@@ -107,21 +107,36 @@
                 <ListView RelativePanel.AlignLeftWithPanel="True" RelativePanel.AlignRightWithPanel="True" RelativePanel.Below="albumInfo" ItemsSource="{Binding Album.Tracks}" SelectionMode="Extended">
                     <ListView.ItemTemplate>
                         <DataTemplate>
-                            <StackPanel Orientation="Horizontal" Height="48" Margin="0">
-                                <TextBlock Text="{Binding TrackNumber}" Width="40"
-                                       Margin="10,0,0,0" HorizontalAlignment="Left"/>
+                            <Grid Height="48" Margin="0">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="40"/>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="90"/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Text="{Binding TrackNumber}" VerticalAlignment="Center" HorizontalAlignment="Right" Grid.Column="0"/>
                                 <TextBlock Text="{Binding Name}"
-                                       Margin="10,0,0,0" Width="300" TextTrimming="WordEllipsis" 
-                                       HorizontalAlignment="Left"/>
+                                       Margin="10,0,0,0" TextTrimming="WordEllipsis" 
+                                       VerticalAlignment="Center" Grid.Column="1"/>
                                 <!--<TextBlock Text="{Binding Path=Album.Id, RelativeSource={RelativeSource Mode=None}}"
                                        Margin="10,0,0,0" Width="300" TextTrimming="WordEllipsis" 
                                        HorizontalAlignment="Left"/>-->
-                                <TextBlock Text="{Binding Duration}" Width="80" 
-                                       Margin="10,0,0,0" 
-                                       HorizontalAlignment="Right" VerticalAlignment="Center"/>
-                            </StackPanel>
+                                <TextBlock Text="{Binding Duration}" 
+                                       Margin="10,0,0,0" VerticalAlignment="Center" Grid.Column="2"/>
+                            </Grid>
                         </DataTemplate>
                     </ListView.ItemTemplate>
+                    <ListView.ItemContainerStyle>
+                        <Style TargetType="ListViewItem">
+                            <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+                            <!--<Setter Property="Template">
+                                <Setter.Value>
+                                    <ControlTemplate>
+                                        <ListViewItemPresenter CheckMode="Inline"/>
+                                    </ControlTemplate>
+                                </Setter.Value>
+                            </Setter>-->
+                        </Style>
+                    </ListView.ItemContainerStyle>
                 </ListView>
             </RelativePanel>
         </ScrollViewer>

@@ -334,7 +334,16 @@
         <Setter Property="VisualStateNormalMinWidth" Value="{StaticResource NormalMinWidth}" />
     </Style>
 
-
+    <Style x:Key="detailsViewItem" TargetType="ListViewItem">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="ListViewItem">
+                    <ListViewItemPresenter CheckMode="Overlay"/>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+    
     <DataTemplate x:Key="PictureSmallTemplate">
         <RelativePanel HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
             <Image x:Name="image" RelativePanel.AlignTopWithPanel="True" RelativePanel.AlignLeftWithPanel="True" RelativePanel.AlignRightWithPanel="True" Stretch="Uniform" Source="{Binding Path=ImageSource}" />

@@ -56,7 +56,7 @@
                     <controls:CrossfadingImage Source="{Binding CoverSource}" Stretch="Uniform" Command="{Binding SelectCommand}"/>
                 </Border>
                 <StackPanel Orientation="Vertical" Margin="6,6,0,0">
-                    <TextBlock Text="{Binding CurrentTrack.Album.Title}" FontWeight="SemiBold" 
+                    <TextBlock Text="{Binding CurrentTrack.Name}" FontWeight="SemiBold" 
                                        TextTrimming="WordEllipsis" TextWrapping="Wrap"/>
                     <TextBlock Text="{Binding CurrentTrack.Album.Artist.Name}" FontSize="12"
                                        TextTrimming="WordEllipsis"/>
