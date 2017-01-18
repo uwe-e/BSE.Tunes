@@ -125,6 +125,11 @@ namespace BSE.Tunes.StoreApp.Services
             client.SetBearerToken(tokenResponse.AccessToken);
             return client;
         }
+        public async Task<bool> UpdateHistory(History history)
+        {
+            string strUrl = string.Format("{0}/api/tunes/UpdateHistory", this.ServiceUrl);
+            return await GetHttpResponseFromPost<bool, History>(new Uri(strUrl), history);
+        }
         #endregion
 
         #region MethodsPrivate

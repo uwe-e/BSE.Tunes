@@ -20,7 +20,9 @@ namespace BSE.Tunes.StoreApp.ViewModels
         private Album m_album;
         private Uri m_coverSource;
         private RelayCommand m_playAlbumCommand;
+
         private PlayerManager m_playerManager;
+        private ICommand m_playTrackCommand;
         #endregion
 
         #region Properties
@@ -49,6 +51,9 @@ namespace BSE.Tunes.StoreApp.ViewModels
             }
         }
         public RelayCommand PlayAlbumCommand => m_playAlbumCommand ?? (m_playAlbumCommand = new RelayCommand(PlayAlbum, CanPlayAlbum));
+        public ICommand PlayTrackCommand => m_playTrackCommand ?? (m_playTrackCommand = new RelayCommand<Track>(PlayTrack));
+
+        
         #endregion
 
         #region MethodsPublic
@@ -93,6 +98,10 @@ namespace BSE.Tunes.StoreApp.ViewModels
                         PlayerMode.CD);
                 }
             }
+        }
+        private void PlayTrack(Track track)
+        {
+            this.m_playerManager.PlayTrack(track.Id, PlayerMode.Song);
         }
         #endregion
     }

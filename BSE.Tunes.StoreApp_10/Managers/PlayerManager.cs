@@ -115,11 +115,14 @@ namespace BSE.Tunes.StoreApp.Managers
                 }
             }
         }
-        public async void PlayTracks(ObservableCollection<int> trackIds, PlayerMode playerMode)
+        public void PlayTracks(ObservableCollection<int> trackIds, PlayerMode playerMode)
+        {
+            this.Playlist = trackIds?.ToNavigableCollection();
+            PlayTrack(this.Playlist?.FirstOrDefault() ?? 0, playerMode);
+        }
+        public async void PlayTrack(int trackId, PlayerMode playerMode)
         {
             this.PlayerMode = playerMode;
-            this.Playlist = trackIds?.ToNavigableCollection();
-            int trackId = this.Playlist?.FirstOrDefault() ?? 0;
             if (trackId > 0)
             {
                 var track = await this.m_dataService.GetTrackById(trackId);
@@ -237,24 +240,21 @@ namespace BSE.Tunes.StoreApp.Managers
                 PlayerService.CanExecuteNextTrack = this.CanExecuteNextTrack();
                 PlayerService.CanExecutePreviousTrack = this.CanExecutePreviousTrack();
 
-                //string userName = "unknown";
-                //TunesUser user = this.m_accountService.User;
-                //if (user != null && !string.IsNullOrEmpty(user.UserName))
-                //{
-                //    userName = user.UserName;
-                //}
+                string userName = "unknown";
+                User user = SettingsService.Instance.User;
+                if (user != null && !string.IsNullOrEmpty(user.UserName))
+                {
+                    userName = user.UserName;
+                }
 
-                //History history = new History
-                //{
-                //    PlayMode = this.PlayerMode,
-                //    AlbumId = this.CurrentTrack.Album.Id,
-                //    TrackId = this.CurrentTrack.Id,
-                //    UserName = userName,
-                //    PlayedAt = DateTime.Now
-                //};
-
-                //HistoryViewModel historyViewModel = new HistoryViewModel(this.m_dataService);
-                //historyViewModel.UpdateHistory(history);
+                this.m_dataService.UpdateHistory(new History
+                {
+                    PlayMode = (Data.Audio.PlayerMode)this.PlayerMode,
+                    AlbumId = this.CurrentTrack.Album.Id,
+                    TrackId = this.CurrentTrack.Id,
+                    UserName = userName,
+                    PlayedAt = DateTime.Now
+                });
             }
             catch { }
         }

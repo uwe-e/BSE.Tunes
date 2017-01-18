@@ -28,5 +28,6 @@ namespace BSE.Tunes.StoreApp.Services
         Task<ObservableCollection<Album>> GetNewestAlbums(int limit);
         Task<Track> GetTrackById(int trackId);
         Task<ObservableCollection<int>> GetTrackIdsByFilters(Filter filter);
+        Task<bool> UpdateHistory(History history);
     }
 }

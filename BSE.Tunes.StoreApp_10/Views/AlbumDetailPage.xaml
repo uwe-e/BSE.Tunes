@@ -5,6 +5,7 @@
     xmlns:local="using:BSE.Tunes.StoreApp.Views"
     xmlns:controls="using:Template10.Controls"
     xmlns:usercontrols="using:BSE.Tunes.StoreApp.Controls"
+    xmlns:controlextensions="using:BSE.Tunes.StoreApp.Controls.Extensions"
     xmlns:vm="using:BSE.Tunes.StoreApp.ViewModels"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
@@ -104,7 +105,8 @@
                     </StackPanel>
                 </Grid>
 
-                <ListView RelativePanel.AlignLeftWithPanel="True" RelativePanel.AlignRightWithPanel="True" RelativePanel.Below="albumInfo" ItemsSource="{Binding Album.Tracks}" SelectionMode="Extended">
+                <ListView RelativePanel.AlignLeftWithPanel="True" RelativePanel.AlignRightWithPanel="True" RelativePanel.Below="albumInfo" ItemsSource="{Binding Album.Tracks}" SelectionMode="Extended"
+                          IsItemClickEnabled="True" controlextensions:ListViewExtensions.Command="{Binding PlayTrackCommand}">
                     <ListView.ItemTemplate>
                         <DataTemplate>
                             <Grid Height="48" Margin="0">
