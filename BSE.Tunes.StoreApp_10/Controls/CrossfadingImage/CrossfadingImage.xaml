@@ -1,11 +1,9 @@
 ﻿<ResourceDictionary
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" 
-    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:controls="using:BSE.Tunes.StoreApp.Controls">
 
-
-
-    <!--xmlns:controls="using:BSE.Tunes.StoreApp.Controls"-->
-    <!--<Style TargetType="controls:CrossfadingImage">
+    <Style TargetType="controls:CrossfadingImage">
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="controls:CrossfadingImage">
@@ -23,14 +21,6 @@
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
-    </Style>-->
-
-    <ResourceDictionary.MergedDictionaries>
-        <ResourceDictionary Source="ms-appx:///Controls/CrossfadingImage/CrossfadingImage.xaml"/>
-        <ResourceDictionary Source="ms-appx:///Controls/Carousel/Carousel.xaml"/>
-        <ResourceDictionary Source="ms-appx:///Controls/RoundButton/RoundButton.xaml"/>
-        <!--<ResourceDictionary Source="ms-appx:///BSE.Tunes.StoreApp/Controls/Carousel/Carousel.xaml"/>
-        <ResourceDictionary Source="ms-appx:///BSE.Tunes.StoreApp/Controls/RoundButton/RoundButton.xaml"/>-->
-    </ResourceDictionary.MergedDictionaries>
+    </Style>
 
 </ResourceDictionary>

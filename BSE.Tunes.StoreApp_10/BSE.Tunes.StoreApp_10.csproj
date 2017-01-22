@@ -98,13 +98,24 @@
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Controls\Carousel\AnimationExtensions.cs" />
+    <Compile Include="Controls\Carousel\Carousel.cs" />
+    <Compile Include="Controls\Carousel\Carousel.Manipulation.cs" />
+    <Compile Include="Controls\Carousel\Carousel.Members.cs" />
+    <Compile Include="Controls\Carousel\Carousel.Mouse.cs" />
+    <Compile Include="Controls\Carousel\CarouselPanel.cs" />
+    <Compile Include="Controls\Carousel\CarouselPanel.Items.cs" />
+    <Compile Include="Controls\Carousel\CarouselPanel.Members.cs" />
+    <Compile Include="Controls\Carousel\FrameworkElementExtensions.cs" />
+    <Compile Include="Controls\Carousel\IntEventArgs.cs" />
+    <Compile Include="Controls\Carousel\MathExtensions.cs" />
     <Compile Include="Controls\Extensions\FlyoutExtensions.cs" />
     <Compile Include="Controls\Extensions\ListViewExtensions.cs" />
     <Compile Include="Collections\IncrementalObservableCollection.cs" />
     <Compile Include="Controls\AlbumSection.xaml.cs">
       <DependentUpon>AlbumSection.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Controls\CrossfadingImage.cs" />
+    <Compile Include="Controls\CrossfadingImage\CrossfadingImage.cs" />
     <Compile Include="Controls\FeaturedItems.xaml.cs">
       <DependentUpon>FeaturedItems.xaml</DependentUpon>
     </Compile>
@@ -114,6 +125,7 @@
     <Compile Include="Controls\RandomPlayerPanel.xaml.cs">
       <DependentUpon>RandomPlayerPanel.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Controls\RoundButton\RoundButton.cs" />
     <Compile Include="Converters\PlayerStateToIconConverter.cs" />
     <Compile Include="Extensions\HttpClientExtensions.cs" />
     <Compile Include="Extensions\HttpContentExtensions.cs" />
@@ -246,6 +258,14 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Controls\Carousel\Carousel.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Controls\CrossfadingImage\CrossfadingImage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Controls\DeviceFamily-Mobile\PlayerBar.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -261,6 +281,10 @@
     <Page Include="Controls\RandomPlayerPanel.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\RoundButton\RoundButton.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="Styles\AppStyles.xaml">
       <SubType>Designer</SubType>

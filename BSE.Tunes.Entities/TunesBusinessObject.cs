@@ -169,11 +169,11 @@ namespace BSE.Tunes.Entities
             query.PageSize = query.PageSize == 0 ? 1 : query.PageSize;
 
             StringBuilder stringBuilder = new StringBuilder();
-			stringBuilder.Append("SELECT i.InterpretID, i.Interpret, i.Interpret_Lang ,a.TitelID, a.Titel1, a.Guid as AlbumId FROM tunesEntities.titel AS a");
+            stringBuilder.Append("SELECT i.InterpretID, i.Interpret, i.Interpret_Lang ,a.TitelID, a.Titel1, a.Guid as AlbumId FROM tunesEntities.titel AS a");
             stringBuilder.Append(" INNER JOIN tunesEntities.interpreten AS i ON a.InterpretID = i.InterpretID");
             stringBuilder.Append(" INNER JOIN tunesEntities.lieder AS t ON a.TitelID = t.TitelID");
             stringBuilder.Append(" WHERE t.Liedpfad IS NOT NULL");
-			stringBuilder.Append(" GROUP BY i.InterpretID, i.Interpret, i.Interpret_Lang ,a.TitelID, a.Titel1, a.Guid");
+            stringBuilder.Append(" GROUP BY i.InterpretID, i.Interpret, i.Interpret_Lang ,a.TitelID, a.Titel1, a.Guid");
             if (query.SortByCondition != null && query.SortByCondition.Id == 1)
             {
                 stringBuilder.Append(" ORDER BY a.Titel1");
@@ -226,7 +226,7 @@ namespace BSE.Tunes.Entities
                                     },
                                     Id = dataReader.GetInt32("TitelID", false, 0),
                                     Title = dataReader.GetString("Titel1", false, string.Empty),
-									AlbumId = dataReader.GetGuid("AlbumId", false, Guid.Empty)
+                                    AlbumId = dataReader.GetGuid("AlbumId", false, Guid.Empty)
 
                                 };
                                 albumCollection.Add(album);
@@ -245,13 +245,74 @@ namespace BSE.Tunes.Entities
             }
             return albums;
         }
+        public Album[] GetFeaturedAlbums(int limit)
+        {
+            Album[] albums = null;
+            var randomAlbumIDs = GetRandomizedAlbums(limit, GetAlbumsThatHavePlayableTracks().ToList())?.Take(limit);
+            var idList = string.Join<int>(",", randomAlbumIDs);
+            if (!string.IsNullOrEmpty(idList))
+            {
+                StringBuilder stringBuilder = new StringBuilder();
+                stringBuilder.Append("SELECT i.InterpretID, i.Interpret, i.Interpret_Lang ,a.TitelID, a.Titel1, a.Guid as AlbumId FROM tunesEntities.titel AS a");
+                stringBuilder.Append(" INNER JOIN tunesEntities.interpreten AS i ON a.InterpretID = i.InterpretID");
+                stringBuilder.Append(" WHERE a.TitelID IN {" + idList + "}");
+
+                string sql = stringBuilder.ToString();
+
+                using (System.Data.EntityClient.EntityConnection entityConnection = new System.Data.EntityClient.EntityConnection(this.ConnectionString))
+                {
+                    try
+                    {
+                        entityConnection.Open();
+                        using (EntityCommand entityCommand = entityConnection.CreateCommand())
+                        {
+                            List<Album> albumCollection = null;
+                            entityCommand.CommandText = sql;
+                            using (EntityDataReader dataReader = entityCommand.ExecuteReader(System.Data.CommandBehavior.SequentialAccess))
+                            {
+                                // Start reading results.
+                                while (dataReader.Read())
+                                {
+                                    if (albumCollection == null)
+                                    {
+                                        albumCollection = new List<Album>();
+                                    }
+                                    Album album = new Album
+                                    {
+                                        Artist = new Artist
+                                        {
+                                            Id = dataReader.GetInt32("InterpretID", false, 0),
+                                            Name = dataReader.GetString("Interpret", false, string.Empty),
+                                            SortName = dataReader.GetString("Interpret_Lang", true, string.Empty)
+                                        },
+                                        Id = dataReader.GetInt32("TitelID", false, 0),
+                                        Title = dataReader.GetString("Titel1", false, string.Empty),
+                                        AlbumId = dataReader.GetGuid("AlbumId", false, Guid.Empty)
+                                    };
+                                    albumCollection.Add(album);
+                                }
+                            }
+                            if (albumCollection != null)
+                            {
+                                albums = albumCollection.ToArray();
+                            }
+                        }
+                    }
+                    finally
+                    {
+                        entityConnection.Close();
+                    }
+                }
+            }
+            return albums;
+        }
 
         public Album[] GetNewestAlbums(int limit)
         {
             Album[] albums = null;
 
             StringBuilder stringBuilder = new StringBuilder();
-			stringBuilder.Append("SELECT i.InterpretID, i.Interpret, i.Interpret_Lang ,a.TitelID, a.Titel1, a.Guid as AlbumId FROM tunesEntities.titel AS a");
+            stringBuilder.Append("SELECT i.InterpretID, i.Interpret, i.Interpret_Lang ,a.TitelID, a.Titel1, a.Guid as AlbumId FROM tunesEntities.titel AS a");
             stringBuilder.Append(" INNER JOIN tunesEntities.interpreten AS i ON a.InterpretID = i.InterpretID");
             stringBuilder.Append(" ORDER BY a.TitelID DESC");
             stringBuilder.Append(" LIMIT @limit ");
@@ -293,7 +354,7 @@ namespace BSE.Tunes.Entities
                                     },
                                     Id = dataReader.GetInt32("TitelID", false, 0),
                                     Title = dataReader.GetString("Titel1", false, string.Empty),
-									AlbumId = dataReader.GetGuid("AlbumId", false, Guid.Empty)
+                                    AlbumId = dataReader.GetGuid("AlbumId", false, Guid.Empty)
                                 };
                                 albumCollection.Add(album);
                             }
@@ -317,7 +378,7 @@ namespace BSE.Tunes.Entities
             Album album = null;
 
             StringBuilder stringBuilder = new StringBuilder();
-			stringBuilder.Append("SELECT i.InterpretID, i.Interpret, i.Interpret_Lang ,a.TitelID, a.Titel1, a.Guid as AlbumId, a.ErschDatum, g.genreid, g.genre1");
+            stringBuilder.Append("SELECT i.InterpretID, i.Interpret, i.Interpret_Lang ,a.TitelID, a.Titel1, a.Guid as AlbumId, a.ErschDatum, g.genreid, g.genre1");
             stringBuilder.Append(" FROM tunesEntities.titel AS a");
             stringBuilder.Append(" INNER JOIN tunesEntities.interpreten AS i ON a.InterpretID = i.InterpretID");
             stringBuilder.Append(" LEFT JOIN tunesEntities.genre AS g ON a.genreid = g.genreid");
@@ -352,8 +413,8 @@ namespace BSE.Tunes.Entities
                                     },
                                     Id = dataReader.GetInt32("TitelID", false, 0),
                                     Title = dataReader.GetString("Titel1", false, string.Empty),
-									AlbumId = dataReader.GetGuid("AlbumId", false, Guid.Empty),
-									Year = dataReader.GetInt32("ErschDatum", true, 0),
+                                    AlbumId = dataReader.GetGuid("AlbumId", false, Guid.Empty),
+                                    Year = dataReader.GetInt32("ErschDatum", true, 0),
                                     Genre = new Genre
                                     {
                                         Id = dataReader.GetInt32("genreid", true, 0),
@@ -372,52 +433,52 @@ namespace BSE.Tunes.Entities
             }
             return album;
         }
-		public CoverImage GetImage(Guid imageId, bool asThumbnail = false)
-		{
-			CoverImage image = null;
+        public CoverImage GetImage(Guid imageId, bool asThumbnail = false)
+        {
+            CoverImage image = null;
 
-			StringBuilder stringBuilder = new StringBuilder();
-			stringBuilder.Append("SELECT a.{0}, a.PictureFormat, a.ErstellDatum, a.MutationDatum");
-			stringBuilder.Append(" FROM tunesEntities.titel AS a");
-			stringBuilder.Append(" WHERE a.guid = @imageId");
+            StringBuilder stringBuilder = new StringBuilder();
+            stringBuilder.Append("SELECT a.{0}, a.PictureFormat, a.ErstellDatum, a.MutationDatum");
+            stringBuilder.Append(" FROM tunesEntities.titel AS a");
+            stringBuilder.Append(" WHERE a.guid = @imageId");
 
-			string field = asThumbnail ? "thumbnail" : "cover";
-			string sql = string.Format(CultureInfo.InvariantCulture, stringBuilder.ToString(), field);
+            string field = asThumbnail ? "thumbnail" : "cover";
+            string sql = string.Format(CultureInfo.InvariantCulture, stringBuilder.ToString(), field);
 
-			using (System.Data.EntityClient.EntityConnection entityConnection =
-					new System.Data.EntityClient.EntityConnection(this.ConnectionString))
-			{
-				try
-				{
-					entityConnection.Open();
-					using (EntityCommand entityCommand = entityConnection.CreateCommand())
-					{
-						EntityParameter id = new EntityParameter();
-						id.ParameterName = "imageId";
-						id.Value = imageId.ToString();
-						entityCommand.Parameters.Add(id);
-						entityCommand.CommandText = sql;
-						using (EntityDataReader dataReader = entityCommand.ExecuteReader(System.Data.CommandBehavior.SequentialAccess))
-						{
-							if (dataReader.Read())
-							{
-								image = new CoverImage
-								{
-									Cover = dataReader.GetBytes(field, true, null),
-									Extension = dataReader.GetString("PictureFormat", true,String.Empty),
-									ModifiedSince = dataReader.GetDateTime("MutationDatum", true, DateTime.MinValue)
-								};
-							}
-						}
-					}
-				}
-				finally
-				{
-					entityConnection.Close();
-				}
-			}
-			return image;
-		}
+            using (System.Data.EntityClient.EntityConnection entityConnection =
+                    new System.Data.EntityClient.EntityConnection(this.ConnectionString))
+            {
+                try
+                {
+                    entityConnection.Open();
+                    using (EntityCommand entityCommand = entityConnection.CreateCommand())
+                    {
+                        EntityParameter id = new EntityParameter();
+                        id.ParameterName = "imageId";
+                        id.Value = imageId.ToString();
+                        entityCommand.Parameters.Add(id);
+                        entityCommand.CommandText = sql;
+                        using (EntityDataReader dataReader = entityCommand.ExecuteReader(System.Data.CommandBehavior.SequentialAccess))
+                        {
+                            if (dataReader.Read())
+                            {
+                                image = new CoverImage
+                                {
+                                    Cover = dataReader.GetBytes(field, true, null),
+                                    Extension = dataReader.GetString("PictureFormat", true, String.Empty),
+                                    ModifiedSince = dataReader.GetDateTime("MutationDatum", true, DateTime.MinValue)
+                                };
+                            }
+                        }
+                    }
+                }
+                finally
+                {
+                    entityConnection.Close();
+                }
+            }
+            return image;
+        }
         public string GetAudioFileNameByGuid(Guid guid)
         {
             string fileName = null;
@@ -468,7 +529,7 @@ namespace BSE.Tunes.Entities
             if (string.IsNullOrEmpty(audioDirectory) == false)
             {
                 StringBuilder stringBuilder = new StringBuilder();
-				stringBuilder.Append("SELECT t.LiedID, t.Track, t.Lied ,t.Dauer, t.Liedpfad, t.guid, a.TitelID, a.Titel1, a.Guid as AlbumId, i.Interpret FROM tunesEntities.lieder AS t");
+                stringBuilder.Append("SELECT t.LiedID, t.Track, t.Lied ,t.Dauer, t.Liedpfad, t.guid, a.TitelID, a.Titel1, a.Guid as AlbumId, i.Interpret FROM tunesEntities.lieder AS t");
                 stringBuilder.Append(" JOIN tunesEntities.titel AS a ON a.TitelID = t.TitelID");
                 stringBuilder.Append(" JOIN tunesEntities.interpreten AS i ON a.InterpretID = i.InterpretID");
                 stringBuilder.Append(" WHERE t.LiedId = @trackid");
@@ -493,24 +554,24 @@ namespace BSE.Tunes.Entities
                             {
                                 if (dataReader.Read() == true)
                                 {
-									track = new Track
-									{
-										Id = dataReader.GetInt32("LiedID", false, 0),
-										TrackNumber = dataReader.GetInt32("Track", false, 0),
-										Name = dataReader.GetString("Lied", false, string.Empty),
-										Duration = dataReader.GetTimeSpan("Dauer", true, TimeSpan.MinValue),
-										Guid = dataReader.GetGuid("guid", false, Guid.Empty),
-										Album = new Album
-										{
-											Id = dataReader.GetInt32("TitelID", false, 0),
-											Title = dataReader.GetString("Titel1", false, string.Empty),
-											AlbumId = dataReader.GetGuid("AlbumId", false, Guid.Empty),
-											Artist = new Artist
-											{
-												Name = dataReader.GetString("Interpret", false, string.Empty)
-											}
-										}
-									};
+                                    track = new Track
+                                    {
+                                        Id = dataReader.GetInt32("LiedID", false, 0),
+                                        TrackNumber = dataReader.GetInt32("Track", false, 0),
+                                        Name = dataReader.GetString("Lied", false, string.Empty),
+                                        Duration = dataReader.GetTimeSpan("Dauer", true, TimeSpan.MinValue),
+                                        Guid = dataReader.GetGuid("guid", false, Guid.Empty),
+                                        Album = new Album
+                                        {
+                                            Id = dataReader.GetInt32("TitelID", false, 0),
+                                            Title = dataReader.GetString("Titel1", false, string.Empty),
+                                            AlbumId = dataReader.GetGuid("AlbumId", false, Guid.Empty),
+                                            Artist = new Artist
+                                            {
+                                                Name = dataReader.GetString("Interpret", false, string.Empty)
+                                            }
+                                        }
+                                    };
                                 }
                             }
                         }
@@ -523,76 +584,76 @@ namespace BSE.Tunes.Entities
             }
             return track;
         }
-		public ICollection<int> GetTrackIdsByFilters(Filter filter)
-		{
-			Collection<int> tracks = null;
-			if (filter != null)
-			{
-				//filter.Value = "17,25,5,14";
-				var names = new int[] { 17, 25, 5, 14 };
+        public ICollection<int> GetTrackIdsByFilters(Filter filter)
+        {
+            Collection<int> tracks = null;
+            if (filter != null)
+            {
+                //filter.Value = "17,25,5,14";
+                var names = new int[] { 17, 25, 5, 14 };
 
-				StringBuilder stringBuilder = new StringBuilder();
-				stringBuilder.Append("SELECT t.LiedID");
-				stringBuilder.Append(" FROM tunesEntities.lieder AS t");
-				stringBuilder.Append(" INNER JOIN tunesEntities.titel AS a ON t.TitelID = a.TitelID");
-				stringBuilder.Append(" WHERE t.Liedpfad IS NOT NULL");
-				//stringBuilder.Append(" AND a.genreid IN (17,25,5,14)");
+                StringBuilder stringBuilder = new StringBuilder();
+                stringBuilder.Append("SELECT t.LiedID");
+                stringBuilder.Append(" FROM tunesEntities.lieder AS t");
+                stringBuilder.Append(" INNER JOIN tunesEntities.titel AS a ON t.TitelID = a.TitelID");
+                stringBuilder.Append(" WHERE t.Liedpfad IS NOT NULL");
+                //stringBuilder.Append(" AND a.genreid IN (17,25,5,14)");
 
-				switch (filter.Mode)
-				{
-					case FilterMode.Genre:
-						stringBuilder.Append(" AND a.genreid IN {" + filter.Value + "}");
-						//stringBuilder.Append(" AND a.genreid IN (@filterValue)");
-						break;
-					case FilterMode.Year:
-						break;
-					default:
-						break;
-				}
+                switch (filter.Mode)
+                {
+                    case FilterMode.Genre:
+                        stringBuilder.Append(" AND a.genreid IN {" + filter.Value + "}");
+                        //stringBuilder.Append(" AND a.genreid IN (@filterValue)");
+                        break;
+                    case FilterMode.Year:
+                        break;
+                    default:
+                        break;
+                }
 
-				string sql = stringBuilder.ToString();
-				using (System.Data.EntityClient.EntityConnection entityConnection =
-				   new System.Data.EntityClient.EntityConnection(this.ConnectionString))
-				{
-					try
-					{
-						entityConnection.Open();
-						using (EntityCommand entityCommand = entityConnection.CreateCommand())
-						{
-							//EntityParameter filterValue = new EntityParameter();
-							//filterValue.ParameterName = "filterValue";
-							//filterValue.Value = filter.Value;
-							//entityCommand.Parameters.Add(filterValue);
-							entityCommand.CommandText = sql;
-							// Execute the command.
-							using (EntityDataReader dataReader = entityCommand.ExecuteReader(System.Data.CommandBehavior.SequentialAccess))
-							{
-								// Start reading results.
-								while (dataReader.Read())
-								{
-									if (tracks == null)
-									{
-										tracks = new Collection<int>();
-									}
-									tracks.Add(dataReader.GetInt32("LiedID", false, 0));
-									//Track track = new Track
-									//{
-									//	Id = dataReader.GetInt32("LiedID", false, 0)
-									//};
-									//tracks.Add(track);
-								}
-							}
-						}
-					}
-					finally
-					{
-						entityConnection.Close();
-					}
-				}
+                string sql = stringBuilder.ToString();
+                using (System.Data.EntityClient.EntityConnection entityConnection =
+                   new System.Data.EntityClient.EntityConnection(this.ConnectionString))
+                {
+                    try
+                    {
+                        entityConnection.Open();
+                        using (EntityCommand entityCommand = entityConnection.CreateCommand())
+                        {
+                            //EntityParameter filterValue = new EntityParameter();
+                            //filterValue.ParameterName = "filterValue";
+                            //filterValue.Value = filter.Value;
+                            //entityCommand.Parameters.Add(filterValue);
+                            entityCommand.CommandText = sql;
+                            // Execute the command.
+                            using (EntityDataReader dataReader = entityCommand.ExecuteReader(System.Data.CommandBehavior.SequentialAccess))
+                            {
+                                // Start reading results.
+                                while (dataReader.Read())
+                                {
+                                    if (tracks == null)
+                                    {
+                                        tracks = new Collection<int>();
+                                    }
+                                    tracks.Add(dataReader.GetInt32("LiedID", false, 0));
+                                    //Track track = new Track
+                                    //{
+                                    //	Id = dataReader.GetInt32("LiedID", false, 0)
+                                    //};
+                                    //tracks.Add(track);
+                                }
+                            }
+                        }
+                    }
+                    finally
+                    {
+                        entityConnection.Close();
+                    }
+                }
 
-			}
-			return tracks;
-		}
+            }
+            return tracks;
+        }
 
         public ICollection<Track> GetTracksByFilters(Filter filter)
         {
@@ -608,7 +669,7 @@ namespace BSE.Tunes.Entities
                 stringBuilder.Append(" INNER JOIN tunesEntities.titel AS a ON t.TitelID = a.TitelID");
                 stringBuilder.Append(" WHERE t.Liedpfad IS NOT NULL");
                 //stringBuilder.Append(" AND a.genreid IN (17,25,5,14)");
-                
+
                 switch (filter.Mode)
                 {
                     case FilterMode.Genre:
@@ -666,7 +727,7 @@ namespace BSE.Tunes.Entities
         public BSE.Tunes.Data.SearchResult GetSearchResults(Query query)
         {
             BSE.Tunes.Data.SearchResult searchResult = new Data.SearchResult();
-            if (query!= null && string.IsNullOrEmpty(query.SearchPhrase) == false)
+            if (query != null && string.IsNullOrEmpty(query.SearchPhrase) == false)
             {
                 searchResult.Albums = this.GetAlbumSearchResults(query);
                 searchResult.Tracks = this.GetTrackSearchResults(query);
@@ -723,7 +784,7 @@ namespace BSE.Tunes.Entities
                                         {
                                             Id = album.AlbumId,
                                             Title = album.AlbumName,
-											AlbumId = string.IsNullOrEmpty(album.Guid) ? Guid.Empty : new Guid(album.Guid),
+                                            AlbumId = string.IsNullOrEmpty(album.Guid) ? Guid.Empty : new Guid(album.Guid),
                                             Artist = new Artist
                                             {
                                                 Id = album.ArtistId,
@@ -797,7 +858,7 @@ namespace BSE.Tunes.Entities
                                             {
                                                 Id = result.AlbumId,
                                                 Title = result.AlbumName,
-												AlbumId = string.IsNullOrEmpty(result.Guid) ? Guid.Empty : new Guid(result.Guid),
+                                                AlbumId = string.IsNullOrEmpty(result.Guid) ? Guid.Empty : new Guid(result.Guid),
                                                 Artist = new Artist
                                                 {
                                                     Id = result.ArtistId,
@@ -843,69 +904,69 @@ namespace BSE.Tunes.Entities
             }
             return hasUpdated;
         }
-		public ICollection<Guid> GetPlaylistImageIdsById(int playlistId, string userName, int limit)
-		{
-			Collection<Guid> imageIds = null;
-			if (string.IsNullOrEmpty(userName) == false)
-			{
-				StringBuilder stringBuilder = new StringBuilder();
-				//stringBuilder.Append("SELECT a.Guid, COUNT(a.Guid) AS Number FROM tunesEntities.playlist AS p");
+        public ICollection<Guid> GetPlaylistImageIdsById(int playlistId, string userName, int limit)
+        {
+            Collection<Guid> imageIds = null;
+            if (string.IsNullOrEmpty(userName) == false)
+            {
+                StringBuilder stringBuilder = new StringBuilder();
+                //stringBuilder.Append("SELECT a.Guid, COUNT(a.Guid) AS Number FROM tunesEntities.playlist AS p");
                 stringBuilder.Append("SELECT a.Guid FROM tunesEntities.playlist AS p");
-				stringBuilder.Append(" LEFT JOIN tunesEntities.playlistentries AS pe ON p.ListId = pe.PlaylistId");
-				stringBuilder.Append(" LEFT JOIN tunesEntities.lieder AS t ON pe.LiedId = t.LiedID");
-				stringBuilder.Append(" LEFT JOIN tunesEntities.titel AS a ON t.TitelID = a.TitelID");
-				stringBuilder.Append(" WHERE p.ListId = @playlistId");
-				stringBuilder.Append(" AND p.User = @userName");
+                stringBuilder.Append(" LEFT JOIN tunesEntities.playlistentries AS pe ON p.ListId = pe.PlaylistId");
+                stringBuilder.Append(" LEFT JOIN tunesEntities.lieder AS t ON pe.LiedId = t.LiedID");
+                stringBuilder.Append(" LEFT JOIN tunesEntities.titel AS a ON t.TitelID = a.TitelID");
+                stringBuilder.Append(" WHERE p.ListId = @playlistId");
+                stringBuilder.Append(" AND p.User = @userName");
                 stringBuilder.Append(" ORDER BY pe.sortorder");
-				stringBuilder.Append(" LIMIT @limit ");
+                stringBuilder.Append(" LIMIT @limit ");
 
-				string sql = stringBuilder.ToString();
-				using (System.Data.EntityClient.EntityConnection entityConnection =
-				   new System.Data.EntityClient.EntityConnection(this.ConnectionString))
-				{
-					try
-					{
-						entityConnection.Open();
-						using (EntityCommand entityCommand = entityConnection.CreateCommand())
-						{
-							EntityParameter idParam = new EntityParameter();
-							idParam.ParameterName = "playlistId";
-							idParam.Value = playlistId;
-							entityCommand.Parameters.Add(idParam);
+                string sql = stringBuilder.ToString();
+                using (System.Data.EntityClient.EntityConnection entityConnection =
+                   new System.Data.EntityClient.EntityConnection(this.ConnectionString))
+                {
+                    try
+                    {
+                        entityConnection.Open();
+                        using (EntityCommand entityCommand = entityConnection.CreateCommand())
+                        {
+                            EntityParameter idParam = new EntityParameter();
+                            idParam.ParameterName = "playlistId";
+                            idParam.Value = playlistId;
+                            entityCommand.Parameters.Add(idParam);
 
-							EntityParameter user = new EntityParameter();
-							user.ParameterName = "userName";
-							user.Value = userName;
-							entityCommand.Parameters.Add(user);
+                            EntityParameter user = new EntityParameter();
+                            user.ParameterName = "userName";
+                            user.Value = userName;
+                            entityCommand.Parameters.Add(user);
 
-							EntityParameter limitParam = new EntityParameter();
-							limitParam.ParameterName = "limit";
-							limitParam.Value = limit;
-							entityCommand.Parameters.Add(limitParam);
+                            EntityParameter limitParam = new EntityParameter();
+                            limitParam.ParameterName = "limit";
+                            limitParam.Value = limit;
+                            entityCommand.Parameters.Add(limitParam);
 
-							entityCommand.CommandText = sql;
-							// Execute the command.
-							using (EntityDataReader dataReader = entityCommand.ExecuteReader(System.Data.CommandBehavior.SequentialAccess))
-							{
-								while (dataReader.Read())
-								{
-									if (imageIds == null)
-									{
-										imageIds = new Collection<Guid>();
-									}
+                            entityCommand.CommandText = sql;
+                            // Execute the command.
+                            using (EntityDataReader dataReader = entityCommand.ExecuteReader(System.Data.CommandBehavior.SequentialAccess))
+                            {
+                                while (dataReader.Read())
+                                {
+                                    if (imageIds == null)
+                                    {
+                                        imageIds = new Collection<Guid>();
+                                    }
                                     imageIds.Add(dataReader.GetGuid("Guid", true, Guid.Empty));
-								}
-							}
-						}
-					}
-					finally
-					{
-						entityConnection.Close();
-					}
-				}
-			}
-			return imageIds;
-		}
+                                }
+                            }
+                        }
+                    }
+                    finally
+                    {
+                        entityConnection.Close();
+                    }
+                }
+            }
+            return imageIds;
+        }
         public Playlist GetPlaylistById(int playlistId, string userName)
         {
             Playlist playlist = null;
@@ -953,7 +1014,7 @@ namespace BSE.Tunes.Entities
                                             Id = dataReader.GetInt32("ListId", false, 0),
                                             Name = dataReader.GetString("ListName", false, string.Empty),
                                             UserName = dataReader.GetString("User", false, string.Empty),
-											Guid = dataReader.GetGuid("Guid", false, Guid.Empty),
+                                            Guid = dataReader.GetGuid("Guid", false, Guid.Empty),
                                         };
                                     }
                                     int entryId = dataReader.GetInt32("EntryId", true, 0);
@@ -963,12 +1024,12 @@ namespace BSE.Tunes.Entities
                                         {
                                             Id = entryId,
                                             SortOrder = dataReader.GetInt32("sortorder", true, 0),
-											Guid = dataReader.GetGuid("EntryGuid", true, Guid.Empty),
-											TrackId = dataReader.GetInt32("LiedID", true, 0),
+                                            Guid = dataReader.GetGuid("EntryGuid", true, Guid.Empty),
+                                            TrackId = dataReader.GetInt32("LiedID", true, 0),
                                             Name = dataReader.GetString("Lied", true, string.Empty),
                                             Duration = dataReader.GetTimeSpan("Dauer", true, TimeSpan.MinValue),
-											AlbumId = dataReader.GetGuid("AlbumId", false, Guid.Empty),
-											Artist = dataReader.GetString("Interpret", true, string.Empty)
+                                            AlbumId = dataReader.GetGuid("AlbumId", false, Guid.Empty),
+                                            Artist = dataReader.GetString("Interpret", true, string.Empty)
                                         };
                                         playlist.Entries.Add(entry);
                                     }
@@ -1072,11 +1133,11 @@ namespace BSE.Tunes.Entities
             {
                 StringBuilder stringBuilder = new StringBuilder();
                 stringBuilder.Append("SELECT p.ListId, p.ListName, p.guid, COUNT(pe.PlaylistId) as Number ");
-				stringBuilder.Append(" FROM tunesEntities.playlist AS p");
+                stringBuilder.Append(" FROM tunesEntities.playlist AS p");
                 stringBuilder.Append(" LEFT JOIN tunesEntities.playlistentries AS pe ON p.ListId = pe.PlaylistId");
                 stringBuilder.Append(" WHERE p.ListId = @playlistId");
                 stringBuilder.Append(" AND p.User = @userName");
-				stringBuilder.Append(" GROUP BY p.listid, p.ListName, p.guid");
+                stringBuilder.Append(" GROUP BY p.listid, p.ListName, p.guid");
 
                 string sql = stringBuilder.ToString();
                 using (System.Data.EntityClient.EntityConnection entityConnection =
@@ -1107,16 +1168,16 @@ namespace BSE.Tunes.Entities
                                     {
                                         Id = dataReader.GetInt32("ListId", false, 0),
                                         Name = dataReader.GetString("ListName", false, string.Empty),
-										Guid = dataReader.GetGuid("guid", false, Guid.Empty),
-										NumberEntries = dataReader.GetInt32("Number", false, 0)
+                                        Guid = dataReader.GetGuid("guid", false, Guid.Empty),
+                                        NumberEntries = dataReader.GetInt32("Number", false, 0)
                                     };
                                 }
                             }
                         }
                     }
-						catch(Exception ex)
-					{
-					}
+                    catch (Exception ex)
+                    {
+                    }
                     finally
                     {
                         entityConnection.Close();
@@ -1270,7 +1331,7 @@ namespace BSE.Tunes.Entities
             }
             return hasDeleted;
         }
-        
+
         public string GetHelloWorld()
         {
             return "Hello World";
@@ -1337,8 +1398,64 @@ namespace BSE.Tunes.Entities
             }
             return strFilePath;
         }
-        
-        
+        private ICollection<int> GetAlbumsThatHavePlayableTracks()
+        {
+            Collection<int> albums = new Collection<int>();
+
+            StringBuilder stringBuilder = new StringBuilder();
+            stringBuilder.Append("SELECT DISTINCT a.TitelID");
+            stringBuilder.Append(" FROM tunesEntities.titel AS a");
+            stringBuilder.Append(" INNER JOIN tunesEntities.lieder AS t ON a.TitelID = t.TitelID");
+            stringBuilder.Append(" WHERE t.Liedpfad IS NOT NULL");
+            string sql = stringBuilder.ToString();
+            using (System.Data.EntityClient.EntityConnection entityConnection =
+                   new System.Data.EntityClient.EntityConnection(this.ConnectionString))
+            {
+                try
+                {
+                    entityConnection.Open();
+                    using (EntityCommand entityCommand = entityConnection.CreateCommand())
+                    {
+                        entityCommand.CommandText = sql;
+                        // Execute the command.
+                        using (EntityDataReader dataReader = entityCommand.ExecuteReader(System.Data.CommandBehavior.SequentialAccess))
+                        {
+                            // Start reading results.
+                            while (dataReader.Read())
+                            {
+                                albums.Add(dataReader.GetInt32("TitelID", false, 0));
+                            }
+                        }
+                    }
+                }
+                finally
+                {
+                    entityConnection.Close();
+                }
+            }
+
+            return albums;
+        }
+        private ICollection<int> GetRandomizedAlbums(int limit, ICollection<int> albumIDs)
+        {
+            Collection<int> randomCollection = new Collection<int>();
+            var albumIDCollection = new Collection<int>(albumIDs?.ToList());
+//            if (albumIDCollection.Count > limit)
+            {
+                Random random = new Random(DateTime.Now.Millisecond);
+                while (albumIDCollection.Count > 0)
+                {
+                    int index = random.Next(albumIDCollection.Count);
+                    int albumID = albumIDCollection[index];
+                    randomCollection.Add(albumID);
+                    albumIDCollection.RemoveAt(index);
+                }
+                albumIDs = randomCollection;
+            }
+            return albumIDs;
+        }
+
+
         #endregion
     }
 }

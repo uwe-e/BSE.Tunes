@@ -74,7 +74,7 @@
                        RelativePanel.AlignLeftWithPanel="True"
                        RelativePanel.AlignRightWithPanel="True">
 
-                <Grid MaxHeight="240" x:Name="flipView" RelativePanel.AlignLeftWithPanel="True" RelativePanel.AlignRightWithPanel="True" RelativePanel.AlignTopWithPanel="True" >
+                <Grid x:Name="flipView" RelativePanel.AlignLeftWithPanel="True" RelativePanel.AlignRightWithPanel="True" RelativePanel.AlignTopWithPanel="True" >
                     <usercontrols:FeaturedItems/>
                 </Grid>
 

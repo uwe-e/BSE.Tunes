@@ -23,10 +23,16 @@ namespace BSE.Tunes.WebApi.Controllers
 			return this.TunesService.GetAlbumById(id);
 		}
 		[Route("{limit:int}/newest")]
-		public Album[] GetNewestAlbums(int limit)
+        public Album[] GetNewestAlbums(int limit)
 		{
 			return this.TunesService.GetNewestAlbums(limit);
 		}
+        [Route("{limit:int}/featured")]
+        [AllowAnonymous]
+        public Album[] GetFeaturedAlbums(int limit)
+        {
+            return this.TunesService.GetFeaturedAlbums(limit);
+        }
 		[Route("number")]
 		public int GetNumberOfPlayableAlbums()
 		{

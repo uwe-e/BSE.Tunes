@@ -37,7 +37,7 @@ namespace BSE.Tunes.StoreApp.ViewModels
         private async void LoadData()
         {
             this.ItemsGroup = new ItemsGroupViewModel();
-            var newestAlbums = await DataService.GetNewestAlbums(6);
+            var newestAlbums = await DataService.GetFeaturedAlbums(6);
             if (newestAlbums != null)
             {
                 foreach (var album in newestAlbums)

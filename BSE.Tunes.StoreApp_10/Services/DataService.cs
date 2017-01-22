@@ -93,6 +93,11 @@ namespace BSE.Tunes.StoreApp.Services
             }
             return new Uri(strUrl);
         }
+        public async Task<ObservableCollection<Album>> GetFeaturedAlbums(int limit)
+        {
+            string strUrl = string.Format("{0}/api/albums/{1}/featured", this.ServiceUrl, limit);
+            return await GetHttpResponse<ObservableCollection<Album>>(new Uri(strUrl));
+        }
         public async Task<ObservableCollection<Album>> GetNewestAlbums(int limit)
         {
             string strUrl = string.Format("{0}/api/albums/{1}/newest", this.ServiceUrl, limit);

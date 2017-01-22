@@ -26,6 +26,7 @@ namespace BSE.Tunes.StoreApp.Services
         Uri GetImage(Guid imageId, bool asThumbnail = false);
         Task<HttpClient> GetHttpClient(bool withRefreshToken = true);
         Task<ObservableCollection<Album>> GetNewestAlbums(int limit);
+        Task<ObservableCollection<Album>> GetFeaturedAlbums(int limit);
         Task<Track> GetTrackById(int trackId);
         Task<ObservableCollection<int>> GetTrackIdsByFilters(Filter filter);
         Task<bool> UpdateHistory(History history);
