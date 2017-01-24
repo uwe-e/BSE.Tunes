@@ -14,9 +14,9 @@
     <UserControl.DataContext>
         <vm:FeaturedItemsViewModel x:Name="ViewModel"/>
     </UserControl.DataContext>
-
+    <StackPanel>
         <uwpcontrols:Carousel x:Name="carousel" ScrollViewer.IsHorizontalRailEnabled="True" ItemsSource="{Binding ItemsGroup.Items}" AspectRatio="1.5" MinHeight="160"
-                MaxHeight="340"  GradientOpacity="0.3">
+                MaxHeight="340"  GradientOpacity="0.5" ItemClickCommand="{Binding SelectItemCommand}">
             <uwpcontrols:Carousel.ContentTemplate>
                 <DataTemplate>
                     <RelativePanel>
@@ -32,7 +32,12 @@
                 </DataTemplate>
             </uwpcontrols:Carousel.ContentTemplate>
         </uwpcontrols:Carousel>
-        <!--<FlipView ScrollViewer.IsHorizontalRailEnabled="True" ItemsSource="{Binding ItemsGroup.Items}">
+        <uwpcontrols:Indicator x:Name="indicator" Margin="0,9"
+                                ItemsSource="{Binding ItemsSource, ElementName=carousel, Mode=TwoWay}"
+                           SelectedIndex="{Binding SelectedIndex, ElementName=carousel, Mode=TwoWay}"
+                                ShapeMode="Ellipse" Background="WhiteSmoke" SelectedBackground="{ThemeResource SystemAccentColor}" PressedBackground="Gray" />
+    </StackPanel>
+    <!--<FlipView ScrollViewer.IsHorizontalRailEnabled="True" ItemsSource="{Binding ItemsGroup.Items}">
         <FlipView.ItemTemplate>
             <DataTemplate>
                 <RelativePanel>

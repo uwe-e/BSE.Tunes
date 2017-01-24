@@ -78,7 +78,7 @@
             <StackPanel Orientation="Horizontal" x:Name="titleInfo" Grid.Column="0" Margin="6" Width="320">
                 <Border Height="48" Width="48">
                     <!--<Image Source="/SampleImage.png" Stretch="UniformToFill"/>-->
-                    <controls:CrossfadingImage Source="{Binding CoverSource}" Stretch="Uniform" Command="{Binding SelectCommand}"/>
+                    <controls:CrossfadingImage Source="{Binding CoverSource}" Stretch="Uniform" Command="{Binding SelectItemCommand}"/>
                 </Border>
                 <StackPanel Orientation="Vertical" Margin="6,6,0,0">
                     <TextBlock Text="{Binding CurrentTrack.Name}" FontWeight="SemiBold" 

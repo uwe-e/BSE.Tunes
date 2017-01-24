@@ -55,7 +55,7 @@ namespace BSE.Tunes.StoreApp.ViewModels
         {
             if (!Windows.ApplicationModel.DesignMode.DesignModeEnabled)
             {
-                NavigationService = NavigationService ?? Template10.Common.WindowWrapper.Current().NavigationServices.FirstOrDefault();
+                //NavigationService = NavigationService ?? Template10.Common.WindowWrapper.Current().NavigationServices.FirstOrDefault();
                 LoadData();
             }
         }

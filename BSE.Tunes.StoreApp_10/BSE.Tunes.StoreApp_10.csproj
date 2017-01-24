@@ -119,6 +119,8 @@
     <Compile Include="Controls\FeaturedItems.xaml.cs">
       <DependentUpon>FeaturedItems.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Controls\Indicator\Indicator.cs" />
+    <Compile Include="Controls\Indicator\IndicatorItem.cs" />
     <Compile Include="Controls\PlayerBar.xaml.cs">
       <DependentUpon>PlayerBar.xaml</DependentUpon>
     </Compile>
@@ -273,6 +275,10 @@
     <Page Include="Controls\FeaturedItems.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\Indicator\Indicator.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="Controls\PlayerBar.xaml">
       <SubType>Designer</SubType>

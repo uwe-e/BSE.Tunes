@@ -11,21 +11,7 @@ namespace BSE.Tunes.StoreApp.Mvvm
 {
     public abstract class ViewModelBase : GalaSoft.MvvmLight.ViewModelBase, Template10.Services.NavigationService.INavigable
     {
-        public virtual Task OnNavigatedToAsync(object parameter, NavigationMode mode, IDictionary<string, object> state)
-        {
-            return Task.CompletedTask;
-        }
-
-        public virtual Task OnNavigatedFromAsync(IDictionary<string, object> state, bool suspending)
-        {
-            return Task.CompletedTask;
-        }
-
-        public virtual Task OnNavigatingFromAsync(Template10.Services.NavigationService.NavigatingEventArgs args)
-        {
-            return Task.CompletedTask;
-        }
-
+        #region Properties
         [JsonIgnore]
         public Template10.Services.NavigationService.INavigationService NavigationService
         {
@@ -59,5 +45,32 @@ namespace BSE.Tunes.StoreApp.Mvvm
                 return BSE.Tunes.StoreApp.Services.DataService.Instance;
             }
         }
+        #endregion
+
+        #region MethodsPublic
+        public ViewModelBase()
+        {
+            if (!Windows.ApplicationModel.DesignMode.DesignModeEnabled)
+            {
+                NavigationService = NavigationService ?? Template10.Common.WindowWrapper.Current().NavigationServices.FirstOrDefault();
+            }
+        }
+        public virtual Task OnNavigatedToAsync(object parameter, NavigationMode mode, IDictionary<string, object> state)
+        {
+            return Task.CompletedTask;
+        }
+
+        public virtual Task OnNavigatedFromAsync(IDictionary<string, object> state, bool suspending)
+        {
+            return Task.CompletedTask;
+        }
+
+        public virtual Task OnNavigatingFromAsync(Template10.Services.NavigationService.NavigatingEventArgs args)
+        {
+            return Task.CompletedTask;
+        }
+        #endregion
+
+
     }
 }
