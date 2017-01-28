@@ -1331,7 +1331,39 @@ namespace BSE.Tunes.Entities
             }
             return hasDeleted;
         }
+        public SystemInfo GetSystemInfo()
+        {
+            SystemInfo sysInfo = new SystemInfo();
 
+            StringBuilder stringBuilder = new StringBuilder();
+            stringBuilder.Append("SELECT COUNT(0) AS count");
+            stringBuilder.Append(" FROM tunesEntities.lieder AS t");
+            stringBuilder.Append(" WHERE t.Liedpfad IS NOT NULL");
+
+            string sql = stringBuilder.ToString();
+            using (System.Data.EntityClient.EntityConnection entityConnection =
+                    new System.Data.EntityClient.EntityConnection(this.ConnectionString))
+            {
+                try
+                {
+                    entityConnection.Open();
+                    using (EntityCommand entityCommand = entityConnection.CreateCommand())
+                    {
+                        entityCommand.CommandText = sql;
+                        object obj = entityCommand.ExecuteScalar();
+                        if (obj is int)
+                        {
+                            sysInfo.NumberTracks = (int)obj;
+                        }
+                    }
+                }
+                finally
+                {
+                    entityConnection.Close();
+                }
+            }
+            return sysInfo;
+        }
         public string GetHelloWorld()
         {
             return "Hello World";

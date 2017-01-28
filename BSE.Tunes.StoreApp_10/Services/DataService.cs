@@ -119,6 +119,17 @@ namespace BSE.Tunes.StoreApp.Services
             string strUrl = string.Format("{0}/api/tunes/GetTrackIdsByFilters", m_settingsService.ServiceUrl);
             return await GetHttpResponseFromPost<ObservableCollection<int>, Filter>(new Uri(strUrl), filter);
         }
+        public async Task<bool> UpdateHistory(History history)
+        {
+            string strUrl = string.Format("{0}/api/tunes/UpdateHistory", this.ServiceUrl);
+            return await GetHttpResponseFromPost<bool, History>(new Uri(strUrl), history);
+        }
+        public async Task<SystemInfo> GetSystemInfo()
+        {
+            string strUrl = string.Format("{0}/api/system", m_settingsService.ServiceUrl);
+            return await GetHttpResponse<SystemInfo>(new Uri(strUrl));
+            //return await GetHttpResponse<SystemInfo>(new Uri(strUrl));
+        }
         public async Task<HttpClient> GetHttpClient(bool withRefreshToken = true)
         {
             var tokenResponse = this.m_authenticationHandler.TokenResponse;
@@ -130,11 +141,7 @@ namespace BSE.Tunes.StoreApp.Services
             client.SetBearerToken(tokenResponse.AccessToken);
             return client;
         }
-        public async Task<bool> UpdateHistory(History history)
-        {
-            string strUrl = string.Format("{0}/api/tunes/UpdateHistory", this.ServiceUrl);
-            return await GetHttpResponseFromPost<bool, History>(new Uri(strUrl), history);
-        }
+
         #endregion
 
         #region MethodsPrivate

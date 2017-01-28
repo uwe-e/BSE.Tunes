@@ -216,4 +216,7 @@ A registration can only be done by the operator of the server.</value>
   <data name="AlbumsDetailPage_Header.Text" xml:space="preserve">
     <value>Album</value>
   </data>
+  <data name="RandomPlayerPanel_Text" xml:space="preserve">
+    <value>We have {0} songs and if you have enough time we play it all.</value>
+  </data>
 </root>

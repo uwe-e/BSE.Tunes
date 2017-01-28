@@ -70,6 +70,7 @@
     <Compile Include="Query.cs" />
     <Compile Include="SearchResult.cs" />
     <Compile Include="SortOrder.cs" />
+    <Compile Include="SystemInfo.cs" />
     <Compile Include="Track.cs" />
     <Compile Include="Collections\NavigableCollection.cs" />
     <Compile Include="TunesUser.cs" />

@@ -59,6 +59,8 @@ namespace BSE.Tunes.Data
         [OperationContract]
         bool DeletePlaylists(IList<Playlist> playlists);
         [OperationContract]
+        SystemInfo GetSystemInfo();
+        [OperationContract]
         string GetHelloWorld();
 
     }

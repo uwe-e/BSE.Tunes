@@ -8,6 +8,7 @@ using GalaSoft.MvvmLight.Messaging;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -19,6 +20,7 @@ namespace BSE.Tunes.StoreApp.ViewModels
         #region FieldsPrivate
         private IPlayerManager m_playerManager;
         private ObservableCollection<int> m_filteredTrackIds;
+        private string m_text;
         #endregion
 
         #region Properties
@@ -34,6 +36,18 @@ namespace BSE.Tunes.StoreApp.ViewModels
                 RaisePropertyChanged("FilteredTrackIds");
             }
         }
+        public string Text
+        {
+            get
+            {
+                return m_text;
+            }
+            set
+            {
+                this.m_text = value;
+                RaisePropertyChanged("Text");
+            }
+        }
         #endregion
 
         #region MethodsPublic
@@ -47,6 +61,7 @@ namespace BSE.Tunes.StoreApp.ViewModels
         #region MethodsPrivate
         private async void LoadData()
         {
+            //Get the id's of all playable tracks and randomize it
             ObservableCollection<int> trackIds = await DataService.GetTrackIdsByFilters(new Filter());
             if (trackIds != null)
             {
@@ -62,6 +77,9 @@ namespace BSE.Tunes.StoreApp.ViewModels
                 }
                 this.m_playerManager.Playlist = this.FilteredTrackIds.ToNavigableCollection();
             }
+            //Gets the number of tracks and builds the panel text.
+            SystemInfo sysInfo = await DataService.GetSystemInfo();
+            Text = string.Format(CultureInfo.CurrentCulture, ResourceService.GetString("RandomPlayerPanel_Text"), sysInfo?.NumberTracks ?? 0);
         }
         #endregion
     }

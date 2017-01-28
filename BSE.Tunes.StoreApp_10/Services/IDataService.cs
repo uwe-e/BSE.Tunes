@@ -30,5 +30,6 @@ namespace BSE.Tunes.StoreApp.Services
         Task<Track> GetTrackById(int trackId);
         Task<ObservableCollection<int>> GetTrackIdsByFilters(Filter filter);
         Task<bool> UpdateHistory(History history);
+        Task<SystemInfo> GetSystemInfo();
     }
 }

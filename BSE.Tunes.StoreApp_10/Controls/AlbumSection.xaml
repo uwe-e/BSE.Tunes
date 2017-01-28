@@ -31,15 +31,35 @@
     </UserControl.Resources>
 
     <RelativePanel Padding="20,10,20,10">
-        <TextBlock x:Uid="AlbumSection_SectionHeader" TextTrimming="CharacterEllipsis" Style="{StaticResource SectionSubtitleTextBlockStyle}" Text="Albums" x:Name="sectionName"/>
-        <Button x:Name="sectionButton" Background="Transparent" Style="{StaticResource SectionTextBlockButtonStyle}" RelativePanel.AlignRightWithPanel="True" RelativePanel.AlignVerticalCenterWith="sectionName" Command="{Binding NavigateToPageCommand}">
-            <Button.Content>
-                <StackPanel Orientation="Horizontal" >
-                    <TextBlock Text="&#xE8A9;" FontFamily="Segoe MDL2 Assets" VerticalAlignment="Center" Margin="0,0,6,0"/>
-                    <TextBlock Text="Show All" VerticalAlignment="Center"/>
-                </StackPanel>
-            </Button.Content>
-        </Button>
+        <VisualStateManager.VisualStateGroups>
+            <VisualStateGroup x:Name="AdaptiveVisualStateGroup">
+                <VisualState x:Name="VisualStateNarrow">
+                    <VisualState.StateTriggers>
+                        <AdaptiveTrigger MinWindowWidth="{StaticResource NarrowMinWidth}" />
+                    </VisualState.StateTriggers>
+                    <VisualState.Setters>
+                        <Setter Target="wrapGrid.MaximumRowsOrColumns" Value="2"/>
+                    </VisualState.Setters>
+                </VisualState>
+            </VisualStateGroup>
+        </VisualStateManager.VisualStateGroups>
+        <HyperlinkButton x:Name="sectionName" Foreground="{ThemeResource SystemBaseHighColor}" Command="{Binding NavigateToPageCommand}">
+            <HyperlinkButton.Content>
+                <TextBlock x:Uid="AlbumSection_SectionHeader" TextTrimming="CharacterEllipsis" Style="{StaticResource SectionSubtitleTextBlockStyle}" Text="Albums"/>
+            </HyperlinkButton.Content>
+        </HyperlinkButton>
+        <HyperlinkButton x:Name="sectionButton" RelativePanel.AlignRightWithPanel="True" RelativePanel.AlignVerticalCenterWith="sectionName" Command="{Binding NavigateToPageCommand}" FontSize="14">
+            <HyperlinkButton.Content>
+                <Grid VerticalAlignment="Center">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Text="&#xE8A9;" FontFamily="Segoe MDL2 Assets" VerticalAlignment="Center" Grid.Column="0"/>
+                    <TextBlock Text="Show All" VerticalAlignment="Center" Margin="6,0,0,0" Grid.Column="1" />
+                </Grid>
+            </HyperlinkButton.Content>
+        </HyperlinkButton>
         <GridView Margin="0,12,0,0" x:Name="list" Padding="0" 
                   SelectionMode="None"
                   IsItemClickEnabled="True"
@@ -51,7 +71,7 @@
                   controlextensions:ListViewExtensions.RightTappedCommand="{Binding RightTappedCommand}">
             <GridView.ItemsPanel>
                 <ItemsPanelTemplate>
-                    <ItemsWrapGrid MaximumRowsOrColumns="1" Orientation="Vertical" />
+                    <ItemsWrapGrid x:Name="wrapGrid" MaximumRowsOrColumns="1" Orientation="Vertical" />
                 </ItemsPanelTemplate>
             </GridView.ItemsPanel>
             <!--<GridView.Resources>

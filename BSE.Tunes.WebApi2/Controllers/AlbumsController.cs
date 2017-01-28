@@ -28,7 +28,6 @@ namespace BSE.Tunes.WebApi.Controllers
 			return this.TunesService.GetNewestAlbums(limit);
 		}
         [Route("{limit:int}/featured")]
-        [AllowAnonymous]
         public Album[] GetFeaturedAlbums(int limit)
         {
             return this.TunesService.GetFeaturedAlbums(limit);

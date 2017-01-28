@@ -13,12 +13,20 @@
     <UserControl.DataContext>
         <vm:RandomPlayerViewModel x:Name="ViewModel"/>
     </UserControl.DataContext>
-    
-    <Grid>
-        <Border Margin="20" Background="{ThemeResource SystemAccentColor}" Padding="20">
-            <Button Command="{Binding PlayRandomTracksCommand}" >
-                <TextBlock Text="play random"/>
-            </Button>
-        </Border>
+
+    <Grid Padding="20">
+        <Button Command="{Binding PlayRandomTracksCommand}" HorizontalAlignment="Stretch" Background="{ThemeResource SystemAccentColor}" Padding="10" HorizontalContentAlignment="Left" Foreground="{ThemeResource SystemChromeWhiteColor}">
+            <Grid VerticalAlignment="Center">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <Grid Grid.Column="0">
+                    <FontIcon FontSize="16" Glyph="&#xE8C9;" FontWeight="SemiBold" />
+                    <FontIcon FontSize="26" Glyph="&#xEA3A;" FontWeight="SemiBold" />
+                </Grid>
+                <TextBlock Grid.Column="1" Text="{Binding Text}" VerticalAlignment="Center" TextWrapping="Wrap" TextTrimming="WordEllipsis" FontSize="16" Margin="10,0,0,0"/>
+            </Grid>
+        </Button>
     </Grid>
 </UserControl>
