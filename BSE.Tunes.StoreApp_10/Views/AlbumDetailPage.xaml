@@ -94,12 +94,16 @@
                                 <Run Text="{Binding Album.Genre.Name}" FontSize="12"/>
                             </TextBlock>
                             <StackPanel x:Name="albumAction" Orientation="Horizontal" Grid.Row="3" VerticalAlignment="Bottom">
-                            <Button Command="{Binding PlayAlbumCommand}"   VerticalContentAlignment="Bottom">
-                                <StackPanel Orientation="Horizontal">
-                                    <FontIcon Glyph="&#xE102;"/>
-                                    <TextBlock Text="Alle wiedergeben"/>
-                                </StackPanel>
-                            </Button>
+                                <HyperlinkButton Command="{Binding PlayAlbumCommand}" VerticalContentAlignment="Center" Foreground="{ThemeResource SystemBaseHighColor}">
+                                    <Grid VerticalAlignment="Center">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="Auto"/>
+                                            <ColumnDefinition Width="*"/>
+                                        </Grid.ColumnDefinitions>
+                                        <FontIcon Glyph="&#xE102;" Grid.Column="0"/>
+                                        <TextBlock Text="Alle wiedergeben" Margin="6,0,0,0" Grid.Column="1"/>
+                                </Grid>
+                            </HyperlinkButton>
                             </StackPanel>
                         </Grid>
                     </StackPanel>
