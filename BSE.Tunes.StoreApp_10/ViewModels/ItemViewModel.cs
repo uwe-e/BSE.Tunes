@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Windows.UI.Xaml.Media.Imaging;
 
 namespace BSE.Tunes.StoreApp.ViewModels
 {
@@ -15,6 +16,7 @@ namespace BSE.Tunes.StoreApp.ViewModels
         private string m_description;
 		private Uri m_imageSource;
         private object m_data;
+        private BitmapSource m_bitmapSource;
         #endregion
 
         #region Properties
@@ -66,6 +68,18 @@ namespace BSE.Tunes.StoreApp.ViewModels
 				RaisePropertyChanged("ImageSource");
 			}
 		}
+        public BitmapSource BitmapSource
+        {
+            get
+            {
+                return this.m_bitmapSource;
+            }
+            set
+            {
+                this.m_bitmapSource = value;
+                RaisePropertyChanged("BitmapSource");
+            }
+        }
         public object Data
         {
             get

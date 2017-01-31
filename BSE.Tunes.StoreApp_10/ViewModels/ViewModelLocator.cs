@@ -21,6 +21,7 @@ namespace BSE.Tunes.StoreApp.ViewModels
             SimpleIoc.Default.Register<IPlayerService, PlayerService>();
             SimpleIoc.Default.Register<IPlayerManager, PlayerManager>();
             SimpleIoc.Default.Register<IAuthenticationService, AuthenticationService>();
+            SimpleIoc.Default.Register<ICacheableBitmapService, CacheableBitmapService>();
 
             //SimpleIoc.Default.Register<SettingsMainPageViewModel>();
         }

@@ -119,6 +119,9 @@
     <Compile Include="Controls\FeaturedItems.xaml.cs">
       <DependentUpon>FeaturedItems.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Controls\FeaturedPlaylists.xaml.cs">
+      <DependentUpon>FeaturedPlaylists.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Controls\Indicator\Indicator.cs" />
     <Compile Include="Controls\Indicator\IndicatorItem.cs" />
     <Compile Include="Controls\PlayerBar.xaml.cs">
@@ -133,6 +136,9 @@
     <Compile Include="Extensions\HttpContentExtensions.cs" />
     <Compile Include="Extensions\HttpResponseMessageExtensions.cs" />
     <Compile Include="Extensions\NavigationServiceExtension.cs" />
+    <Compile Include="Extensions\ScaledImageFile.cs" />
+    <Compile Include="Extensions\WriteableBitmapLoadExtensions.cs" />
+    <Compile Include="Extensions\WriteableBitmapSaveExtensions.cs" />
     <Compile Include="IO\AudioStreamDownloader.cs" />
     <Compile Include="IO\IOUtilities.cs" />
     <Compile Include="IO\LocalStorage.cs" />
@@ -151,9 +157,11 @@
     <Compile Include="Mvvm\Messaging\TrackChangedArgs.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\AuthenticationService.cs" />
+    <Compile Include="Services\CacheableBitmapService.cs" />
     <Compile Include="Services\DataService.cs" />
     <Compile Include="Services\DialogService.cs" />
     <Compile Include="Services\IAuthenticationService.cs" />
+    <Compile Include="Services\ICacheableBitmapService.cs" />
     <Compile Include="Services\IDataService.cs" />
     <Compile Include="Services\IDialogService.cs" />
     <Compile Include="Services\NavigationService\INavigationService.cs" />
@@ -168,7 +176,9 @@
     <Compile Include="ViewModels\AlbumSectionViewModel.cs" />
     <Compile Include="ViewModels\AlbumsPageViewModel.cs" />
     <Compile Include="ViewModels\AlbumsViewModel.cs" />
+    <Compile Include="ViewModels\FeaturedItemsBaseViewModel.cs" />
     <Compile Include="ViewModels\FeaturedItemsViewModel.cs" />
+    <Compile Include="ViewModels\FeaturedPlaylistsViewModel.cs" />
     <Compile Include="ViewModels\ItemsGroupViewModel.cs" />
     <Compile Include="ViewModels\ItemViewModel.cs" />
     <Compile Include="ViewModels\SignOutSettingsPageViewModel.cs" />
@@ -273,6 +283,10 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Controls\FeaturedItems.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\FeaturedPlaylists.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

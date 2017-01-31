@@ -219,4 +219,16 @@ A registration can only be done by the operator of the server.</value>
   <data name="RandomPlayerPanel_Text" xml:space="preserve">
     <value>We have {0} songs and if you have enough time we play it all.</value>
   </data>
+  <data name="AlbumSection_ShowAll.Text" xml:space="preserve">
+    <value>Show All</value>
+  </data>
+  <data name="FeaturedPlaylists_SectionHeader.Text" xml:space="preserve">
+    <value>My Playlists</value>
+  </data>
+  <data name="FeaturedPlaylists_ShowAll.Text" xml:space="preserve">
+    <value>Show All</value>
+  </data>
+  <data name="PlaylistItem_PartNumberOfEntries" xml:space="preserve">
+    <value>Songs</value>
+  </data>
 </root>

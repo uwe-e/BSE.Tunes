@@ -342,6 +342,14 @@
         </RelativePanel>
     </DataTemplate>
 
+    <DataTemplate x:Key="BitmapSourceSmallTemplate">
+        <RelativePanel HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+            <Image x:Name="image" RelativePanel.AlignTopWithPanel="True" RelativePanel.AlignLeftWithPanel="True" RelativePanel.AlignRightWithPanel="True" Stretch="Uniform" Source="{Binding Path=BitmapSource}" />
+            <TextBlock RelativePanel.Below="image" Grid.Row="1" Margin="0,4,0,0" Text="{Binding Title}" MaxLines="1" TextTrimming="CharacterEllipsis" FontFamily="Segoe UI Light" FontSize="14" FontWeight="SemiBold" x:Name="title"/>
+            <TextBlock Margin="0,6,0,0" Text="{Binding Subtitle}" FontFamily="Segoe UI Light" FontSize="12" RelativePanel.Below="title" />
+        </RelativePanel>
+    </DataTemplate>
+
     <DataTemplate x:Key="PictureTemplate">
         <RelativePanel Width="150" >
             <Grid x:Name="image" RelativePanel.AlignTopWithPanel="True" Height="150" RelativePanel.AlignLeftWithPanel="True" RelativePanel.AlignRightWithPanel="True" Padding="1">

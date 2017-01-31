@@ -2139,6 +2139,14 @@
         "runtime": {
           "lib/portable-net45+wp80+win8+wpa81/Thinktecture.IdentityModel.Client.dll": {}
         }
+      },
+      "WriteableBitmapEx/1.5.0": {
+        "compile": {
+          "lib/NetCore45/WriteableBitmapEx.WinRT.dll": {}
+        },
+        "runtime": {
+          "lib/NetCore45/WriteableBitmapEx.WinRT.dll": {}
+        }
       }
     },
     "UAP,Version=v10.0/win10-arm": {
@@ -4357,6 +4365,14 @@
         },
         "runtime": {
           "lib/portable-net45+wp80+win8+wpa81/Thinktecture.IdentityModel.Client.dll": {}
+        }
+      },
+      "WriteableBitmapEx/1.5.0": {
+        "compile": {
+          "lib/NetCore45/WriteableBitmapEx.WinRT.dll": {}
+        },
+        "runtime": {
+          "lib/NetCore45/WriteableBitmapEx.WinRT.dll": {}
         }
       }
     },
@@ -6616,6 +6632,14 @@
         "runtime": {
           "lib/portable-net45+wp80+win8+wpa81/Thinktecture.IdentityModel.Client.dll": {}
         }
+      },
+      "WriteableBitmapEx/1.5.0": {
+        "compile": {
+          "lib/NetCore45/WriteableBitmapEx.WinRT.dll": {}
+        },
+        "runtime": {
+          "lib/NetCore45/WriteableBitmapEx.WinRT.dll": {}
+        }
       }
     },
     "UAP,Version=v10.0/win10-x64": {
@@ -8843,6 +8867,14 @@
         },
         "runtime": {
           "lib/portable-net45+wp80+win8+wpa81/Thinktecture.IdentityModel.Client.dll": {}
+        }
+      },
+      "WriteableBitmapEx/1.5.0": {
+        "compile": {
+          "lib/NetCore45/WriteableBitmapEx.WinRT.dll": {}
+        },
+        "runtime": {
+          "lib/NetCore45/WriteableBitmapEx.WinRT.dll": {}
         }
       }
     },
@@ -11111,6 +11143,14 @@
         "runtime": {
           "lib/portable-net45+wp80+win8+wpa81/Thinktecture.IdentityModel.Client.dll": {}
         }
+      },
+      "WriteableBitmapEx/1.5.0": {
+        "compile": {
+          "lib/NetCore45/WriteableBitmapEx.WinRT.dll": {}
+        },
+        "runtime": {
+          "lib/NetCore45/WriteableBitmapEx.WinRT.dll": {}
+        }
       }
     },
     "UAP,Version=v10.0/win10-x86": {
@@ -13338,6 +13378,14 @@
         },
         "runtime": {
           "lib/portable-net45+wp80+win8+wpa81/Thinktecture.IdentityModel.Client.dll": {}
+        }
+      },
+      "WriteableBitmapEx/1.5.0": {
+        "compile": {
+          "lib/NetCore45/WriteableBitmapEx.WinRT.dll": {}
+        },
+        "runtime": {
+          "lib/NetCore45/WriteableBitmapEx.WinRT.dll": {}
         }
       }
     },
@@ -15605,6 +15653,14 @@
         },
         "runtime": {
           "lib/portable-net45+wp80+win8+wpa81/Thinktecture.IdentityModel.Client.dll": {}
+        }
+      },
+      "WriteableBitmapEx/1.5.0": {
+        "compile": {
+          "lib/NetCore45/WriteableBitmapEx.WinRT.dll": {}
+        },
+        "runtime": {
+          "lib/NetCore45/WriteableBitmapEx.WinRT.dll": {}
         }
       }
     }
@@ -22002,6 +22058,38 @@
         "lib/portable-net45+wp80+win8+wpa81/Thinktecture.IdentityModel.Client.dll",
         "lib/portable-net45+wp80+win8+wpa81/Thinktecture.IdentityModel.Client.pdb"
       ]
+    },
+    "WriteableBitmapEx/1.5.0": {
+      "sha512": "K4g5wN6y4RhDUcfLdOoNZrQQBdv6dbXycaOoeBcS3qrXMhXssECb4K/3cPXehi+hDSwNx5dYLhRilk49DXiFZQ==",
+      "type": "package",
+      "files": [
+        "WriteableBitmapEx.1.5.0.nupkg.sha512",
+        "WriteableBitmapEx.nuspec",
+        "lib/NetCore45/WriteableBitmapEx.WinRT.dll",
+        "lib/NetCore45/WriteableBitmapEx.WinRT.pdb",
+        "lib/NetCore45/WriteableBitmapEx.WinRT.xml",
+        "lib/WindowsPhone8/WriteableBitmapExWinPhone.XML",
+        "lib/WindowsPhone8/WriteableBitmapExWinPhone.dll",
+        "lib/WindowsPhone8/WriteableBitmapExWinPhone.pdb",
+        "lib/WindowsPhone8/WriteableBitmapExWinPhoneXnaDependant.XML",
+        "lib/WindowsPhone8/WriteableBitmapExWinPhoneXnaDependant.dll",
+        "lib/WindowsPhone8/WriteableBitmapExWinPhoneXnaDependant.pdb",
+        "lib/net40/WriteableBitmapEx.Wpf.XML",
+        "lib/net40/WriteableBitmapEx.Wpf.dll",
+        "lib/net40/WriteableBitmapEx.Wpf.pdb",
+        "lib/sl4-wp71/WriteableBitmapExWinPhone.XML",
+        "lib/sl4-wp71/WriteableBitmapExWinPhone.dll",
+        "lib/sl4-wp71/WriteableBitmapExWinPhone.pdb",
+        "lib/sl4-wp71/WriteableBitmapExWinPhoneXnaDependant.XML",
+        "lib/sl4-wp71/WriteableBitmapExWinPhoneXnaDependant.dll",
+        "lib/sl4-wp71/WriteableBitmapExWinPhoneXnaDependant.pdb",
+        "lib/sl4/WriteableBitmapEx.XML",
+        "lib/sl4/WriteableBitmapEx.dll",
+        "lib/sl4/WriteableBitmapEx.pdb",
+        "lib/wpa81/WriteableBitmapEx.WinRT.dll",
+        "lib/wpa81/WriteableBitmapEx.WinRT.pdb",
+        "lib/wpa81/WriteableBitmapEx.WinRT.xml"
+      ]
     }
   },
   "projectFileDependencyGroups": {
@@ -22012,7 +22100,8 @@
       "MvvmLight >= 5.3.0",
       "Newtonsoft.Json >= 9.0.1",
       "Template10 >= 1.1.12",
-      "Thinktecture.IdentityModel.Client >= 4.0.1"
+      "Thinktecture.IdentityModel.Client >= 4.0.1",
+      "WriteableBitmapEx >= 1.5.0"
     ],
     "UAP,Version=v10.0": []
   }

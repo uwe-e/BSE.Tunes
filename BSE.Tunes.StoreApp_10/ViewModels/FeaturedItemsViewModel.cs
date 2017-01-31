@@ -1,6 +1,4 @@
-﻿using BSE.Tunes.StoreApp.Mvvm;
-using GalaSoft.MvvmLight.Command;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -9,28 +7,8 @@ using System.Windows.Input;
 
 namespace BSE.Tunes.StoreApp.ViewModels
 {
-    public class FeaturedItemsViewModel: ViewModelBase
+    public class FeaturedItemsViewModel: FeaturedItemsBaseViewModel
     {
-        #region FieldsPrivate
-        private ItemsGroupViewModel m_itemsGroup;
-        private ICommand m_selectItemCommand;
-        #endregion
-
-        #region Properties
-        public ItemsGroupViewModel ItemsGroup
-        {
-            get
-            {
-                return this.m_itemsGroup;
-            }
-            set
-            {
-                this.m_itemsGroup = value;
-                RaisePropertyChanged("ItemsGroup");
-            }
-        }
-        public ICommand SelectItemCommand => m_selectItemCommand ?? (m_selectItemCommand = new RelayCommand<ItemViewModel>(SelectItem));
-        #endregion
         #region MethodsPublic
         public FeaturedItemsViewModel()
         {
@@ -42,7 +20,7 @@ namespace BSE.Tunes.StoreApp.ViewModels
         #endregion
 
         #region MethodsPrivate
-        private async void LoadData()
+        public override async void LoadData()
         {
             this.ItemsGroup = new ItemsGroupViewModel();
             var newestAlbums = await DataService.GetFeaturedAlbums(6);
@@ -61,10 +39,9 @@ namespace BSE.Tunes.StoreApp.ViewModels
                         });
                     }
                 }
-                //                this.IsBusy = false;
             }
         }
-        private void SelectItem(ItemViewModel item)
+        public override void SelectItem(ItemViewModel item)
         {
             NavigationService.NavigateAsync(typeof(Views.AlbumDetailPage), item.Data);
         }
