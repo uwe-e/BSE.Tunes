@@ -24,7 +24,7 @@
             <Setter.Value>
                 <ControlTemplate TargetType="Frame">
                     <Grid>
-                        <MediaElement x:Name="AudioMediaElement" services:PlayerService.RegisterAsMediaService="True"/>
+                        <MediaPlayerElement x:Name="AudioMediaElement" services:PlayerService.RegisterAsMediaService="True"/>
                         <ContentPresenter />
                     </Grid>
                 </ControlTemplate>

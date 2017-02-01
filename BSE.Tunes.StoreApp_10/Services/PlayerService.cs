@@ -14,6 +14,7 @@ using BSE.Tunes.StoreApp.IO;
 using MediaParsers;
 using BSE.Tunes.StoreApp.Models;
 using BSE.Tunes.StoreApp.Mvvm.Messaging;
+using Windows.Media.Playback;
 
 namespace BSE.Tunes.StoreApp.Services
 {
@@ -49,7 +50,7 @@ namespace BSE.Tunes.StoreApp.Services
         {
             if (!Windows.ApplicationModel.DesignMode.DesignModeEnabled)
             {
-                MediaElement mediaElement = d as MediaElement;
+                MediaPlayerElement mediaElement = d as MediaPlayerElement;
                 if (mediaElement != null)
                 {
                     bool newValue = (bool)e.NewValue;
@@ -71,8 +72,8 @@ namespace BSE.Tunes.StoreApp.Services
         #region FieldsPrivate
         private IDataService m_dataService;
         private IAuthenticationService m_accountService;
-        //private SettingsService m_settingsService;
-        private MediaElement m_mediaElement;
+        private MediaPlayerElement m_mediaElement;
+        private MediaPlayer m_mediaPlayer;
         private Track m_currentTrack;
         private PlayerState m_currentState;
         private bool m_canExecuteNextTrack;
@@ -91,6 +92,7 @@ namespace BSE.Tunes.StoreApp.Services
         // MP3 Framesize and length for Layer II and Layer III
         private const UInt32 sampleSize = 1152;
         private TimeSpan sampleDuration = new TimeSpan(0, 0, 0, 0, 70);
+        
         #endregion
 
         #region Properties
@@ -112,7 +114,6 @@ namespace BSE.Tunes.StoreApp.Services
                 this.m_playerNaturalDuration = value;
             }
         }
-
         public TimeSpan Position
         {
             get
@@ -157,6 +158,7 @@ namespace BSE.Tunes.StoreApp.Services
                 this.m_canExecutePreviousTrack = value;
             }
         }
+        public MediaPlayer MediaPlayer => m_mediaPlayer ?? (m_mediaPlayer = new MediaPlayer());
         #endregion
 
         #region MethodsPublic
@@ -165,51 +167,54 @@ namespace BSE.Tunes.StoreApp.Services
             this.CurrentState = PlayerState.Closed;
 
             this.m_dataService = dataService;
-            //m_settingsService = SettingsService.Instance;
             this.m_accountService = accountService;
-
-            this.m_systemMediaControls = SystemMediaTransportControls.GetForCurrentView();
-            this.m_systemMediaControls.IsEnabled = false;
-            this.m_systemMediaControls.ButtonPressed += (sender, args) =>
-            {
-                switch (args.Button)
-                {
-                    case SystemMediaTransportControlsButton.Play:
-                        this.Play();
-                        break;
-                    case SystemMediaTransportControlsButton.Pause:
-                        this.Pause();
-                        break;
-                    case SystemMediaTransportControlsButton.Stop:
-                        this.Stop();
-                        break;
-                    case SystemMediaTransportControlsButton.Previous:
-                        this.PreviousTrack();
-                        break;
-                    case SystemMediaTransportControlsButton.Next:
-                        this.NextTrack();
-                        break;
-                }
-            };
-            this.m_systemMediaControls.IsPlayEnabled = true;
-            this.m_systemMediaControls.IsPauseEnabled = true;
-            this.m_systemMediaControls.IsStopEnabled = true;
-            this.m_systemMediaControls.PlaybackStatus = MediaPlaybackStatus.Closed;
         }
 
-        public void RegisterAsMediaService(MediaElement mediaElement)
+        public void RegisterAsMediaService(MediaPlayerElement mediaElement)
         {
             if (mediaElement != null && this.m_mediaElement == null)
             {
                 this.m_mediaElement = mediaElement;
+                this.m_mediaElement.SetMediaPlayer(MediaPlayer);
+                this.m_mediaElement.AutoPlay = true;
                 //The property AreTransportControlsEnabled causes in an additional displaying of mediaplayer content.
                 //this.m_mediaElement.AreTransportControlsEnabled = true;
 
-                this.m_mediaElement.AudioCategory = Windows.UI.Xaml.Media.AudioCategory.BackgroundCapableMedia;
-                this.m_mediaElement.MediaOpened += OnMediaOpened;
-                this.m_mediaElement.MediaEnded += OnMediaEnded;
-                this.m_mediaElement.MediaFailed += OnMediaFailed;
-                this.m_mediaElement.CurrentStateChanged += OnCurrentStateChanged;
+                this.m_mediaElement.MediaPlayer.MediaOpened += OnMediaOpened;
+                this.m_mediaElement.MediaPlayer.MediaEnded += OnMediaEnded;
+                this.m_mediaElement.MediaPlayer.MediaFailed += OnMediaFailed;
+                this.m_mediaElement.MediaPlayer.PlaybackSession.PlaybackStateChanged += OnPlaybackStateChanged;
+
+                this.m_systemMediaControls = this.m_mediaElement.MediaPlayer.SystemMediaTransportControls;
+                //If you are going to manually control the SMTC, you should disable the automatic integration provided by MediaPlayer by setting
+                //the CommandManager.IsEnabled property to false.
+                //this.m_mediaElement.MediaPlayer.CommandManager.IsEnabled = false;
+                this.m_systemMediaControls.IsEnabled = false;
+                this.m_systemMediaControls.ButtonPressed += (sender, args) =>
+                {
+                    switch (args.Button)
+                    {
+                        case SystemMediaTransportControlsButton.Play:
+                            this.Play();
+                            break;
+                        case SystemMediaTransportControlsButton.Pause:
+                            this.Pause();
+                            break;
+                        case SystemMediaTransportControlsButton.Stop:
+                            this.Stop();
+                            break;
+                        case SystemMediaTransportControlsButton.Previous:
+                            this.PreviousTrack();
+                            break;
+                        case SystemMediaTransportControlsButton.Next:
+                            this.NextTrack();
+                            break;
+                    }
+                };
+                this.m_systemMediaControls.IsPlayEnabled = true;
+                this.m_systemMediaControls.IsPauseEnabled = true;
+                this.m_systemMediaControls.IsStopEnabled = true;
+                this.m_systemMediaControls.PlaybackStatus = MediaPlaybackStatus.Closed;
             }
         }
 
@@ -256,28 +261,25 @@ namespace BSE.Tunes.StoreApp.Services
                 throw;
             }
         }
-
-        
-
         public async void Play()
         {
             await this.m_mediaElement.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
             {
-                this.m_mediaElement.Play();
+                this.m_mediaElement.MediaPlayer.Play();
             });
         }
         public async void Pause()
         {
             await this.m_mediaElement.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
             {
-                this.m_mediaElement.Pause();
+                this.m_mediaElement.MediaPlayer.Pause();
             });
         }
         public async void Stop()
         {
             await this.m_mediaElement.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
             {
-                this.m_mediaElement.Stop();
+                //this.m_mediaElement.Stop();
             });
         }
         public async void NextTrack()
@@ -329,7 +331,8 @@ namespace BSE.Tunes.StoreApp.Services
                 this.m_mediaStreamSource.SampleRequested += OnStreamSourceSampleRequested;
                 this.m_mediaStreamSource.Closed += OnStreamSourceClosed;
 
-                this.m_mediaElement.SetMediaStreamSource(this.m_mediaStreamSource);
+                //this.m_mediaElement.SetMediaStreamSource(this.m_mediaStreamSource);
+                this.m_mediaElement.MediaPlayer.Source = MediaSource.CreateFromMediaStreamSource(this.m_mediaStreamSource);
             }
         }
         private void OnDownloadComplete(object sender, EventArgs e)
@@ -453,67 +456,76 @@ namespace BSE.Tunes.StoreApp.Services
                 m_mediaStreamSource = null;
             }
         }
-        private void OnCurrentStateChanged(object sender, Windows.UI.Xaml.RoutedEventArgs e)
-        {
-            this.CurrentState = PlayerState.Closed;
-            switch (this.m_mediaElement.CurrentState)
-            {
-                case Windows.UI.Xaml.Media.MediaElementState.Buffering:
-                    this.CurrentState = PlayerState.Buffering;
-                    break;
-                case Windows.UI.Xaml.Media.MediaElementState.Opening:
-                    this.CurrentState = PlayerState.Opening;
-                    break;
-                case Windows.UI.Xaml.Media.MediaElementState.Paused:
-                    this.CurrentState = PlayerState.Paused;
-                    this.m_systemMediaControls.PlaybackStatus = MediaPlaybackStatus.Paused;
-                    break;
-                case Windows.UI.Xaml.Media.MediaElementState.Playing:
-                    this.CurrentState = PlayerState.Playing;
-                    this.m_systemMediaControls.PlaybackStatus = MediaPlaybackStatus.Playing;
-                    this.m_systemMediaControls.IsNextEnabled = this.CanExecuteNextTrack;
-                    this.m_systemMediaControls.IsPreviousEnabled = this.CanExecutePreviousTrack;
-                    break;
-                case Windows.UI.Xaml.Media.MediaElementState.Stopped:
-                    this.CurrentState = PlayerState.Stopped;
-                    this.m_systemMediaControls.PlaybackStatus = MediaPlaybackStatus.Stopped;
-                    break;
-                default:
-                    this.CurrentState = PlayerState.Closed;
-                    this.m_systemMediaControls.PlaybackStatus = MediaPlaybackStatus.Closed;
-                    break;
-            }
-            Messenger.Default.Send(new Mvvm.Messaging.PlayerStateChangedArgs(this.CurrentState));
-        }
 
-        private void OnMediaFailed(object sender, Windows.UI.Xaml.ExceptionRoutedEventArgs e)
+        private async void OnPlaybackStateChanged(MediaPlaybackSession sender, object args)
+        {
+            await m_mediaElement.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
+            {
+                this.CurrentState = PlayerState.Closed;
+                MediaPlayer mediaPlayer = sender.MediaPlayer;
+                if (mediaPlayer != null)
+                {
+                    switch (mediaPlayer.PlaybackSession.PlaybackState)
+                    {
+                        case MediaPlaybackState.Buffering:
+                            this.CurrentState = PlayerState.Buffering;
+                            break;
+                        case MediaPlaybackState.Opening:
+                            this.CurrentState = PlayerState.Opening;
+                            break;
+                        case MediaPlaybackState.Paused:
+                            this.CurrentState = PlayerState.Paused;
+                            this.m_systemMediaControls.PlaybackStatus = MediaPlaybackStatus.Paused;
+                            break;
+                        case MediaPlaybackState.Playing:
+                            this.CurrentState = PlayerState.Playing;
+                            this.m_systemMediaControls.IsNextEnabled = this.CanExecuteNextTrack;
+                            this.m_systemMediaControls.IsPreviousEnabled = this.CanExecutePreviousTrack;
+                            break;
+                        default:
+                            this.CurrentState = PlayerState.Closed;
+                            this.m_systemMediaControls.PlaybackStatus = MediaPlaybackStatus.Closed;
+                            break;
+                    }
+                    Messenger.Default.Send(new Mvvm.Messaging.PlayerStateChangedArgs(this.CurrentState));
+                }
+            });
+        }
+        private void OnMediaFailed(MediaPlayer sender, MediaPlayerFailedEventArgs args)
         {
             //throw new NotImplementedException();
         }
-        private void OnMediaOpened(object sender, Windows.UI.Xaml.RoutedEventArgs e)
+        private async void OnMediaOpened(MediaPlayer sender, object args)
         {
-            this.m_playerNaturalDuration = this.m_mediaElement.NaturalDuration.TimeSpan;
-            this.m_playerPosition = new TimeSpan();
-            this.m_systemMediaControls.IsEnabled = true;
+            await m_mediaElement.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
+            {
+                this.m_playerNaturalDuration = new TimeSpan(this.m_mediaElement.MediaPlayer.PlaybackSession.NaturalDuration.Ticks);
+                this.m_playerPosition = new TimeSpan();
+                this.m_systemMediaControls.IsEnabled = true;
 
-            SystemMediaTransportControlsDisplayUpdater updater = this.m_systemMediaControls.DisplayUpdater;
-            updater.Type = MediaPlaybackType.Music;
-            updater.MusicProperties.Artist = this.CurrentTrack.Album.Artist.Name;
-            updater.MusicProperties.AlbumArtist = this.CurrentTrack.Album.Artist.Name;
-            updater.MusicProperties.AlbumTitle = this.CurrentTrack.Album.Title;
-            updater.MusicProperties.Title = this.CurrentTrack.Name;
-            updater.Thumbnail = Windows.Storage.Streams.RandomAccessStreamReference.CreateFromUri(this.m_dataService.GetImage(this.CurrentTrack.Album.AlbumId, true));
-            updater.Update();
+                SystemMediaTransportControlsDisplayUpdater updater = this.m_systemMediaControls.DisplayUpdater;
+                updater.Type = MediaPlaybackType.Music;
+                updater.MusicProperties.Artist = this.CurrentTrack.Album.Artist.Name;
+                updater.MusicProperties.AlbumArtist = this.CurrentTrack.Album.Artist.Name;
+                updater.MusicProperties.AlbumTitle = this.CurrentTrack.Album.Title;
+                updater.MusicProperties.Title = this.CurrentTrack.Name;
+                updater.Thumbnail = Windows.Storage.Streams.RandomAccessStreamReference.CreateFromUri(this.m_dataService.GetImage(this.CurrentTrack.Album.AlbumId, true));
+                updater.Update();
 
-            this.m_systemMediaControls.IsPlayEnabled = true;
-            this.m_systemMediaControls.IsPauseEnabled = true;
-            this.m_systemMediaControls.IsNextEnabled = false;
-            this.m_systemMediaControls.IsPreviousEnabled = false;
-            Messenger.Default.Send(new MediaStateChangedArgs(MediaState.Opened));
+                this.m_systemMediaControls.IsPlayEnabled = true;
+                this.m_systemMediaControls.IsPauseEnabled = true;
+                this.m_systemMediaControls.IsNextEnabled = false;
+                this.m_systemMediaControls.IsPreviousEnabled = false;
+
+                Messenger.Default.Send(new MediaStateChangedArgs(MediaState.Opened));
+            });
         }
-        private void OnMediaEnded(object sender, Windows.UI.Xaml.RoutedEventArgs e)
+        private async void OnMediaEnded(MediaPlayer sender, object args)
         {
-            Messenger.Default.Send(new MediaStateChangedArgs(MediaState.Ended));
+            await m_mediaElement.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
+            {
+                Messenger.Default.Send(new MediaStateChangedArgs(MediaState.Ended));
+            });
         }
         #endregion
     }
