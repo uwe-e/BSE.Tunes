@@ -101,7 +101,7 @@
                                             <ColumnDefinition Width="*"/>
                                         </Grid.ColumnDefinitions>
                                         <FontIcon Glyph="&#xE102;" Grid.Column="0"/>
-                                        <TextBlock Text="Alle wiedergeben" Margin="6,0,0,0" Grid.Column="1"/>
+                                        <TextBlock x:Uid="AlbumDetailPage_PlayAll" Text="Alle wiedergeben" Margin="6,0,0,0" Grid.Column="1"/>
                                 </Grid>
                             </HyperlinkButton>
                             </StackPanel>

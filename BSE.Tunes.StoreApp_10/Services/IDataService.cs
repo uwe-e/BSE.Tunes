@@ -31,6 +31,7 @@ namespace BSE.Tunes.StoreApp.Services
         Task<ObservableCollection<int>> GetTrackIdsByFilters(Filter filter);
         Task<bool> UpdateHistory(History history);
         Task<SystemInfo> GetSystemInfo();
+        Task<ObservableCollection<Playlist>> GetPlaylistsByUserName(string userName);
         Task<ObservableCollection<Playlist>> GetPlaylistsByUserName(string userName, int limit);
         Task<Playlist> GetPlaylistByIdWithNumberOfEntries(int playlistId, string userName);
         Task<ObservableCollection<Guid>> GetPlaylistImageIdsById(int playlistId, string userName, int limit);

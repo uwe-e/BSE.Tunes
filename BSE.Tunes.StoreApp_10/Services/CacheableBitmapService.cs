@@ -44,7 +44,7 @@ namespace BSE.Tunes.StoreApp.Services
 					var storageFile = await storageFolder.TryGetItemAsync(cacheFileName) as StorageFile;
 					if (storageFile != null)
 					{
-						writeableBitmap = await new WriteableBitmap(width, height).LoadAsync(storageFile);
+						return writeableBitmap = await new WriteableBitmap(width, height).LoadAsync(storageFile);
 					}
 
 					var innerWidth = width / 2;

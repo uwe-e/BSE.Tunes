@@ -1,5 +1,6 @@
 ﻿using BSE.Tunes.Data;
 using BSE.Tunes.StoreApp.Models;
+using BSE.Tunes.StoreApp.Mvvm;
 using BSE.Tunes.StoreApp.Services;
 using System;
 using System.Collections.Generic;
@@ -11,28 +12,19 @@ using System.Threading.Tasks;
 
 namespace BSE.Tunes.StoreApp.ViewModels
 {
-    public class FeaturedPlaylistsViewModel : FeaturedItemsBaseViewModel
+    public class PlaylistsPageViewModel : FeaturedItemsBaseViewModel
     {
         #region MethodsPublic
-        public override void SelectItem(ItemViewModel item)
-        {
-            base.SelectItem(item);
-        }
-        public override void NavigateTo()
-        {
-            NavigationService.NavigateAsync(typeof(Views.PlaylistsPage));
-        }
-        public override async void LoadData()
+        public async override void LoadData()
         {
             User user = SettingsService.Instance.User;
             if (user != null && !string.IsNullOrEmpty(user.UserName))
             {
-                //this.IsBusy = true;
                 try
                 {
                     this.ItemsGroup = new ItemsGroupViewModel();
                     ICacheableBitmapService cacheableBitmapService = CacheableBitmapService.Instance;
-                    var playlists = await DataService.GetPlaylistsByUserName(user.UserName, 6);
+                    var playlists = await DataService.GetPlaylistsByUserName(user.UserName);
                     foreach (var playlst in playlists)
                     {
                         if (playlst != null)
@@ -59,12 +51,12 @@ namespace BSE.Tunes.StoreApp.ViewModels
                 }
                 finally
                 {
-                    //this.IsBusy = false;
                 }
             }
         }
         #endregion
 
+        #region MethodsPrivate
         private string FormatNumberOfEntriesString(Playlist playlist)
         {
             int numberOfEntries = 0;
@@ -74,5 +66,6 @@ namespace BSE.Tunes.StoreApp.ViewModels
             }
             return string.Format(CultureInfo.CurrentUICulture, "{0} {1}", numberOfEntries, ResourceService.GetString("PlaylistItem_PartNumberOfEntries", "Songs"));
         }
+        #endregion
     }
 }

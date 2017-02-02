@@ -47,7 +47,7 @@ namespace BSE.Tunes.StoreApp.ViewModels
             //NavigationService.NavigateAsync(typeof(Views.AlbumsPage));
         }
 
-        public virtual async void LoadData()
+        public virtual void LoadData()
         {
 
         }

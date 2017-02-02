@@ -81,15 +81,15 @@ namespace BSE.Tunes.StoreApp.Services
         }
         public async Task<Album> GetAlbumById(int albumId)
         {
-            string strUrl = string.Format("{0}/api/albums/{1}", m_settingsService.ServiceUrl, albumId);
+            string strUrl = string.Format("{0}/api/albums/{1}", this.ServiceUrl, albumId);
             return await GetHttpResponse<Album>(new Uri(strUrl));
         }
         public Uri GetImage(Guid imageId, bool asThumbnail = false)
         {
-            string strUrl = string.Format("{0}/api/files/image/{1}", m_settingsService.ServiceUrl, imageId.ToString());
+            string strUrl = string.Format("{0}/api/files/image/{1}", this.ServiceUrl, imageId.ToString());
             if (asThumbnail)
             {
-                strUrl = string.Format("{0}/api/files/image/{1}/true", m_settingsService.ServiceUrl, imageId.ToString());
+                strUrl = string.Format("{0}/api/files/image/{1}/true", this.ServiceUrl, imageId.ToString());
             }
             return new Uri(strUrl);
         }
@@ -110,13 +110,13 @@ namespace BSE.Tunes.StoreApp.Services
         }
         public async Task<Track> GetTrackById(int trackId)
         {
-            string strUrl = string.Format("{0}/api/tunes/GetTrackById/{1}", m_settingsService.ServiceUrl, trackId);
+            string strUrl = string.Format("{0}/api/tunes/GetTrackById/{1}", this.ServiceUrl, trackId);
             return await GetHttpResponse<Track>(new Uri(strUrl));
         }
 
         public async Task<ObservableCollection<int>> GetTrackIdsByFilters(Filter filter)
         {
-            string strUrl = string.Format("{0}/api/tunes/GetTrackIdsByFilters", m_settingsService.ServiceUrl);
+            string strUrl = string.Format("{0}/api/tunes/GetTrackIdsByFilters", this.ServiceUrl);
             return await GetHttpResponseFromPost<ObservableCollection<int>, Filter>(new Uri(strUrl), filter);
         }
         public async Task<bool> UpdateHistory(History history)
@@ -126,8 +126,13 @@ namespace BSE.Tunes.StoreApp.Services
         }
         public async Task<SystemInfo> GetSystemInfo()
         {
-            string strUrl = string.Format("{0}/api/system", m_settingsService.ServiceUrl);
+            string strUrl = string.Format("{0}/api/system", this.ServiceUrl);
             return await GetHttpResponse<SystemInfo>(new Uri(strUrl));
+        }
+        public async Task<ObservableCollection<Playlist>> GetPlaylistsByUserName(string userName)
+        {
+            string strUrl = string.Format("{0}/api/playlist/{1}/playlists", this.ServiceUrl, userName);
+            return await this.GetHttpResponse<ObservableCollection<Playlist>>(new Uri(strUrl));
         }
         public async Task<ObservableCollection<Playlist>> GetPlaylistsByUserName(string userName, int limit)
         {

@@ -181,6 +181,7 @@
     <Compile Include="ViewModels\FeaturedPlaylistsViewModel.cs" />
     <Compile Include="ViewModels\ItemsGroupViewModel.cs" />
     <Compile Include="ViewModels\ItemViewModel.cs" />
+    <Compile Include="ViewModels\PlaylistsPageViewModel.cs" />
     <Compile Include="ViewModels\SignOutSettingsPageViewModel.cs" />
     <Compile Include="ViewModels\SystemSettingsItemViewModel.cs" />
     <Compile Include="ViewModels\SignOutSettingsItemViewModel.cs" />
@@ -209,6 +210,9 @@
     </Compile>
     <Compile Include="Views\DetailPage.xaml.cs">
       <DependentUpon>DetailPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\PlaylistsPage.xaml.cs">
+      <DependentUpon>PlaylistsPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\ServiceUrlSettingsPage.xaml.cs">
       <DependentUpon>ServiceUrlSettingsPage.xaml</DependentUpon>
@@ -339,6 +343,10 @@
     <Page Include="Views\DeviceFamily-Mobile\AlbumsPage.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\PlaylistsPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\ServiceUrlSettingsPage.xaml">
       <Generator>MSBuild:Compile</Generator>

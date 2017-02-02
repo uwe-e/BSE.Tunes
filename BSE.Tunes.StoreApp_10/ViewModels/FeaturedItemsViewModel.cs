@@ -10,16 +10,6 @@ namespace BSE.Tunes.StoreApp.ViewModels
     public class FeaturedItemsViewModel: FeaturedItemsBaseViewModel
     {
         #region MethodsPublic
-        public FeaturedItemsViewModel()
-        {
-            if (!Windows.ApplicationModel.DesignMode.DesignModeEnabled)
-            {
-                LoadData();
-            }
-        }
-        #endregion
-
-        #region MethodsPrivate
         public override async void LoadData()
         {
             this.ItemsGroup = new ItemsGroupViewModel();

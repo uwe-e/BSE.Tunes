@@ -52,8 +52,8 @@ namespace AppStudio.Uwp.Controls
             _panel = base.GetTemplateChild("panel") as CarouselPanel;
 
             _arrows = base.GetTemplateChild("arrows") as Grid;
-            _left = base.GetTemplateChild("left") as Button;
-            _right = base.GetTemplateChild("right") as Button;
+            _left = base.GetTemplateChild("PreviousButtonHorizontal") as Button;
+            _right = base.GetTemplateChild("NextButtonHorizontal") as Button;
 
             _gradient = base.GetTemplateChild("gradient") as LinearGradientBrush;
             _clip = base.GetTemplateChild("clip") as RectangleGeometry;

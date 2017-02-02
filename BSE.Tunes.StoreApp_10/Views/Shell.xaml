@@ -42,6 +42,16 @@
                                Text="Albums" />
                     </StackPanel>
                 </Controls:HamburgerButtonInfo>
+                <Controls:HamburgerButtonInfo ClearHistory="False" PageType="views:PlaylistsPage">
+                    <StackPanel Orientation="Horizontal">
+                        <FontIcon Width="48"
+                                  Height="48"
+                                  Glyph="&#xE8FD;"/>
+                        <TextBlock x:Uid="Shell_TxtPlaylists" Margin="12,0,0,0"
+                               VerticalAlignment="Center"
+                               Text="Playlists" />
+                    </StackPanel>
+                </Controls:HamburgerButtonInfo>
 
             </Controls:HamburgerMenu.PrimaryButtons>
 

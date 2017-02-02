@@ -231,4 +231,13 @@ A registration can only be done by the operator of the server.</value>
   <data name="PlaylistItem_PartNumberOfEntries" xml:space="preserve">
     <value>Songs</value>
   </data>
+  <data name="AlbumDetailPage_PlayAll.Text" xml:space="preserve">
+    <value>Play all</value>
+  </data>
+  <data name="PlaylistsPage_Header.Text" xml:space="preserve">
+    <value>Playlists</value>
+  </data>
+  <data name="Shell_TxtPlaylists.Text" xml:space="preserve">
+    <value>Playlists</value>
+  </data>
 </root>
