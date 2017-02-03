@@ -119,6 +119,25 @@
                                     <ColumnDefinition Width="*"/>
                                     <ColumnDefinition Width="90"/>
                                 </Grid.ColumnDefinitions>
+                                <Grid.ContextFlyout>
+                                    <MenuFlyout controlextensions:FlyoutExtensions.IsOpen="{Binding IsOpen}">
+                                        <MenuFlyout.Items>
+                                            <MenuFlyoutItem x:Name="Edit"  Text="Edit"/>
+                                            <MenuFlyoutItem x:Name="Remove" Text="Remove"/>
+                                            <MenuFlyoutItem x:Uid="MnuSelectTracks" Text="Select" Command="{Binding SelectTracksCommand}"/>
+                                        </MenuFlyout.Items>
+                                    </MenuFlyout>
+                                    <!--<MenuFlyout controlextensions:FlyoutExtensions.IsOpen="{Binding DataContext.IsOpen, ElementName=SelectedToFavoritesButton}"
+                                                controlextensions:FlyoutExtensions.Parent="{Binding}">
+                                        <MenuFlyout.Items>
+                                            <MenuFlyoutItem x:Name="Edit"  Text="Edit"/>
+                                            <MenuFlyoutItem x:Name="Remove" Text="Remove"/>
+                                        </MenuFlyout.Items>
+                                    </MenuFlyout>-->
+                                </Grid.ContextFlyout>
+                                <!--<FlyoutBase.AttachedFlyout>
+                                    
+                                </FlyoutBase.AttachedFlyout>-->
                                 <TextBlock Text="{Binding TrackNumber}" VerticalAlignment="Center" HorizontalAlignment="Right" Grid.Column="0"/>
                                 <TextBlock Text="{Binding Name}"
                                        Margin="10,0,0,0" TextTrimming="WordEllipsis" 
@@ -129,6 +148,7 @@
                                 <TextBlock Text="{Binding Duration}" 
                                        Margin="10,0,0,0" VerticalAlignment="Center" Grid.Column="2"/>
                             </Grid>
+                            
                         </DataTemplate>
                     </ListView.ItemTemplate>
                     <ListView.ItemContainerStyle>

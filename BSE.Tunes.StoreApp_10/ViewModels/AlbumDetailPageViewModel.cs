@@ -23,6 +23,8 @@ namespace BSE.Tunes.StoreApp.ViewModels
 
         private PlayerManager m_playerManager;
         private ICommand m_playTrackCommand;
+        private ICommand m_rightTappedCommand;
+        private bool m_isOpen;
         #endregion
 
         #region Properties
@@ -36,6 +38,18 @@ namespace BSE.Tunes.StoreApp.ViewModels
             {
                 this.m_album = value;
                 RaisePropertyChanged("Album");
+            }
+        }
+        public bool IsOpen
+        {
+            get
+            {
+                return this.m_isOpen;
+            }
+            set
+            {
+                this.m_isOpen = value;
+                RaisePropertyChanged("IsOpen");
             }
         }
         public Uri CoverSource
@@ -52,8 +66,15 @@ namespace BSE.Tunes.StoreApp.ViewModels
         }
         public RelayCommand PlayAllCommand => m_playAllCommand ?? (m_playAllCommand = new RelayCommand(PlayAll, CanPlayAll));
         public ICommand PlayTrackCommand => m_playTrackCommand ?? (m_playTrackCommand = new RelayCommand<Track>(PlayTrack));
+        public ICommand RightTappedCommand => m_rightTappedCommand ?? (m_rightTappedCommand = new RelayCommand<Track>(TestFunction));
 
-        
+        private void TestFunction(Track obj)
+        {
+            this.IsOpen = true;
+            
+            //throw new NotImplementedException();
+        }
+
         #endregion
 
         #region MethodsPublic

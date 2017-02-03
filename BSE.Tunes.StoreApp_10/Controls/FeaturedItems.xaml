@@ -33,9 +33,9 @@
             </uwpcontrols:Carousel.ContentTemplate>
         </uwpcontrols:Carousel>
         <uwpcontrols:Indicator x:Name="indicator" Margin="0,9"
-                                ItemsSource="{Binding ItemsSource, ElementName=carousel, Mode=TwoWay}"
-                           SelectedIndex="{Binding SelectedIndex, ElementName=carousel, Mode=TwoWay}"
-                                ShapeMode="Ellipse" Background="WhiteSmoke" SelectedBackground="{ThemeResource SystemAccentColor}" PressedBackground="Gray" />
+                               ItemsSource="{Binding ItemsSource, ElementName=carousel, Mode=TwoWay}"
+                               SelectedIndex="{Binding SelectedIndex, ElementName=carousel, Mode=TwoWay}"
+                               ShapeMode="Ellipse" />
     </StackPanel>
     <!--<FlipView ScrollViewer.IsHorizontalRailEnabled="True" ItemsSource="{Binding ItemsGroup.Items}">
         <FlipView.ItemTemplate>

@@ -29,6 +29,7 @@
                         <Setter Target="infoProperties.Height" Value="Auto"/>
                         <Setter Target="infoTitle.HorizontalAlignment" Value="Center"/>
                         <Setter Target="infoSubTitle.HorizontalAlignment" Value="Center"/>
+                        <Setter Target="infoAction.HorizontalAlignment" Value="Center"/>
                     </VisualState.Setters>
                 </VisualState>
                 <VisualState x:Name="VisualStateNormal">

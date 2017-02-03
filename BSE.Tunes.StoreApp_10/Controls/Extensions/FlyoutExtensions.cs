@@ -93,7 +93,7 @@ namespace BSE.Tunes.StoreApp.Controls.Extensions
         /// <param name="e">Event data that is issued by any event that tracks changes to the effective value of this property.</param>
         private static void OnIsOpenChanged(DependencyObject obj, DependencyPropertyChangedEventArgs e)
         {
-            var flyout = obj as Flyout;
+            var flyout = obj as MenuFlyout;
             var parent = (FrameworkElement)obj.GetValue(ParentProperty);
 
             if (flyout != null && parent != null)
