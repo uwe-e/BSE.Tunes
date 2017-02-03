@@ -16,7 +16,7 @@ namespace BSE.Tunes.StoreApp.ViewModels
         #region MethodsPublic
         public override void SelectItem(ItemViewModel item)
         {
-            base.SelectItem(item);
+            NavigationService.NavigateAsync(typeof(Views.PlaylistDetailPage), item.Data);
         }
         public override void NavigateTo()
         {

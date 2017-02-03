@@ -73,9 +73,14 @@
                       VerticalScrollBarVisibility="Auto">
             <Grid Margin="0">
                 <ListView x:Name="listView" ItemsSource="{x:Bind ViewModel.SettingItems}" Visibility="Collapsed" Margin="0,0,12,0">
+                    <ListView.ItemContainerStyle>
+                        <Style TargetType="ListViewItem">
+                            <Setter Property="Padding" Value="0,4"/>
+                        </Style>
+                    </ListView.ItemContainerStyle>
                     <ListView.ItemTemplate>
                         <DataTemplate>
-                            <Grid>
+                            <Grid >
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="Auto"/>
                                     <ColumnDefinition Width="*"/>

@@ -23,7 +23,6 @@ namespace BSE.Tunes.StoreApp.ViewModels
         private IDialogService m_dialogService;
         private ICommand m_playCommand;
         private RelayCommand m_previousTrackCommand;
-        private ICommand m_stopCommand;
         private RelayCommand m_nextTrackCommand;
         private ICommand m_selectItemCommand;
         private PlayerState m_playerState = PlayerState.Closed;
@@ -163,7 +162,6 @@ namespace BSE.Tunes.StoreApp.ViewModels
             }
         }
         public ICommand PlayCommand => m_playCommand ?? (m_playCommand = new RelayCommand<object>(vm => Play()));
-        public ICommand StopCommand => m_stopCommand ?? (this.m_stopCommand = new RelayCommand<object>(vm => this.m_playerManager.Stop()));
         public ICommand SelectItemCommand => m_selectItemCommand ?? (this.m_selectItemCommand = new RelayCommand(this.SelectItem));
         public RelayCommand PreviousTrackCommand => m_previousTrackCommand ?? (m_previousTrackCommand = new RelayCommand(ExecutePreviousTrack, CanExecutePreviousTrack));
         public RelayCommand NextTrackCommand => m_nextTrackCommand ?? (m_nextTrackCommand = new RelayCommand(ExecuteNextTrack, CanExecuteNextTrack));

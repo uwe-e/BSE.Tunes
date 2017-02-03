@@ -177,18 +177,12 @@ namespace BSE.Tunes.StoreApp.Services
                 this.m_mediaElement = mediaElement;
                 this.m_mediaElement.SetMediaPlayer(MediaPlayer);
                 this.m_mediaElement.AutoPlay = true;
-                //The property AreTransportControlsEnabled causes in an additional displaying of mediaplayer content.
-                //this.m_mediaElement.AreTransportControlsEnabled = true;
-
                 this.m_mediaElement.MediaPlayer.MediaOpened += OnMediaOpened;
                 this.m_mediaElement.MediaPlayer.MediaEnded += OnMediaEnded;
                 this.m_mediaElement.MediaPlayer.MediaFailed += OnMediaFailed;
                 this.m_mediaElement.MediaPlayer.PlaybackSession.PlaybackStateChanged += OnPlaybackStateChanged;
 
                 this.m_systemMediaControls = this.m_mediaElement.MediaPlayer.SystemMediaTransportControls;
-                //If you are going to manually control the SMTC, you should disable the automatic integration provided by MediaPlayer by setting
-                //the CommandManager.IsEnabled property to false.
-                //this.m_mediaElement.MediaPlayer.CommandManager.IsEnabled = false;
                 this.m_systemMediaControls.IsEnabled = false;
                 this.m_systemMediaControls.ButtonPressed += (sender, args) =>
                 {
@@ -200,9 +194,6 @@ namespace BSE.Tunes.StoreApp.Services
                         case SystemMediaTransportControlsButton.Pause:
                             this.Pause();
                             break;
-                        case SystemMediaTransportControlsButton.Stop:
-                            this.Stop();
-                            break;
                         case SystemMediaTransportControlsButton.Previous:
                             this.PreviousTrack();
                             break;
@@ -213,7 +204,6 @@ namespace BSE.Tunes.StoreApp.Services
                 };
                 this.m_systemMediaControls.IsPlayEnabled = true;
                 this.m_systemMediaControls.IsPauseEnabled = true;
-                this.m_systemMediaControls.IsStopEnabled = true;
                 this.m_systemMediaControls.PlaybackStatus = MediaPlaybackStatus.Closed;
             }
         }
@@ -273,13 +263,6 @@ namespace BSE.Tunes.StoreApp.Services
             await this.m_mediaElement.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
             {
                 this.m_mediaElement.MediaPlayer.Pause();
-            });
-        }
-        public async void Stop()
-        {
-            await this.m_mediaElement.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
-            {
-                //this.m_mediaElement.Stop();
             });
         }
         public async void NextTrack()

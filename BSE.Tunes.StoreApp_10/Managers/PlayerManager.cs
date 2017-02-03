@@ -219,10 +219,6 @@ namespace BSE.Tunes.StoreApp.Managers
         {
             this.PlayerService.Pause();
         }
-        public void Stop()
-        {
-            this.PlayerService.Stop();
-        }
         #endregion
 
         #region MethodsPrivate

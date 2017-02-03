@@ -23,7 +23,6 @@ namespace BSE.Tunes.StoreApp.Services
         Task PrepareTrack(Track track);
         void Play();
         void Pause();
-        void Stop();
         void NextTrack();
         void PreviousTrack();
     }

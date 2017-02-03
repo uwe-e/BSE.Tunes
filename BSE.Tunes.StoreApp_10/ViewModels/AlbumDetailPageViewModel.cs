@@ -19,7 +19,7 @@ namespace BSE.Tunes.StoreApp.ViewModels
         #region FieldsPrivate
         private Album m_album;
         private Uri m_coverSource;
-        private RelayCommand m_playAlbumCommand;
+        private RelayCommand m_playAllCommand;
 
         private PlayerManager m_playerManager;
         private ICommand m_playTrackCommand;
@@ -50,7 +50,7 @@ namespace BSE.Tunes.StoreApp.ViewModels
                 RaisePropertyChanged("CoverSource");
             }
         }
-        public RelayCommand PlayAlbumCommand => m_playAlbumCommand ?? (m_playAlbumCommand = new RelayCommand(PlayAlbum, CanPlayAlbum));
+        public RelayCommand PlayAllCommand => m_playAllCommand ?? (m_playAllCommand = new RelayCommand(PlayAll, CanPlayAll));
         public ICommand PlayTrackCommand => m_playTrackCommand ?? (m_playTrackCommand = new RelayCommand<Track>(PlayTrack));
 
         
@@ -68,17 +68,17 @@ namespace BSE.Tunes.StoreApp.ViewModels
             {
                 this.Album = await DataService.GetAlbumById(album.Id);
                 this.CoverSource = DataService.GetImage(album.AlbumId);
-                this.PlayAlbumCommand.RaiseCanExecuteChanged();
+                this.PlayAllCommand.RaiseCanExecuteChanged();
             }
         }
         #endregion
 
         #region MethodsPrivate
-        private bool CanPlayAlbum()
+        private bool CanPlayAll()
         {
             return this.Album != null && this.Album.Tracks != null && this.Album?.Tracks?.Count() > 0;
         }
-        private void PlayAlbum()
+        private void PlayAll()
         {
             var tracks = new System.Collections.ObjectModel.ObservableCollection<Track>(this.Album.Tracks);
             if (tracks != null && tracks.Count() > 0)

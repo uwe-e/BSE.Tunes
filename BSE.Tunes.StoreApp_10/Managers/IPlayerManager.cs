@@ -29,6 +29,5 @@ namespace BSE.Tunes.StoreApp.Managers
         void PrepareNextTrack();
         void Play();
         void Pause();
-        void Stop();
     }
 }

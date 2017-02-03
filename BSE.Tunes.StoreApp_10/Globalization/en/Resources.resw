@@ -240,4 +240,10 @@ A registration can only be done by the operator of the server.</value>
   <data name="Shell_TxtPlaylists.Text" xml:space="preserve">
     <value>Playlists</value>
   </data>
+  <data name="PlaylistDetailPage_Header.Text" xml:space="preserve">
+    <value>Playlist</value>
+  </data>
+  <data name="PlaylistDetailPage_PlayAll.Text" xml:space="preserve">
+    <value>Play all</value>
+  </data>
 </root>

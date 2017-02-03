@@ -45,7 +45,6 @@ namespace BSE.Tunes.StoreApp.ViewModels
                                     Data = playlist
                                 });
                             }
-
                         }
                     }
                 }
@@ -53,6 +52,10 @@ namespace BSE.Tunes.StoreApp.ViewModels
                 {
                 }
             }
+        }
+        public override void SelectItem(ItemViewModel item)
+        {
+            NavigationService.NavigateAsync(typeof(Views.PlaylistDetailPage), item.Data);
         }
         #endregion
 
