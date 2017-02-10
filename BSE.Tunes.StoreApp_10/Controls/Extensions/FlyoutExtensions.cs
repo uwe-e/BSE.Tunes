@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Windows.Foundation;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 
@@ -29,6 +30,9 @@ namespace BSE.Tunes.StoreApp.Controls.Extensions
         public static readonly DependencyProperty ParentProperty =
             DependencyProperty.RegisterAttached("Parent", typeof(FrameworkElement),
             typeof(FlyoutExtensions), new PropertyMetadata(null, OnParentChanged));
+        public static readonly DependencyProperty OffsetPointProperty =
+            DependencyProperty.RegisterAttached("OffsetPoint", typeof(Point),
+                typeof(FlyoutExtensions), new PropertyMetadata(null));
         /// <summary>
         /// Set the IsOpen value.
         /// </summary>
@@ -65,6 +69,14 @@ namespace BSE.Tunes.StoreApp.Controls.Extensions
         {
             return (FrameworkElement)obj.GetValue(ParentProperty);
         }
+        public static void SetOffsetPoint(DependencyObject obj, Point value)
+        {
+            obj.SetValue(OffsetPointProperty, value);
+        }
+        public static Point GetOffsetPoint(DependencyObject obj)
+        {
+            return (Point)obj.GetValue(OffsetPointProperty);
+        }
         /// <summary>
         /// Handles changes to the Parent property.
         /// </summary>
@@ -95,7 +107,11 @@ namespace BSE.Tunes.StoreApp.Controls.Extensions
         {
             var flyout = obj as MenuFlyout;
             var parent = (FrameworkElement)obj.GetValue(ParentProperty);
-
+            var offsetPoint = (Point)obj.GetValue(OffsetPointProperty);
+            //var fe = sender as FrameworkElement;
+            //var menu = (MenuFlyout)FlyoutBase.GetAttachedFlyout(fe);
+            //menu.ShowAt(fe, e.GetPosition(fe));
+            
             if (flyout != null && parent != null)
             {
                 // trycatch prevents the
@@ -106,7 +122,8 @@ namespace BSE.Tunes.StoreApp.Controls.Extensions
                     var newValue = (bool)e.NewValue;
                     if (newValue)
                     {
-                        flyout.ShowAt(parent);
+                        flyout.Closed += OnFlyoutClosed;
+                        flyout.ShowAt(parent, offsetPoint);
                     }
                     else
                     {
@@ -115,6 +132,11 @@ namespace BSE.Tunes.StoreApp.Controls.Extensions
                 }
                 catch { }
             }
+        }
+
+        private static void OnFlyoutClosed(object sender, object e)
+        {
+            SetIsOpen(sender as DependencyObject, false);
         }
     }
 }

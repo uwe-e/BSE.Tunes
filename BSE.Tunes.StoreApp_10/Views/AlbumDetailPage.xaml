@@ -6,6 +6,11 @@
     xmlns:controls="using:Template10.Controls"
     xmlns:usercontrols="using:BSE.Tunes.StoreApp.Controls"
     xmlns:controlextensions="using:BSE.Tunes.StoreApp.Controls.Extensions"
+    xmlns:behaviours="using:BSE.Tunes.StoreApp.Controls.Behaviours"
+    xmlns:interactivity="using:Microsoft.Xaml.Interactivity"
+    xmlns:core="using:Microsoft.Xaml.Interactions.Core"
+    xmlns:mvvm="http://www.galasoft.ch/mvvmlight"
+    xmlns:converters="using:BSE.Tunes.StoreApp.Converters"
     xmlns:vm="using:BSE.Tunes.StoreApp.ViewModels"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
@@ -14,6 +19,11 @@
     <Page.DataContext>
         <vm:AlbumDetailPageViewModel x:Name="ViewModel" />
     </Page.DataContext>
+
+    <Page.Resources>
+        <converters:RightTappedRoutedEventArgsToPointConverter x:Key="RightTappedToPointConverter"/>
+        <converters:InverseBooleanConverter x:Key="InverseBooleanConverter"/>
+    </Page.Resources>
 
     <RelativePanel Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
         <VisualStateManager.VisualStateGroups>
@@ -53,7 +63,7 @@
                 </VisualState>
             </VisualStateGroup>
         </VisualStateManager.VisualStateGroups>
-        
+
         <controls:PageHeader x:Name="pageHeader"
                              x:Uid="AlbumsDetailPage_Header"
                              Frame="{x:Bind Frame}"
@@ -102,65 +112,57 @@
                                         </Grid.ColumnDefinitions>
                                         <FontIcon Glyph="&#xE102;" Grid.Column="0"/>
                                         <TextBlock x:Uid="AlbumDetailPage_PlayAll" Text="Alle wiedergeben" Margin="6,0,0,0" Grid.Column="1"/>
-                                </Grid>
-                            </HyperlinkButton>
+                                    </Grid>
+                                </HyperlinkButton>
                             </StackPanel>
                         </Grid>
                     </StackPanel>
                 </Grid>
-
-                <ListView RelativePanel.AlignLeftWithPanel="True" RelativePanel.AlignRightWithPanel="True" RelativePanel.Below="infoPart" ItemsSource="{Binding Album.Tracks}" SelectionMode="Extended"
-                          IsItemClickEnabled="True" controlextensions:ListViewExtensions.Command="{Binding PlayTrackCommand}">
+                <ListView x:Name="listview" RelativePanel.AlignLeftWithPanel="True" RelativePanel.AlignRightWithPanel="True" RelativePanel.Below="infoPart"
+                          ItemsSource="{Binding Items}"
+                          SelectionMode="{Binding HasSelectedItems, Converter={StaticResource BooleanToSelectionModeConverter}}"
+                          IsItemClickEnabled="{Binding HasSelectedItems, Converter={StaticResource InverseBooleanConverter}}"
+                          controlextensions:ListViewExtensions.Command="{Binding PlayTrackCommand}" 
+                          controlextensions:ListViewExtensions.SelectedItems="{Binding SelectedItems, Mode=TwoWay}">
                     <ListView.ItemTemplate>
                         <DataTemplate>
-                            <Grid Height="48" Margin="0">
+                            <Grid  x:Name="listViewItem" Height="48" Margin="0">
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="40"/>
                                     <ColumnDefinition Width="*"/>
                                     <ColumnDefinition Width="90"/>
                                 </Grid.ColumnDefinitions>
-                                <Grid.ContextFlyout>
-                                    <MenuFlyout controlextensions:FlyoutExtensions.IsOpen="{Binding IsOpen}">
+                                <FlyoutBase.AttachedFlyout>
+                                    <MenuFlyout controlextensions:FlyoutExtensions.IsOpen="{Binding IsOpen, Mode=TwoWay}" 
+                                                controlextensions:FlyoutExtensions.Parent="{Binding ElementName=listViewItem}"
+                                                controlextensions:FlyoutExtensions.OffsetPoint="{Binding OffsetPoint, Mode=TwoWay}">
                                         <MenuFlyout.Items>
                                             <MenuFlyoutItem x:Name="Edit"  Text="Edit"/>
                                             <MenuFlyoutItem x:Name="Remove" Text="Remove"/>
-                                            <MenuFlyoutItem x:Uid="MnuSelectTracks" Text="Select" Command="{Binding SelectTracksCommand}"/>
+                                            <MenuFlyoutItem x:Uid="MnuSelectTracks" Text="Select" Command="{Binding DataContext.SelectItemsCommand, ElementName=listview}" CommandParameter="{Binding}"/>
                                         </MenuFlyout.Items>
                                     </MenuFlyout>
-                                    <!--<MenuFlyout controlextensions:FlyoutExtensions.IsOpen="{Binding DataContext.IsOpen, ElementName=SelectedToFavoritesButton}"
-                                                controlextensions:FlyoutExtensions.Parent="{Binding}">
-                                        <MenuFlyout.Items>
-                                            <MenuFlyoutItem x:Name="Edit"  Text="Edit"/>
-                                            <MenuFlyoutItem x:Name="Remove" Text="Remove"/>
-                                        </MenuFlyout.Items>
-                                    </MenuFlyout>-->
-                                </Grid.ContextFlyout>
-                                <!--<FlyoutBase.AttachedFlyout>
-                                    
-                                </FlyoutBase.AttachedFlyout>-->
-                                <TextBlock Text="{Binding TrackNumber}" VerticalAlignment="Center" HorizontalAlignment="Right" Grid.Column="0"/>
-                                <TextBlock Text="{Binding Name}"
+                                </FlyoutBase.AttachedFlyout>
+                                <TextBlock Text="{Binding Data.TrackNumber}" VerticalAlignment="Center" HorizontalAlignment="Right" Grid.Column="0"/>
+                                <TextBlock Text="{Binding Data.Name}"
                                        Margin="10,0,0,0" TextTrimming="WordEllipsis" 
                                        VerticalAlignment="Center" Grid.Column="1"/>
-                                <!--<TextBlock Text="{Binding Path=Album.Id, RelativeSource={RelativeSource Mode=None}}"
-                                       Margin="10,0,0,0" Width="300" TextTrimming="WordEllipsis" 
-                                       HorizontalAlignment="Left"/>-->
-                                <TextBlock Text="{Binding Duration}" 
+                                <TextBlock Text="{Binding Data.Duration}" 
                                        Margin="10,0,0,0" VerticalAlignment="Center" Grid.Column="2"/>
+                                <interactivity:Interaction.Behaviors>
+                                    <core:EventTriggerBehavior EventName="RightTapped">
+                                        <core:InvokeCommandAction Command="{Binding DataContext.ShowFlyoutCommand, ElementName=listview}"
+                                                                  InputConverter="{StaticResource RightTappedToPointConverter}"
+                                                                  InputConverterParameter="{Binding ElementName=listViewItem}"/>
+                                    </core:EventTriggerBehavior>
+                                </interactivity:Interaction.Behaviors>
                             </Grid>
-                            
+
                         </DataTemplate>
                     </ListView.ItemTemplate>
                     <ListView.ItemContainerStyle>
                         <Style TargetType="ListViewItem">
                             <Setter Property="HorizontalContentAlignment" Value="Stretch" />
-                            <!--<Setter Property="Template">
-                                <Setter.Value>
-                                    <ControlTemplate>
-                                        <ListViewItemPresenter CheckMode="Inline"/>
-                                    </ControlTemplate>
-                                </Setter.Value>
-                            </Setter>-->
                         </Style>
                     </ListView.ItemContainerStyle>
                 </ListView>

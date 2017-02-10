@@ -11,6 +11,8 @@
     
     <!-- The global converters --> 
     <converter:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
+    <converter:InverseBooleanConverter x:Key="InverseBooleanConverter"/>
+    <converter:BooleanToListViewSelectionModeConverter x:Key="BooleanToSelectionModeConverter"/>
 
     <!-- Global Style selectors-->
     <!--<styles:ListViewItemStyleSelector x:Key="ListViewItemStyleSelector"/>-->

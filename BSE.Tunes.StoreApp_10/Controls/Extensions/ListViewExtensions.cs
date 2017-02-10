@@ -1,4 +1,5 @@
-﻿using System.Collections.Specialized;
+﻿using System.Collections.ObjectModel;
+using System.Collections.Specialized;
 using System.Windows.Input;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
@@ -192,75 +193,166 @@ namespace BSE.Tunes.StoreApp.Controls.Extensions
         //    var scrollViewer = listView.GetFirstDescendantOfType<ScrollViewer>();
         //    scrollViewer.ScrollToVerticalOffset(scrollViewer.ScrollableHeight);
         //}
+
+        #region BindableSelection
+        /// <summary>
+        /// BindableSelection Attached Dependency Property
+        /// </summary>
+        public static readonly DependencyProperty SelectedItemsProperty =
+            DependencyProperty.RegisterAttached(
+                "SelectedItems",
+                typeof(object),
+                typeof(ListViewExtensions),
+                new PropertyMetadata(null, OnSelectedItemsChanged));
+
+        /// <summary>
+        /// Gets the BindableSelection property. This dependency property 
+        /// indicates the list of selected items that is synchronized
+        /// with the items selected in the ListView.
+        /// </summary>
+        public static ObservableCollection<object> GetSelectedItems(DependencyObject d)
+        {
+            return (ObservableCollection<object>)d.GetValue(SelectedItemsProperty);
+        }
+
+        /// <summary>
+        /// Sets the BindableSelection property. This dependency property 
+        /// indicates the list of selected items that is synchronized
+        /// with the items selected in the ListView.
+        /// </summary>
+        public static void SetSelectedItems(DependencyObject d, ObservableCollection<object> value)
+        {
+            d.SetValue(SelectedItemsProperty, value);
+        }
+        /// <summary>
+        /// Handles changes to the BindableSelection property.
+        /// </summary>
+        /// <param name="d">
+        /// The <see cref="DependencyObject"/> on which
+        /// the property has changed value.
+        /// </param>
+        /// <param name="e">
+        /// Event data that is issued by any event that
+        /// tracks changes to the effective value of this property.
+        /// </param>
+        private static void OnSelectedItemsChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            dynamic oldSelectedItems = e.OldValue;
+            dynamic newSelectedItems = d.GetValue(SelectedItemsProperty);
+
+            if (oldSelectedItems != null)
+            {
+                var handler = GetSelectedItemsHandler(d);
+                SetSelectedItemsHandler(d, null);
+                handler?.Detach();
+            }
+
+            if (newSelectedItems != null)
+            {
+                var handler = new ListViewSelectedItemsHandler((ListViewBase)d, newSelectedItems);
+                SetSelectedItemsHandler(d, handler);
+            }
+        }
+        #endregion
+
+        #region SelectedItemsHandler
+        /// <summary>
+        /// BindableSelectionHandler Attached Dependency Property
+        /// </summary>
+        public static readonly DependencyProperty BindableSelectedItemsHandlerProperty =
+            DependencyProperty.RegisterAttached(
+                "SelectedItemsHandler",
+                typeof(ListViewSelectedItemsHandler),
+                typeof(ListViewExtensions),
+                new PropertyMetadata(null));
+
+        /// <summary>
+        /// Gets the BindableSelectionHandler property. This dependency property 
+        /// indicates BindableSelectionHandler for a ListView - used
+        /// to manage synchronization of BindableSelection and SelectedItems.
+        /// </summary>
+        public static ListViewSelectedItemsHandler GetSelectedItemsHandler(DependencyObject d)
+        {
+            return (ListViewSelectedItemsHandler)d.GetValue(BindableSelectedItemsHandlerProperty);
+        }
+
+        /// <summary>
+        /// Sets the BindableSelectionHandler property. This dependency property 
+        /// indicates BindableSelectionHandler for a ListView - used to manage synchronization of BindableSelection and SelectedItems.
+        /// </summary>
+        public static void SetSelectedItemsHandler(DependencyObject d, ListViewSelectedItemsHandler value)
+        {
+            d.SetValue(BindableSelectedItemsHandlerProperty, value);
+        }
+        #endregion
+
     }
 
-    public class ListViewBindableSelectionHandler
+    public class ListViewSelectedItemsHandler
     {
-        private ListViewBase _listView;
-        private dynamic _boundSelection;
-        private readonly NotifyCollectionChangedEventHandler _handler;
+        private ListViewBase m_listView;
+        private dynamic m_boundSelection;
+        private readonly NotifyCollectionChangedEventHandler m_notifyCollectionChangedHandler;
 
-        public ListViewBindableSelectionHandler(
+        public ListViewSelectedItemsHandler(
             ListViewBase listView, dynamic boundSelection)
         {
-            _handler = OnBoundSelectionChanged;
+            m_notifyCollectionChangedHandler = OnBoundSelectionChanged;
             Attach(listView, boundSelection);
         }
 
         private void Attach(ListViewBase listView, dynamic boundSelection)
         {
-            _listView = listView;
-            _listView.SelectionChanged += OnListViewSelectionChanged;
-            _boundSelection = boundSelection;
-            _listView.SelectedItems.Clear();
+            m_listView = listView;
+            m_listView.SelectionChanged += OnListViewSelectionChanged;
+            m_boundSelection = boundSelection;
+            m_listView.SelectedItems.Clear();
 
-            foreach (object item in _boundSelection)
+            foreach (object item in m_boundSelection)
             {
-                if (!_listView.SelectedItems.Contains(item))
+                if (!m_listView.SelectedItems.Contains(item))
                 {
-                    _listView.SelectedItems.Add(item);
+                    m_listView.SelectedItems.Add(item);
                 }
             }
 
-            var eventInfo =
-                _boundSelection.GetType().GetDeclaredEvent("CollectionChanged");
-            eventInfo.AddEventHandler(_boundSelection, _handler);
-            //_boundSelection.CollectionChanged += OnBoundSelectionChanged;
+            var eventInfo = m_boundSelection.GetType().GetDeclaredEvent("CollectionChanged");
+            eventInfo.AddEventHandler(m_boundSelection, m_notifyCollectionChangedHandler);
         }
 
-        private void OnListViewSelectionChanged(
-            object sender, SelectionChangedEventArgs e)
+        private void OnListViewSelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            foreach (dynamic item in e.RemovedItems)
+            if (((ListViewBase)sender).SelectionMode == ListViewSelectionMode.Multiple)
             {
-                if (_boundSelection.Contains(item))
+                foreach (dynamic item in e.RemovedItems)
                 {
-                    _boundSelection.Remove(item);
-                }
-            }
-
-            foreach (dynamic item in e.AddedItems)
-            {
-                if (!_boundSelection.Contains(item))
-                {
-                    _boundSelection.Add(item);
-                }
-            }
-        }
-
-        private void OnBoundSelectionChanged(
-            object sender, NotifyCollectionChangedEventArgs e)
-        {
-            if (e.Action ==
-                NotifyCollectionChangedAction.Reset)
-            {
-                _listView.SelectedItems.Clear();
-
-                foreach (var item in _boundSelection)
-                {
-                    if (!_listView.SelectedItems.Contains(item))
+                    if (m_boundSelection.Contains(item))
                     {
-                        _listView.SelectedItems.Add(item);
+                        m_boundSelection.Remove(item);
+                    }
+                }
+
+                foreach (dynamic item in e.AddedItems)
+                {
+                    if (!m_boundSelection.Contains(item))
+                    {
+                        m_boundSelection.Add(item);
+                    }
+                }
+            }
+        }
+
+        private void OnBoundSelectionChanged(object sender, NotifyCollectionChangedEventArgs e)
+        {
+            if (e.Action == NotifyCollectionChangedAction.Reset)
+            {
+                m_listView.SelectedItems.Clear();
+
+                foreach (var item in m_boundSelection)
+                {
+                    if (!m_listView.SelectedItems.Contains(item))
+                    {
+                        m_listView.SelectedItems.Add(item);
                     }
                 }
 
@@ -271,9 +363,9 @@ namespace BSE.Tunes.StoreApp.Controls.Extensions
             {
                 foreach (var item in e.OldItems)
                 {
-                    if (_listView.SelectedItems.Contains(item))
+                    if (m_listView.SelectedItems.Contains(item))
                     {
-                        _listView.SelectedItems.Remove(item);
+                        m_listView.SelectedItems.Remove(item);
                     }
                 }
             }
@@ -282,9 +374,9 @@ namespace BSE.Tunes.StoreApp.Controls.Extensions
             {
                 foreach (var item in e.NewItems)
                 {
-                    if (!_listView.SelectedItems.Contains(item))
+                    if (!m_listView.SelectedItems.Contains(item))
                     {
-                        _listView.SelectedItems.Add(item);
+                        m_listView.SelectedItems.Add(item);
                     }
                 }
             }
@@ -292,12 +384,11 @@ namespace BSE.Tunes.StoreApp.Controls.Extensions
 
         internal void Detach()
         {
-            _listView.SelectionChanged -= OnListViewSelectionChanged;
-            _listView = null;
-            var eventInfo =
-                _boundSelection.GetType().GetDeclaredEvent("CollectionChanged");
-            eventInfo.RemoveEventHandler(_boundSelection, _handler);
-            _boundSelection = null;
+            m_listView.SelectionChanged -= OnListViewSelectionChanged;
+            m_listView = null;
+            var eventInfo = m_boundSelection.GetType().GetDeclaredEvent("CollectionChanged");
+            eventInfo.RemoveEventHandler(m_boundSelection, m_notifyCollectionChangedHandler);
+            m_boundSelection = null;
         }
     }
 }
