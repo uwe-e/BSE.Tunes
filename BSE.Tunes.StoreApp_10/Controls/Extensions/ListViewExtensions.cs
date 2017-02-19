@@ -259,7 +259,7 @@ namespace BSE.Tunes.StoreApp.Controls.Extensions
         /// <summary>
         /// BindableSelectionHandler Attached Dependency Property
         /// </summary>
-        public static readonly DependencyProperty BindableSelectedItemsHandlerProperty =
+        public static readonly DependencyProperty SelectedItemsHandlerProperty =
             DependencyProperty.RegisterAttached(
                 "SelectedItemsHandler",
                 typeof(ListViewSelectedItemsHandler),
@@ -273,7 +273,7 @@ namespace BSE.Tunes.StoreApp.Controls.Extensions
         /// </summary>
         public static ListViewSelectedItemsHandler GetSelectedItemsHandler(DependencyObject d)
         {
-            return (ListViewSelectedItemsHandler)d.GetValue(BindableSelectedItemsHandlerProperty);
+            return (ListViewSelectedItemsHandler)d.GetValue(SelectedItemsHandlerProperty);
         }
 
         /// <summary>
@@ -282,7 +282,7 @@ namespace BSE.Tunes.StoreApp.Controls.Extensions
         /// </summary>
         public static void SetSelectedItemsHandler(DependencyObject d, ListViewSelectedItemsHandler value)
         {
-            d.SetValue(BindableSelectedItemsHandlerProperty, value);
+            d.SetValue(SelectedItemsHandlerProperty, value);
         }
         #endregion
 

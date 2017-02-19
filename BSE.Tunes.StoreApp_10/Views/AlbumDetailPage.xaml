@@ -25,6 +25,30 @@
         <converters:InverseBooleanConverter x:Key="InverseBooleanConverter"/>
     </Page.Resources>
 
+    <Page.BottomAppBar>
+        <CommandBar x:Uid="BottomAppBar" Visibility="{Binding IsCommandBarVisible, Converter={StaticResource BooleanToVisibilityConverter}}">
+            <AppBarButton x:Uid="ButtonPlaySelection" Icon="Play"
+                            Command="{Binding PlaySelectedItemsCommand}"/>
+            <AppBarButton x:Name="buttonAddTo" x:Uid="ButtonAddToPlaylist" Icon="Add"
+                            Command="{Binding OpenPlaylistFlyoutCommand}">
+                <FlyoutBase.AttachedFlyout>
+                    <Flyout controlextensions:FlyoutExtensions.IsOpen="{Binding IsPlaylistFlyoutOpen, Mode=TwoWay}"
+                            controlextensions:FlyoutExtensions.Parent="{Binding ElementName=buttonAddTo}" controlextensions:FlyoutExtensions.ItemsSource="{Binding MenuItemsPlaylist}">
+                        <controlextensions:FlyoutExtensions.ItemTemplate>
+                            <DataTemplate>
+                                <Grid>
+                                    <MenuFlyoutItem Text="{Binding Text}" Visibility="{Binding IsSeparator, Converter={StaticResource BooleanToVisibilityConverter}, ConverterParameter=true}"/>
+                                    <MenuFlyoutSeparator Visibility="{Binding IsSeparator, Converter={StaticResource BooleanToVisibilityConverter}, ConverterParameter=false}"/>
+                                </Grid>
+                                
+                            </DataTemplate>
+                        </controlextensions:FlyoutExtensions.ItemTemplate>
+                    </Flyout>
+                </FlyoutBase.AttachedFlyout>
+            </AppBarButton>
+        </CommandBar>
+    </Page.BottomAppBar>
+    
     <RelativePanel Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
         <VisualStateManager.VisualStateGroups>
             <VisualStateGroup x:Name="AdaptiveVisualStateGroup">
@@ -137,9 +161,8 @@
                                                 controlextensions:FlyoutExtensions.Parent="{Binding ElementName=listViewItem}"
                                                 controlextensions:FlyoutExtensions.OffsetPoint="{Binding OffsetPoint, Mode=TwoWay}">
                                         <MenuFlyout.Items>
-                                            <MenuFlyoutItem x:Name="Edit"  Text="Edit"/>
-                                            <MenuFlyoutItem x:Name="Remove" Text="Remove"/>
-                                            <MenuFlyoutItem x:Uid="MnuSelectTracks" Text="Select" Command="{Binding DataContext.SelectItemsCommand, ElementName=listview}" CommandParameter="{Binding}"/>
+                                            <MenuFlyoutItem x:Uid="MenuFlyoutAddTo" Text="Add to"/>
+                                            <MenuFlyoutItem x:Uid="MenuFlyoutSelectItems" Text="Select" Command="{Binding DataContext.SelectItemsCommand, ElementName=listview}" CommandParameter="{Binding}"/>
                                         </MenuFlyout.Items>
                                     </MenuFlyout>
                                 </FlyoutBase.AttachedFlyout>

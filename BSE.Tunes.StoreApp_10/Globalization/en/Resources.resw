@@ -246,4 +246,19 @@ A registration can only be done by the operator of the server.</value>
   <data name="PlaylistDetailPage_PlayAll.Text" xml:space="preserve">
     <value>Play all</value>
   </data>
+  <data name="ButtonPlaySelection.Label" xml:space="preserve">
+    <value>Play</value>
+  </data>
+  <data name="MenuFlyoutAddTo.Text" xml:space="preserve">
+    <value>Add to</value>
+  </data>
+  <data name="MenuFlyoutSelectItems.Text" xml:space="preserve">
+    <value>Select</value>
+  </data>
+  <data name="ButtonAddToPlaylist.Label" xml:space="preserve">
+    <value>Add to</value>
+  </data>
+  <data name="FlyoutMenuItem_AddNewPlaylist" xml:space="preserve">
+    <value>New Playlist</value>
+  </data>
 </root>

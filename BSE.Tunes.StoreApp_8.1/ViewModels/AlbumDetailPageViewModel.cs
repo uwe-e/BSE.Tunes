@@ -98,7 +98,6 @@ namespace BSE.Tunes.StoreApp.ViewModels
         #region MethodsProtected
         protected override void PlaySelectedItems()
         {
-            base.PlaySelectedItems();
             var selectedItems = this.SelectedItems;
             if (selectedItems != null)
             {
@@ -109,6 +108,7 @@ namespace BSE.Tunes.StoreApp.ViewModels
                 }
                 this.SelectedItems.Clear();
             }
+            base.PlaySelectedItems();
         }
         protected override void AddAllToPlaylist(Playlist playlist)
         {

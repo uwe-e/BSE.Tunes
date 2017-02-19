@@ -83,6 +83,24 @@ namespace BSE.Tunes.StoreApp.ViewModels
                 }
                 this.CoverSource = DataService.GetImage(album.AlbumId);
                 this.PlayAllCommand.RaiseCanExecuteChanged();
+
+                CreatePlaylistMenu();
+            }
+        }
+        #endregion
+
+        #region MethodsProtected
+        protected override void PlaySelectedItems()
+        {
+            var selectedItems = this.SelectedItems;
+            if (selectedItems != null)
+            {
+                var selectedTracks = new System.Collections.ObjectModel.ObservableCollection<Track>(selectedItems.Cast<ListViewItemViewModel>().Select(itm => itm.Data).Cast<Track>());
+                if (selectedTracks?.Count() > 0)
+                {
+                    this.PlayTracks(selectedTracks);
+                }
+                this.SelectedItems.Clear();
             }
         }
         #endregion
