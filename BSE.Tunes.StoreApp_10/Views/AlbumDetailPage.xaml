@@ -31,20 +31,20 @@
                             Command="{Binding PlaySelectedItemsCommand}"/>
             <AppBarButton x:Name="buttonAddTo" x:Uid="ButtonAddToPlaylist" Icon="Add"
                             Command="{Binding OpenPlaylistFlyoutCommand}">
-                <FlyoutBase.AttachedFlyout>
+                <AppBarButton.ContextFlyout>
                     <Flyout controlextensions:FlyoutExtensions.IsOpen="{Binding IsPlaylistFlyoutOpen, Mode=TwoWay}"
-                            controlextensions:FlyoutExtensions.Parent="{Binding ElementName=buttonAddTo}" controlextensions:FlyoutExtensions.ItemsSource="{Binding MenuItemsPlaylist}">
+                            controlextensions:FlyoutExtensions.Parent="{Binding ElementName=buttonAddTo}"
+                            controlextensions:FlyoutExtensions.ItemsSource="{Binding MenuItemsPlaylist}">
                         <controlextensions:FlyoutExtensions.ItemTemplate>
                             <DataTemplate>
                                 <Grid>
-                                    <MenuFlyoutItem Text="{Binding Text}" Visibility="{Binding IsSeparator, Converter={StaticResource BooleanToVisibilityConverter}, ConverterParameter=true}"/>
+                                    <MenuFlyoutItem Command="{Binding MenuItemClickedCommand}" CommandParameter="{Binding}" Text="{Binding Text}" Visibility="{Binding IsSeparator, Converter={StaticResource BooleanToVisibilityConverter}, ConverterParameter=true}"/>
                                     <MenuFlyoutSeparator Visibility="{Binding IsSeparator, Converter={StaticResource BooleanToVisibilityConverter}, ConverterParameter=false}"/>
                                 </Grid>
-                                
                             </DataTemplate>
                         </controlextensions:FlyoutExtensions.ItemTemplate>
                     </Flyout>
-                </FlyoutBase.AttachedFlyout>
+                </AppBarButton.ContextFlyout>
             </AppBarButton>
         </CommandBar>
     </Page.BottomAppBar>

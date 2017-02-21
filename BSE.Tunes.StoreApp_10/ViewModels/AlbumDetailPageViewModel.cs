@@ -56,9 +56,9 @@ namespace BSE.Tunes.StoreApp.ViewModels
         public ObservableCollection<ListViewItemViewModel> Items => m_listViewItems ?? (m_listViewItems = new ObservableCollection<ListViewItemViewModel>());
         public RelayCommand PlayAllCommand => m_playAllCommand ?? (m_playAllCommand = new RelayCommand(PlayAll, CanPlayAll));
         public ICommand PlayTrackCommand => m_playTrackCommand ?? (m_playTrackCommand = new RelayCommand<ListViewItemViewModel>(PlayTrack, CanPlayTrack));
-        //public ICommand RightTappedCommand => m_rightTappedCommand ?? (m_rightTappedCommand = new RelayCommand<Track>(TestFunction));
         public ICommand ShowFlyoutCommand => m_showFlyoutCommand ?? (m_showFlyoutCommand = new RelayCommand<ListViewItemViewModel>(ShowFlyout));
         public ICommand SelectItemsCommand => m_selectItemsCommand ?? (m_selectItemsCommand = new RelayCommand<ListViewItemViewModel>(SelectItems));
+
         #endregion
 
         #region MethodsPublic
@@ -102,6 +102,34 @@ namespace BSE.Tunes.StoreApp.ViewModels
                 }
                 this.SelectedItems.Clear();
             }
+        }
+        protected override void AddAllToPlaylist(Playlist playlist)
+        {
+            if (playlist != null)
+            {
+                var tracks = new ObservableCollection<Track>(this.Album.Tracks);
+                if (tracks != null)
+                {
+                    this.AddTracksToPlaylist(playlist, tracks);
+                }
+            }
+        }
+        protected override void AddSelectedToPlaylist(Playlist playlist)
+        {
+            if (playlist != null)
+            {
+                var selectedItems = this.SelectedItems;
+                if (selectedItems != null)
+                {
+                    //new System.Collections.ObjectModel.ObservableCollection<Track>(selectedItems.Cast<ListViewItemViewModel>().Select(itm => itm.Data).Cast<Track>());
+                    var tracks = new ObservableCollection<Track>(selectedItems.Cast<ListViewItemViewModel>().Select(itm => itm.Data).Cast<Track>());
+                    if (tracks != null)
+                    {
+                        this.AddTracksToPlaylist(playlist, tracks);
+                    }
+                }
+            }
+            this.SelectedItems.Clear();
         }
         #endregion
 
@@ -147,6 +175,25 @@ namespace BSE.Tunes.StoreApp.ViewModels
         {
             HasSelectedItems = true;
             this.SelectedItems.Add(viewModel);
+        }
+        private void AddTracksToPlaylist(Playlist playlist, ObservableCollection<Track> tracks)
+        {
+            if (playlist != null && tracks != null)
+            {
+                foreach (var track in tracks)
+                {
+                    if (track != null)
+                    {
+                        playlist.Entries.Add(new PlaylistEntry
+                        {
+                            PlaylistId = playlist.Id,
+                            TrackId = track.Id,
+                            Guid = Guid.NewGuid()
+                        });
+                    }
+                }
+                this.AppendToPlaylist(playlist);
+            }
         }
         #endregion
     }

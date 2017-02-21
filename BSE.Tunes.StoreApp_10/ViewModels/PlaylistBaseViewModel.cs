@@ -83,7 +83,7 @@ namespace BSE.Tunes.StoreApp.ViewModels
                 RaisePropertyChanged("SelectedItems");
             }
         }
-        public virtual ObservableCollection<MenuItemViewModel> MenuItemsPlaylist
+        public virtual ObservableCollection<MenuFlyoutItemViewModel> MenuItemsPlaylist
         {
             get;
             set;
@@ -111,6 +111,14 @@ namespace BSE.Tunes.StoreApp.ViewModels
                 this.SelectedItems.CollectionChanged -= OnSelectedItemsCollectionChanged;
                 this.SelectedItems = null;
             }
+            if (MenuItemsPlaylist != null)
+            {
+                foreach (var menuItem in MenuItemsPlaylist)
+                {
+                    menuItem.ItemClicked -= OnMenuItemViewModelClicked;
+                }
+                MenuItemsPlaylist.Clear();
+            }
             this.HasSelectedItems = false;
             this.IsCommandBarVisible = false;
             return base.OnNavigatedFromAsync(state, suspending);
@@ -137,7 +145,7 @@ namespace BSE.Tunes.StoreApp.ViewModels
         {
             if (this.MenuItemsPlaylist == null)
             {
-                this.MenuItemsPlaylist = new ObservableCollection<MenuItemViewModel>();
+                this.MenuItemsPlaylist = new ObservableCollection<MenuFlyoutItemViewModel>();
             }
             this.MenuItemsPlaylist.Clear();
 
@@ -150,15 +158,18 @@ namespace BSE.Tunes.StoreApp.ViewModels
                     this.CreateMenuItems(playlists);
                 }
             }
-            this.MenuItemsPlaylist.Insert(0, new MenuItemViewModel
+            this.MenuItemsPlaylist.Insert(0, new MenuFlyoutItemViewModel
             {
                 IsSeparator = true
             });
-            this.MenuItemsPlaylist.Insert(0,
-                new MenuItemViewModel
-                {
-                    Text = this.ResourceService.GetString("FlyoutMenuItem_AddNewPlaylist", "New Playlist")
-                });
+
+            var menuItem = new NewPlaylistFlyoutItemViewModel
+            {
+                Text = this.ResourceService.GetString("FlyoutMenuItem_AddNewPlaylist", "New Playlist")
+            };
+            menuItem.ItemClicked += OnMenuItemViewModelClicked;
+
+            this.MenuItemsPlaylist.Insert(0, menuItem);
         }
         protected virtual void CreateMenuItems(ObservableCollection<Playlist> playlists)
         {
@@ -168,8 +179,41 @@ namespace BSE.Tunes.StoreApp.ViewModels
                 {
                     if (playlist != null)
                     {
-                        this.MenuItemsPlaylist.Add(new PlaylistMenuItemViewModel { Text = playlist.Name, Playlist = playlist });
+                        var menuItem = new PlaylistFlyoutItemViewModel
+                        {
+                            Text = playlist.Name,
+                            Playlist = playlist
+                        };
+                        menuItem.ItemClicked += OnMenuItemViewModelClicked;
+                        this.MenuItemsPlaylist.Add(menuItem);
                     }
+                }
+            }
+        }
+        protected virtual void AddSelectedToPlaylist(Playlist playlist)
+        {
+        }
+        protected virtual void AddAllToPlaylist(Playlist playlist)
+        {
+        }
+        protected virtual async void AppendToPlaylist(Playlist playlist)
+        {
+            if (playlist != null)
+            {
+                try
+                {
+                    var changedPlaylist = await this.DataService.AppendToPlaylist(playlist);
+                    if (changedPlaylist != null)
+                    {
+                        ICacheableBitmapService cacheableBitmapService = CacheableBitmapService.Instance;
+                        await cacheableBitmapService.RemoveCache(changedPlaylist.Guid.ToString());
+                        //Refreshing all the playlist entry views
+                        //Messenger.Default.Send<PlaylistEntryChangeMessage>(new PlaylistEntryChangeMessage { Playlist = changedPlaylist });
+                    }
+                }
+                catch (Exception exception)
+                {
+                    //this.DialogService.ShowDialog(exception.Message);
                 }
             }
         }
@@ -184,6 +228,47 @@ namespace BSE.Tunes.StoreApp.ViewModels
         private void OpenPlaylistFlyout()
         {
             IsPlaylistFlyoutOpen = true;
+        }
+
+        private void OnMenuItemViewModelClicked(object sender, EventArgs e)
+        {
+            IsPlaylistFlyoutOpen = false;
+            SelectedToPlaylist(sender as MenuFlyoutItemViewModel);
+        }
+
+        private void SelectedToPlaylist(MenuFlyoutItemViewModel menuItemViewModel)
+        {
+            //Necessary because NewPlaylistFlyoutItemViewModel is a own viewmodel.
+            NewPlaylistFlyoutItemViewModel viewModel = menuItemViewModel as NewPlaylistFlyoutItemViewModel;
+            if (viewModel != null)
+            {
+                //this.NewSelectedToPlaylistViewModel = this.CreateNewPlaylistModel(InsertMode.Selected);
+            }
+            this.ChoosePlaylist(menuItemViewModel, InsertMode.Selected);
+        }
+
+        private void ChoosePlaylist(MenuFlyoutItemViewModel menuItemViewModel, InsertMode insertMode)
+        {
+            PlaylistFlyoutItemViewModel viewModel = menuItemViewModel as PlaylistFlyoutItemViewModel;
+            if (viewModel != null && viewModel.Playlist != null)
+            {
+                AddToPlaylist(viewModel.Playlist, insertMode);
+            }
+        }
+        private void AddToPlaylist(Playlist playlist, InsertMode insertMode)
+        {
+            if (playlist != null)
+            {
+                switch (insertMode)
+                {
+                    case InsertMode.All:
+                        this.AddAllToPlaylist(playlist);
+                        break;
+                    default:
+                        this.AddSelectedToPlaylist(playlist);
+                        break;
+                }
+            }
         }
         #endregion
     }

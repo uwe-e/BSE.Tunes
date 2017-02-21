@@ -151,6 +151,7 @@
     <Compile Include="Media\MediaParsers\BitTools.cs" />
     <Compile Include="Media\MediaParsers\Mp3MediaStreamExtension.cs" />
     <Compile Include="Media\MediaParsers\MpegFrame.cs" />
+    <Compile Include="Models\InsertMode.cs" />
     <Compile Include="Models\MediaState.cs" />
     <Compile Include="Models\PlayerMode.cs" />
     <Compile Include="Models\PlayerState.cs" />
@@ -187,10 +188,11 @@
     <Compile Include="ViewModels\ItemsGroupViewModel.cs" />
     <Compile Include="ViewModels\ItemViewModel.cs" />
     <Compile Include="ViewModels\ListViewItemViewModel.cs" />
-    <Compile Include="ViewModels\MenuItemViewModel.cs" />
+    <Compile Include="ViewModels\MenuFlyoutItemViewModel.cs" />
+    <Compile Include="ViewModels\NewPlaylistFlyoutItemViewModel.cs" />
     <Compile Include="ViewModels\PlaylistBaseViewModel.cs" />
     <Compile Include="ViewModels\PlaylistDetailPageViewModel.cs" />
-    <Compile Include="ViewModels\PlaylistMenuItemViewModel.cs" />
+    <Compile Include="ViewModels\PlaylistFlyoutItemViewModel.cs" />
     <Compile Include="ViewModels\PlaylistsPageViewModel.cs" />
     <Compile Include="ViewModels\SignOutSettingsPageViewModel.cs" />
     <Compile Include="ViewModels\SystemSettingsItemViewModel.cs" />
