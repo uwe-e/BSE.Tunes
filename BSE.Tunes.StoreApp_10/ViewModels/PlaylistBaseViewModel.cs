@@ -236,13 +236,15 @@ namespace BSE.Tunes.StoreApp.ViewModels
             SelectedToPlaylist(sender as MenuFlyoutItemViewModel);
         }
 
-        private void SelectedToPlaylist(MenuFlyoutItemViewModel menuItemViewModel)
+        private async void SelectedToPlaylist(MenuFlyoutItemViewModel menuItemViewModel)
         {
             //Necessary because NewPlaylistFlyoutItemViewModel is a own viewmodel.
             NewPlaylistFlyoutItemViewModel viewModel = menuItemViewModel as NewPlaylistFlyoutItemViewModel;
             if (viewModel != null)
             {
                 //this.NewSelectedToPlaylistViewModel = this.CreateNewPlaylistModel(InsertMode.Selected);
+                IDialogService dialogService = DialogService.Instance;
+                await dialogService.ShowContentDialogAsync(new NewPlaylistContentDialogViewModel());
             }
             this.ChoosePlaylist(menuItemViewModel, InsertMode.Selected);
         }

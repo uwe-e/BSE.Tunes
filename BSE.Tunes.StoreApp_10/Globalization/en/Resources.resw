@@ -261,4 +261,10 @@ A registration can only be done by the operator of the server.</value>
   <data name="FlyoutMenuItem_AddNewPlaylist" xml:space="preserve">
     <value>New Playlist</value>
   </data>
+  <data name="NewPlaylistContentDialog.PrimaryButtonText" xml:space="preserve">
+    <value>Save</value>
+  </data>
+  <data name="NewPlaylistContentDialog.SecondaryButtonText" xml:space="preserve">
+    <value>Cancel</value>
+  </data>
 </root>

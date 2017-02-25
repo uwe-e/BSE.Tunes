@@ -6,8 +6,7 @@ using System.Threading.Tasks;
 
 namespace BSE.Tunes.StoreApp.Services
 {
-    public interface IDialogService
+    public interface IDialogService : MvvmDialogs.IDialogService
     {
-        Task ShowAsync(string content, string title = default(string));
     }
 }

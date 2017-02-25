@@ -142,7 +142,7 @@ namespace BSE.Tunes.StoreApp.Managers
                 }
                 catch (Exception exception)
                 {
-                    await this.m_dialogService.ShowAsync(exception.Message);
+                    await this.m_dialogService.ShowMessageDialogAsync(exception.Message);
                 }
             }
         }

@@ -78,7 +78,7 @@ namespace BSE.Tunes.StoreApp.ViewModels
             }
             catch (Exception)
             {
-                await m_dialogSService.ShowAsync(
+                await m_dialogSService.ShowMessageDialogAsync(
                     ResourceService.GetString("ServiceUrlNotAvailableExceptionMessage", "The address of your webserver was entered incorrectly or the webserver is not available."),
                     ResourceService.GetString("ExceptionMessageDialogHeader", "Error"));
             }

@@ -70,7 +70,7 @@ namespace BSE.Tunes.StoreApp.ViewModels
             }
             catch (Exception exception)
             {
-                await m_dialogSService.ShowAsync(exception.Message, "Fähler");
+                await m_dialogSService.ShowMessageDialogAsync(exception.Message, "Fähler");
             }
         }
         #endregion

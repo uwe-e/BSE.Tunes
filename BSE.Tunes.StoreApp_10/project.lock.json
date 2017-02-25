@@ -328,6 +328,14 @@
           "lib/uap10.0/Microsoft.Xaml.Interactivity.dll": {}
         }
       },
+      "MvvmDialogs/4.0.0": {
+        "compile": {
+          "lib/uap10.0/MvvmDialogs.dll": {}
+        },
+        "runtime": {
+          "lib/uap10.0/MvvmDialogs.dll": {}
+        }
+      },
       "MvvmLight/5.3.0": {
         "dependencies": {
           "MvvmLightLibs": "5.3.0"
@@ -2421,6 +2429,14 @@
         "runtime": {
           "lib/uap10.0/Microsoft.Xaml.Interactions.dll": {},
           "lib/uap10.0/Microsoft.Xaml.Interactivity.dll": {}
+        }
+      },
+      "MvvmDialogs/4.0.0": {
+        "compile": {
+          "lib/uap10.0/MvvmDialogs.dll": {}
+        },
+        "runtime": {
+          "lib/uap10.0/MvvmDialogs.dll": {}
         }
       },
       "MvvmLight/5.3.0": {
@@ -4649,6 +4665,14 @@
         "runtime": {
           "lib/uap10.0/Microsoft.Xaml.Interactions.dll": {},
           "lib/uap10.0/Microsoft.Xaml.Interactivity.dll": {}
+        }
+      },
+      "MvvmDialogs/4.0.0": {
+        "compile": {
+          "lib/uap10.0/MvvmDialogs.dll": {}
+        },
+        "runtime": {
+          "lib/uap10.0/MvvmDialogs.dll": {}
         }
       },
       "MvvmLight/5.3.0": {
@@ -6920,6 +6944,14 @@
           "lib/uap10.0/Microsoft.Xaml.Interactivity.dll": {}
         }
       },
+      "MvvmDialogs/4.0.0": {
+        "compile": {
+          "lib/uap10.0/MvvmDialogs.dll": {}
+        },
+        "runtime": {
+          "lib/uap10.0/MvvmDialogs.dll": {}
+        }
+      },
       "MvvmLight/5.3.0": {
         "dependencies": {
           "MvvmLightLibs": "5.3.0"
@@ -9155,6 +9187,14 @@
         "runtime": {
           "lib/uap10.0/Microsoft.Xaml.Interactions.dll": {},
           "lib/uap10.0/Microsoft.Xaml.Interactivity.dll": {}
+        }
+      },
+      "MvvmDialogs/4.0.0": {
+        "compile": {
+          "lib/uap10.0/MvvmDialogs.dll": {}
+        },
+        "runtime": {
+          "lib/uap10.0/MvvmDialogs.dll": {}
         }
       },
       "MvvmLight/5.3.0": {
@@ -11431,6 +11471,14 @@
           "lib/uap10.0/Microsoft.Xaml.Interactivity.dll": {}
         }
       },
+      "MvvmDialogs/4.0.0": {
+        "compile": {
+          "lib/uap10.0/MvvmDialogs.dll": {}
+        },
+        "runtime": {
+          "lib/uap10.0/MvvmDialogs.dll": {}
+        }
+      },
       "MvvmLight/5.3.0": {
         "dependencies": {
           "MvvmLightLibs": "5.3.0"
@@ -13666,6 +13714,14 @@
         "runtime": {
           "lib/uap10.0/Microsoft.Xaml.Interactions.dll": {},
           "lib/uap10.0/Microsoft.Xaml.Interactivity.dll": {}
+        }
+      },
+      "MvvmDialogs/4.0.0": {
+        "compile": {
+          "lib/uap10.0/MvvmDialogs.dll": {}
+        },
+        "runtime": {
+          "lib/uap10.0/MvvmDialogs.dll": {}
         }
       },
       "MvvmLight/5.3.0": {
@@ -16175,6 +16231,22 @@
         "lib/uap10.0/Microsoft.Xaml.Interactivity.dll",
         "lib/uap10.0/Microsoft.Xaml.Interactivity.pri",
         "lib/uap10.0/Microsoft.Xaml.Interactivity.xml"
+      ]
+    },
+    "MvvmDialogs/4.0.0": {
+      "sha512": "53pUV1urmfvx8jtrJ0+6LdHseFIaXF2KSMnn0aOivXHuZJtxjYZrp/FFnlVX1fpuf24RRFadyXNE0UVY9I+CYQ==",
+      "type": "package",
+      "files": [
+        "MvvmDialogs.4.0.0.nupkg.sha512",
+        "MvvmDialogs.nuspec",
+        "lib/net35/MvvmDialogs.dll",
+        "lib/net35/MvvmDialogs.xml",
+        "lib/net40/MvvmDialogs.dll",
+        "lib/net40/MvvmDialogs.xml",
+        "lib/net45/MvvmDialogs.dll",
+        "lib/net45/MvvmDialogs.xml",
+        "lib/uap10.0/MvvmDialogs.dll",
+        "lib/uap10.0/MvvmDialogs.xml"
       ]
     },
     "MvvmLight/5.3.0": {
@@ -22097,6 +22169,7 @@
       "Microsoft.AspNet.WebApi.Client >= 5.2.3",
       "Microsoft.NETCore.UniversalWindowsPlatform >= 5.2.2",
       "Microsoft.Xaml.Behaviors.Uwp.Managed >= 2.0.0",
+      "MvvmDialogs >= 4.0.0",
       "MvvmLight >= 5.3.0",
       "Newtonsoft.Json >= 9.0.1",
       "Template10 >= 1.1.12",

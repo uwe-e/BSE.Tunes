@@ -84,7 +84,7 @@ namespace BSE.Tunes.StoreApp.ViewModels
             }
             catch (Exception exception)
             {
-                await m_dialogSService.ShowAsync(exception.Message, ResourceService.GetString("ExceptionMessageDialogHeader", "Error"));
+                await m_dialogSService.ShowMessageDialogAsync(exception.Message, ResourceService.GetString("ExceptionMessageDialogHeader", "Error"));
             }
         }
         #endregion

@@ -109,6 +109,7 @@
     <Compile Include="Controls\Carousel\FrameworkElementExtensions.cs" />
     <Compile Include="Controls\Carousel\IntEventArgs.cs" />
     <Compile Include="Controls\Carousel\MathExtensions.cs" />
+    <Compile Include="Controls\Extensions\ContentDialog.cs" />
     <Compile Include="Controls\Extensions\FlyoutExtensions.cs" />
     <Compile Include="Controls\Behaviours\FrameworkElementBehaviour.cs" />
     <Compile Include="Controls\Extensions\ListViewExtensions.cs" />
@@ -189,6 +190,7 @@
     <Compile Include="ViewModels\ItemViewModel.cs" />
     <Compile Include="ViewModels\ListViewItemViewModel.cs" />
     <Compile Include="ViewModels\MenuFlyoutItemViewModel.cs" />
+    <Compile Include="ViewModels\NewPlaylistContentDialogViewModel.cs" />
     <Compile Include="ViewModels\NewPlaylistFlyoutItemViewModel.cs" />
     <Compile Include="ViewModels\PlaylistBaseViewModel.cs" />
     <Compile Include="ViewModels\PlaylistDetailPageViewModel.cs" />
@@ -222,6 +224,9 @@
     </Compile>
     <Compile Include="Views\DetailPage.xaml.cs">
       <DependentUpon>DetailPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\NewPlaylistContentDialog.xaml.cs">
+      <DependentUpon>NewPlaylistContentDialog.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\PlaylistDetailPage.xaml.cs">
       <DependentUpon>PlaylistDetailPage.xaml</DependentUpon>
@@ -362,6 +367,10 @@
     <Page Include="Views\DeviceFamily-Mobile\PlaylistsPage.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\NewPlaylistContentDialog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\PlaylistDetailPage.xaml">
       <SubType>Designer</SubType>

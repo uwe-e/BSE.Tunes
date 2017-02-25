@@ -210,7 +210,7 @@ namespace BSE.Tunes.StoreApp.ViewModels
         #endregion
 
         #region MethodsPrivate
-        private void Play()
+        private async void Play()
         {
             try
             {
@@ -233,7 +233,7 @@ namespace BSE.Tunes.StoreApp.ViewModels
             }
             catch (Exception exception)
             {
-                m_dialogService.ShowAsync(exception.Message);
+                await m_dialogService.ShowMessageDialogAsync(exception.Message);
             }
         }
         private void SelectItem()

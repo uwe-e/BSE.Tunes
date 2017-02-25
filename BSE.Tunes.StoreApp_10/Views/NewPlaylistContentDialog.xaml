@@ -1,0 +1,22 @@
+﻿<ContentDialog
+    x:Class="BSE.Tunes.StoreApp.Views.NewPlaylistContentDialog"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:BSE.Tunes.StoreApp.Views"
+    xmlns:controlextensions="using:BSE.Tunes.StoreApp.Controls.Extensions"
+    xmlns:interactivity="using:Microsoft.Xaml.Interactivity"
+    xmlns:converters="using:BSE.Tunes.StoreApp.Converters"
+    xmlns:core="using:Microsoft.Xaml.Interactions.Core"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    x:Uid="NewPlaylistContentDialog"
+    mc:Ignorable="d"
+    PrimaryButtonText="Button1"
+    SecondaryButtonText="Button2"
+    controlextensions:ContentDialog.DialogCancel="{Binding Cancel}"
+    controlextensions:ContentDialog.CancelableCommandParameter="{Binding}"
+    controlextensions:ContentDialog.CancelableCommand="{Binding SavePlaylistCommand}">
+
+    <Grid>
+    </Grid>
+</ContentDialog>
