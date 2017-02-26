@@ -267,4 +267,11 @@ A registration can only be done by the operator of the server.</value>
   <data name="NewPlaylistContentDialog.SecondaryButtonText" xml:space="preserve">
     <value>Cancel</value>
   </data>
+  <data name="NewPlaylistContentDialog_TxtNewPlaylist.Header" xml:space="preserve">
+    <value>Name the new playlist</value>
+  </data>
+  <data name="NewPlaylistContentDialog_PlayListAlreadyExistsExceptionMessage" xml:space="preserve">
+    <value>The name "{0}" for the playlist already exists.
+Please choose a different name for your playlist!</value>
+  </data>
 </root>

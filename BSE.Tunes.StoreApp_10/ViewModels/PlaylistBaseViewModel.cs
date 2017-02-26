@@ -13,6 +13,8 @@ using BSE.Tunes.StoreApp.Services;
 using BSE.Tunes.StoreApp.Models;
 using BSE.Tunes.Data;
 using System.Windows.Input;
+using GalaSoft.MvvmLight.Messaging;
+using BSE.Tunes.StoreApp.Mvvm.Messaging;
 
 namespace BSE.Tunes.StoreApp.ViewModels
 {
@@ -91,10 +93,29 @@ namespace BSE.Tunes.StoreApp.ViewModels
         public RelayCommand PlaySelectedItemsCommand => m_playSelectedItemsCommand ?? (m_playSelectedItemsCommand = new RelayCommand(PlaySelectedItems, CanPlaySelectedItems));
         public ICommand OpenPlaylistFlyoutCommand => m_openPlaylistFlyoutCommand ?? (m_openPlaylistFlyoutCommand = new RelayCommand(OpenPlaylistFlyout));
 
-        
+
         #endregion
 
         #region MethodsPublic
+        public PlaylistBaseViewModel()
+        {
+            Messenger.Default.Register<PlaylistChangedArgs>(this, args =>
+            {
+                PlaylistCreatedArgs playlistCreated = args as PlaylistCreatedArgs;
+                if (playlistCreated != null)
+                {
+                    switch (playlistCreated.InsertMode)
+                    {
+                        case InsertMode.Selected:
+                            AddSelectedToPlaylist(args.Playlist);
+                            break;
+                        case InsertMode.All:
+                            AddAllToPlaylist(args.Playlist);
+                            break;
+                    }
+                }
+            });
+        }
         public override Task OnNavigatedToAsync(object parameter, NavigationMode mode, IDictionary<string, object> state)
         {
             if (this.SelectedItems == null)
@@ -213,7 +234,7 @@ namespace BSE.Tunes.StoreApp.ViewModels
                 }
                 catch (Exception exception)
                 {
-                    //this.DialogService.ShowDialog(exception.Message);
+                    //DialogService.ShowExDialog(exception.Message);
                 }
             }
         }
@@ -242,9 +263,11 @@ namespace BSE.Tunes.StoreApp.ViewModels
             NewPlaylistFlyoutItemViewModel viewModel = menuItemViewModel as NewPlaylistFlyoutItemViewModel;
             if (viewModel != null)
             {
-                //this.NewSelectedToPlaylistViewModel = this.CreateNewPlaylistModel(InsertMode.Selected);
                 IDialogService dialogService = DialogService.Instance;
-                await dialogService.ShowContentDialogAsync(new NewPlaylistContentDialogViewModel());
+                await dialogService.ShowContentDialogAsync(new NewPlaylistContentDialogViewModel
+                {
+                    InsertMode = InsertMode.Selected
+                });
             }
             this.ChoosePlaylist(menuItemViewModel, InsertMode.Selected);
         }

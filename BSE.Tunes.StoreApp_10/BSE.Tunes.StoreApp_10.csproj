@@ -159,6 +159,8 @@
     <Compile Include="Models\User.cs" />
     <Compile Include="Mvvm\Messaging\MediaStateChangedArgs.cs" />
     <Compile Include="Mvvm\Messaging\PlayerStateChangedArgs.cs" />
+    <Compile Include="Mvvm\Messaging\PlaylistChangedArgs.cs" />
+    <Compile Include="Mvvm\Messaging\PlaylistCreatedArgs.cs" />
     <Compile Include="Mvvm\Messaging\ScreenSizeChangedArgs.cs" />
     <Compile Include="Mvvm\Messaging\TrackChangedArgs.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

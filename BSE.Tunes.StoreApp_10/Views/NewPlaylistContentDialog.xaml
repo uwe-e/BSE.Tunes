@@ -17,6 +17,8 @@
     controlextensions:ContentDialog.CancelableCommandParameter="{Binding}"
     controlextensions:ContentDialog.CancelableCommand="{Binding SavePlaylistCommand}">
 
-    <Grid>
-    </Grid>
+    <StackPanel VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
+        <TextBox TextWrapping="NoWrap" x:Uid="NewPlaylistContentDialog_TxtNewPlaylist" Header="Diese Wiedergabeliste benennen" Text="{Binding PlaylistName, Mode=TwoWay}"/>
+        <TextBlock TextWrapping="Wrap" Text="{Binding ErrorMessage}"/>
+    </StackPanel>
 </ContentDialog>
