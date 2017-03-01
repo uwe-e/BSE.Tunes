@@ -111,13 +111,13 @@
     <Compile Include="Controls\Carousel\MathExtensions.cs" />
     <Compile Include="Controls\Extensions\ContentDialog.cs" />
     <Compile Include="Controls\Extensions\FlyoutExtensions.cs" />
-    <Compile Include="Controls\Behaviours\FrameworkElementBehaviour.cs" />
     <Compile Include="Controls\Extensions\ListViewExtensions.cs" />
     <Compile Include="Collections\IncrementalObservableCollection.cs" />
     <Compile Include="Controls\AlbumSection.xaml.cs">
       <DependentUpon>AlbumSection.xaml</DependentUpon>
     </Compile>
     <Compile Include="Controls\CrossfadingImage\CrossfadingImage.cs" />
+    <Compile Include="Controls\Extensions\MenuFlyoutItem.cs" />
     <Compile Include="Controls\FeaturedItems.xaml.cs">
       <DependentUpon>FeaturedItems.xaml</DependentUpon>
     </Compile>
@@ -134,6 +134,7 @@
     </Compile>
     <Compile Include="Controls\RoundButton\RoundButton.cs" />
     <Compile Include="Converters\BooleanToListViewSelectionModeConverter.cs" />
+    <Compile Include="Converters\InsertModeConverter.cs" />
     <Compile Include="Converters\InverseBooleanConverter.cs" />
     <Compile Include="Converters\PlayerStateToIconConverter.cs" />
     <Compile Include="Converters\RightTappedRoutedEventArgsToPointConverter.cs" />

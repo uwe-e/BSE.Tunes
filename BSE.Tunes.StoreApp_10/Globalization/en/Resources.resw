@@ -274,4 +274,7 @@ A registration can only be done by the operator of the server.</value>
     <value>The name "{0}" for the playlist already exists.
 Please choose a different name for your playlist!</value>
   </data>
+  <data name="AlbumDetailPage_AddTo.Text" xml:space="preserve">
+    <value>Add to</value>
+  </data>
 </root>

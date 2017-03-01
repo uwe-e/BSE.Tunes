@@ -26,7 +26,11 @@ namespace BSE.Tunes.StoreApp.ViewModels
         private ObservableCollection<object> m_selectedItems;
         private RelayCommand m_playSelectedItemsCommand;
         private ICommand m_openPlaylistFlyoutCommand;
+        private ICommand m_openAllToPlaylistCommand;
         private bool m_isPlaylistFlyoutOpen;
+        private bool m_isAllToPlaylistFlyoutOpen;
+        private ObservableCollection<MenuFlyoutItemViewModel> m_playlistMenuItems;
+        
         #endregion
 
         #region Properties
@@ -40,6 +44,18 @@ namespace BSE.Tunes.StoreApp.ViewModels
             {
                 m_isPlaylistFlyoutOpen = value;
                 RaisePropertyChanged("IsPlaylistFlyoutOpen");
+            }
+        }
+        public bool IsAllToPlaylistFlyoutOpen
+        {
+            get
+            {
+                return m_isAllToPlaylistFlyoutOpen;
+            }
+            set
+            {
+                m_isAllToPlaylistFlyoutOpen = value;
+                RaisePropertyChanged("IsAllToPlaylistFlyoutOpen");
             }
         }
         /// <summary>
@@ -87,12 +103,20 @@ namespace BSE.Tunes.StoreApp.ViewModels
         }
         public virtual ObservableCollection<MenuFlyoutItemViewModel> MenuItemsPlaylist
         {
-            get;
-            set;
+            get
+            {
+                if (m_playlistMenuItems == null)
+                {
+                    m_playlistMenuItems = new ObservableCollection<MenuFlyoutItemViewModel>();
+                }
+                return m_playlistMenuItems;
+            }
         }
         public RelayCommand PlaySelectedItemsCommand => m_playSelectedItemsCommand ?? (m_playSelectedItemsCommand = new RelayCommand(PlaySelectedItems, CanPlaySelectedItems));
         public ICommand OpenPlaylistFlyoutCommand => m_openPlaylistFlyoutCommand ?? (m_openPlaylistFlyoutCommand = new RelayCommand(OpenPlaylistFlyout));
+        public ICommand OpenAllToPlaylistCommand => m_openAllToPlaylistCommand ?? (m_openAllToPlaylistCommand = new RelayCommand(OpenAllToPlaylistFlyout));
 
+        
 
         #endregion
 
@@ -147,9 +171,6 @@ namespace BSE.Tunes.StoreApp.ViewModels
         #endregion
 
         #region MethodsProtected
-        protected virtual void PlaySelectedItems()
-        {
-        }
         /// <summary>
         /// Occurs when an item is added, removed, changed, moved, or the entire list is refreshed.
         /// </summary>
@@ -164,10 +185,6 @@ namespace BSE.Tunes.StoreApp.ViewModels
         }
         protected virtual async void CreatePlaylistMenu()
         {
-            if (this.MenuItemsPlaylist == null)
-            {
-                this.MenuItemsPlaylist = new ObservableCollection<MenuFlyoutItemViewModel>();
-            }
             this.MenuItemsPlaylist.Clear();
 
             User user = SettingsService.Instance.User;
@@ -211,6 +228,9 @@ namespace BSE.Tunes.StoreApp.ViewModels
                 }
             }
         }
+        protected virtual void PlaySelectedItems()
+        {
+        }
         protected virtual void AddSelectedToPlaylist(Playlist playlist)
         {
         }
@@ -251,9 +271,14 @@ namespace BSE.Tunes.StoreApp.ViewModels
             IsPlaylistFlyoutOpen = true;
         }
 
+        private void OpenAllToPlaylistFlyout()
+        {
+            IsAllToPlaylistFlyoutOpen = true;
+        }
         private void OnMenuItemViewModelClicked(object sender, EventArgs e)
         {
             IsPlaylistFlyoutOpen = false;
+            IsAllToPlaylistFlyoutOpen = false;
             SelectedToPlaylist(sender as MenuFlyoutItemViewModel);
         }
 
@@ -266,18 +291,18 @@ namespace BSE.Tunes.StoreApp.ViewModels
                 IDialogService dialogService = DialogService.Instance;
                 await dialogService.ShowContentDialogAsync(new NewPlaylistContentDialogViewModel
                 {
-                    InsertMode = InsertMode.Selected
+                    InsertMode = menuItemViewModel.InsertMode
                 });
             }
-            this.ChoosePlaylist(menuItemViewModel, InsertMode.Selected);
+            this.ChoosePlaylist(menuItemViewModel);
         }
 
-        private void ChoosePlaylist(MenuFlyoutItemViewModel menuItemViewModel, InsertMode insertMode)
+        private void ChoosePlaylist(MenuFlyoutItemViewModel menuItemViewModel)
         {
             PlaylistFlyoutItemViewModel viewModel = menuItemViewModel as PlaylistFlyoutItemViewModel;
             if (viewModel != null && viewModel.Playlist != null)
             {
-                AddToPlaylist(viewModel.Playlist, insertMode);
+                AddToPlaylist(viewModel.Playlist, viewModel.InsertMode);
             }
         }
         private void AddToPlaylist(Playlist playlist, InsertMode insertMode)

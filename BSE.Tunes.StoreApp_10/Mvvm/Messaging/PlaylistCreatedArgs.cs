@@ -15,7 +15,7 @@ namespace BSE.Tunes.StoreApp.Mvvm.Messaging
             get; private set;
         }
         public PlaylistCreatedArgs(Playlist playlist, InsertMode insertMode) : base(playlist) {
-            InsertMode = InsertMode;
+            InsertMode = insertMode;
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using GalaSoft.MvvmLight.Command;
+﻿using BSE.Tunes.StoreApp.Models;
+using GalaSoft.MvvmLight.Command;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,6 +19,7 @@ namespace BSE.Tunes.StoreApp.ViewModels
         private string m_text;
         private bool m_isSeparator;
         private ICommand m_menuItemClickedCommand;
+        private InsertMode m_insertMode;
         #endregion
 
         #region Properties
@@ -31,6 +33,18 @@ namespace BSE.Tunes.StoreApp.ViewModels
             {
                 m_isSeparator = value;
                 RaisePropertyChanged("IsSeparator");
+            }
+        }
+        public InsertMode InsertMode
+        {
+            get
+            {
+                return m_insertMode;
+            }
+            set
+            {
+                m_insertMode = value;
+                RaisePropertyChanged("InsertMode");
             }
         }
         public string Text
