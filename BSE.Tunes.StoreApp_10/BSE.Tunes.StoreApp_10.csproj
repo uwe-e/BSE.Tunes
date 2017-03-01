@@ -113,24 +113,24 @@
     <Compile Include="Controls\Extensions\FlyoutExtensions.cs" />
     <Compile Include="Controls\Extensions\ListViewExtensions.cs" />
     <Compile Include="Collections\IncrementalObservableCollection.cs" />
-    <Compile Include="Controls\AlbumSection.xaml.cs">
-      <DependentUpon>AlbumSection.xaml</DependentUpon>
+    <Compile Include="Views\FeaturedAlbumsUserControl.xaml.cs">
+      <DependentUpon>FeaturedAlbumsUserControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="Controls\CrossfadingImage\CrossfadingImage.cs" />
     <Compile Include="Controls\Extensions\MenuFlyoutItem.cs" />
-    <Compile Include="Controls\FeaturedItems.xaml.cs">
-      <DependentUpon>FeaturedItems.xaml</DependentUpon>
+    <Compile Include="Views\FeaturedItemsUserControl.xaml.cs">
+      <DependentUpon>FeaturedItemsUserControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Controls\FeaturedPlaylists.xaml.cs">
-      <DependentUpon>FeaturedPlaylists.xaml</DependentUpon>
+    <Compile Include="Views\FeaturedPlaylistsUserControl.xaml.cs">
+      <DependentUpon>FeaturedPlaylistsUserControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="Controls\Indicator\Indicator.cs" />
     <Compile Include="Controls\Indicator\IndicatorItem.cs" />
-    <Compile Include="Controls\PlayerBar.xaml.cs">
-      <DependentUpon>PlayerBar.xaml</DependentUpon>
+    <Compile Include="Views\PlayerBarUserControl.xaml.cs">
+      <DependentUpon>PlayerBarUserControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Controls\RandomPlayerPanel.xaml.cs">
-      <DependentUpon>RandomPlayerPanel.xaml</DependentUpon>
+    <Compile Include="Views\RandomPlayerPanelUserControl.xaml.cs">
+      <DependentUpon>RandomPlayerPanelUserControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="Controls\RoundButton\RoundButton.cs" />
     <Compile Include="Converters\BooleanToListViewSelectionModeConverter.cs" />
@@ -182,12 +182,12 @@
     <Compile Include="Services\SettingsService.cs" />
     <Compile Include="Converters\BooleanToVisibilityConverter.cs" />
     <Compile Include="ViewModels\AlbumDetailPageViewModel.cs" />
-    <Compile Include="ViewModels\AlbumSectionViewModel.cs" />
+    <Compile Include="ViewModels\FeaturedAlbumsUserControlViewModel.cs" />
     <Compile Include="ViewModels\AlbumsPageViewModel.cs" />
     <Compile Include="ViewModels\AlbumsViewModel.cs" />
     <Compile Include="ViewModels\FeaturedItemsBaseViewModel.cs" />
-    <Compile Include="ViewModels\FeaturedItemsViewModel.cs" />
-    <Compile Include="ViewModels\FeaturedPlaylistsViewModel.cs" />
+    <Compile Include="ViewModels\FeaturedItemsUserControlViewModel.cs" />
+    <Compile Include="ViewModels\FeaturedPlaylistsUserControlViewModel.cs" />
     <Compile Include="ViewModels\IPlaceableContext.cs" />
     <Compile Include="ViewModels\ItemsGroupViewModel.cs" />
     <Compile Include="ViewModels\ItemViewModel.cs" />
@@ -207,8 +207,8 @@
     <Compile Include="ViewModels\ISettingsItemViewModel.cs" />
     <Compile Include="ViewModels\MainPageViewModel.cs" />
     <Compile Include="ViewModels\DetailPageViewModel.cs" />
-    <Compile Include="ViewModels\PlayerBarViewModel.cs" />
-    <Compile Include="ViewModels\RandomPlayerViewModel.cs" />
+    <Compile Include="ViewModels\PlayerBarUserControlViewModel.cs" />
+    <Compile Include="ViewModels\RandomPlayerPanelUserControlViewModel.cs" />
     <Compile Include="ViewModels\ServiceUrlSettingsItemViewModel.cs" />
     <Compile Include="ViewModels\SettingsItemViewModel.cs" />
     <Compile Include="ViewModels\SettingsMainPageViewModel.cs" />
@@ -293,7 +293,7 @@
     </ApplicationDefinition>
   </ItemGroup>
   <ItemGroup>
-    <Page Include="Controls\AlbumSection.xaml">
+    <Page Include="Views\FeaturedAlbumsUserControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -305,15 +305,15 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Controls\DeviceFamily-Mobile\PlayerBar.xaml">
+    <Page Include="Views\DeviceFamily-Mobile\PlayerBarUserControl.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Controls\FeaturedItems.xaml">
+    <Page Include="Views\FeaturedItemsUserControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Controls\FeaturedPlaylists.xaml">
+    <Page Include="Views\FeaturedPlaylistsUserControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -321,11 +321,11 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Controls\PlayerBar.xaml">
+    <Page Include="Views\PlayerBarUserControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Controls\RandomPlayerPanel.xaml">
+    <Page Include="Views\RandomPlayerPanelUserControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

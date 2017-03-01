@@ -18,7 +18,7 @@ using System.Windows.Input;
 
 namespace BSE.Tunes.StoreApp.ViewModels
 {
-    public class RandomPlayerViewModel : ViewModelBase
+    public class RandomPlayerPanelUserControlViewModel : ViewModelBase
     {
         #region FieldsPrivate
         private IPlayerManager m_playerManager;
@@ -56,7 +56,7 @@ namespace BSE.Tunes.StoreApp.ViewModels
         #endregion
 
         #region MethodsPublic
-        public RandomPlayerViewModel()
+        public RandomPlayerPanelUserControlViewModel()
         {
             m_playerManager = PlayerManager.Instance;
             LoadData();

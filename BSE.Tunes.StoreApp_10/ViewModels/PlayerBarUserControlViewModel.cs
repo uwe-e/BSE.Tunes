@@ -16,7 +16,7 @@ using BSE.Tunes.Data;
 
 namespace BSE.Tunes.StoreApp.ViewModels
 {
-    public class PlayerBarViewModel : ViewModelBase
+    public class PlayerBarUserControlViewModel : ViewModelBase
     {
         #region FieldsPrivate
         private PlayerManager m_playerManager;
@@ -168,7 +168,7 @@ namespace BSE.Tunes.StoreApp.ViewModels
         #endregion
 
         #region MethodsPublic
-        public PlayerBarViewModel()
+        public PlayerBarUserControlViewModel()
         {
             if (!Windows.ApplicationModel.DesignMode.DesignModeEnabled)
             {

@@ -15,11 +15,11 @@ using Windows.UI.Xaml.Navigation;
 
 // The User Control item template is documented at http://go.microsoft.com/fwlink/?LinkId=234236
 
-namespace BSE.Tunes.StoreApp.Controls
+namespace BSE.Tunes.StoreApp.Views
 {
-    public sealed partial class RandomPlayerPanel : UserControl
+    public sealed partial class FeaturedItemsUserControl : UserControl
     {
-        public RandomPlayerPanel()
+        public FeaturedItemsUserControl()
         {
             this.InitializeComponent();
         }

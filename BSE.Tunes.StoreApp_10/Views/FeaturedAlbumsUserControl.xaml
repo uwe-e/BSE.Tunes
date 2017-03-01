@@ -1,8 +1,8 @@
 ﻿<UserControl
-    x:Class="BSE.Tunes.StoreApp.Controls.AlbumSection"
+    x:Class="BSE.Tunes.StoreApp.Views.FeaturedAlbumsUserControl"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:local="using:BSE.Tunes.StoreApp.Controls"
+    xmlns:local="using:BSE.Tunes.StoreApp.Views"
     xmlns:vm="using:BSE.Tunes.StoreApp.ViewModels"
     xmlns:interactivity="using:Microsoft.Xaml.Interactivity"
     xmlns:core="using:Microsoft.Xaml.Interactions.Core"
@@ -14,7 +14,7 @@
     d:DesignWidth="400">
 
     <UserControl.DataContext>
-        <vm:AlbumSectionViewModel x:Name="ViewModel"/>
+        <vm:FeaturedAlbumsUserControlViewModel x:Name="ViewModel"/>
     </UserControl.DataContext>
 
     <UserControl.Resources>

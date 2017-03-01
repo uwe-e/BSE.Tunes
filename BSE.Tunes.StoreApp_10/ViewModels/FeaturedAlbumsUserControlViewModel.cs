@@ -10,7 +10,7 @@ using System.Windows.Input;
 
 namespace BSE.Tunes.StoreApp.ViewModels
 {
-    public class AlbumSectionViewModel : ViewModelBase
+    public class FeaturedAlbumsUserControlViewModel : ViewModelBase
     {
         #region FieldsPrivate
         private ItemsGroupViewModel m_itemsGroup;
@@ -51,7 +51,7 @@ namespace BSE.Tunes.StoreApp.ViewModels
         #endregion
 
         #region MethodsPublic
-        public AlbumSectionViewModel()
+        public FeaturedAlbumsUserControlViewModel()
         {
             if (!Windows.ApplicationModel.DesignMode.DesignModeEnabled)
             {

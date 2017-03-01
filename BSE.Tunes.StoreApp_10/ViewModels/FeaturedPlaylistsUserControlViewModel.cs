@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace BSE.Tunes.StoreApp.ViewModels
 {
-    public class FeaturedPlaylistsViewModel : FeaturedItemsBaseViewModel
+    public class FeaturedPlaylistsUserControlViewModel : FeaturedItemsBaseViewModel
     {
         #region MethodsPublic
         public override void SelectItem(ItemViewModel item)

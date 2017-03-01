@@ -43,8 +43,8 @@ namespace BSE.Tunes.StoreApp.ViewModels
         //private ServiceUrlWizzardPageViewModel m_HostSettingsPageViewModel;
         //public ServiceUrlWizzardPageViewModel HostSettingsPageViewModel => m_HostSettingsPageViewModel ?? (m_HostSettingsPageViewModel = new ServiceUrlWizzardPageViewModel());
 
-        private PlayerBarViewModel m_playerBarViewModel;
-        public PlayerBarViewModel PlayerBarViewModel => m_playerBarViewModel ?? (m_playerBarViewModel = new PlayerBarViewModel());
+        private PlayerBarUserControlViewModel m_playerBarViewModel;
+        public PlayerBarUserControlViewModel PlayerBarViewModel => m_playerBarViewModel ?? (m_playerBarViewModel = new PlayerBarUserControlViewModel());
 
     }
 }

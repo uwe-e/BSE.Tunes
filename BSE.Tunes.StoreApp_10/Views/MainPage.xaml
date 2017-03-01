@@ -75,19 +75,19 @@
                        RelativePanel.AlignRightWithPanel="True">
 
                 <Grid x:Name="flipView" RelativePanel.AlignLeftWithPanel="True" RelativePanel.AlignRightWithPanel="True" RelativePanel.AlignTopWithPanel="True" >
-                    <usercontrols:FeaturedItems/>
+                    <local:FeaturedItemsUserControl/>
                 </Grid>
 
                 <Grid x:Name="randomPlayer" RelativePanel.AlignLeftWithPanel="True" RelativePanel.AlignRightWithPanel="True" RelativePanel.Below="flipView">
-                    <usercontrols:RandomPlayerPanel  />
+                    <local:RandomPlayerPanelUserControl  />
                 </Grid>
 
                 <Grid x:Name="featuredAlbums" RelativePanel.AlignLeftWithPanel="True" RelativePanel.AlignRightWithPanel="True" RelativePanel.Below="randomPlayer">
-                    <usercontrols:AlbumSection  />
+                    <local:FeaturedAlbumsUserControl/>
                 </Grid>
 
                 <Grid x:Name="featuredPlaylists" RelativePanel.AlignLeftWithPanel="True" RelativePanel.AlignRightWithPanel="True" RelativePanel.Below="featuredAlbums">
-                    <usercontrols:FeaturedPlaylists  />
+                    <local:FeaturedPlaylistsUserControl/>
                 </Grid>
 
             </RelativePanel>

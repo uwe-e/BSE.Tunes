@@ -1,8 +1,8 @@
 ﻿<UserControl
-    x:Class="BSE.Tunes.StoreApp.Controls.FeaturedPlaylists"
+    x:Class="BSE.Tunes.StoreApp.Views.FeaturedPlaylistsUserControl"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:local="using:BSE.Tunes.StoreApp.Controls"
+    xmlns:local="using:BSE.Tunes.StoreApp.Views"
     xmlns:vm="using:BSE.Tunes.StoreApp.ViewModels"
     xmlns:controlextensions="using:BSE.Tunes.StoreApp.Controls.Extensions"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
@@ -12,7 +12,7 @@
     d:DesignWidth="400">
 
     <UserControl.DataContext>
-        <vm:FeaturedPlaylistsViewModel x:Name="ViewModel"/>
+        <vm:FeaturedPlaylistsUserControlViewModel x:Name="ViewModel"/>
     </UserControl.DataContext>
 
     <UserControl.Resources>

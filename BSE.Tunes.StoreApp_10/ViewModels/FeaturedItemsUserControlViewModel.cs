@@ -7,7 +7,7 @@ using System.Windows.Input;
 
 namespace BSE.Tunes.StoreApp.ViewModels
 {
-    public class FeaturedItemsViewModel: FeaturedItemsBaseViewModel
+    public class FeaturedItemsUserControlViewModel: FeaturedItemsBaseViewModel
     {
         #region MethodsPublic
         public override async void LoadData()
