@@ -61,7 +61,7 @@
                   IsItemClickEnabled="True"
                   ItemTemplate="{StaticResource PictureSmallTemplate}"
                   ItemContainerStyle="{StaticResource NormalView}"
-                  ItemsSource="{Binding ItemsGroup.Items}" RelativePanel.Below="sectionName"  ScrollViewer.VerticalScrollMode="Disabled"
+                  ItemsSource="{Binding Items}" RelativePanel.Below="sectionName"  ScrollViewer.VerticalScrollMode="Disabled"
                   ScrollViewer.HorizontalScrollBarVisibility="Hidden" ScrollViewer.HorizontalScrollMode="Enabled" ScrollViewer.IsHorizontalRailEnabled="True"
                   controlextensions:ListViewExtensions.Command="{Binding SelectItemCommand}"
                   controlextensions:ListViewExtensions.RightTappedCommand="{Binding RightTappedCommand}">

@@ -12,7 +12,6 @@ namespace BSE.Tunes.StoreApp.ViewModels
         #region MethodsPublic
         public override async void LoadData()
         {
-            this.ItemsGroup = new ItemsGroupViewModel();
             var newestAlbums = await DataService.GetFeaturedAlbums(6);
             if (newestAlbums != null)
             {
@@ -20,7 +19,7 @@ namespace BSE.Tunes.StoreApp.ViewModels
                 {
                     if (album != null)
                     {
-                        this.ItemsGroup.Items.Add(new ItemViewModel
+                        Items.Add(new GridPanelItemViewModel
                         {
                             Title = album.Title,
                             Subtitle = album.Artist.Name,
@@ -31,7 +30,7 @@ namespace BSE.Tunes.StoreApp.ViewModels
                 }
             }
         }
-        public override void SelectItem(ItemViewModel item)
+        public override void SelectItem(GridPanelItemViewModel item)
         {
             NavigationService.NavigateAsync(typeof(Views.AlbumDetailPage), item.Data);
         }

@@ -8,14 +8,13 @@ using Windows.UI.Xaml.Media.Imaging;
 
 namespace BSE.Tunes.StoreApp.ViewModels
 {
-    public class ItemViewModel : ViewModelBase
+    public class GridPanelItemViewModel : ListViewItemViewModel
     {
         #region FieldsPrivate
         private string m_title;
         private string m_subTitle;
         private string m_description;
 		private Uri m_imageSource;
-        private object m_data;
         private BitmapSource m_bitmapSource;
         #endregion
 
@@ -78,18 +77,6 @@ namespace BSE.Tunes.StoreApp.ViewModels
             {
                 this.m_bitmapSource = value;
                 RaisePropertyChanged("BitmapSource");
-            }
-        }
-        public object Data
-        {
-            get
-            {
-                return this.m_data;
-            }
-            set
-            {
-                this.m_data = value;
-                RaisePropertyChanged("Data");
             }
         }
         #endregion

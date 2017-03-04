@@ -10,12 +10,9 @@ using System.Windows.Input;
 
 namespace BSE.Tunes.StoreApp.ViewModels
 {
-    public class FeaturedAlbumsUserControlViewModel : ViewModelBase
+    public class FeaturedAlbumsUserControlViewModel : FeaturedItemsBaseViewModel
     {
         #region FieldsPrivate
-        private ItemsGroupViewModel m_itemsGroup;
-        private ICommand m_navigateToPageCommand;
-        private ICommand m_selectItemCommand;
         private ICommand m_rightTappedCommand;
         private bool m_isOpen;
         #endregion
@@ -33,41 +30,12 @@ namespace BSE.Tunes.StoreApp.ViewModels
                 RaisePropertyChanged("IsOpen");
             }
         }
-        public ItemsGroupViewModel ItemsGroup
-        {
-            get
-            {
-                return this.m_itemsGroup;
-            }
-            set
-            {
-                this.m_itemsGroup = value;
-                RaisePropertyChanged("ItemsGroup");
-            }
-        }
-        public ICommand NavigateToPageCommand => m_navigateToPageCommand ?? (m_navigateToPageCommand = new RelayCommand<object>(vm => NavigateTo()));
-        public ICommand SelectItemCommand => m_selectItemCommand ?? (m_selectItemCommand = new RelayCommand<ItemViewModel>(SelectItem));
-        public ICommand RightTappedCommand => m_rightTappedCommand ?? (m_rightTappedCommand = new RelayCommand<ItemViewModel>(TestFunction));
+        public ICommand RightTappedCommand => m_rightTappedCommand ?? (m_rightTappedCommand = new RelayCommand<GridPanelItemViewModel>(TestFunction));
         #endregion
 
         #region MethodsPublic
-        public FeaturedAlbumsUserControlViewModel()
+        public override async void LoadData()
         {
-            if (!Windows.ApplicationModel.DesignMode.DesignModeEnabled)
-            {
-                LoadData();
-            }
-        }
-        public virtual void NavigateTo()
-        {
-            NavigationService.NavigateAsync(typeof(Views.AlbumsPage));
-        }
-        #endregion
-
-        #region MethodsPrivate
-        private async void LoadData()
-        {
-            this.ItemsGroup = new ItemsGroupViewModel();
             var newestAlbums = await DataService.GetNewestAlbums(20);
             if (newestAlbums != null)
             {
@@ -75,7 +43,7 @@ namespace BSE.Tunes.StoreApp.ViewModels
                 {
                     if (album != null)
                     {
-                        this.ItemsGroup.Items.Add(new ItemViewModel
+                        Items.Add(new GridPanelItemViewModel
                         {
                             Title = album.Title,
                             Subtitle = album.Artist.Name,
@@ -84,14 +52,20 @@ namespace BSE.Tunes.StoreApp.ViewModels
                         });
                     }
                 }
-                //                this.IsBusy = false;
             }
         }
-        private void SelectItem(ItemViewModel item)
+        public override void SelectItem(GridPanelItemViewModel item)
         {
             NavigationService.NavigateAsync(typeof(Views.AlbumDetailPage), item.Data);
         }
-        private void TestFunction(ItemViewModel item)
+        public override void NavigateTo()
+        {
+            NavigationService.NavigateAsync(typeof(Views.AlbumsPage));
+        }
+        #endregion
+
+        #region MethodsPrivate
+        private void TestFunction(GridPanelItemViewModel item)
         {
             this.IsOpen = true;
         }

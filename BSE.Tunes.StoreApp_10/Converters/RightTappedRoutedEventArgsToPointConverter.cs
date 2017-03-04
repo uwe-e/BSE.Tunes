@@ -21,7 +21,10 @@ namespace BSE.Tunes.StoreApp.Converters
             if (frameworkElement != null)
             {
                 placeableContext = frameworkElement.DataContext as IPlaceableContext;
-                placeableContext.OffsetPoint = args?.GetPosition(frameworkElement) ?? new Point();
+                if (placeableContext != null)
+                {
+                    placeableContext.OffsetPoint = args?.GetPosition(frameworkElement) ?? new Point();
+                }
             }
             return placeableContext;
         }

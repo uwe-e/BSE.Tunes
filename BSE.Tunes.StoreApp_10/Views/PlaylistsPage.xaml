@@ -58,7 +58,7 @@
                       RelativePanel.AlignLeftWithPanel="True"
                       RelativePanel.AlignRightWithPanel="True"
                       RelativePanel.Below="pageHeader">
-            <GridView ItemsSource="{Binding ItemsGroup.Items}" ItemContainerStyle="{StaticResource NormalView}" ItemTemplate="{StaticResource BitmapSourceSmallTemplate}"  IsItemClickEnabled="True" controlextensions:ListViewExtensions.Command="{Binding SelectItemCommand}"/>
+            <GridView ItemsSource="{Binding Items}" ItemContainerStyle="{StaticResource NormalView}" ItemTemplate="{StaticResource BitmapSourceSmallTemplate}"  IsItemClickEnabled="True" controlextensions:ListViewExtensions.Command="{Binding SelectItemCommand}"/>
         </Grid>
     </RelativePanel>
 </Page>

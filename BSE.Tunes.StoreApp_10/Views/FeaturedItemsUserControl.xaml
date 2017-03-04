@@ -15,7 +15,7 @@
         <vm:FeaturedItemsUserControlViewModel x:Name="ViewModel"/>
     </UserControl.DataContext>
     <StackPanel>
-        <uwpcontrols:Carousel x:Name="carousel" ScrollViewer.IsHorizontalRailEnabled="True" ItemsSource="{Binding ItemsGroup.Items}" AspectRatio="1.6" MinHeight="160"
+        <uwpcontrols:Carousel x:Name="carousel" ScrollViewer.IsHorizontalRailEnabled="True" ItemsSource="{Binding Items}" AspectRatio="1.6" MinHeight="160"
                 MaxHeight="340"  GradientOpacity="0.5" ItemClickCommand="{Binding SelectItemCommand}">
             <uwpcontrols:Carousel.ContentTemplate>
                 <DataTemplate>
