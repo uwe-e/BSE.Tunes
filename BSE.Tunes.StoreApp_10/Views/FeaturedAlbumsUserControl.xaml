@@ -6,6 +6,7 @@
     xmlns:vm="using:BSE.Tunes.StoreApp.ViewModels"
     xmlns:interactivity="using:Microsoft.Xaml.Interactivity"
     xmlns:core="using:Microsoft.Xaml.Interactions.Core"
+    xmlns:converters="using:BSE.Tunes.StoreApp.Converters"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:controlextensions="using:BSE.Tunes.StoreApp.Controls.Extensions"
@@ -36,6 +37,49 @@
             <ItemsWrapGrid MaximumRowsOrColumns="2"/>
         </ItemsPanelTemplate>
 
+        <converters:RightTappedRoutedEventArgsToPointConverter x:Key="RightTappedToPointConverter"/>
+        
+        <DataTemplate x:Name="SmallImagePanelTemplate">
+            <Grid x:Name="gridViewItem" Width="150">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="150"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+                <FlyoutBase.AttachedFlyout>
+                    <MenuFlyout controlextensions:FlyoutExtensions.IsOpen="{Binding IsOpen, Mode=TwoWay}"
+                                        controlextensions:FlyoutExtensions.Parent="{Binding ElementName=gridViewItem}"
+                                        controlextensions:FlyoutExtensions.OffsetPoint="{Binding OffsetPoint, Mode=TwoWay}">
+                        <MenuFlyout.Items>
+                            <MenuFlyoutItem x:Uid="MenuFlyoutPlayAll" Text="Play" Command="{Binding DataContext.PlayAllCommand, ElementName=gridview}" CommandParameter="{Binding}"/>
+                            <MenuFlyoutItem x:Uid="MenuFlyoutAddTo" x:Name="menuAddTo"  Text="Add to" Command="{Binding DataContext.ShowAddToPlaylistDialogCommand, ElementName=gridview}" CommandParameter="{Binding}">
+                                <FlyoutBase.AttachedFlyout>
+                                    <Flyout controlextensions:FlyoutExtensions.IsOpen="{Binding IsContextOpen, Mode=TwoWay}"
+                                            controlextensions:FlyoutExtensions.Parent="{Binding ElementName=gridViewItem}">
+                                        <local:AddToPlaylistFlyoutUserControl/>
+                                        <!--<StackPanel>
+                                            <TextBlock Style="{ThemeResource BaseTextBlockStyle}" Text="All items will be removed. Do you want to continue?" Margin="0,0,0,12" />
+                                            <Button Content="Yes, empty my cart" />
+                                        </StackPanel>-->
+                                    </Flyout>
+                                </FlyoutBase.AttachedFlyout>
+                            </MenuFlyoutItem>
+                        </MenuFlyout.Items>
+                    </MenuFlyout>
+                </FlyoutBase.AttachedFlyout>
+                <Image x:Name="image" Stretch="Uniform" Source="{Binding Path=ImageSource}" Height="150" Grid.Row="0"/>
+                <TextBlock Grid.Row="1" Text="{Binding Data.Title}" TextWrapping="WrapWholeWords" TextTrimming="WordEllipsis" MaxLines="2" x:Name="title" FontWeight="SemiBold"/>
+                <TextBlock Grid.Row="2" Text="{Binding Data.Artist.Name}" FontWeight="SemiLight" x:Name="description" TextTrimming="WordEllipsis" FontSize="12" />
+                <interactivity:Interaction.Behaviors>
+                    <core:EventTriggerBehavior EventName="RightTapped">
+                        <core:InvokeCommandAction Command="{Binding DataContext.OpenFlyoutCommand, ElementName=gridview}"
+                                                                  InputConverter="{StaticResource RightTappedToPointConverter}"
+                                                                  InputConverterParameter="{Binding ElementName=gridViewItem}"/>
+                    </core:EventTriggerBehavior>
+                </interactivity:Interaction.Behaviors>
+            </Grid>
+        </DataTemplate>
+
     </UserControl.Resources>
 
     <RelativePanel Padding="20,10,20,10">
@@ -56,10 +100,11 @@
                 </Grid>
             </HyperlinkButton.Content>
         </HyperlinkButton>
-        <GridView Margin="0,12,0,0" x:Name="list" Padding="0" 
+        <!-- ItemTemplate="{StaticResource PictureSmallTemplate}" -->
+        <GridView Margin="0,12,0,0" x:Name="gridview" Padding="0" 
                   SelectionMode="None"
                   IsItemClickEnabled="True"
-                  ItemTemplate="{StaticResource PictureSmallTemplate}"
+                  ItemTemplate="{StaticResource SmallImagePanelTemplate}"
                   ItemContainerStyle="{StaticResource NormalView}"
                   ItemsSource="{Binding Items}" RelativePanel.Below="sectionName"  ScrollViewer.VerticalScrollMode="Disabled"
                   ScrollViewer.HorizontalScrollBarVisibility="Hidden" ScrollViewer.HorizontalScrollMode="Enabled" ScrollViewer.IsHorizontalRailEnabled="True"
@@ -70,34 +115,7 @@
                     <ItemsWrapGrid x:Name="wrapGrid" MaximumRowsOrColumns="1"/>
                 </ItemsPanelTemplate>
             </GridView.ItemsPanel>
-            <!--<GridView.Resources>
-                <FlyoutBase.AttachedFlyout>
-                    <MenuFlyout>
-                        <MenuFlyout.Items>
-                            <MenuFlyoutItem x:Name="Edit"  Text="Edit"/>
-                            <MenuFlyoutItem x:Name="Remove" Text="Remove"/>
-                        </MenuFlyout.Items>
-                    </MenuFlyout>
-                </FlyoutBase.AttachedFlyout>
-            </GridView.Resources>-->
-            <FlyoutBase.AttachedFlyout>
-                <MenuFlyout controlextensions:FlyoutExtensions.IsOpen="{Binding IsOpen}">
-                    <MenuFlyout.Items>
-                        <MenuFlyoutItem x:Name="Edit"  Text="Edit"/>
-                        <MenuFlyoutItem x:Name="Remove" Text="Remove"/>
-                    </MenuFlyout.Items>
-                </MenuFlyout>
-            </FlyoutBase.AttachedFlyout>
-            <!--<interactivity:Interaction.Behaviors>
-                <core:EventTriggerBehavior EventName="ItemClick">
-                    <core:InvokeCommandAction Command="{Binding SelectItemCommand}"/>
-                </core:EventTriggerBehavior>
-                -->
-            <!--<core:EventTriggerBehavior EventName="RightTapped">
-                    <core:
-                </core:EventTriggerBehavior>-->
-            <!--
-            </interactivity:Interaction.Behaviors>-->
+           
         </GridView>
     </RelativePanel>
 </UserControl>

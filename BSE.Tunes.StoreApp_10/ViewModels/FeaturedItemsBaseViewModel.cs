@@ -1,4 +1,5 @@
 ﻿using BSE.Tunes.Data;
+using BSE.Tunes.StoreApp.Managers;
 using BSE.Tunes.StoreApp.Mvvm;
 using GalaSoft.MvvmLight.Command;
 using System;
@@ -18,6 +19,8 @@ namespace BSE.Tunes.StoreApp.ViewModels
         private ObservableCollection<GridPanelItemViewModel> m_items;
         private ICommand m_navigateToPageCommand;
         private ICommand m_selectItemCommand;
+        private ICommand m_playAllCommand;
+        private ICommand m_showAddToPlaylistDialogCommand;
         #endregion
 
         #region Properties
@@ -34,6 +37,14 @@ namespace BSE.Tunes.StoreApp.ViewModels
         }
         public ICommand NavigateToPageCommand => m_navigateToPageCommand ?? (m_navigateToPageCommand = new RelayCommand<object>(vm => NavigateTo()));
         public ICommand SelectItemCommand => m_selectItemCommand ?? (m_selectItemCommand = new RelayCommand<GridPanelItemViewModel>(SelectItem));
+        public ICommand PlayAllCommand => m_playAllCommand ?? (m_playAllCommand = new RelayCommand<GridPanelItemViewModel>(PlayAll));
+        public ICommand ShowAddToPlaylistDialogCommand => m_showAddToPlaylistDialogCommand ?? (m_showAddToPlaylistDialogCommand = new RelayCommand<GridPanelItemViewModel>(ShowAddToPlaylistDialog));
+
+        public PlayerManager PlayerManager
+        {
+            get;
+        } = PlayerManager.Instance;
+
         #endregion
 
         #region MethodsPublic
@@ -51,9 +62,15 @@ namespace BSE.Tunes.StoreApp.ViewModels
         public virtual void LoadData()
         {
         }
-
         public virtual void SelectItem(GridPanelItemViewModel item)
         {
+        }
+        public virtual void PlayAll(GridPanelItemViewModel item)
+        {
+        }
+        public virtual void ShowAddToPlaylistDialog(GridPanelItemViewModel item)
+        {
+            item.IsContextOpen = true;
         }
         public virtual string FormatNumberOfEntriesString(Playlist playlist)
         {
@@ -64,6 +81,7 @@ namespace BSE.Tunes.StoreApp.ViewModels
             }
             return string.Format(CultureInfo.CurrentUICulture, "{0} {1}", numberOfEntries, ResourceService.GetString("PlaylistItem_PartNumberOfEntries", "Songs"));
         }
+        
         #endregion
     }
 }

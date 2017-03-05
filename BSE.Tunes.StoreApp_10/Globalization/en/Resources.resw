@@ -277,4 +277,7 @@ Please choose a different name for your playlist!</value>
   <data name="AlbumDetailPage_AddTo.Text" xml:space="preserve">
     <value>Add to</value>
   </data>
+  <data name="MenuFlyoutPlayAll.Text" xml:space="preserve">
+    <value>Play</value>
+  </data>
 </root>

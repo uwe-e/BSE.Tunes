@@ -113,6 +113,10 @@
     <Compile Include="Controls\Extensions\FlyoutExtensions.cs" />
     <Compile Include="Controls\Extensions\ListViewExtensions.cs" />
     <Compile Include="Collections\IncrementalObservableCollection.cs" />
+    <Compile Include="ViewModels\AddToPlaylistFlyoutUserControlViewModel.cs" />
+    <Compile Include="Views\AddToPlaylistFlyoutUserControl.xaml.cs">
+      <DependentUpon>AddToPlaylistFlyoutUserControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\FeaturedAlbumsUserControl.xaml.cs">
       <DependentUpon>FeaturedAlbumsUserControl.xaml</DependentUpon>
     </Compile>
@@ -292,6 +296,10 @@
     </ApplicationDefinition>
   </ItemGroup>
   <ItemGroup>
+    <Page Include="Views\AddToPlaylistFlyoutUserControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\FeaturedAlbumsUserControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

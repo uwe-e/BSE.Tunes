@@ -115,9 +115,6 @@ namespace BSE.Tunes.StoreApp.ViewModels
         public RelayCommand PlaySelectedItemsCommand => m_playSelectedItemsCommand ?? (m_playSelectedItemsCommand = new RelayCommand(PlaySelectedItems, CanPlaySelectedItems));
         public ICommand OpenPlaylistFlyoutCommand => m_openPlaylistFlyoutCommand ?? (m_openPlaylistFlyoutCommand = new RelayCommand(OpenPlaylistFlyout));
         public ICommand OpenAllToPlaylistCommand => m_openAllToPlaylistCommand ?? (m_openAllToPlaylistCommand = new RelayCommand(OpenAllToPlaylistFlyout));
-
-        
-
         #endregion
 
         #region MethodsPublic

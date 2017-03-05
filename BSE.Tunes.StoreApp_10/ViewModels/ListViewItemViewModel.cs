@@ -13,6 +13,7 @@ namespace BSE.Tunes.StoreApp.ViewModels
         #region FieldsPrivate
         private object m_data;
         private bool m_isOpen;
+        private bool m_isContextOpen;
         private Point m_offsetPoint;
         #endregion
 
@@ -27,6 +28,18 @@ namespace BSE.Tunes.StoreApp.ViewModels
             {
                 this.m_isOpen = value;
                 RaisePropertyChanged("IsOpen");
+            }
+        }
+        public bool IsContextOpen
+        {
+            get
+            {
+                return m_isContextOpen;
+            }
+            set
+            {
+                this.m_isContextOpen = value;
+                RaisePropertyChanged("IsContextOpen");
             }
         }
         public Point OffsetPoint

@@ -1,4 +1,5 @@
 ﻿using BSE.Tunes.Data;
+using BSE.Tunes.StoreApp.Models;
 using BSE.Tunes.StoreApp.Mvvm;
 using GalaSoft.MvvmLight.Command;
 using System;
@@ -13,24 +14,11 @@ namespace BSE.Tunes.StoreApp.ViewModels
     public class FeaturedAlbumsUserControlViewModel : FeaturedItemsBaseViewModel
     {
         #region FieldsPrivate
-        private ICommand m_rightTappedCommand;
-        private bool m_isOpen;
+        private ICommand m_openFlyoutCommand;
         #endregion
 
         #region Properties
-        public bool IsOpen
-        {
-            get
-            {
-                return this.m_isOpen;
-            }
-            set
-            {
-                this.m_isOpen = value;
-                RaisePropertyChanged("IsOpen");
-            }
-        }
-        public ICommand RightTappedCommand => m_rightTappedCommand ?? (m_rightTappedCommand = new RelayCommand<GridPanelItemViewModel>(TestFunction));
+        public ICommand OpenFlyoutCommand => m_openFlyoutCommand ?? (m_openFlyoutCommand = new RelayCommand<GridPanelItemViewModel>(OpenFlyout));
         #endregion
 
         #region MethodsPublic
@@ -62,12 +50,30 @@ namespace BSE.Tunes.StoreApp.ViewModels
         {
             NavigationService.NavigateAsync(typeof(Views.AlbumsPage));
         }
+        public override async void PlayAll(GridPanelItemViewModel item)
+        {
+            Album album = item.Data as Album;
+            if (album != null)
+            {
+                album = await DataService.GetAlbumById(album.Id);
+                if (album.Tracks != null)
+                {
+                    var trackIds = album.Tracks.Select(track => track.Id);
+                    if (trackIds != null)
+                    {
+                        PlayerManager.PlayTracks(
+                            new System.Collections.ObjectModel.ObservableCollection<int>(trackIds),
+                            PlayerMode.CD);
+                    }
+                }
+            }
+        }
         #endregion
 
         #region MethodsPrivate
-        private void TestFunction(GridPanelItemViewModel item)
+        private void OpenFlyout(GridPanelItemViewModel item)
         {
-            this.IsOpen = true;
+            item.IsOpen = true;
         }
         #endregion
     }
