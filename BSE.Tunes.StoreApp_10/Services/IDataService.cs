@@ -38,5 +38,6 @@ namespace BSE.Tunes.StoreApp.Services
         Task<ObservableCollection<Guid>> GetPlaylistImageIdsById(int playlistId, string userName, int limit);
         Task<Playlist> InsertPlaylist(Playlist playlist);
         Task<Playlist> AppendToPlaylist(Playlist playlist);
+        Task<bool> DeletePlaylists(ObservableCollection<Playlist> playlists);
     }
 }

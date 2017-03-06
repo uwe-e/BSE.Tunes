@@ -52,18 +52,6 @@
                                         controlextensions:FlyoutExtensions.OffsetPoint="{Binding OffsetPoint, Mode=TwoWay}">
                         <MenuFlyout.Items>
                             <MenuFlyoutItem x:Uid="MenuFlyoutPlayAll" Text="Play" Command="{Binding DataContext.PlayAllCommand, ElementName=gridview}" CommandParameter="{Binding}"/>
-                            <MenuFlyoutItem x:Uid="MenuFlyoutAddTo" x:Name="menuAddTo"  Text="Add to" Command="{Binding DataContext.ShowAddToPlaylistDialogCommand, ElementName=gridview}" CommandParameter="{Binding}">
-                                <FlyoutBase.AttachedFlyout>
-                                    <Flyout controlextensions:FlyoutExtensions.IsOpen="{Binding IsContextOpen, Mode=TwoWay}"
-                                            controlextensions:FlyoutExtensions.Parent="{Binding ElementName=gridViewItem}">
-                                        <local:AddToPlaylistFlyoutUserControl/>
-                                        <!--<StackPanel>
-                                            <TextBlock Style="{ThemeResource BaseTextBlockStyle}" Text="All items will be removed. Do you want to continue?" Margin="0,0,0,12" />
-                                            <Button Content="Yes, empty my cart" />
-                                        </StackPanel>-->
-                                    </Flyout>
-                                </FlyoutBase.AttachedFlyout>
-                            </MenuFlyoutItem>
                         </MenuFlyout.Items>
                     </MenuFlyout>
                 </FlyoutBase.AttachedFlyout>
@@ -73,8 +61,8 @@
                 <interactivity:Interaction.Behaviors>
                     <core:EventTriggerBehavior EventName="RightTapped">
                         <core:InvokeCommandAction Command="{Binding DataContext.OpenFlyoutCommand, ElementName=gridview}"
-                                                                  InputConverter="{StaticResource RightTappedToPointConverter}"
-                                                                  InputConverterParameter="{Binding ElementName=gridViewItem}"/>
+                                                  InputConverter="{StaticResource RightTappedToPointConverter}"
+                                                  InputConverterParameter="{Binding ElementName=gridViewItem}"/>
                     </core:EventTriggerBehavior>
                 </interactivity:Interaction.Behaviors>
             </Grid>

@@ -280,4 +280,19 @@ Please choose a different name for your playlist!</value>
   <data name="MenuFlyoutPlayAll.Text" xml:space="preserve">
     <value>Play</value>
   </data>
+  <data name="MenuFlyoutDelete.Text" xml:space="preserve">
+    <value>Delete</value>
+  </data>
+  <data name="DeletePlaylistContentDialog.PrimaryButtonText" xml:space="preserve">
+    <value>OK</value>
+  </data>
+  <data name="DeletePlaylistContentDialog.SecondaryButtonText" xml:space="preserve">
+    <value>Cancel</value>
+  </data>
+  <data name="DeletePlaylistContentDialog.Title" xml:space="preserve">
+    <value>Do you want delete this?</value>
+  </data>
+  <data name="DeletePlaylistContentDialog_TxtDeleteInformation.Text" xml:space="preserve">
+    <value>If you delete {0} from your library, you can't play it anymore from other devices.</value>
+  </data>
 </root>

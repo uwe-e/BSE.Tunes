@@ -13,15 +13,23 @@ using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 
-// The User Control item template is documented at http://go.microsoft.com/fwlink/?LinkId=234236
+// The Content Dialog item template is documented at http://go.microsoft.com/fwlink/?LinkId=234238
 
 namespace BSE.Tunes.StoreApp.Views
 {
-    public sealed partial class AddToPlaylistFlyoutUserControl : UserControl
+    public sealed partial class DeletePlaylistContentDialog : ContentDialog
     {
-        public AddToPlaylistFlyoutUserControl()
+        public DeletePlaylistContentDialog()
         {
             this.InitializeComponent();
+        }
+
+        private void ContentDialog_PrimaryButtonClick(ContentDialog sender, ContentDialogButtonClickEventArgs args)
+        {
+        }
+
+        private void ContentDialog_SecondaryButtonClick(ContentDialog sender, ContentDialogButtonClickEventArgs args)
+        {
         }
     }
 }

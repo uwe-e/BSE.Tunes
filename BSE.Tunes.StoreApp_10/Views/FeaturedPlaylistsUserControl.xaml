@@ -4,6 +4,9 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="using:BSE.Tunes.StoreApp.Views"
     xmlns:vm="using:BSE.Tunes.StoreApp.ViewModels"
+    xmlns:interactivity="using:Microsoft.Xaml.Interactivity"
+    xmlns:core="using:Microsoft.Xaml.Interactions.Core"
+    xmlns:converters="using:BSE.Tunes.StoreApp.Converters"
     xmlns:controlextensions="using:BSE.Tunes.StoreApp.Controls.Extensions"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
@@ -22,6 +25,38 @@
             <Setter Property="MaxWidth" Value="142" />
         </Style>
 
+        <converters:RightTappedRoutedEventArgsToPointConverter x:Key="RightTappedToPointConverter"/>
+        
+        <DataTemplate x:Name="SmallImagePanelTemplate">
+            <Grid x:Name="gridViewItem" Width="150">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="150"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+                <FlyoutBase.AttachedFlyout>
+                    <MenuFlyout controlextensions:FlyoutExtensions.IsOpen="{Binding IsOpen, Mode=TwoWay}"
+                                        controlextensions:FlyoutExtensions.Parent="{Binding ElementName=gridViewItem}"
+                                        controlextensions:FlyoutExtensions.OffsetPoint="{Binding OffsetPoint, Mode=TwoWay}">
+                        <MenuFlyout.Items>
+                            <MenuFlyoutItem x:Uid="MenuFlyoutPlayAll" Text="Play" Command="{Binding DataContext.PlayAllCommand, ElementName=gridview}" CommandParameter="{Binding}"/>
+                            <MenuFlyoutItem x:Uid="MenuFlyoutDelete" Text="Delete" Command="{Binding DataContext.ShowDeletePlaylistDialogCommand, ElementName=gridview}" CommandParameter="{Binding}"/>
+                        </MenuFlyout.Items>
+                    </MenuFlyout>
+                </FlyoutBase.AttachedFlyout>
+                <Image x:Name="image" Stretch="Uniform" Source="{Binding Path=BitmapSource}" Height="150" Grid.Row="0"/>
+                <TextBlock Grid.Row="1" Text="{Binding Title}" TextWrapping="WrapWholeWords" TextTrimming="WordEllipsis" MaxLines="2" x:Name="title" FontWeight="SemiBold"/>
+                <TextBlock Grid.Row="2" Text="{Binding Subtitle}" FontWeight="SemiLight" x:Name="description" TextTrimming="WordEllipsis" FontSize="12" />
+                <interactivity:Interaction.Behaviors>
+                    <core:EventTriggerBehavior EventName="RightTapped">
+                        <core:InvokeCommandAction Command="{Binding DataContext.OpenFlyoutCommand, ElementName=gridview}"
+                                                  InputConverter="{StaticResource RightTappedToPointConverter}"
+                                                  InputConverterParameter="{Binding ElementName=gridViewItem}"/>
+                    </core:EventTriggerBehavior>
+                </interactivity:Interaction.Behaviors>
+            </Grid>
+        </DataTemplate>
+        
     </UserControl.Resources>
 
     <RelativePanel Padding="20,10,20,10">
@@ -42,10 +77,10 @@
                 </Grid>
             </HyperlinkButton.Content>
         </HyperlinkButton>
-        <GridView Margin="0,12,0,0" x:Name="list" Padding="0" 
+        <GridView Margin="0,12,0,0" x:Name="gridview" Padding="0" 
                   SelectionMode="None"
                   IsItemClickEnabled="True"
-                  ItemTemplate="{StaticResource BitmapSourceSmallTemplate}"
+                  ItemTemplate="{StaticResource SmallImagePanelTemplate}"
                   ItemContainerStyle="{StaticResource NormalView}"
                   ItemsSource="{Binding Items}" RelativePanel.Below="sectionName"  ScrollViewer.VerticalScrollMode="Disabled"
                   ScrollViewer.HorizontalScrollBarVisibility="Hidden" ScrollViewer.HorizontalScrollMode="Enabled" ScrollViewer.IsHorizontalRailEnabled="True"

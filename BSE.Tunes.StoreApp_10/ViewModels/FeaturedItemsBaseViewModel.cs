@@ -21,6 +21,7 @@ namespace BSE.Tunes.StoreApp.ViewModels
         private ICommand m_selectItemCommand;
         private ICommand m_playAllCommand;
         private ICommand m_showAddToPlaylistDialogCommand;
+        private ICommand m_openFlyoutCommand;
         #endregion
 
         #region Properties
@@ -39,7 +40,7 @@ namespace BSE.Tunes.StoreApp.ViewModels
         public ICommand SelectItemCommand => m_selectItemCommand ?? (m_selectItemCommand = new RelayCommand<GridPanelItemViewModel>(SelectItem));
         public ICommand PlayAllCommand => m_playAllCommand ?? (m_playAllCommand = new RelayCommand<GridPanelItemViewModel>(PlayAll));
         public ICommand ShowAddToPlaylistDialogCommand => m_showAddToPlaylistDialogCommand ?? (m_showAddToPlaylistDialogCommand = new RelayCommand<GridPanelItemViewModel>(ShowAddToPlaylistDialog));
-
+        public ICommand OpenFlyoutCommand => m_openFlyoutCommand ?? (m_openFlyoutCommand = new RelayCommand<GridPanelItemViewModel>(OpenFlyout));
         public PlayerManager PlayerManager
         {
             get;
@@ -71,6 +72,10 @@ namespace BSE.Tunes.StoreApp.ViewModels
         public virtual void ShowAddToPlaylistDialog(GridPanelItemViewModel item)
         {
             item.IsContextOpen = true;
+        }
+        public virtual void OpenFlyout(GridPanelItemViewModel item)
+        {
+            item.IsOpen = true;
         }
         public virtual string FormatNumberOfEntriesString(Playlist playlist)
         {

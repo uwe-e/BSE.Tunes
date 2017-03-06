@@ -164,6 +164,11 @@ namespace BSE.Tunes.StoreApp.Services
             string strUrl = string.Format("{0}/api/playlist/append", this.ServiceUrl);
             return await GetHttpResponseFromPost<Playlist, Playlist>(new Uri(strUrl), playlist);
         }
+        public async Task<bool> DeletePlaylists(ObservableCollection<Playlist> playlists)
+        {
+            string strUrl = string.Format("{0}/api/playlist/delete", this.ServiceUrl);
+            return await GetHttpResponseFromPost<bool, ObservableCollection<Playlist>>(new Uri(strUrl), playlists);
+        }
         public async Task<HttpClient> GetHttpClient(bool withRefreshToken = true)
         {
             var tokenResponse = this.m_authenticationHandler.TokenResponse;

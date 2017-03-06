@@ -1,6 +1,9 @@
 ﻿using BSE.Tunes.Data;
 using BSE.Tunes.StoreApp.Models;
+using BSE.Tunes.StoreApp.Mvvm.Messaging;
 using BSE.Tunes.StoreApp.Services;
+using GalaSoft.MvvmLight.Command;
+using GalaSoft.MvvmLight.Messaging;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -8,12 +11,41 @@ using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Input;
 
 namespace BSE.Tunes.StoreApp.ViewModels
 {
     public class FeaturedPlaylistsUserControlViewModel : FeaturedItemsBaseViewModel
     {
+        private ICommand m_showDeletePlaylistDialogCommand;
+        #region FieldsPrivate
+        #endregion
+
+        #region Properties
+        public User User
+        {
+            get;
+        } = SettingsService.Instance.User;
+        public ICommand ShowDeletePlaylistDialogCommand => m_showDeletePlaylistDialogCommand ?? (m_showDeletePlaylistDialogCommand = new RelayCommand<GridPanelItemViewModel>(ShowDeletePlaylistDialog));
+        #endregion
+
         #region MethodsPublic
+        public FeaturedPlaylistsUserControlViewModel()
+        {
+            Messenger.Default.Register<PlaylistChangedArgs>(this, args =>
+            {
+                PlaylistCreatedArgs playlistCreated = args as PlaylistCreatedArgs;
+                if (playlistCreated != null)
+                {
+                    LoadData();
+                }
+                PlaylistDeletedArgs playlistDeleted = args as PlaylistDeletedArgs;
+                if (playlistDeleted != null)
+                {
+                    LoadData();
+                }
+            });
+        }
         public override void SelectItem(GridPanelItemViewModel item)
         {
             NavigationService.NavigateAsync(typeof(Views.PlaylistDetailPage), item.Data);
@@ -24,21 +56,21 @@ namespace BSE.Tunes.StoreApp.ViewModels
         }
         public override async void LoadData()
         {
-            User user = SettingsService.Instance.User;
-            if (user != null && !string.IsNullOrEmpty(user.UserName))
+            if (!string.IsNullOrEmpty(User.UserName))
             {
                 try
                 {
+                    Items.Clear();
                     ICacheableBitmapService cacheableBitmapService = CacheableBitmapService.Instance;
-                    var playlists = await DataService.GetPlaylistsByUserName(user.UserName, 6);
+                    var playlists = await DataService.GetPlaylistsByUserName(User.UserName, 6);
                     foreach (var playlst in playlists)
                     {
                         if (playlst != null)
                         {
-                            var playlist = await DataService.GetPlaylistByIdWithNumberOfEntries(playlst.Id, user.UserName);
+                            var playlist = await DataService.GetPlaylistByIdWithNumberOfEntries(playlst.Id, User.UserName);
                             if (playlist != null)
                             {
-                                System.Collections.ObjectModel.ObservableCollection<Guid> albumIds = await DataService.GetPlaylistImageIdsById(playlist.Id, user.UserName, 4);
+                                System.Collections.ObjectModel.ObservableCollection<Guid> albumIds = await DataService.GetPlaylistImageIdsById(playlist.Id, User.UserName, 4);
                                 Items.Add(new GridPanelItemViewModel
                                 {
                                     Title = playlist.Name,
@@ -50,7 +82,6 @@ namespace BSE.Tunes.StoreApp.ViewModels
                                     Data = playlist
                                 });
                             }
-
                         }
                     }
                 }
@@ -59,6 +90,32 @@ namespace BSE.Tunes.StoreApp.ViewModels
                     //this.IsBusy = false;
                 }
             }
+        }
+        public async override void PlayAll(GridPanelItemViewModel item)
+        {
+            Playlist playlist = item.Data as Playlist;
+            if (playlist != null && !string.IsNullOrEmpty(User.UserName))
+            {
+                playlist = await this.DataService.GetPlaylistById(playlist.Id, User.UserName);
+                var entryIds = playlist.Entries.Select(entry => entry.TrackId);
+                if (entryIds != null)
+                {
+                    PlayerManager.PlayTracks(
+                        new System.Collections.ObjectModel.ObservableCollection<int>(entryIds),
+                        PlayerMode.Playlist);
+                }
+            }
+        }
+        #endregion
+
+        #region MethodsPrivate
+        private async void ShowDeletePlaylistDialog(GridPanelItemViewModel item)
+        {
+            IDialogService dialogService = DialogService.Instance;
+            await dialogService.ShowContentDialogAsync(new DeletePlaylistContentDialogViewModel
+            {
+                Playlist = item.Data as Playlist
+            });
         }
         #endregion
     }
