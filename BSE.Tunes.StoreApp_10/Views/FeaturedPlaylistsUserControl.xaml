@@ -6,7 +6,6 @@
     xmlns:vm="using:BSE.Tunes.StoreApp.ViewModels"
     xmlns:interactivity="using:Microsoft.Xaml.Interactivity"
     xmlns:core="using:Microsoft.Xaml.Interactions.Core"
-    xmlns:converters="using:BSE.Tunes.StoreApp.Converters"
     xmlns:controlextensions="using:BSE.Tunes.StoreApp.Controls.Extensions"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
@@ -25,8 +24,6 @@
             <Setter Property="MaxWidth" Value="142" />
         </Style>
 
-        <converters:RightTappedRoutedEventArgsToPointConverter x:Key="RightTappedToPointConverter"/>
-        
         <DataTemplate x:Name="SmallImagePanelTemplate">
             <Grid x:Name="gridViewItem" Width="150">
                 <Grid.RowDefinitions>

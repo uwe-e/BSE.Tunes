@@ -295,4 +295,16 @@ Please choose a different name for your playlist!</value>
   <data name="DeletePlaylistContentDialog_TxtDeleteInformation.Text" xml:space="preserve">
     <value>If you delete {0} from your library, you can't play it anymore from other devices.</value>
   </data>
+  <data name="ButtonClearSelection.Label" xml:space="preserve">
+    <value>Cancel</value>
+  </data>
+  <data name="ButtonDeleteSelection.Label" xml:space="preserve">
+    <value>Delete</value>
+  </data>
+  <data name="ButtonSelectAll.Label" xml:space="preserve">
+    <value>Select all</value>
+  </data>
+  <data name="ButtonUnSelectAll.Label" xml:space="preserve">
+    <value>Unselect all</value>
+  </data>
 </root>

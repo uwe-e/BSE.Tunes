@@ -5,6 +5,9 @@
     xmlns:local="using:BSE.Tunes.StoreApp.Views"
     xmlns:controls="using:Template10.Controls"
     xmlns:vm="using:BSE.Tunes.StoreApp.ViewModels"
+    xmlns:interactivity="using:Microsoft.Xaml.Interactivity"
+    xmlns:core="using:Microsoft.Xaml.Interactions.Core"
+    xmlns:converters="using:BSE.Tunes.StoreApp.Converters"
     xmlns:controlextensions="using:BSE.Tunes.StoreApp.Controls.Extensions"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
@@ -20,7 +23,50 @@
             <Setter Property="Padding" Value="0" />
             <Setter Property="MaxWidth" Value="142" />
         </Style>
+
+        <DataTemplate x:Name="SmallImagePanelTemplate">
+            <Grid x:Name="gridViewItem" Width="150">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="150"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+                <FlyoutBase.AttachedFlyout>
+                    <MenuFlyout controlextensions:FlyoutExtensions.IsOpen="{Binding IsOpen, Mode=TwoWay}"
+                                        controlextensions:FlyoutExtensions.Parent="{Binding ElementName=gridViewItem}"
+                                        controlextensions:FlyoutExtensions.OffsetPoint="{Binding OffsetPoint, Mode=TwoWay}">
+                        <MenuFlyout.Items>
+                            <MenuFlyoutItem x:Uid="MenuFlyoutPlayAll" Text="Play" Command="{Binding DataContext.PlayAllCommand, ElementName=gridview}" CommandParameter="{Binding}"/>
+                            <MenuFlyoutItem x:Uid="MenuFlyoutDelete" Text="Delete" Command="{Binding DataContext.ShowDeletePlaylistDialogCommand, ElementName=gridview}" CommandParameter="{Binding}"/>
+                            <MenuFlyoutSeparator/>
+                            <MenuFlyoutItem x:Uid="MenuFlyoutSelectItems" Text="Select" Command="{Binding DataContext.SelectItemsCommand, ElementName=gridview}" CommandParameter="{Binding}"/>
+                        </MenuFlyout.Items>
+                    </MenuFlyout>
+                </FlyoutBase.AttachedFlyout>
+                <Image x:Name="image" Stretch="Uniform" Source="{Binding Path=BitmapSource}" Height="150" Grid.Row="0"/>
+                <TextBlock Grid.Row="1" Text="{Binding Title}" TextWrapping="WrapWholeWords" TextTrimming="WordEllipsis" MaxLines="2" x:Name="title" FontWeight="SemiBold"/>
+                <TextBlock Grid.Row="2" Text="{Binding Subtitle}" FontWeight="SemiLight" x:Name="description" TextTrimming="WordEllipsis" FontSize="12" />
+                <interactivity:Interaction.Behaviors>
+                    <core:EventTriggerBehavior EventName="RightTapped">
+                        <core:InvokeCommandAction Command="{Binding DataContext.OpenFlyoutCommand, ElementName=gridview}"
+                                                  InputConverter="{StaticResource RightTappedToPointConverter}"
+                                                  InputConverterParameter="{Binding ElementName=gridViewItem}"/>
+                    </core:EventTriggerBehavior>
+                </interactivity:Interaction.Behaviors>
+            </Grid>
+        </DataTemplate>
     </Page.Resources>
+
+    <Page.BottomAppBar>
+        <CommandBar x:Uid="BottomAppBar" Visibility="{Binding IsCommandBarVisible, Converter={StaticResource BooleanToVisibilityConverter}}">
+            <AppBarButton x:Uid="ButtonClearSelection" Icon="Bullets" Command="{Binding ClearSelectionCommand}"/>
+            <AppBarSeparator/>
+            <AppBarButton x:Uid="ButtonPlaySelection" Icon="Play" Command="{Binding PlaySelectedItemsCommand}"/>
+            <AppBarButton x:Uid="ButtonDeleteSelection" Icon="Delete" Command="{Binding DeleteSelectedItemsCommand}"/>
+            <AppBarButton x:Uid="ButtonSelectAll" Icon="SelectAll" Command="{Binding SelectAllItemsCommand}" Visibility="{Binding AllItemsSelected, Converter={StaticResource BooleanToVisibilityConverter}, ConverterParameter=true, Mode=TwoWay}"/>
+            <AppBarButton x:Uid="ButtonUnSelectAll" Icon="ClearSelection" Command="{Binding ClearSelectionCommand}" Visibility="{Binding AllItemsSelected, Converter={StaticResource BooleanToVisibilityConverter}, ConverterParameter=false, Mode=TwoWay}"/>
+        </CommandBar>
+    </Page.BottomAppBar>
 
     <RelativePanel Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
         <VisualStateManager.VisualStateGroups>
@@ -58,7 +104,12 @@
                       RelativePanel.AlignLeftWithPanel="True"
                       RelativePanel.AlignRightWithPanel="True"
                       RelativePanel.Below="pageHeader">
-            <GridView ItemsSource="{Binding Items}" ItemContainerStyle="{StaticResource NormalView}" ItemTemplate="{StaticResource BitmapSourceSmallTemplate}"  IsItemClickEnabled="True" controlextensions:ListViewExtensions.Command="{Binding SelectItemCommand}"/>
+            <GridView x:Name="gridview" ItemsSource="{Binding Items}" ItemContainerStyle="{StaticResource NormalView}"
+                      ItemTemplate="{StaticResource SmallImagePanelTemplate}"
+                      SelectionMode="{Binding HasSelectedItems, Converter={StaticResource BooleanToSelectionModeConverter}}"
+                      IsItemClickEnabled="{Binding HasSelectedItems, Converter={StaticResource InverseBooleanConverter}}"
+                      controlextensions:ListViewExtensions.Command="{Binding SelectItemCommand}"
+                      controlextensions:ListViewExtensions.SelectedItems="{Binding SelectedItems, Mode=TwoWay}"/>
         </Grid>
     </RelativePanel>
 </Page>

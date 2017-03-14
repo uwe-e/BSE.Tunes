@@ -78,7 +78,7 @@ namespace BSE.Tunes.StoreApp.ViewModels
                                     BitmapSource = await cacheableBitmapService.GetBitmapSource(
                                         new ObservableCollection<Uri>(albumIds.Select(id => DataService.GetImage(id, true))),
                                         playlist.Guid.ToString(),
-                                        160, true),
+                                        150, true),
                                     Data = playlist
                                 });
                             }

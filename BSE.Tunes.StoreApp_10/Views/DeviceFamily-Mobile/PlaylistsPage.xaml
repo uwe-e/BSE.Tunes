@@ -46,11 +46,11 @@
                              Text="Playlists"
                              Visibility="Collapsed"/>
 
-        <Grid Padding="24,10,24,10" RelativePanel.AlignBottomWithPanel="True"
+        <Grid Margin="0" RelativePanel.AlignBottomWithPanel="True"
                       RelativePanel.AlignLeftWithPanel="True"
                       RelativePanel.AlignRightWithPanel="True"
                       RelativePanel.Below="pageHeader">
-            <ListView ItemsSource="{Binding ItemsGroup.Items}" IsItemClickEnabled="True" controlextensions:ListViewExtensions.Command="{Binding SelectItemCommand}">
+            <ListView ItemsSource="{Binding Items}" IsItemClickEnabled="True" controlextensions:ListViewExtensions.Command="{Binding SelectItemCommand}">
                 <ListView.ItemContainerStyle>
                     <Style TargetType="ListViewItem">
                         <Setter Property="Padding" Value="0,4"/>

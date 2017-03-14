@@ -25,17 +25,7 @@ namespace BSE.Tunes.StoreApp.ViewModels
         #endregion
 
         #region Properties
-        public virtual ObservableCollection<GridPanelItemViewModel> Items
-        {
-            get
-            {
-                if (m_items == null)
-                {
-                    m_items = new ObservableCollection<GridPanelItemViewModel>();
-                }
-                return m_items;
-            }
-        }
+        public virtual ObservableCollection<GridPanelItemViewModel> Items => m_items ?? (m_items = new ObservableCollection<GridPanelItemViewModel>());
         public ICommand NavigateToPageCommand => m_navigateToPageCommand ?? (m_navigateToPageCommand = new RelayCommand<object>(vm => NavigateTo()));
         public ICommand SelectItemCommand => m_selectItemCommand ?? (m_selectItemCommand = new RelayCommand<GridPanelItemViewModel>(SelectItem));
         public ICommand PlayAllCommand => m_playAllCommand ?? (m_playAllCommand = new RelayCommand<GridPanelItemViewModel>(PlayAll));

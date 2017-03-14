@@ -13,6 +13,7 @@
     <converter:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
     <converter:InverseBooleanConverter x:Key="InverseBooleanConverter"/>
     <converter:BooleanToListViewSelectionModeConverter x:Key="BooleanToSelectionModeConverter"/>
+    <converter:RightTappedRoutedEventArgsToPointConverter x:Key="RightTappedToPointConverter"/>
 
     <!-- Global Style selectors-->
     <!--<styles:ListViewItemStyleSelector x:Key="ListViewItemStyleSelector"/>-->
