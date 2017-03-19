@@ -85,47 +85,47 @@ namespace BSE.Tunes.StoreApp.ViewModels
                 RaisePropertyChanged("AllItemsSelected");
             }
         }
-
+        public User User
+        {
+            get;
+        } = SettingsService.Instance.User;
         public ICommand SelectItemsCommand => m_selectItemsCommand ?? (m_selectItemsCommand = new RelayCommand<ListViewItemViewModel>(SelectItems));
         public ICommand ClearSelectionCommand => m_clearSelectionCommand ?? (m_clearSelectionCommand = new RelayCommand(ClearSelection));
         public ICommand SelectAllItemsCommand => m_selectAllItemsCommand ?? (m_selectAllItemsCommand = new RelayCommand(SelectAll));
         public RelayCommand DeleteSelectedItemsCommand => m_deleteSelectedItemsCommand ?? (m_deleteSelectedItemsCommand = new RelayCommand(DeleteSelectedItems, CanDeleteSelectedItems));
         public RelayCommand PlaySelectedItemsCommand => m_playSelectedItemsCommand ?? (m_playSelectedItemsCommand = new RelayCommand(PlaySelectedItems, CanPlaySelectedItems));
-
-        
         #endregion
 
         #region MethodsPublic
         public PlaylistsPageViewModel()
         {
             Messenger.Default.Register<PlaylistChangedArgs>(this, args =>
-                        {
-                            PlaylistDeletedArgs playlistDeleted = args as PlaylistDeletedArgs;
-                            if (playlistDeleted != null)
-                            {
-                                LoadData();
-                            }
-                        });
+            {
+                PlaylistDeletedArgs playlistDeleted = args as PlaylistDeletedArgs;
+                if (playlistDeleted != null)
+                {
+                    LoadData();
+                }
+            });
         }
-            
+
         public async override void LoadData()
         {
-            User user = SettingsService.Instance.User;
-            if (user != null && !string.IsNullOrEmpty(user.UserName))
+            if (!string.IsNullOrEmpty(User.UserName))
             {
                 try
                 {
                     Items.Clear();
                     ICacheableBitmapService cacheableBitmapService = CacheableBitmapService.Instance;
-                    var playlists = await DataService.GetPlaylistsByUserName(user.UserName);
+                    var playlists = await DataService.GetPlaylistsByUserName(User.UserName);
                     foreach (var playlst in playlists)
                     {
                         if (playlst != null)
                         {
-                            var playlist = await DataService.GetPlaylistByIdWithNumberOfEntries(playlst.Id, user.UserName);
+                            var playlist = await DataService.GetPlaylistByIdWithNumberOfEntries(playlst.Id, User.UserName);
                             if (playlist != null)
                             {
-                                ObservableCollection<Guid> albumIds = await DataService.GetPlaylistImageIdsById(playlist.Id, user.UserName, 4);
+                                ObservableCollection<Guid> albumIds = await DataService.GetPlaylistImageIdsById(playlist.Id, User.UserName, 4);
                                 Items.Add(new GridPanelItemViewModel
                                 {
                                     Title = playlist.Name,
@@ -169,6 +169,37 @@ namespace BSE.Tunes.StoreApp.ViewModels
         {
             NavigationService.NavigateAsync(typeof(Views.PlaylistDetailPage), item.Data);
         }
+        public override void OpenFlyout(GridPanelItemViewModel item)
+        {
+            //if there are selections, clear it before open the flyout.
+            if (!SelectedItems.Contains(item))
+            {
+                ClearSelection();
+            }
+            base.OpenFlyout(item);
+        }
+        public override async void PlayAll(GridPanelItemViewModel item)
+        {
+            if (HasSelectedItems)
+            {
+                PlaySelectedItems();
+            }
+            else
+            {
+                Playlist playlist = item.Data as Playlist;
+                if (playlist != null && !string.IsNullOrEmpty(User.UserName))
+                {
+                    playlist = await this.DataService.GetPlaylistById(playlist.Id, User.UserName);
+                    var entryIds = playlist.Entries.Select(entry => entry.TrackId);
+                    if (entryIds != null)
+                    {
+                        PlayerManager.PlayTracks(
+                            new System.Collections.ObjectModel.ObservableCollection<int>(entryIds),
+                            PlayerMode.Playlist);
+                    }
+                }
+            }
+        }
         #endregion
 
         #region MethodsProtected
@@ -181,9 +212,9 @@ namespace BSE.Tunes.StoreApp.ViewModels
         {
             HasSelectedItems = SelectedItems.Count > 0;
             IsCommandBarVisible = HasSelectedItems;
-            AllItemsSelected = Items.OrderBy(itm =>((Playlist)itm.Data).Id).SequenceEqual(
+            AllItemsSelected = Items.OrderBy(itm => ((Playlist)itm.Data).Id).SequenceEqual(
                 SelectedItems.Cast<GridPanelItemViewModel>().OrderBy(itm => ((Playlist)itm.Data).Id));
-            //PlaySelectedItemsCommand.RaiseCanExecuteChanged();
+            PlaySelectedItemsCommand.RaiseCanExecuteChanged();
             //this.ClearSelectionCommand.RaiseCanExecuteChanged();
         }
         #endregion
@@ -213,7 +244,7 @@ namespace BSE.Tunes.StoreApp.ViewModels
 
         private async void DeleteSelectedItems()
         {
-           var playlistsToDelete = new ObservableCollection<Playlist>(SelectedItems.Cast<GridPanelItemViewModel>().Select(item => item.Data).Cast<Playlist>());
+            var playlistsToDelete = new ObservableCollection<Playlist>(SelectedItems.Cast<GridPanelItemViewModel>().Select(item => item.Data).Cast<Playlist>());
             if (playlistsToDelete != null)
             {
                 ICacheableBitmapService cacheableBitmapService = CacheableBitmapService.Instance;
@@ -236,9 +267,23 @@ namespace BSE.Tunes.StoreApp.ViewModels
             return HasSelectedItems;
         }
 
-        private void PlaySelectedItems()
+        private async void PlaySelectedItems()
         {
-            var playlists = SelectedItems.Cast<GridPanelItemViewModel>().Select(itm => (Playlist)itm.Data);
+            if (!string.IsNullOrEmpty(User.UserName))
+            {
+                var playlistIds = SelectedItems.Cast<GridPanelItemViewModel>().Select(itm => (Playlist)itm.Data).Select(itm => itm.Id).ToList();
+                if (playlistIds != null)
+                {
+                    var entryIds = await DataService.GetTrackIdsByPlaylistIds(playlistIds, User.UserName);
+                    if (entryIds != null)
+                    {
+                        PlayerManager.PlayTracks(
+                            new System.Collections.ObjectModel.ObservableCollection<int>(entryIds),
+                            PlayerMode.Playlist);
+                    }
+                }
+
+            }
         }
         #endregion
     }

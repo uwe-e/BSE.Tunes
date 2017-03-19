@@ -904,6 +904,58 @@ namespace BSE.Tunes.Entities
             }
             return hasUpdated;
         }
+        public ICollection<int> GetTrackIdsByPlaylistIds(IList<int> playlistIds, string userName)
+        {
+            Collection<int> trackIds = null;
+            if (playlistIds != null)
+            {
+                string list = string.Join(",", playlistIds);
+                StringBuilder stringBuilder = new StringBuilder();
+                stringBuilder.Append("SELECT t.LiedID FROM tunesEntities.lieder AS t");
+                stringBuilder.Append(" JOIN tunesEntities.playlistentries AS ple ON t.LiedID = ple.LiedId");
+                stringBuilder.Append(" JOIN tunesEntities.playlist AS pl ON ple.PlaylistId = pl.ListId");
+                stringBuilder.Append(" WHERE pl.User = @userName");
+                stringBuilder.Append(" AND t.Liedpfad IS NOT NULL");
+                stringBuilder.Append(" AND pl.ListId IN {" + list + "}");
+                
+                string sql = stringBuilder.ToString();
+                using (System.Data.EntityClient.EntityConnection entityConnection =
+                   new System.Data.EntityClient.EntityConnection(this.ConnectionString))
+                {
+                    try
+                    {
+                        entityConnection.Open();
+                        using (EntityCommand entityCommand = entityConnection.CreateCommand())
+                        {
+                            EntityParameter user = new EntityParameter();
+                            user.ParameterName = "userName";
+                            user.Value = userName;
+                            entityCommand.Parameters.Add(user);
+
+                            entityCommand.CommandText = sql;
+                            // Execute the command.
+                            using (EntityDataReader dataReader = entityCommand.ExecuteReader(System.Data.CommandBehavior.SequentialAccess))
+                            {
+                                // Start reading results.
+                                while (dataReader.Read())
+                                {
+                                    if (trackIds == null)
+                                    {
+                                        trackIds = new Collection<int>();
+                                    }
+                                    trackIds.Add(dataReader.GetInt32("LiedID", false, 0));
+                                }
+                            }
+                        }
+                    }
+                    finally
+                    {
+                        entityConnection.Close();
+                    }
+                }
+            }
+            return trackIds;
+        }
         public ICollection<Guid> GetPlaylistImageIdsById(int playlistId, string userName, int limit)
         {
             Collection<Guid> imageIds = null;

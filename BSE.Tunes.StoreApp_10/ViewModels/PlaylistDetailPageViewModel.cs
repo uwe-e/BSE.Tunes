@@ -130,13 +130,12 @@ namespace BSE.Tunes.StoreApp.ViewModels
 
         private void PlayAll()
         {
-            PlayerMode playerMode = PlayerMode.Playlist;
             var entryIds = this.Playlist.Entries.Select(entry => entry.TrackId);
             if (entryIds != null)
             {
                 this.m_playerManager.PlayTracks(
                     new System.Collections.ObjectModel.ObservableCollection<int>(entryIds),
-                    playerMode);
+                    PlayerMode.Playlist);
             }
         }
         private void PlayEntry(PlaylistEntry entry)
