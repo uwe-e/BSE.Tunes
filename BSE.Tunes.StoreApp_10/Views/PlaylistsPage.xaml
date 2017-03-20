@@ -37,9 +37,15 @@
                                         controlextensions:FlyoutExtensions.OffsetPoint="{Binding OffsetPoint, Mode=TwoWay}">
                         <MenuFlyout.Items>
                             <MenuFlyoutItem x:Uid="MenuFlyoutPlayAll" Text="Play" Command="{Binding DataContext.PlayAllCommand, ElementName=gridview}" CommandParameter="{Binding}"/>
-                            <MenuFlyoutItem x:Uid="MenuFlyoutDelete" Text="Delete" Command="{Binding DataContext.ShowDeletePlaylistDialogCommand, ElementName=gridview}" CommandParameter="{Binding}"/>
+                            <MenuFlyoutItem x:Uid="MenuFlyoutDelete" Text="Delete" Command="{Binding DataContext.DeletePlaylistCommand, ElementName=gridview}" CommandParameter="{Binding}"/>
                             <MenuFlyoutSeparator/>
-                            <MenuFlyoutItem x:Uid="MenuFlyoutSelectItems" Text="Select" Command="{Binding DataContext.SelectItemsCommand, ElementName=gridview}" CommandParameter="{Binding}"/>
+                            <MenuFlyoutItem x:Uid="MenuFlyoutSelectItems" Text="Select"
+                                            Command="{Binding DataContext.SelectItemsCommand, ElementName=gridview}" CommandParameter="{Binding}"
+                                            Visibility="{Binding DataContext.HasSelectedItems, ElementName=gridview, Converter={StaticResource BooleanToVisibilityConverter}, ConverterParameter=true, Mode=TwoWay}"/>
+                            <MenuFlyoutItem x:Uid="MenuFlyoutSelectAllItems" Text="Select All" Command="{Binding DataContext.SelectAllItemsCommand, ElementName=gridview}" CommandParameter="{Binding}"
+                                            Visibility="{Binding DataContext.AllItemsSelectable, ElementName=gridview, Converter={StaticResource BooleanToVisibilityConverter}, Mode=TwoWay}"/>
+                            <MenuFlyoutItem x:Uid="MenuFlyoutUnSelectAll" Text="Unselect All" Command="{Binding DataContext.ClearSelectionCommand, ElementName=gridview}" CommandParameter="{Binding}"
+                                            Visibility="{Binding DataContext.AllItemsSelected, ElementName=gridview, Converter={StaticResource BooleanToVisibilityConverter}, Mode=TwoWay}"/>
                         </MenuFlyout.Items>
                     </MenuFlyout>
                 </FlyoutBase.AttachedFlyout>

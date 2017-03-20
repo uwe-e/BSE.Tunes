@@ -7,6 +7,7 @@ using GalaSoft.MvvmLight.Messaging;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
@@ -21,11 +22,13 @@ namespace BSE.Tunes.StoreApp.ViewModels
         private bool m_isCommandBarVisible;
         private bool m_hasSelectedItems;
         private bool m_allItemsSelected;
+        private bool m_allItemsSelectable;
         private ICommand m_selectItemsCommand;
         private ICommand m_clearSelectionCommand;
         private ICommand m_selectAllItemsCommand;
         private RelayCommand m_deleteSelectedItemsCommand;
         private RelayCommand m_playSelectedItemsCommand;
+        private ICommand m_deletePlaylistCommand;
 
         #endregion
 
@@ -73,6 +76,18 @@ namespace BSE.Tunes.StoreApp.ViewModels
                 RaisePropertyChanged("HasSelectedItems");
             }
         }
+        public bool AllItemsSelectable
+        {
+            get
+            {
+                return m_allItemsSelectable;
+            }
+            set
+            {
+                m_allItemsSelectable = value;
+                RaisePropertyChanged("AllItemsSelectable");
+            }
+        }
         public virtual bool AllItemsSelected
         {
             get
@@ -92,6 +107,7 @@ namespace BSE.Tunes.StoreApp.ViewModels
         public ICommand SelectItemsCommand => m_selectItemsCommand ?? (m_selectItemsCommand = new RelayCommand<ListViewItemViewModel>(SelectItems));
         public ICommand ClearSelectionCommand => m_clearSelectionCommand ?? (m_clearSelectionCommand = new RelayCommand(ClearSelection));
         public ICommand SelectAllItemsCommand => m_selectAllItemsCommand ?? (m_selectAllItemsCommand = new RelayCommand(SelectAll));
+        public ICommand DeletePlaylistCommand => m_deletePlaylistCommand ?? (m_deletePlaylistCommand = new RelayCommand<ListViewItemViewModel>(DeletePlaylist));
         public RelayCommand DeleteSelectedItemsCommand => m_deleteSelectedItemsCommand ?? (m_deleteSelectedItemsCommand = new RelayCommand(DeleteSelectedItems, CanDeleteSelectedItems));
         public RelayCommand PlaySelectedItemsCommand => m_playSelectedItemsCommand ?? (m_playSelectedItemsCommand = new RelayCommand(PlaySelectedItems, CanPlaySelectedItems));
         #endregion
@@ -214,6 +230,7 @@ namespace BSE.Tunes.StoreApp.ViewModels
             IsCommandBarVisible = HasSelectedItems;
             AllItemsSelected = Items.OrderBy(itm => ((Playlist)itm.Data).Id).SequenceEqual(
                 SelectedItems.Cast<GridPanelItemViewModel>().OrderBy(itm => ((Playlist)itm.Data).Id));
+            AllItemsSelectable = HasSelectedItems & !AllItemsSelected;
             PlaySelectedItemsCommand.RaiseCanExecuteChanged();
             //this.ClearSelectionCommand.RaiseCanExecuteChanged();
         }
@@ -247,19 +264,32 @@ namespace BSE.Tunes.StoreApp.ViewModels
             var playlistsToDelete = new ObservableCollection<Playlist>(SelectedItems.Cast<GridPanelItemViewModel>().Select(item => item.Data).Cast<Playlist>());
             if (playlistsToDelete != null)
             {
-                ICacheableBitmapService cacheableBitmapService = CacheableBitmapService.Instance;
-                var hasDeleted = await DataService.DeletePlaylists(playlistsToDelete);
-                if (hasDeleted)
+                DeletePlaylistContentDialogViewModel deletePlaylistDialog = new DeletePlaylistContentDialogViewModel();
+                foreach (var playlist in playlistsToDelete)
                 {
-                    foreach (var playlist in playlistsToDelete)
+                    if (playlist != null)
                     {
-                        if (playlist != null)
-                        {
-                            await cacheableBitmapService.RemoveCache(playlist.Guid.ToString());
-                        }
+                        deletePlaylistDialog.Playlists.Add(playlist);
                     }
-                    Messenger.Default.Send<PlaylistChangedArgs>(new PlaylistDeletedArgs(null));
                 }
+                deletePlaylistDialog.DeleteInformation = string.Format(CultureInfo.InvariantCulture, ResourceService.GetString("DeletePlaylistContentDialog_TxtDeleteSelectedInformation"));
+                IDialogService dialogService = DialogService.Instance;
+                await dialogService.ShowContentDialogAsync(deletePlaylistDialog);
+            }
+        }
+        private async void DeletePlaylist(ListViewItemViewModel item)
+        {
+            if (HasSelectedItems)
+            {
+                DeleteSelectedItems();
+            }
+            else
+            {
+                DeletePlaylistContentDialogViewModel deletePlaylistDialog = new DeletePlaylistContentDialogViewModel();
+                deletePlaylistDialog.Playlists.Add(item.Data as Playlist);
+                deletePlaylistDialog.DeleteInformation = string.Format(CultureInfo.InvariantCulture, ResourceService.GetString("DeletePlaylistContentDialog_TxtDeleteInformation"), ((Playlist)item.Data).Name);
+                IDialogService dialogService = DialogService.Instance;
+                await dialogService.ShowContentDialogAsync(deletePlaylistDialog);
             }
         }
         private bool CanPlaySelectedItems()
@@ -285,6 +315,7 @@ namespace BSE.Tunes.StoreApp.ViewModels
 
             }
         }
+        
         #endregion
     }
 }

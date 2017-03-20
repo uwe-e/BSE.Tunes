@@ -5,6 +5,7 @@ using GalaSoft.MvvmLight.Command;
 using GalaSoft.MvvmLight.Messaging;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -15,26 +16,16 @@ namespace BSE.Tunes.StoreApp.ViewModels
     public class DeletePlaylistContentDialogViewModel : ViewModelBase
     {
         #region FieldsPrivate
-        private Playlist m_playlist;
+        private ObservableCollection<Playlist> m_playlists;
         private ICommand m_deletePlaylistCommand;
         private bool m_cancel;
         private string m_errorMessage;
+        private string m_deleteInformation;
         #endregion
 
         #region Properties
 
-        public Playlist Playlist
-        {
-            get
-            {
-                return m_playlist;
-            }
-            set
-            {
-                m_playlist = value;
-                RaisePropertyChanged("Playlist");
-            }
-        }
+        public ObservableCollection<Playlist> Playlists => m_playlists ?? (m_playlists = new ObservableCollection<Playlist>());
         public bool Cancel
         {
             get
@@ -45,6 +36,18 @@ namespace BSE.Tunes.StoreApp.ViewModels
             {
                 m_cancel = value;
                 RaisePropertyChanged("Cancel");
+            }
+        }
+        public string DeleteInformation
+        {
+            get
+            {
+                return m_deleteInformation;
+            }
+            set
+            {
+                m_deleteInformation = value;
+                RaisePropertyChanged("DeleteInformation");
             }
         }
         public string ErrorMessage
@@ -70,13 +73,13 @@ namespace BSE.Tunes.StoreApp.ViewModels
         private bool ValidateDialog()
         {
             bool isValid = false;
-            if (Playlist != null)
+            if (Playlists != null)
             {
                 try
                 {
-                    System.Collections.ObjectModel.ObservableCollection<Playlist> playlists = new System.Collections.ObjectModel.ObservableCollection<Playlist>();
-                    playlists.Add(Playlist);
-                    Task<bool> task = Task.Run(async () => await DataService.DeletePlaylists(playlists));
+                    //System.Collections.ObjectModel.ObservableCollection<Playlist> playlists = new System.Collections.ObjectModel.ObservableCollection<Playlist>();
+                    //playlists.Add(Playlist);
+                    Task<bool> task = Task.Run(async () => await DataService.DeletePlaylists(Playlists));
                     try
                     {
                         isValid = task.Result;

@@ -111,11 +111,11 @@ namespace BSE.Tunes.StoreApp.ViewModels
         #region MethodsPrivate
         private async void ShowDeletePlaylistDialog(GridPanelItemViewModel item)
         {
+            DeletePlaylistContentDialogViewModel deletePlaylistDialog = new DeletePlaylistContentDialogViewModel();
+            deletePlaylistDialog.Playlists.Add(item.Data as Playlist);
+            deletePlaylistDialog.DeleteInformation = string.Format(CultureInfo.InvariantCulture, ResourceService.GetString("DeletePlaylistContentDialog_TxtDeleteInformation"), ((Playlist)item.Data).Name);
             IDialogService dialogService = DialogService.Instance;
-            await dialogService.ShowContentDialogAsync(new DeletePlaylistContentDialogViewModel
-            {
-                Playlist = item.Data as Playlist
-            });
+            await dialogService.ShowContentDialogAsync(deletePlaylistDialog);
         }
         #endregion
     }

@@ -121,15 +121,15 @@ namespace BSE.Tunes.StoreApp.ViewModels
                 var selectedItems = this.SelectedItems;
                 if (selectedItems != null)
                 {
-                    //new System.Collections.ObjectModel.ObservableCollection<Track>(selectedItems.Cast<ListViewItemViewModel>().Select(itm => itm.Data).Cast<Track>());
-                    var tracks = new ObservableCollection<Track>(selectedItems.Cast<ListViewItemViewModel>().Select(itm => itm.Data).Cast<Track>());
+                    var tracks = new ObservableCollection<Track>(selectedItems.Cast<ListViewItemViewModel>()
+                        .Select(itm => itm.Data).Cast<Track>());
                     if (tracks != null)
                     {
                         this.AddTracksToPlaylist(playlist, tracks);
                     }
                 }
             }
-            this.SelectedItems.Clear();
+            this.SelectedItems?.Clear();
         }
         #endregion
 

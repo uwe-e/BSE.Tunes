@@ -16,7 +16,7 @@
     controlextensions:ContentDialog.CancelableCommand="{Binding DeletePlaylistCommand}">
 
     <Grid>
-        <TextBlock Style="{ThemeResource BaseTextBlockStyle}" x:Uid="DeletePlaylistContentDialog_TxtDeleteInformation" Text="All items will be removed. Do you want to continue?" Margin="0,0,0,12" />
+        <TextBlock Style="{ThemeResource BaseTextBlockStyle}" Text="{Binding DeleteInformation}" Margin="0,0,0,12" />
     </Grid>
     
 </ContentDialog>
