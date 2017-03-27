@@ -16,7 +16,7 @@ namespace BSE.Tunes.StoreApp.ViewModels
     public class FeaturedItemsBaseViewModel : ViewModelBase
     {
         #region FieldsPrivate
-        private ObservableCollection<GridPanelItemViewModel> m_items;
+        private ObservableCollection<ListViewItemViewModel> m_items;
         private ICommand m_navigateToPageCommand;
         private ICommand m_selectItemCommand;
         private ICommand m_playAllCommand;
@@ -25,7 +25,7 @@ namespace BSE.Tunes.StoreApp.ViewModels
         #endregion
 
         #region Properties
-        public virtual ObservableCollection<GridPanelItemViewModel> Items => m_items ?? (m_items = new ObservableCollection<GridPanelItemViewModel>());
+        public virtual ObservableCollection<ListViewItemViewModel> Items => m_items ?? (m_items = new ObservableCollection<ListViewItemViewModel>());
         public ICommand NavigateToPageCommand => m_navigateToPageCommand ?? (m_navigateToPageCommand = new RelayCommand<object>(vm => NavigateTo()));
         public ICommand SelectItemCommand => m_selectItemCommand ?? (m_selectItemCommand = new RelayCommand<GridPanelItemViewModel>(SelectItem));
         public ICommand PlayAllCommand => m_playAllCommand ?? (m_playAllCommand = new RelayCommand<GridPanelItemViewModel>(PlayAll));

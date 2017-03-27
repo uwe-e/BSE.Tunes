@@ -15,6 +15,7 @@ using BSE.Tunes.Data;
 using System.Windows.Input;
 using GalaSoft.MvvmLight.Messaging;
 using BSE.Tunes.StoreApp.Mvvm.Messaging;
+using BSE.Tunes.StoreApp.Managers;
 
 namespace BSE.Tunes.StoreApp.ViewModels
 {
@@ -22,15 +23,22 @@ namespace BSE.Tunes.StoreApp.ViewModels
     {
         #region FieldsPrivate
         private bool m_hasSelectedItems;
+        private bool m_allItemsSelectable;
+        private bool m_allItemsSelected;
         private bool m_isCommandBarVisible;
         private ObservableCollection<object> m_selectedItems;
         private RelayCommand m_playSelectedItemsCommand;
+        private ICommand m_playTrackCommand;
+        private RelayCommand m_playAllCommand;
         private ICommand m_openPlaylistFlyoutCommand;
         private ICommand m_openAllToPlaylistCommand;
+        private ICommand m_clearSelectionCommand;
+        private ICommand m_selectAllItemsCommand;
         private bool m_isPlaylistFlyoutOpen;
         private bool m_isAllToPlaylistFlyoutOpen;
+        private ObservableCollection<ListViewItemViewModel> m_listViewItems;
         private ObservableCollection<MenuFlyoutItemViewModel> m_playlistMenuItems;
-        
+
         #endregion
 
         #region Properties
@@ -65,11 +73,11 @@ namespace BSE.Tunes.StoreApp.ViewModels
         {
             get
             {
-                return this.m_hasSelectedItems;
+                return m_hasSelectedItems;
             }
             set
             {
-                this.m_hasSelectedItems = value;
+                m_hasSelectedItems = value;
                 RaisePropertyChanged("HasSelectedItems");
             }
         }
@@ -81,11 +89,11 @@ namespace BSE.Tunes.StoreApp.ViewModels
         {
             get
             {
-                return this.m_isCommandBarVisible;
+                return m_isCommandBarVisible;
             }
             set
             {
-                this.m_isCommandBarVisible = value;
+                m_isCommandBarVisible = value;
                 RaisePropertyChanged("IsCommandBarVisible");
             }
         }
@@ -93,12 +101,36 @@ namespace BSE.Tunes.StoreApp.ViewModels
         {
             get
             {
-                return this.m_selectedItems;
+                return m_selectedItems;
             }
             set
             {
-                this.m_selectedItems = value;
+                m_selectedItems = value;
                 RaisePropertyChanged("SelectedItems");
+            }
+        }
+        public bool AllItemsSelectable
+        {
+            get
+            {
+                return m_allItemsSelectable;
+            }
+            set
+            {
+                m_allItemsSelectable = value;
+                RaisePropertyChanged("AllItemsSelectable");
+            }
+        }
+        public virtual bool AllItemsSelected
+        {
+            get
+            {
+                return m_allItemsSelected;
+            }
+            set
+            {
+                m_allItemsSelected = value;
+                RaisePropertyChanged("AllItemsSelected");
             }
         }
         public virtual ObservableCollection<MenuFlyoutItemViewModel> MenuItemsPlaylist
@@ -112,9 +144,15 @@ namespace BSE.Tunes.StoreApp.ViewModels
                 return m_playlistMenuItems;
             }
         }
+        public PlayerManager PlayerManager {get;} = PlayerManager.Instance;
+        public ObservableCollection<ListViewItemViewModel> Items => m_listViewItems ?? (m_listViewItems = new ObservableCollection<ListViewItemViewModel>());
         public RelayCommand PlaySelectedItemsCommand => m_playSelectedItemsCommand ?? (m_playSelectedItemsCommand = new RelayCommand(PlaySelectedItems, CanPlaySelectedItems));
+        public ICommand PlayTrackCommand => m_playTrackCommand ?? (m_playTrackCommand = new RelayCommand<ListViewItemViewModel>(PlayTrack, CanPlayTrack));
+        public RelayCommand PlayAllCommand => m_playAllCommand ?? (m_playAllCommand = new RelayCommand(PlayAll, CanPlayAll));
         public ICommand OpenPlaylistFlyoutCommand => m_openPlaylistFlyoutCommand ?? (m_openPlaylistFlyoutCommand = new RelayCommand(OpenPlaylistFlyout));
         public ICommand OpenAllToPlaylistCommand => m_openAllToPlaylistCommand ?? (m_openAllToPlaylistCommand = new RelayCommand(OpenAllToPlaylistFlyout));
+        public ICommand ClearSelectionCommand => m_clearSelectionCommand ?? (m_clearSelectionCommand = new RelayCommand(ClearSelection));
+        public ICommand SelectAllItemsCommand => m_selectAllItemsCommand ?? (m_selectAllItemsCommand = new RelayCommand(SelectAll));
         #endregion
 
         #region MethodsPublic
@@ -135,23 +173,28 @@ namespace BSE.Tunes.StoreApp.ViewModels
                             break;
                     }
                 }
+                PlaylistEntriesChangedArgs playlistEntriesChanged = args as PlaylistEntriesChangedArgs;
+                if (playlistEntriesChanged != null)
+                {
+                    CreatePlaylistMenu();
+                }
             });
         }
         public override Task OnNavigatedToAsync(object parameter, NavigationMode mode, IDictionary<string, object> state)
         {
-            if (this.SelectedItems == null)
+            if (SelectedItems == null)
             {
-                this.SelectedItems = new ObservableCollection<object>();
-                this.SelectedItems.CollectionChanged += OnSelectedItemsCollectionChanged;
+                SelectedItems = new ObservableCollection<object>();
+                SelectedItems.CollectionChanged += OnSelectedItemsCollectionChanged;
             }
             return Task.CompletedTask;
         }
         public override Task OnNavigatedFromAsync(IDictionary<string, object> state, bool suspending)
         {
-            if (this.SelectedItems != null)
+            if (SelectedItems != null)
             {
-                this.SelectedItems.CollectionChanged -= OnSelectedItemsCollectionChanged;
-                this.SelectedItems = null;
+                SelectedItems.CollectionChanged -= OnSelectedItemsCollectionChanged;
+                SelectedItems = null;
             }
             if (MenuItemsPlaylist != null)
             {
@@ -161,9 +204,36 @@ namespace BSE.Tunes.StoreApp.ViewModels
                 }
                 MenuItemsPlaylist.Clear();
             }
-            this.HasSelectedItems = false;
-            this.IsCommandBarVisible = false;
+            HasSelectedItems = AllItemsSelected = false;
+            IsCommandBarVisible = false;
             return base.OnNavigatedFromAsync(state, suspending);
+        }
+        public virtual bool CanPlayAll()
+        {
+            return false;
+        }
+        public virtual void PlayAll()
+        {
+        }
+        public virtual bool CanPlayTrack(ListViewItemViewModel item)
+        {
+            return !HasSelectedItems;
+        }
+        public virtual void PlayTrack(ListViewItemViewModel item)
+        {
+            PlayerManager.PlayTrack(((Track)item.Data).Id, PlayerMode.Song);
+        }
+        public virtual void ClearSelection()
+        {
+            SelectedItems?.Clear();
+        }
+        public virtual void SelectAll()
+        {
+            var notSelectedItems = Items.Except(SelectedItems);
+            foreach (var item in notSelectedItems)
+            {
+                SelectedItems.Add(item);
+            }
         }
         #endregion
 
@@ -175,36 +245,36 @@ namespace BSE.Tunes.StoreApp.ViewModels
         /// <param name="e"></param>
         protected virtual void OnSelectedItemsCollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
         {
-            this.HasSelectedItems = this.SelectedItems.Count > 0;
-            this.IsCommandBarVisible = this.HasSelectedItems;
-            this.PlaySelectedItemsCommand.RaiseCanExecuteChanged();
+            HasSelectedItems = SelectedItems.Count > 0;
+            IsCommandBarVisible = HasSelectedItems;
+            PlaySelectedItemsCommand.RaiseCanExecuteChanged();
             //this.ClearSelectionCommand.RaiseCanExecuteChanged();
         }
         protected virtual async void CreatePlaylistMenu()
         {
-            this.MenuItemsPlaylist.Clear();
+            MenuItemsPlaylist.Clear();
 
             User user = SettingsService.Instance.User;
             if (user != null && !string.IsNullOrEmpty(user.UserName))
             {
-                var playlists = await this.DataService.GetPlaylistsByUserName(user.UserName);
+                var playlists = await DataService.GetPlaylistsByUserName(user.UserName);
                 if (playlists != null)
                 {
-                    this.CreateMenuItems(playlists);
+                    CreateMenuItems(playlists);
                 }
             }
-            this.MenuItemsPlaylist.Insert(0, new MenuFlyoutItemViewModel
+            MenuItemsPlaylist.Insert(0, new MenuFlyoutItemViewModel
             {
                 IsSeparator = true
             });
 
             var menuItem = new NewPlaylistFlyoutItemViewModel
             {
-                Text = this.ResourceService.GetString("FlyoutMenuItem_AddNewPlaylist", "New Playlist")
+                Text = ResourceService.GetString("FlyoutMenuItem_AddNewPlaylist", "New Playlist")
             };
             menuItem.ItemClicked += OnMenuItemViewModelClicked;
 
-            this.MenuItemsPlaylist.Insert(0, menuItem);
+            MenuItemsPlaylist.Insert(0, menuItem);
         }
         protected virtual void CreateMenuItems(ObservableCollection<Playlist> playlists)
         {
@@ -220,7 +290,7 @@ namespace BSE.Tunes.StoreApp.ViewModels
                             Playlist = playlist
                         };
                         menuItem.ItemClicked += OnMenuItemViewModelClicked;
-                        this.MenuItemsPlaylist.Add(menuItem);
+                        MenuItemsPlaylist.Add(menuItem);
                     }
                 }
             }
@@ -240,18 +310,19 @@ namespace BSE.Tunes.StoreApp.ViewModels
             {
                 try
                 {
-                    var changedPlaylist = await this.DataService.AppendToPlaylist(playlist);
+                    var changedPlaylist = await DataService.AppendToPlaylist(playlist);
                     if (changedPlaylist != null)
                     {
                         ICacheableBitmapService cacheableBitmapService = CacheableBitmapService.Instance;
                         await cacheableBitmapService.RemoveCache(changedPlaylist.Guid.ToString());
                         //Refreshing all the playlist entry views
-                        //Messenger.Default.Send<PlaylistEntryChangeMessage>(new PlaylistEntryChangeMessage { Playlist = changedPlaylist });
+                        Messenger.Default.Send<PlaylistChangedArgs>(new PlaylistEntriesChangedArgs(changedPlaylist));
                     }
                 }
                 catch (Exception exception)
                 {
-                    //DialogService.ShowExDialog(exception.Message);
+                    IDialogService dialogService = DialogService.Instance;
+                    await dialogService.ShowMessageDialogAsync(exception.Message);
                 }
             }
         }
@@ -260,7 +331,7 @@ namespace BSE.Tunes.StoreApp.ViewModels
         #region MethodsPrivate
         private bool CanPlaySelectedItems()
         {
-            return this.SelectedItems?.Count > 0;
+            return SelectedItems?.Count > 0;
         }
 
         private void OpenPlaylistFlyout()
@@ -291,7 +362,7 @@ namespace BSE.Tunes.StoreApp.ViewModels
                     InsertMode = menuItemViewModel.InsertMode
                 });
             }
-            this.ChoosePlaylist(menuItemViewModel);
+            ChoosePlaylist(menuItemViewModel);
         }
 
         private void ChoosePlaylist(MenuFlyoutItemViewModel menuItemViewModel)
@@ -309,10 +380,10 @@ namespace BSE.Tunes.StoreApp.ViewModels
                 switch (insertMode)
                 {
                     case InsertMode.All:
-                        this.AddAllToPlaylist(playlist);
+                        AddAllToPlaylist(playlist);
                         break;
                     default:
-                        this.AddSelectedToPlaylist(playlist);
+                        AddSelectedToPlaylist(playlist);
                         break;
                 }
             }

@@ -12,6 +12,7 @@ using System.Threading.Tasks;
 using System.Windows.Input;
 using Template10.Services.NavigationService;
 using Windows.UI.Xaml.Navigation;
+using System.Collections.Specialized;
 
 namespace BSE.Tunes.StoreApp.ViewModels
 {
@@ -20,12 +21,8 @@ namespace BSE.Tunes.StoreApp.ViewModels
         #region FieldsPrivate
         private Album m_album;
         private Uri m_coverSource;
-        private PlayerManager m_playerManager;
-        private RelayCommand m_playAllCommand;
-        private ICommand m_playTrackCommand;
         private ICommand m_selectItemsCommand;
         private ICommand m_showFlyoutCommand;
-        private ObservableCollection<ListViewItemViewModel> m_listViewItems;
         #endregion
 
         #region Properties
@@ -53,9 +50,6 @@ namespace BSE.Tunes.StoreApp.ViewModels
                 RaisePropertyChanged("CoverSource");
             }
         }
-        public ObservableCollection<ListViewItemViewModel> Items => m_listViewItems ?? (m_listViewItems = new ObservableCollection<ListViewItemViewModel>());
-        public RelayCommand PlayAllCommand => m_playAllCommand ?? (m_playAllCommand = new RelayCommand(PlayAll, CanPlayAll));
-        public ICommand PlayTrackCommand => m_playTrackCommand ?? (m_playTrackCommand = new RelayCommand<ListViewItemViewModel>(PlayTrack, CanPlayTrack));
         public ICommand ShowFlyoutCommand => m_showFlyoutCommand ?? (m_showFlyoutCommand = new RelayCommand<ListViewItemViewModel>(ShowFlyout));
         public ICommand SelectItemsCommand => m_selectItemsCommand ?? (m_selectItemsCommand = new RelayCommand<ListViewItemViewModel>(SelectItems));
 
@@ -64,7 +58,6 @@ namespace BSE.Tunes.StoreApp.ViewModels
         #region MethodsPublic
         public AlbumDetailPageViewModel()
         {
-            m_playerManager = PlayerManager.Instance;
         }
         public async override Task OnNavigatedToAsync(object parameter, NavigationMode mode, IDictionary<string, object> state)
         {
@@ -85,6 +78,18 @@ namespace BSE.Tunes.StoreApp.ViewModels
                 this.PlayAllCommand.RaiseCanExecuteChanged();
 
                 CreatePlaylistMenu();
+            }
+        }
+        public override bool CanPlayAll()
+        {
+            return this.Album != null && this.Album.Tracks != null && this.Album?.Tracks?.Count() > 0;
+        }
+        public override void PlayAll()
+        {
+            var tracks = new System.Collections.ObjectModel.ObservableCollection<Track>(this.Album.Tracks);
+            if (tracks != null && tracks.Count() > 0)
+            {
+                this.PlayTracks(tracks);
             }
         }
         #endregion
@@ -131,21 +136,17 @@ namespace BSE.Tunes.StoreApp.ViewModels
             }
             this.SelectedItems?.Clear();
         }
+        protected override void OnSelectedItemsCollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
+        {
+            base.OnSelectedItemsCollectionChanged(sender, e);
+            AllItemsSelected = Items.OrderBy(itm => ((Track)itm.Data).TrackNumber).SequenceEqual(
+                SelectedItems.Cast<ListViewItemViewModel>().OrderBy(itm => ((Track)itm.Data).TrackNumber));
+            AllItemsSelectable = HasSelectedItems & !AllItemsSelected;
+        }
         #endregion
 
         #region MethodsPrivate
-        private bool CanPlayAll()
-        {
-            return this.Album != null && this.Album.Tracks != null && this.Album?.Tracks?.Count() > 0;
-        }
-        private void PlayAll()
-        {
-            var tracks = new System.Collections.ObjectModel.ObservableCollection<Track>(this.Album.Tracks);
-            if (tracks != null && tracks.Count() > 0)
-            {
-                this.PlayTracks(tracks);
-            }
-        }
+
         private void PlayTracks(System.Collections.ObjectModel.ObservableCollection<Track> tracks)
         {
             if (tracks != null)
@@ -153,28 +154,30 @@ namespace BSE.Tunes.StoreApp.ViewModels
                 var trackIds = tracks.Select(track => track.Id);
                 if (trackIds != null)
                 {
-                    this.m_playerManager.PlayTracks(
+                    PlayerManager.PlayTracks(
                         new System.Collections.ObjectModel.ObservableCollection<int>(trackIds),
                         PlayerMode.CD);
                 }
             }
         }
-        private bool CanPlayTrack(ListViewItemViewModel arg)
+       
+        private void ShowFlyout(ListViewItemViewModel item)
         {
-            return !HasSelectedItems;
+            //if there are selections, clear it before open the flyout.
+            if (!SelectedItems.Contains(item))
+            {
+                ClearSelection();
+            }
+            item.IsOpen = true;
         }
-        private void PlayTrack(ListViewItemViewModel listviewItem)
-        {
-            this.m_playerManager.PlayTrack(((Track)listviewItem.Data).Id, PlayerMode.Song);
-        }
-        private void ShowFlyout(ListViewItemViewModel viewModel)
-        {
-            viewModel.IsOpen = true;
-        }
-        private void SelectItems(ListViewItemViewModel viewModel)
+        private void SelectItems(ListViewItemViewModel item)
         {
             HasSelectedItems = true;
-            this.SelectedItems.Add(viewModel);
+            this.SelectedItems.Add(item);
+        }
+        private void ClearSelection()
+        {
+            SelectedItems?.Clear();
         }
         private void AddTracksToPlaylist(Playlist playlist, ObservableCollection<Track> tracks)
         {

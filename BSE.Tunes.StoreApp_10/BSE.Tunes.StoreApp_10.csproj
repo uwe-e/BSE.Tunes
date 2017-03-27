@@ -114,6 +114,7 @@
     <Compile Include="Controls\Extensions\ListViewExtensions.cs" />
     <Compile Include="Collections\IncrementalObservableCollection.cs" />
     <Compile Include="Mvvm\Messaging\PlaylistDeletedArgs.cs" />
+    <Compile Include="Mvvm\Messaging\PlaylistEntriesChanged.cs" />
     <Compile Include="ViewModels\DeletePlaylistContentDialogViewModel.cs" />
     <Compile Include="Views\DeletePlaylistContentDialog.xaml.cs">
       <DependentUpon>DeletePlaylistContentDialog.xaml</DependentUpon>

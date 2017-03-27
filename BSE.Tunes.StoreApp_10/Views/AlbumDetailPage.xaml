@@ -27,6 +27,8 @@
 
     <Page.BottomAppBar>
         <CommandBar x:Uid="BottomAppBar" Visibility="{Binding IsCommandBarVisible, Converter={StaticResource BooleanToVisibilityConverter}}">
+            <AppBarButton x:Uid="ButtonClearSelection" Icon="Bullets" Command="{Binding ClearSelectionCommand}"/>
+            <AppBarSeparator/>
             <AppBarButton x:Uid="ButtonPlaySelection" Icon="Play"
                             Command="{Binding PlaySelectedItemsCommand}"/>
             <AppBarButton x:Name="buttonAddTo" x:Uid="ButtonAddToPlaylist" Icon="Add"
@@ -51,6 +53,8 @@
                     </Flyout>
                 </AppBarButton.ContextFlyout>
             </AppBarButton>
+            <AppBarButton x:Uid="ButtonSelectAll" Icon="SelectAll" Command="{Binding SelectAllItemsCommand}" Visibility="{Binding AllItemsSelected, Converter={StaticResource BooleanToVisibilityConverter}, ConverterParameter=true, Mode=TwoWay}"/>
+            <AppBarButton x:Uid="ButtonUnSelectAll" Icon="ClearSelection" Command="{Binding ClearSelectionCommand}" Visibility="{Binding AllItemsSelected, Converter={StaticResource BooleanToVisibilityConverter}, ConverterParameter=false, Mode=TwoWay}"/>
         </CommandBar>
     </Page.BottomAppBar>
 
@@ -199,7 +203,12 @@
                                                 controlextensions:FlyoutExtensions.OffsetPoint="{Binding OffsetPoint, Mode=TwoWay}">
                                         <MenuFlyout.Items>
                                             <MenuFlyoutItem x:Uid="MenuFlyoutAddTo" Text="Add to"/>
-                                            <MenuFlyoutItem x:Uid="MenuFlyoutSelectItems" Text="Select" Command="{Binding DataContext.SelectItemsCommand, ElementName=listview}" CommandParameter="{Binding}"/>
+                                            <MenuFlyoutItem x:Uid="MenuFlyoutSelectItems" Text="Select" Command="{Binding DataContext.SelectItemsCommand, ElementName=listview}" CommandParameter="{Binding}"
+                                                            Visibility="{Binding DataContext.HasSelectedItems, ElementName=listview, Converter={StaticResource BooleanToVisibilityConverter}, ConverterParameter=true, Mode=TwoWay}"/>
+                                            <MenuFlyoutItem x:Uid="MenuFlyoutSelectAllItems" Text="Select All" Command="{Binding DataContext.SelectAllItemsCommand, ElementName=listview}" CommandParameter="{Binding}"
+                                            Visibility="{Binding DataContext.AllItemsSelectable, ElementName=listview, Converter={StaticResource BooleanToVisibilityConverter}, Mode=TwoWay}"/>
+                                            <MenuFlyoutItem x:Uid="MenuFlyoutUnSelectAll" Text="Unselect All" Command="{Binding DataContext.ClearSelectionCommand, ElementName=listview}" CommandParameter="{Binding}"
+                                            Visibility="{Binding DataContext.AllItemsSelected, ElementName=listview, Converter={StaticResource BooleanToVisibilityConverter}, Mode=TwoWay}"/>
                                         </MenuFlyout.Items>
                                     </MenuFlyout>
                                 </FlyoutBase.AttachedFlyout>
