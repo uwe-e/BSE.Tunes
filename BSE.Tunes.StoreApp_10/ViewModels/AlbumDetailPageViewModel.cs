@@ -21,8 +21,6 @@ namespace BSE.Tunes.StoreApp.ViewModels
         #region FieldsPrivate
         private Album m_album;
         private Uri m_coverSource;
-        private ICommand m_selectItemsCommand;
-        private ICommand m_showFlyoutCommand;
         #endregion
 
         #region Properties
@@ -50,9 +48,6 @@ namespace BSE.Tunes.StoreApp.ViewModels
                 RaisePropertyChanged("CoverSource");
             }
         }
-        public ICommand ShowFlyoutCommand => m_showFlyoutCommand ?? (m_showFlyoutCommand = new RelayCommand<ListViewItemViewModel>(ShowFlyout));
-        public ICommand SelectItemsCommand => m_selectItemsCommand ?? (m_selectItemsCommand = new RelayCommand<ListViewItemViewModel>(SelectItems));
-
         #endregion
 
         #region MethodsPublic
@@ -76,8 +71,6 @@ namespace BSE.Tunes.StoreApp.ViewModels
                 }
                 this.CoverSource = DataService.GetImage(album.AlbumId);
                 this.PlayAllCommand.RaiseCanExecuteChanged();
-
-                CreatePlaylistMenu();
             }
         }
         public override bool CanPlayAll()
@@ -159,25 +152,6 @@ namespace BSE.Tunes.StoreApp.ViewModels
                         PlayerMode.CD);
                 }
             }
-        }
-       
-        private void ShowFlyout(ListViewItemViewModel item)
-        {
-            //if there are selections, clear it before open the flyout.
-            if (!SelectedItems.Contains(item))
-            {
-                ClearSelection();
-            }
-            item.IsOpen = true;
-        }
-        private void SelectItems(ListViewItemViewModel item)
-        {
-            HasSelectedItems = true;
-            this.SelectedItems.Add(item);
-        }
-        private void ClearSelection()
-        {
-            SelectedItems?.Clear();
         }
         private void AddTracksToPlaylist(Playlist playlist, ObservableCollection<Track> tracks)
         {

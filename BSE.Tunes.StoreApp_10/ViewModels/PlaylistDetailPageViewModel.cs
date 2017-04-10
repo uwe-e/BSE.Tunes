@@ -14,18 +14,20 @@ using System.Threading.Tasks;
 using System.Windows.Input;
 using Windows.UI.Xaml.Media.Imaging;
 using Windows.UI.Xaml.Navigation;
+using System.Collections.Specialized;
+using Template10.Services.NavigationService;
+using BSE.Tunes.StoreApp.Mvvm.Messaging;
+using GalaSoft.MvvmLight.Messaging;
 
 namespace BSE.Tunes.StoreApp.ViewModels
 {
-    public class PlaylistDetailPageViewModel : ViewModelBase
+    public class PlaylistDetailPageViewModel : PlaylistBaseViewModel
     {
         #region FieldsPrivate
         private Playlist m_playlist;
         private BitmapSource m_coverSource;
         private string m_subTitle;
-        private RelayCommand m_playAllCommand;
-        private PlayerManager m_playerManager;
-        private ICommand m_playEntryCommand;
+        private bool m_hasPlaylistChanged;
         #endregion
 
         #region Properties
@@ -65,21 +67,92 @@ namespace BSE.Tunes.StoreApp.ViewModels
                 RaisePropertyChanged("InfoSubTitle");
             }
         }
-        public RelayCommand PlayAllCommand => m_playAllCommand ?? (m_playAllCommand = new RelayCommand(PlayAll, CanPlayAll));
-        public ICommand PlayEntryCommand => m_playEntryCommand ?? (m_playEntryCommand = new RelayCommand<PlaylistEntry>(PlayEntry));
         #endregion
 
         #region MethodsPublic
         public PlaylistDetailPageViewModel()
         {
-            if (!Windows.ApplicationModel.DesignMode.DesignModeEnabled)
+            Messenger.Default.Register<PlaylistChangedArgs>(this, args =>
             {
-                m_playerManager = PlayerManager.Instance;
-            }
+                PlaylistEntriesChangedArgs playlistEntriesChanged = args as PlaylistEntriesChangedArgs;
+                if (playlistEntriesChanged != null)
+                {
+                    LoadData(args.Playlist);
+                }
+            });
         }
         public async override Task OnNavigatedToAsync(object parameter, NavigationMode mode, IDictionary<string, object> state)
         {
-            Playlist playlist = parameter as Playlist;
+            LoadData(parameter as Playlist);
+            await base.OnNavigatedToAsync(parameter, mode, state);
+            
+        }
+
+        public async override Task OnNavigatingFromAsync(NavigatingEventArgs args)
+        {
+            Items.CollectionChanged -= OnItemsCollectionChanged;
+            await base.OnNavigatingFromAsync(args);
+        }
+
+        public override bool CanPlayAll()
+        {
+            return this.Playlist?.Entries != null && this.Playlist.Entries.Count() > 0;
+        }
+        public override void PlayAll()
+        {
+            var entryIds = this.Playlist.Entries.Select(entry => entry.TrackId);
+            if (entryIds != null)
+            {
+                PlayerManager.PlayTracks(
+                    new System.Collections.ObjectModel.ObservableCollection<int>(entryIds),
+                    PlayerMode.Playlist);
+            }
+        }
+        public override void PlayTrack(ListViewItemViewModel item)
+        {
+            PlayerManager.PlayTrack(((PlaylistEntry)item.Data).TrackId, PlayerMode.Song);
+        }
+        public async override void DeleteSelectedItems()
+        {
+            if (SelectedItems?.Count > 0)
+            {
+                var list = SelectedItems.ToList(); ;
+                foreach (var item in list)
+                {
+                    Items.Remove((ListViewItemViewModel)item);
+                }
+                Playlist.Entries.Clear();
+                foreach (var entry in Items.Select(itm => itm.Data).Cast<PlaylistEntry>())
+                {
+                    Playlist.Entries.Add(entry);
+                }
+                await DataService.UpdatePlaylistEntries(Playlist);
+                ICacheableBitmapService cacheableBitmapService = CacheableBitmapService.Instance;
+                await cacheableBitmapService.RemoveCache(Playlist.Guid.ToString());
+                Messenger.Default.Send<PlaylistChangedArgs>(new PlaylistEntriesChangedArgs(Playlist));
+            }
+        }
+        #endregion
+
+        #region MethodsProtected
+        protected override void OnSelectedItemsCollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
+        {
+            base.OnSelectedItemsCollectionChanged(sender, e);
+            AllItemsSelected = Items.OrderBy(itm => ((PlaylistEntry)itm.Data).SortOrder).SequenceEqual(
+                SelectedItems.Cast<ListViewItemViewModel>().OrderBy(itm => ((PlaylistEntry)itm.Data).SortOrder));
+            AllItemsSelectable = HasSelectedItems & !AllItemsSelected;
+        }
+        #endregion
+
+        #region MethodsPrivate
+        private void OnItemsCollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
+        {
+            m_hasPlaylistChanged = true;
+        }
+        private async void LoadData(Playlist playlist)
+        {
+            Items.CollectionChanged -= OnItemsCollectionChanged;
+            Items.Clear();
             if (playlist != null)
             {
                 User user = SettingsService.Instance.User;
@@ -89,13 +162,16 @@ namespace BSE.Tunes.StoreApp.ViewModels
                     {
                         Collection<Uri> imageUris = null;
                         ICacheableBitmapService cacheableBitmapService = CacheableBitmapService.Instance;
-                        this.Playlist = await this.DataService.GetPlaylistById(playlist.Id, user.UserName);
+                        Playlist = await this.DataService.GetPlaylistById(playlist.Id, user.UserName);
                         if (this.Playlist != null)
                         {
+                            
+                            Items.CollectionChanged += OnItemsCollectionChanged;
                             foreach (var entry in this.Playlist.Entries?.OrderBy(pe => pe.SortOrder))
                             {
                                 if (entry != null)
                                 {
+                                    Items.Add(new ListViewItemViewModel { Data = entry });
                                     if (imageUris == null)
                                     {
                                         imageUris = new Collection<Uri>();
@@ -110,7 +186,7 @@ namespace BSE.Tunes.StoreApp.ViewModels
                                     this.Playlist.Guid.ToString(),
                                     500);
                             }
-                            this.InfoSubTitle = FormatNumberOfEntriesString(playlist);
+                            this.InfoSubTitle = FormatNumberOfEntriesString(Playlist);
                         }
                     }
                     finally
@@ -120,37 +196,16 @@ namespace BSE.Tunes.StoreApp.ViewModels
                 }
             }
         }
-        #endregion
-
-        #region MethodsPrivate
-        private bool CanPlayAll()
-        {
-            return this.Playlist?.Entries != null && this.Playlist.Entries.Count() > 0;
-        }
-
-        private void PlayAll()
-        {
-            var entryIds = this.Playlist.Entries.Select(entry => entry.TrackId);
-            if (entryIds != null)
-            {
-                this.m_playerManager.PlayTracks(
-                    new System.Collections.ObjectModel.ObservableCollection<int>(entryIds),
-                    PlayerMode.Playlist);
-            }
-        }
-        private void PlayEntry(PlaylistEntry entry)
-        {
-            m_playerManager.PlayTrack(entry.TrackId, PlayerMode.Song);
-        }
         private string FormatNumberOfEntriesString(Playlist playlist)
         {
             int numberOfEntries = 0;
             if (playlist != null)
             {
-                numberOfEntries = playlist.NumberEntries;
+                numberOfEntries = playlist.Entries?.Count ?? 0;
             }
             return string.Format(CultureInfo.CurrentUICulture, "{0} {1}", numberOfEntries, ResourceService.GetString("PlaylistItem_PartNumberOfEntries", "Songs"));
         }
         #endregion
+        
     }
 }

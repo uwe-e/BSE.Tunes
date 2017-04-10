@@ -316,4 +316,10 @@ Please choose a different name for your playlist!</value>
   <data name="DeletePlaylistContentDialog_TxtDeleteSelectedInformation" xml:space="preserve">
     <value>If you delete this playlists from your library, you can't play it anymore from other devices.</value>
   </data>
+  <data name="PlaylistDetailPage_AddTo.Text" xml:space="preserve">
+    <value>Add to</value>
+  </data>
+  <data name="ButtonDeleteItems.Label" xml:space="preserve">
+    <value>Remove from playlist</value>
+  </data>
 </root>

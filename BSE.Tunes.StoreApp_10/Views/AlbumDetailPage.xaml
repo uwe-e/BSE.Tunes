@@ -19,12 +19,6 @@
         <vm:AlbumDetailPageViewModel x:Name="ViewModel" />
     </Page.DataContext>
 
-    <Page.Resources>
-        <converters:RightTappedRoutedEventArgsToPointConverter x:Key="RightTappedToPointConverter"/>
-        <converters:InverseBooleanConverter x:Key="InverseBooleanConverter"/>
-        <converters:InsertModeConverter x:Key="InsertModeConverter"/>
-    </Page.Resources>
-
     <Page.BottomAppBar>
         <CommandBar x:Uid="BottomAppBar" Visibility="{Binding IsCommandBarVisible, Converter={StaticResource BooleanToVisibilityConverter}}">
             <AppBarButton x:Uid="ButtonClearSelection" Icon="Bullets" Command="{Binding ClearSelectionCommand}"/>
@@ -164,8 +158,6 @@
                                             <controlextensions:FlyoutExtensions.ItemTemplate>
                                                 <DataTemplate>
                                                     <Grid>
-                                                        <!--<MenuFlyoutItem Command="{Binding MenuItemClickedCommand}" Tag="{Binding InsertMode}" CommandParameter="{Binding}" Text="{Binding Text}" Visibility="{Binding IsSeparator, Converter={StaticResource BooleanToVisibilityConverter}, ConverterParameter=true}"/>-->
-                                                        <!--<MenuFlyoutItem Command="{Binding MenuItemClickedCommand}" Text="{Binding InsertMode, ConverterParameter=All, Converter={StaticResource InsertModeConverter}}" CommandParameter="{Binding}" Visibility="{Binding IsSeparator, Converter={StaticResource BooleanToVisibilityConverter}, ConverterParameter=true}"/>-->
                                                         <MenuFlyoutItem Command="{Binding MenuItemClickedCommand}"
                                                                         CommandParameter="{Binding}"
                                                                         controlextensions:MenuFlyoutItem.UpdateTagTarget="True"

@@ -5,6 +5,8 @@
     xmlns:local="using:BSE.Tunes.StoreApp.Views"
     xmlns:controls="using:Template10.Controls"
     xmlns:controlextensions="using:BSE.Tunes.StoreApp.Controls.Extensions"
+    xmlns:interactivity="using:Microsoft.Xaml.Interactivity"
+    xmlns:core="using:Microsoft.Xaml.Interactions.Core"
     xmlns:vm="using:BSE.Tunes.StoreApp.ViewModels"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
@@ -14,6 +16,40 @@
         <vm:PlaylistDetailPageViewModel x:Name="ViewModel" />
     </Page.DataContext>
 
+    <Page.BottomAppBar>
+        <CommandBar x:Uid="BottomAppBar" Visibility="{Binding IsCommandBarVisible, Converter={StaticResource BooleanToVisibilityConverter}}">
+            <AppBarButton x:Uid="ButtonClearSelection" Icon="Bullets" Command="{Binding ClearSelectionCommand}"/>
+            <AppBarSeparator/>
+            <AppBarButton x:Uid="ButtonPlaySelection" Icon="Play"
+                            Command="{Binding PlaySelectedItemsCommand}"/>
+            <AppBarButton x:Name="buttonAddTo" x:Uid="ButtonAddToPlaylist" Icon="Add"
+                            Command="{Binding OpenPlaylistFlyoutCommand}">
+                <AppBarButton.ContextFlyout>
+                    <Flyout controlextensions:FlyoutExtensions.IsOpen="{Binding IsPlaylistFlyoutOpen, Mode=TwoWay}"
+                            controlextensions:FlyoutExtensions.Parent="{Binding ElementName=buttonAddTo}"
+                            controlextensions:FlyoutExtensions.ItemsSource="{Binding MenuItemsPlaylist}">
+                        <controlextensions:FlyoutExtensions.ItemTemplate>
+                            <DataTemplate>
+                                <Grid>
+                                    <MenuFlyoutItem Command="{Binding MenuItemClickedCommand}"
+                                                    CommandParameter="{Binding}"
+                                                    Text="{Binding Text}"
+                                                    controlextensions:MenuFlyoutItem.UpdateTagTarget="True"
+                                                    Tag="{Binding InsertMode, ConverterParameter=Selected, Converter={StaticResource InsertModeConverter}, Mode=TwoWay}"
+                                                    Visibility="{Binding IsSeparator, Converter={StaticResource BooleanToVisibilityConverter}, ConverterParameter=true}"/>
+                                    <MenuFlyoutSeparator Visibility="{Binding IsSeparator, Converter={StaticResource BooleanToVisibilityConverter}, ConverterParameter=false}"/>
+                                </Grid>
+                            </DataTemplate>
+                        </controlextensions:FlyoutExtensions.ItemTemplate>
+                    </Flyout>
+                </AppBarButton.ContextFlyout>
+            </AppBarButton>
+            <AppBarButton x:Uid="ButtonDeleteItems" Icon="Delete" Command="{Binding DeleteSelectedItemsCommand}"/>
+            <AppBarButton x:Uid="ButtonSelectAll" Icon="SelectAll" Command="{Binding SelectAllItemsCommand}" Visibility="{Binding AllItemsSelected, Converter={StaticResource BooleanToVisibilityConverter}, ConverterParameter=true, Mode=TwoWay}"/>
+            <AppBarButton x:Uid="ButtonUnSelectAll" Icon="ClearSelection" Command="{Binding ClearSelectionCommand}" Visibility="{Binding AllItemsSelected, Converter={StaticResource BooleanToVisibilityConverter}, ConverterParameter=false, Mode=TwoWay}"/>
+        </CommandBar>
+    </Page.BottomAppBar>
+    
     <RelativePanel Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
         <VisualStateManager.VisualStateGroups>
             <VisualStateGroup x:Name="AdaptiveVisualStateGroup">
@@ -96,28 +132,84 @@
                                         <TextBlock x:Uid="PlaylistDetailPage_PlayAll" Text="Alle wiedergeben" Margin="6,0,0,0" Grid.Column="1"/>
                                     </Grid>
                                 </HyperlinkButton>
+
+                                <HyperlinkButton x:Name="buttonAddAllTo" Command="{Binding OpenAllToPlaylistCommand}" VerticalContentAlignment="Center" Foreground="{ThemeResource SystemBaseHighColor}">
+                                    <Grid VerticalAlignment="Center">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="Auto"/>
+                                            <ColumnDefinition Width="*"/>
+                                        </Grid.ColumnDefinitions>
+                                        <FontIcon Glyph="&#xE710;" Grid.Column="0"/>
+                                        <TextBlock x:Uid="PlaylistDetailPage_AddTo" Text="Hinzufügen zu" Margin="6,0,0,0" Grid.Column="1"/>
+                                    </Grid>
+                                    <HyperlinkButton.ContextFlyout>
+                                        <Flyout controlextensions:FlyoutExtensions.IsOpen="{Binding IsAllToPlaylistFlyoutOpen, Mode=TwoWay}"
+                                                controlextensions:FlyoutExtensions.Parent="{Binding ElementName=buttonAddAllTo}"
+                                                controlextensions:FlyoutExtensions.ItemsSource="{Binding MenuItemsPlaylist}">
+                                            <controlextensions:FlyoutExtensions.ItemTemplate>
+                                                <DataTemplate>
+                                                    <Grid>
+                                                        <MenuFlyoutItem Command="{Binding MenuItemClickedCommand}"
+                                                                        CommandParameter="{Binding}"
+                                                                        controlextensions:MenuFlyoutItem.UpdateTagTarget="True"
+                                                                        Tag="{Binding InsertMode, ConverterParameter=All, Converter={StaticResource InsertModeConverter}, Mode=TwoWay}"
+                                                                        Text="{Binding Text}"
+                                                                        Visibility="{Binding IsSeparator, Converter={StaticResource BooleanToVisibilityConverter}, ConverterParameter=true}"/>
+                                                        <MenuFlyoutSeparator Visibility="{Binding IsSeparator, Converter={StaticResource BooleanToVisibilityConverter}, ConverterParameter=false}"/>
+                                                    </Grid>
+                                                </DataTemplate>
+                                            </controlextensions:FlyoutExtensions.ItemTemplate>
+                                        </Flyout>
+                                    </HyperlinkButton.ContextFlyout>
+                                </HyperlinkButton>
                             </StackPanel>
                         </Grid>
                     </StackPanel>
                 </Grid>
 
-                <ListView RelativePanel.AlignLeftWithPanel="True" RelativePanel.AlignRightWithPanel="True" RelativePanel.Below="infoPart" ItemsSource="{Binding Playlist.Entries}" SelectionMode="Extended"
-                          IsItemClickEnabled="True" controlextensions:ListViewExtensions.Command="{Binding PlayEntryCommand}">
+                <ListView x:Name="listview" RelativePanel.AlignLeftWithPanel="True" RelativePanel.AlignRightWithPanel="True" RelativePanel.Below="infoPart"
+                          ItemsSource="{Binding Items}" SelectionMode="{Binding HasSelectedItems, Converter={StaticResource BooleanToSelectionModeConverter}}"
+                          IsItemClickEnabled="{Binding HasSelectedItems, Converter={StaticResource InverseBooleanConverter}}"
+                          controlextensions:ListViewExtensions.Command="{Binding PlayTrackCommand}" 
+                          controlextensions:ListViewExtensions.SelectedItems="{Binding SelectedItems, Mode=TwoWay}">
                     <ListView.ItemTemplate>
                         <DataTemplate>
-                            <Grid Height="48" Margin="0">
+                            <Grid x:Name="listViewItem" Height="48" Margin="0">
                                 <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
                                     <ColumnDefinition Width="*"/>
                                     <ColumnDefinition Width="90"/>
                                 </Grid.ColumnDefinitions>
-                                <TextBlock Text="{Binding Name}"
+                                <FlyoutBase.AttachedFlyout>
+                                    <MenuFlyout controlextensions:FlyoutExtensions.IsOpen="{Binding IsOpen, Mode=TwoWay}" 
+                                                controlextensions:FlyoutExtensions.Parent="{Binding ElementName=listViewItem}"
+                                                controlextensions:FlyoutExtensions.OffsetPoint="{Binding OffsetPoint, Mode=TwoWay}">
+                                        <MenuFlyout.Items>
+                                            <MenuFlyoutItem x:Uid="MenuFlyoutAddTo" Text="Add to"/>
+                                            <MenuFlyoutItem x:Uid="MenuFlyoutSelectItems" Text="Select" Command="{Binding DataContext.SelectItemsCommand, ElementName=listview}" CommandParameter="{Binding}"
+                                                            Visibility="{Binding DataContext.HasSelectedItems, ElementName=listview, Converter={StaticResource BooleanToVisibilityConverter}, ConverterParameter=true, Mode=TwoWay}"/>
+                                            <MenuFlyoutItem x:Uid="MenuFlyoutSelectAllItems" Text="Select All" Command="{Binding DataContext.SelectAllItemsCommand, ElementName=listview}" CommandParameter="{Binding}"
+                                            Visibility="{Binding DataContext.AllItemsSelectable, ElementName=listview, Converter={StaticResource BooleanToVisibilityConverter}, Mode=TwoWay}"/>
+                                            <MenuFlyoutItem x:Uid="MenuFlyoutUnSelectAll" Text="Unselect All" Command="{Binding DataContext.ClearSelectionCommand, ElementName=listview}" CommandParameter="{Binding}"
+                                            Visibility="{Binding DataContext.AllItemsSelected, ElementName=listview, Converter={StaticResource BooleanToVisibilityConverter}, Mode=TwoWay}"/>
+                                        </MenuFlyout.Items>
+                                    </MenuFlyout>
+                                </FlyoutBase.AttachedFlyout>
+                                <TextBlock Text="{Binding Data.Name}"
                                            TextTrimming="WordEllipsis" 
                                            VerticalAlignment="Center" Grid.Column="0"/>
-                                <!--<TextBlock Text="{Binding Path=Album.Id, RelativeSource={RelativeSource Mode=None}}"
-                                       Margin="10,0,0,0" Width="300" TextTrimming="WordEllipsis" 
-                                       HorizontalAlignment="Left"/>-->
-                                <TextBlock Text="{Binding Duration}" 
-                                       Margin="10,0,0,0" VerticalAlignment="Center" Grid.Column="1"/>
+                                <TextBlock Text="{Binding Data.Artist}"
+                                           TextTrimming="WordEllipsis" 
+                                           VerticalAlignment="Center" Grid.Column="1"/>
+                                <TextBlock Text="{Binding Data.Duration}" 
+                                       Margin="10,0,0,0" VerticalAlignment="Center" Grid.Column="2"/>
+                                <interactivity:Interaction.Behaviors>
+                                    <core:EventTriggerBehavior EventName="RightTapped">
+                                        <core:InvokeCommandAction Command="{Binding DataContext.ShowFlyoutCommand, ElementName=listview}"
+                                                                  InputConverter="{StaticResource RightTappedToPointConverter}"
+                                                                  InputConverterParameter="{Binding ElementName=listViewItem}"/>
+                                    </core:EventTriggerBehavior>
+                                </interactivity:Interaction.Behaviors>
                             </Grid>
                         </DataTemplate>
                     </ListView.ItemTemplate>

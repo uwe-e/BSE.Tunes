@@ -33,7 +33,10 @@ namespace BSE.Tunes.StoreApp.ViewModels
         private ICommand m_openPlaylistFlyoutCommand;
         private ICommand m_openAllToPlaylistCommand;
         private ICommand m_clearSelectionCommand;
+        private ICommand m_showFlyoutCommand;
+        private ICommand m_selectItemsCommand;
         private ICommand m_selectAllItemsCommand;
+        private RelayCommand m_deleteSelectedItemsCommand;
         private bool m_isPlaylistFlyoutOpen;
         private bool m_isAllToPlaylistFlyoutOpen;
         private ObservableCollection<ListViewItemViewModel> m_listViewItems;
@@ -152,7 +155,10 @@ namespace BSE.Tunes.StoreApp.ViewModels
         public ICommand OpenPlaylistFlyoutCommand => m_openPlaylistFlyoutCommand ?? (m_openPlaylistFlyoutCommand = new RelayCommand(OpenPlaylistFlyout));
         public ICommand OpenAllToPlaylistCommand => m_openAllToPlaylistCommand ?? (m_openAllToPlaylistCommand = new RelayCommand(OpenAllToPlaylistFlyout));
         public ICommand ClearSelectionCommand => m_clearSelectionCommand ?? (m_clearSelectionCommand = new RelayCommand(ClearSelection));
+        public ICommand ShowFlyoutCommand => m_showFlyoutCommand ?? (m_showFlyoutCommand = new RelayCommand<ListViewItemViewModel>(ShowFlyout));
+        public ICommand SelectItemsCommand => m_selectItemsCommand ?? (m_selectItemsCommand = new RelayCommand<ListViewItemViewModel>(SelectItems));
         public ICommand SelectAllItemsCommand => m_selectAllItemsCommand ?? (m_selectAllItemsCommand = new RelayCommand(SelectAll));
+        public RelayCommand DeleteSelectedItemsCommand => m_deleteSelectedItemsCommand ?? (m_deleteSelectedItemsCommand = new RelayCommand(DeleteSelectedItems, CanDeleteSelectedItems));
         #endregion
 
         #region MethodsPublic
@@ -187,6 +193,7 @@ namespace BSE.Tunes.StoreApp.ViewModels
                 SelectedItems = new ObservableCollection<object>();
                 SelectedItems.CollectionChanged += OnSelectedItemsCollectionChanged;
             }
+            CreatePlaylistMenu();
             return Task.CompletedTask;
         }
         public override Task OnNavigatedFromAsync(IDictionary<string, object> state, bool suspending)
@@ -227,6 +234,14 @@ namespace BSE.Tunes.StoreApp.ViewModels
         {
             SelectedItems?.Clear();
         }
+        public virtual bool CanDeleteSelectedItems()
+        {
+            return HasSelectedItems;
+        }
+
+        public virtual void DeleteSelectedItems()
+        {
+        }
         public virtual void SelectAll()
         {
             var notSelectedItems = Items.Except(SelectedItems);
@@ -234,6 +249,20 @@ namespace BSE.Tunes.StoreApp.ViewModels
             {
                 SelectedItems.Add(item);
             }
+        }
+        public virtual void SelectItems(ListViewItemViewModel item)
+        {
+            HasSelectedItems = true;
+            SelectedItems.Add(item);
+        }
+        public virtual void ShowFlyout(ListViewItemViewModel item)
+        {
+            //if there are selections, clear it before open the flyout.
+            if (!SelectedItems.Contains(item))
+            {
+                ClearSelection();
+            }
+            item.IsOpen = true;
         }
         #endregion
 

@@ -164,6 +164,11 @@ namespace BSE.Tunes.StoreApp.Services
             string strUrl = string.Format("{0}/api/playlist/insert", this.ServiceUrl);
             return await GetHttpResponseFromPost<Playlist, Playlist>(new Uri(strUrl), playlist);
         }
+        public async Task<bool> UpdatePlaylistEntries(Playlist playlist)
+        {
+            string strUrl = string.Format("{0}/api/playlist/update", this.ServiceUrl);
+            return await GetHttpResponseFromPost<bool, Playlist>(new Uri(strUrl), playlist);
+        }
         public async Task<Playlist> AppendToPlaylist(Playlist playlist)
         {
             string strUrl = string.Format("{0}/api/playlist/append", this.ServiceUrl);

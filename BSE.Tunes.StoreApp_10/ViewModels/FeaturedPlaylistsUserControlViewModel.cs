@@ -34,16 +34,7 @@ namespace BSE.Tunes.StoreApp.ViewModels
         {
             Messenger.Default.Register<PlaylistChangedArgs>(this, args =>
             {
-                PlaylistCreatedArgs playlistCreated = args as PlaylistCreatedArgs;
-                if (playlistCreated != null)
-                {
-                    LoadData();
-                }
-                PlaylistDeletedArgs playlistDeleted = args as PlaylistDeletedArgs;
-                if (playlistDeleted != null)
-                {
-                    LoadData();
-                }
+                LoadData();
             });
         }
         public override void SelectItem(GridPanelItemViewModel item)
