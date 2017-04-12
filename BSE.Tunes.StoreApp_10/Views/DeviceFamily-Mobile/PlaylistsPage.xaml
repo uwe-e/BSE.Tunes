@@ -5,6 +5,8 @@
     xmlns:local="using:BSE.Tunes.StoreApp.Views"
     xmlns:controls="using:Template10.Controls"
     xmlns:vm="using:BSE.Tunes.StoreApp.ViewModels"
+    xmlns:interactivity="using:Microsoft.Xaml.Interactivity"
+    xmlns:core="using:Microsoft.Xaml.Interactions.Core"
     xmlns:controlextensions="using:BSE.Tunes.StoreApp.Controls.Extensions"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
@@ -14,6 +16,17 @@
         <vm:PlaylistsPageViewModel x:Name="ViewModel" />
     </Page.DataContext>
 
+    <Page.BottomAppBar>
+        <CommandBar x:Uid="BottomAppBar" Visibility="{Binding IsCommandBarVisible, Converter={StaticResource BooleanToVisibilityConverter}}">
+            <AppBarButton x:Uid="ButtonClearSelection" Icon="Bullets" Command="{Binding ClearSelectionCommand}"/>
+            <AppBarSeparator/>
+            <AppBarButton x:Uid="ButtonPlaySelection" Icon="Play" Command="{Binding PlaySelectedItemsCommand}"/>
+            <AppBarButton x:Uid="ButtonDeleteSelection" Icon="Delete" Command="{Binding DeleteSelectedItemsCommand}"/>
+            <AppBarButton x:Uid="ButtonSelectAll" Icon="SelectAll" Command="{Binding SelectAllItemsCommand}" Visibility="{Binding AllItemsSelected, Converter={StaticResource BooleanToVisibilityConverter}, ConverterParameter=true, Mode=TwoWay}"/>
+            <AppBarButton x:Uid="ButtonUnSelectAll" Icon="ClearSelection" Command="{Binding ClearSelectionCommand}" Visibility="{Binding AllItemsSelected, Converter={StaticResource BooleanToVisibilityConverter}, ConverterParameter=false, Mode=TwoWay}"/>
+        </CommandBar>
+    </Page.BottomAppBar>
+    
     <RelativePanel Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
         <VisualStateManager.VisualStateGroups>
             <VisualStateGroup x:Name="AdaptiveVisualStateGroup">
@@ -50,7 +63,11 @@
                       RelativePanel.AlignLeftWithPanel="True"
                       RelativePanel.AlignRightWithPanel="True"
                       RelativePanel.Below="pageHeader">
-            <ListView ItemsSource="{Binding Items}" IsItemClickEnabled="True" controlextensions:ListViewExtensions.Command="{Binding SelectItemCommand}">
+            <ListView x:Name="listView" ItemsSource="{Binding Items}"
+                      SelectionMode="{Binding HasSelectedItems, Converter={StaticResource BooleanToSelectionModeConverter}}"
+                      IsItemClickEnabled="{Binding HasSelectedItems, Converter={StaticResource InverseBooleanConverter}}"
+                      controlextensions:ListViewExtensions.Command="{Binding SelectItemCommand}"
+                      controlextensions:ListViewExtensions.SelectedItems="{Binding SelectedItems, Mode=TwoWay}">
                 <ListView.ItemContainerStyle>
                     <Style TargetType="ListViewItem">
                         <Setter Property="Padding" Value="0,4"/>
@@ -58,16 +75,37 @@
                 </ListView.ItemContainerStyle>
                 <ListView.ItemTemplate>
                     <DataTemplate>
-                        <Grid Margin="12,6,0,6">
+                        <Grid Margin="12,6,0,6" x:Name="listViewItem">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="Auto"/>
                                 <ColumnDefinition Width="*"/>
                             </Grid.ColumnDefinitions>
+                            <FlyoutBase.AttachedFlyout>
+                                <MenuFlyout controlextensions:FlyoutExtensions.IsOpen="{Binding IsOpen, Mode=TwoWay}"
+                                        controlextensions:FlyoutExtensions.Parent="{Binding ElementName=listViewItem}"
+                                        controlextensions:FlyoutExtensions.OffsetPoint="{Binding OffsetPoint, Mode=TwoWay}">
+                                    <MenuFlyout.Items>
+                                        <MenuFlyoutItem x:Uid="MenuFlyoutPlayAll" Text="Play" Command="{Binding DataContext.PlayAllCommand, ElementName=listView}" CommandParameter="{Binding}"/>
+                                        <MenuFlyoutItem x:Uid="MenuFlyoutDelete" Text="Delete" Command="{Binding DataContext.DeletePlaylistCommand, ElementName=listView}" CommandParameter="{Binding}"/>
+                                        <MenuFlyoutSeparator/>
+                                        <MenuFlyoutItem x:Uid="MenuFlyoutSelectItems" Text="Select"
+                                            Command="{Binding DataContext.SelectItemsCommand, ElementName=listView}" CommandParameter="{Binding}"
+                                            Visibility="{Binding DataContext.HasSelectedItems, ElementName=listView, Converter={StaticResource BooleanToVisibilityConverter}, ConverterParameter=true, Mode=TwoWay}"/>
+                                    </MenuFlyout.Items>
+                                </MenuFlyout>
+                            </FlyoutBase.AttachedFlyout>
                             <Image x:Name="image" Stretch="Uniform" Source="{Binding Path=BitmapSource}" Grid.Column="0" Width="100" />
                             <StackPanel Orientation="Vertical" Grid.Column="1" Margin="10,0">
                                 <TextBlock Text="{Binding Title}" TextWrapping="NoWrap" TextTrimming="WordEllipsis" Style="{StaticResource SubtitleTextBlockStyle}" />
                                 <TextBlock Text="{Binding Subtitle}" FontWeight="SemiLight" x:Name="description" TextWrapping="NoWrap" TextTrimming="WordEllipsis" FontSize="14"/>
                             </StackPanel>
+                            <interactivity:Interaction.Behaviors>
+                                <core:EventTriggerBehavior EventName="RightTapped">
+                                    <core:InvokeCommandAction Command="{Binding DataContext.OpenFlyoutCommand, ElementName=listView}"
+                                                  InputConverter="{StaticResource RightTappedToPointConverter}"
+                                                  InputConverterParameter="{Binding ElementName=listViewItem}"/>
+                                </core:EventTriggerBehavior>
+                            </interactivity:Interaction.Behaviors>
                         </Grid>
                     </DataTemplate>
                 </ListView.ItemTemplate>
