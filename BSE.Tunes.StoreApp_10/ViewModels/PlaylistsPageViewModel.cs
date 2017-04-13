@@ -15,67 +15,17 @@ using Windows.UI.Xaml.Navigation;
 
 namespace BSE.Tunes.StoreApp.ViewModels
 {
-    public class PlaylistsPageViewModel : FeaturedItemsBaseViewModel
+    public class PlaylistsPageViewModel : SelectableItemsBaseViewModel
     {
         #region FieldsPrivate
-        private ObservableCollection<object> m_selectedItems;
-        private bool m_isCommandBarVisible;
-        private bool m_hasSelectedItems;
         private bool m_allItemsSelected;
         private bool m_allItemsSelectable;
-        private ICommand m_selectItemsCommand;
-        private ICommand m_clearSelectionCommand;
         private ICommand m_selectAllItemsCommand;
         private RelayCommand m_deleteSelectedItemsCommand;
-        private RelayCommand m_playSelectedItemsCommand;
         private ICommand m_deletePlaylistCommand;
-
         #endregion
 
         #region Properties
-        public ObservableCollection<object> SelectedItems
-        {
-            get
-            {
-                return m_selectedItems;
-            }
-            set
-            {
-                m_selectedItems = value;
-                RaisePropertyChanged("SelectedItems");
-            }
-        }
-        /// <summary>
-        /// Gets or sets a value indicating whether the the toolbar for the playlist related content is open.
-        /// </summary>
-        /// <remarks>Because it´s a twoway bound property in xaml the <see cref="HasSelectedItems"/> property can not used.</remarks>
-        public virtual bool IsCommandBarVisible
-        {
-            get
-            {
-                return m_isCommandBarVisible;
-            }
-            set
-            {
-                m_isCommandBarVisible = value;
-                RaisePropertyChanged("IsCommandBarVisible");
-            }
-        }
-        /// <summary>
-        /// Gets or sets an value indication whether the tracklist has at the minimum one selected item.
-        /// </summary>
-        public virtual bool HasSelectedItems
-        {
-            get
-            {
-                return m_hasSelectedItems;
-            }
-            set
-            {
-                m_hasSelectedItems = value;
-                RaisePropertyChanged("HasSelectedItems");
-            }
-        }
         public bool AllItemsSelectable
         {
             get
@@ -104,12 +54,9 @@ namespace BSE.Tunes.StoreApp.ViewModels
         {
             get;
         } = SettingsService.Instance.User;
-        public ICommand SelectItemsCommand => m_selectItemsCommand ?? (m_selectItemsCommand = new RelayCommand<ListViewItemViewModel>(SelectItems));
-        public ICommand ClearSelectionCommand => m_clearSelectionCommand ?? (m_clearSelectionCommand = new RelayCommand(ClearSelection));
         public ICommand SelectAllItemsCommand => m_selectAllItemsCommand ?? (m_selectAllItemsCommand = new RelayCommand(SelectAll));
         public ICommand DeletePlaylistCommand => m_deletePlaylistCommand ?? (m_deletePlaylistCommand = new RelayCommand<ListViewItemViewModel>(DeletePlaylist));
         public RelayCommand DeleteSelectedItemsCommand => m_deleteSelectedItemsCommand ?? (m_deleteSelectedItemsCommand = new RelayCommand(DeleteSelectedItems, CanDeleteSelectedItems));
-        public RelayCommand PlaySelectedItemsCommand => m_playSelectedItemsCommand ?? (m_playSelectedItemsCommand = new RelayCommand(PlaySelectedItems, CanPlaySelectedItems));
         #endregion
 
         #region MethodsPublic
@@ -161,26 +108,6 @@ namespace BSE.Tunes.StoreApp.ViewModels
                 }
             }
         }
-        public override Task OnNavigatedToAsync(object parameter, NavigationMode mode, IDictionary<string, object> state)
-        {
-            if (SelectedItems == null)
-            {
-                SelectedItems = new ObservableCollection<object>();
-                SelectedItems.CollectionChanged += OnSelectedItemsCollectionChanged;
-            }
-            return Task.CompletedTask;
-        }
-        public override Task OnNavigatedFromAsync(IDictionary<string, object> state, bool suspending)
-        {
-            if (SelectedItems != null)
-            {
-                SelectedItems.CollectionChanged -= OnSelectedItemsCollectionChanged;
-                SelectedItems = null;
-            }
-            HasSelectedItems = AllItemsSelected = false;
-            IsCommandBarVisible = false;
-            return base.OnNavigatedFromAsync(state, suspending);
-        }
         public override void SelectItem(GridPanelItemViewModel item)
         {
             NavigationService.NavigateAsync(typeof(Views.PlaylistDetailPage), item.Data);
@@ -216,6 +143,23 @@ namespace BSE.Tunes.StoreApp.ViewModels
                 }
             }
         }
+        public override async void PlaySelectedItems()
+        {
+            if (!string.IsNullOrEmpty(User.UserName))
+            {
+                var playlistIds = SelectedItems.Cast<GridPanelItemViewModel>().Select(itm => (Playlist)itm.Data).Select(itm => itm.Id).ToList();
+                if (playlistIds != null)
+                {
+                    var entryIds = await DataService.GetTrackIdsByPlaylistIds(playlistIds, User.UserName);
+                    if (entryIds != null)
+                    {
+                        PlayerManager.PlayTracks(
+                            new System.Collections.ObjectModel.ObservableCollection<int>(entryIds),
+                            PlayerMode.Playlist);
+                    }
+                }
+            }
+        }
         #endregion
 
         #region MethodsProtected
@@ -224,28 +168,16 @@ namespace BSE.Tunes.StoreApp.ViewModels
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        protected virtual void OnSelectedItemsCollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+        protected override void OnSelectedItemsCollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
         {
-            HasSelectedItems = SelectedItems.Count > 0;
-            IsCommandBarVisible = HasSelectedItems;
+            base.OnSelectedItemsCollectionChanged(sender, e);
             AllItemsSelected = Items.OrderBy(itm => ((Playlist)itm.Data).Id).SequenceEqual(
                 SelectedItems.Cast<GridPanelItemViewModel>().OrderBy(itm => ((Playlist)itm.Data).Id));
             AllItemsSelectable = HasSelectedItems & !AllItemsSelected;
-            PlaySelectedItemsCommand.RaiseCanExecuteChanged();
-            //this.ClearSelectionCommand.RaiseCanExecuteChanged();
         }
         #endregion
 
         #region MethodsPrivate
-        private void SelectItems(ListViewItemViewModel viewModel)
-        {
-            HasSelectedItems = true;
-            SelectedItems.Add(viewModel);
-        }
-        private void ClearSelection()
-        {
-            SelectedItems?.Clear();
-        }
         private void SelectAll()
         {
             var notSelectedItems = Items.Except(SelectedItems);
@@ -292,30 +224,6 @@ namespace BSE.Tunes.StoreApp.ViewModels
                 await dialogService.ShowContentDialogAsync(deletePlaylistDialog);
             }
         }
-        private bool CanPlaySelectedItems()
-        {
-            return HasSelectedItems;
-        }
-
-        private async void PlaySelectedItems()
-        {
-            if (!string.IsNullOrEmpty(User.UserName))
-            {
-                var playlistIds = SelectedItems.Cast<GridPanelItemViewModel>().Select(itm => (Playlist)itm.Data).Select(itm => itm.Id).ToList();
-                if (playlistIds != null)
-                {
-                    var entryIds = await DataService.GetTrackIdsByPlaylistIds(playlistIds, User.UserName);
-                    if (entryIds != null)
-                    {
-                        PlayerManager.PlayTracks(
-                            new System.Collections.ObjectModel.ObservableCollection<int>(entryIds),
-                            PlayerMode.Playlist);
-                    }
-                }
-
-            }
-        }
-        
         #endregion
     }
 }

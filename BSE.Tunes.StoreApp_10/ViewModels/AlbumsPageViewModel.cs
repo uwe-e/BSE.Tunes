@@ -9,20 +9,20 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using Windows.UI.Xaml.Navigation;
+using Template10.Services.NavigationService;
 
 namespace BSE.Tunes.StoreApp.ViewModels
 {
-    public class AlbumsPageViewModel : ViewModelBase
+    public class AlbumsPageViewModel : SelectableItemsBaseViewModel
     {
         #region FieldsPrivate
-        private IncrementalObservableCollection<AlbumViewModel> m_albums;
-        private ICommand m_selectItemCommand;
+        private IncrementalObservableCollection<ListViewItemViewModel> m_albums;
         #endregion
 
         #region Properties
-        public IncrementalObservableCollection<AlbumViewModel> Albums
+        public IncrementalObservableCollection<ListViewItemViewModel> Albums
         {
-            //get; set;
             get
             {
                 return this.m_albums;
@@ -33,32 +33,16 @@ namespace BSE.Tunes.StoreApp.ViewModels
                 RaisePropertyChanged("Albums");
             }
         }
-        public ICommand SelectItemCommand => m_selectItemCommand ?? (m_selectItemCommand = new RelayCommand<AlbumViewModel>(SelectItem));
         #endregion
 
         #region MethodsPublic
-        public AlbumsPageViewModel()
-        {
-            if (!Windows.ApplicationModel.DesignMode.DesignModeEnabled)
-            {
-                LoadData();
-            }
-        }
-        #endregion
-
-        #region MethodsPrivate
-        private async void LoadData()
-        {
-            await LoadAlbums();
-        }
-
-        private async Task LoadAlbums()
+        public async override void LoadData()
         {
             this.Albums = null;
             int iNumberOfPlayableAlbums = await DataService?.GetNumberOfPlayableAlbums();
             int pageNumber = 0;
 
-            this.Albums = new IncrementalObservableCollection<AlbumViewModel>(
+            this.Albums = new IncrementalObservableCollection<ListViewItemViewModel>(
                 (uint)iNumberOfPlayableAlbums,
                 (uint count) =>
                 {
@@ -66,15 +50,22 @@ namespace BSE.Tunes.StoreApp.ViewModels
                     {
                         int pageSize = (int)count;
 
-                        Query query = GetQuery();
-                        query.PageIndex = pageNumber;
-                        query.PageSize = pageSize;
-                        ObservableCollection<Album> albums = await DataService?.GetAlbums(query);
+                        ObservableCollection<Album> albums = await DataService?.GetAlbums(new Query
+                        {
+                            PageIndex = pageNumber,
+                            PageSize = pageSize
+                        });
                         if (albums != null)
                         {
                             foreach (var album in albums)
                             {
-                                this.Albums.Add(new AlbumViewModel(album));
+                                this.Albums.Add(new GridPanelItemViewModel
+                                {
+                                    Title = album.Title,
+                                    Subtitle = album.Artist.Name,
+                                    ImageSource = DataService?.GetImage(album.AlbumId, true),
+                                    Data = album
+                                });
                             }
                             pageNumber += pageSize;
                         }
@@ -87,25 +78,10 @@ namespace BSE.Tunes.StoreApp.ViewModels
                     return loadMoreItemsTask.AsAsyncOperation<Windows.UI.Xaml.Data.LoadMoreItemsResult>();
                 }
             );
-
-            //if (this.m_queryChanged == true)
-            //{
-               // await this.Albums.LoadMoreItemsAsync();
-            //    this.m_queryChanged = false;
-            //}
         }
-
-        private Query GetQuery()
+        public override void SelectItem(GridPanelItemViewModel item)
         {
-            //return new Query
-            //{
-            //    SortByCondition = this.SelectedSortOrder.SortOrder
-            //};
-            return new Query();
-        }
-        private void SelectItem(AlbumViewModel item)
-        {
-            NavigationService.NavigateAsync(typeof(Views.AlbumDetailPage), item.Album);
+            NavigationService.NavigateAsync(typeof(Views.AlbumDetailPage), item.Data);
         }
         #endregion
     }

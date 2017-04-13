@@ -101,9 +101,9 @@
                             </StackPanel>
                             <interactivity:Interaction.Behaviors>
                                 <core:EventTriggerBehavior EventName="RightTapped">
-                                    <core:InvokeCommandAction Command="{Binding DataContext.OpenFlyoutCommand, ElementName=listView}"
-                                                  InputConverter="{StaticResource RightTappedToPointConverter}"
-                                                  InputConverterParameter="{Binding ElementName=listViewItem}"/>
+                                    <core:InvokeCommandAction Command="{Binding DataContext.OpenMobileFlyoutCommand, ElementName=listView}"
+                                                              InputConverter="{StaticResource RightTappedToPointConverter}"
+                                                              InputConverterParameter="{Binding ElementName=listViewItem}"/>
                                 </core:EventTriggerBehavior>
                             </interactivity:Interaction.Behaviors>
                         </Grid>
