@@ -21,9 +21,6 @@
             <AppBarButton x:Uid="ButtonClearSelection" Icon="Bullets" Command="{Binding ClearSelectionCommand}"/>
             <AppBarSeparator/>
             <AppBarButton x:Uid="ButtonPlaySelection" Icon="Play" Command="{Binding PlaySelectedItemsCommand}"/>
-            <!--<AppBarButton x:Uid="ButtonDeleteSelection" Icon="Delete" Command="{Binding DeleteSelectedItemsCommand}"/>
-            <AppBarButton x:Uid="ButtonSelectAll" Icon="SelectAll" Command="{Binding SelectAllItemsCommand}" Visibility="{Binding AllItemsSelected, Converter={StaticResource BooleanToVisibilityConverter}, ConverterParameter=true, Mode=TwoWay}"/>
-            <AppBarButton x:Uid="ButtonUnSelectAll" Icon="ClearSelection" Command="{Binding ClearSelectionCommand}" Visibility="{Binding AllItemsSelected, Converter={StaticResource BooleanToVisibilityConverter}, ConverterParameter=false, Mode=TwoWay}"/>-->
         </CommandBar>
     </Page.BottomAppBar>
     
@@ -96,7 +93,6 @@
                                         controlextensions:FlyoutExtensions.OffsetPoint="{Binding OffsetPoint, Mode=TwoWay}">
                                     <MenuFlyout.Items>
                                         <MenuFlyoutItem x:Uid="MenuFlyoutPlayAll" Text="Play" Command="{Binding DataContext.PlayAllCommand, ElementName=listView}" CommandParameter="{Binding}"/>
-                                        <!--<MenuFlyoutItem x:Uid="MenuFlyoutDelete" Text="Delete" Command="{Binding DataContext.DeletePlaylistCommand, ElementName=listView}" CommandParameter="{Binding}"/>-->
                                         <MenuFlyoutSeparator/>
                                         <MenuFlyoutItem x:Uid="MenuFlyoutSelectItems" Text="Select"
                                             Command="{Binding DataContext.SelectItemsCommand, ElementName=listView}" CommandParameter="{Binding}"

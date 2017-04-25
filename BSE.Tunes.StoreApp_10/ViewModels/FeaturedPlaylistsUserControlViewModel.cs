@@ -17,8 +17,8 @@ namespace BSE.Tunes.StoreApp.ViewModels
 {
     public class FeaturedPlaylistsUserControlViewModel : FeaturedItemsBaseViewModel
     {
-        private ICommand m_showDeletePlaylistDialogCommand;
         #region FieldsPrivate
+        private ICommand m_showDeletePlaylistDialogCommand;
         #endregion
 
         #region Properties

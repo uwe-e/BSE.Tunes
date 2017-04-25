@@ -15,6 +15,8 @@ namespace BSE.Tunes.Data
 		[OperationContract]
         string GetAudioFileNameByGuid(Guid guid);
         [OperationContract]
+        ICollection<int> GetTrackIdsByAlbumIds(IList<int> albumIds);
+        [OperationContract]
         Album GetAlbumById(int albumId);
         [OperationContract]
         Genre[] GetGenres();

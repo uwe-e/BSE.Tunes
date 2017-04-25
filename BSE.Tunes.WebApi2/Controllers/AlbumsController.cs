@@ -37,5 +37,11 @@ namespace BSE.Tunes.WebApi.Controllers
 		{
 			return this.TunesService.GetNumberOfPlayableAlbums();
 		}
-	}
+        [HttpPost]
+        [Route("trackids")]
+        public ICollection<int> GetTrackIdsByAlbumIds([FromBody] IList<int> albumIds)
+        {
+            return TunesService.GetTrackIdsByAlbumIds(albumIds);
+        }
+    }
 }

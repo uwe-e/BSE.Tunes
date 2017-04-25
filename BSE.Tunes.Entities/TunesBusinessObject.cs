@@ -372,7 +372,50 @@ namespace BSE.Tunes.Entities
             }
             return albums;
         }
+        public ICollection<int> GetTrackIdsByAlbumIds(IList<int> albumIds)
+        {
+            Collection<int> trackIds = null;
+            if (albumIds != null)
+            {
+                string list = string.Join(",", albumIds);
+                StringBuilder stringBuilder = new StringBuilder();
+                stringBuilder.Append("SELECT t.LiedID FROM tunesEntities.lieder AS t");
+                stringBuilder.Append(" WHERE t.Liedpfad IS NOT NULL");
+                stringBuilder.Append(" AND t.titelid IN {" + list + "}");
 
+                string sql = stringBuilder.ToString();
+                using (System.Data.EntityClient.EntityConnection entityConnection =
+                   new System.Data.EntityClient.EntityConnection(this.ConnectionString))
+                {
+                    try
+                    {
+                        entityConnection.Open();
+                        using (EntityCommand entityCommand = entityConnection.CreateCommand())
+                        {
+                            entityCommand.CommandText = sql;
+                            // Execute the command.
+                            using (EntityDataReader dataReader = entityCommand.ExecuteReader(System.Data.CommandBehavior.SequentialAccess))
+                            {
+                                // Start reading results.
+                                while (dataReader.Read())
+                                {
+                                    if (trackIds == null)
+                                    {
+                                        trackIds = new Collection<int>();
+                                    }
+                                    trackIds.Add(dataReader.GetInt32("LiedID", false, 0));
+                                }
+                            }
+                        }
+                    }
+                    finally
+                    {
+                        entityConnection.Close();
+                    }
+                }
+            }
+            return trackIds;
+        }
         public Album GetAlbumById(int albumId)
         {
             Album album = null;
