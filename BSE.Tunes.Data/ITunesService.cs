@@ -35,6 +35,8 @@ namespace BSE.Tunes.Data
 		[OperationContract]
         ICollection<Track> GetTracksByFilters(Filter filter);
         [OperationContract]
+        String[] GetSearchSuggestions(Query query);
+        [OperationContract]
         SearchResult GetSearchResults(Query query);
         [OperationContract]
         Album[] GetAlbumSearchResults(Query query);

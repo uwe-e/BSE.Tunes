@@ -15,6 +15,7 @@
     <converter:BooleanToListViewSelectionModeConverter x:Key="BooleanToSelectionModeConverter"/>
     <converter:RightTappedRoutedEventArgsToPointConverter x:Key="RightTappedToPointConverter"/>
     <converter:InsertModeConverter x:Key="InsertModeConverter"/>
+    <converter:AutoSuggestQueryParameterConverter x:Key="AutoSuggestQueryParameterConverter"/>
 
     <!-- Global Style selectors-->
     <!--<styles:ListViewItemStyleSelector x:Key="ListViewItemStyleSelector"/>-->

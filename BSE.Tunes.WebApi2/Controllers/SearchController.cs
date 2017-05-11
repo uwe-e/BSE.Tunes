@@ -31,5 +31,12 @@ namespace BSE.Tunes.WebApi.Controllers
 		{
 			return this.TunesService.GetTrackSearchResults(query);
 		}
-	}
+        [HttpPost]
+        [Route("suggestions/")]
+        public String[] GetSearchSuggestions([FromBody] Query query)
+        {
+            return TunesService.GetSearchSuggestions(query);
+        }
+
+    }
 }

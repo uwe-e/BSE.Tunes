@@ -322,4 +322,7 @@ Please choose a different name for your playlist!</value>
   <data name="ButtonDeleteItems.Label" xml:space="preserve">
     <value>Remove from playlist</value>
   </data>
+  <data name="TxtSearchAutoSuggestBox.PlaceholderText" xml:space="preserve">
+    <value>Search</value>
+  </data>
 </root>

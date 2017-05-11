@@ -767,6 +767,32 @@ namespace BSE.Tunes.Entities
             }
             return tracks;
         }
+        public String[] GetSearchSuggestions(Query query)
+        {
+            string[] suggestions = null;
+            if (query != null && string.IsNullOrEmpty(query.SearchPhrase) == false && query.SearchPhrase.Length > 2)
+            {
+                var searchPhrase = query.SearchPhrase;
+                if (!string.IsNullOrEmpty(searchPhrase) && searchPhrase.Length >= 3)
+                {
+                    using (TunesEntities tunesEntity = new TunesEntities(this.ConnectionString))
+                    {
+                        if (tunesEntity != null)
+                        {
+                            using (System.Data.Objects.ObjectContext objectContext = tunesEntity.ObjectContext())
+                            {
+                                var result = objectContext.ExecuteFunction<String>("GetSearchSuggestions", new System.Data.Objects.ObjectParameter[] { new System.Data.Objects.ObjectParameter("searchPhrase", searchPhrase) });
+                                if (result != null)
+                                {
+                                    suggestions = result.ToArray<String>();
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            return suggestions;
+        }
         public BSE.Tunes.Data.SearchResult GetSearchResults(Query query)
         {
             BSE.Tunes.Data.SearchResult searchResult = new Data.SearchResult();

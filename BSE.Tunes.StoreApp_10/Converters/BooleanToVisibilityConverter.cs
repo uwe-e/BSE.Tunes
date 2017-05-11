@@ -34,7 +34,15 @@ namespace BSE.Tunes.StoreApp.Converters
 
         public object ConvertBack(object value, Type targetType, object parameter, string language)
         {
-            return value is Visibility && (Visibility)value == Visibility.Visible;
+            var back = ((value is Visibility) && (((Visibility)value) == Visibility.Visible));
+            if (parameter != null)
+            {
+                if (bool.Parse((string)parameter))
+                {
+                    back = !back;
+                }
+            }
+            return back;
         }
     }
 }

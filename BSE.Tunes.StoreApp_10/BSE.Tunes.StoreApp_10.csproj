@@ -113,10 +113,13 @@
     <Compile Include="Controls\Extensions\FlyoutExtensions.cs" />
     <Compile Include="Controls\Extensions\ListViewExtensions.cs" />
     <Compile Include="Collections\IncrementalObservableCollection.cs" />
+    <Compile Include="Converters\AutoSuggestQueryParameterConverter.cs" />
     <Compile Include="Mvvm\Messaging\PlaylistDeletedArgs.cs" />
     <Compile Include="Mvvm\Messaging\PlaylistEntriesChanged.cs" />
     <Compile Include="ViewModels\DeletePlaylistContentDialogViewModel.cs" />
+    <Compile Include="ViewModels\SearchResultPageViewModel.cs" />
     <Compile Include="ViewModels\SelectableItemsBaseViewModel.cs" />
+    <Compile Include="ViewModels\ShellViewModel.cs" />
     <Compile Include="Views\DeletePlaylistContentDialog.xaml.cs">
       <DependentUpon>DeletePlaylistContentDialog.xaml</DependentUpon>
     </Compile>
@@ -242,6 +245,9 @@
     </Compile>
     <Compile Include="Views\PlaylistsPage.xaml.cs">
       <DependentUpon>PlaylistsPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\SearchResultPage.xaml.cs">
+      <DependentUpon>SearchResultPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\ServiceUrlSettingsPage.xaml.cs">
       <DependentUpon>ServiceUrlSettingsPage.xaml</DependentUpon>
@@ -390,6 +396,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\PlaylistsPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\SearchResultPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

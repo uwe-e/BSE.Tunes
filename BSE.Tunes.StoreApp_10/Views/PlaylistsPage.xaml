@@ -19,9 +19,9 @@
     
     <Page.Resources>
         <Style x:Key="NormalView" TargetType="GridViewItem">
-            <Setter Property="Margin" Value="0,0,12,0"/>
+            <Setter Property="Margin" Value="0,0,12,24"/>
             <Setter Property="Padding" Value="0" />
-            <Setter Property="MaxWidth" Value="142" />
+            <Setter Property="MaxWidth" Value="150" />
         </Style>
 
         <DataTemplate x:Name="SmallImagePanelTemplate">

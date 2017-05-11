@@ -4,126 +4,129 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-    <Schema Namespace="TunesModel.Store" Alias="Self" Provider="MySql.Data.MySqlClient" ProviderManifestToken="5.6" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
-        <EntityContainer Name="TunesModelStoreContainer">
-          <EntitySet Name="filtersettings" EntityType="TunesModel.Store.filtersettings" store:Type="Tables" Schema="platten" />
-          <EntitySet Name="genre" EntityType="TunesModel.Store.genre" store:Type="Tables" Schema="platten" />
-          <EntitySet Name="history" EntityType="TunesModel.Store.history" store:Type="Tables" Schema="platten" />
-          <EntitySet Name="interpreten" EntityType="TunesModel.Store.interpreten" store:Type="Tables" Schema="platten" />
-          <EntitySet Name="lieder" EntityType="TunesModel.Store.lieder" store:Type="Tables" Schema="platten" />
-          <EntitySet Name="medium" EntityType="TunesModel.Store.medium" store:Type="Tables" Schema="platten" />
-          <EntitySet Name="playlist" EntityType="TunesModel.Store.playlist" store:Type="Tables" Schema="platten" />
-          <EntitySet Name="playlistentries" EntityType="TunesModel.Store.playlistentries" store:Type="Tables" Schema="platten" />
-          <EntitySet Name="titel" EntityType="TunesModel.Store.titel" store:Type="Tables" Schema="platten" />
-        </EntityContainer>
+    <Schema Namespace="TunesModel.Store" Provider="MySql.Data.MySqlClient" ProviderManifestToken="5.6" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="filtersettings">
           <Key>
             <PropertyRef Name="filterid" />
           </Key>
-          <Property Name="filterid" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="filterid" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="mode" Type="int" Nullable="false" />
           <Property Name="value" Type="varchar" MaxLength="255" />
           <Property Name="isused" Type="bit" Nullable="false" />
-          <Property Name="benutzer" Type="varchar" Nullable="false" MaxLength="50" />
+          <Property Name="benutzer" Type="varchar" MaxLength="50" Nullable="false" />
         </EntityType>
         <EntityType Name="genre">
           <Key>
             <PropertyRef Name="genreid" />
           </Key>
-          <Property Name="genreid" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
-          <Property Name="genre" Type="varchar" Nullable="false" MaxLength="100" />
-          <Property Name="guid" Type="varchar" Nullable="false" MaxLength="36" />
-          <Property Name="timestamp" Type="timestamp" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="genreid" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="genre" Type="varchar" MaxLength="100" Nullable="false" />
+          <Property Name="guid" Type="varchar" MaxLength="36" Nullable="false" />
+          <Property Name="timestamp" Type="timestamp" Precision="0" Nullable="false" />
         </EntityType>
         <EntityType Name="history">
           <Key>
             <PropertyRef Name="PlayID" />
           </Key>
-          <Property Name="PlayID" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="PlayID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="AppID" Type="int" Nullable="false" />
           <Property Name="TitelID" Type="int" Nullable="false" />
           <Property Name="LiedID" Type="int" Nullable="false" />
-          <Property Name="Zeit" Type="datetime" Nullable="false" />
-          <Property Name="Interpret" Type="varchar" Nullable="false" MaxLength="50" />
-          <Property Name="Titel" Type="varchar" Nullable="false" MaxLength="60" />
-          <Property Name="Lied" Type="varchar" Nullable="false" MaxLength="60" />
-          <Property Name="Benutzer" Type="varchar" Nullable="false" MaxLength="50" />
+          <Property Name="Zeit" Type="datetime" Precision="0" Nullable="false" />
+          <Property Name="Interpret" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="Titel" Type="varchar" MaxLength="60" Nullable="false" />
+          <Property Name="Lied" Type="varchar" MaxLength="60" Nullable="false" />
+          <Property Name="Benutzer" Type="varchar" MaxLength="50" Nullable="false" />
         </EntityType>
         <EntityType Name="interpreten">
           <Key>
             <PropertyRef Name="InterpretID" />
           </Key>
-          <Property Name="InterpretID" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
-          <Property Name="Interpret" Type="varchar" Nullable="false" MaxLength="60" />
-          <Property Name="Interpret_Lang" Type="varchar" Nullable="false" MaxLength="60" />
-          <Property Name="Guid" Type="varchar" Nullable="false" MaxLength="36" />
-          <Property Name="Timestamp" Type="timestamp" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="InterpretID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Interpret" Type="varchar" MaxLength="60" Nullable="false" />
+          <Property Name="Interpret_Lang" Type="varchar" MaxLength="60" Nullable="false" />
+          <Property Name="Guid" Type="varchar" MaxLength="36" Nullable="false" />
+          <Property Name="Timestamp" Type="timestamp" Precision="0" Nullable="false" />
         </EntityType>
         <EntityType Name="lieder">
           <Key>
             <PropertyRef Name="LiedID" />
           </Key>
-          <Property Name="LiedID" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="LiedID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="TitelID" Type="int" Nullable="false" />
           <Property Name="Track" Type="int" />
           <Property Name="Lied" Type="varchar" MaxLength="100" />
-          <Property Name="Dauer" Type="datetime" />
+          <Property Name="Dauer" Type="datetime" Precision="0" />
           <Property Name="Liedpfad" Type="varchar" MaxLength="255" />
-          <Property Name="guid" Type="varchar" Nullable="false" MaxLength="36" />
-          <Property Name="Timestamp" Type="timestamp" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="guid" Type="varchar" MaxLength="36" Nullable="false" />
+          <Property Name="Timestamp" Type="timestamp" Precision="0" Nullable="false" />
         </EntityType>
         <EntityType Name="medium">
           <Key>
             <PropertyRef Name="MediumID" />
           </Key>
-          <Property Name="MediumID" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
-          <Property Name="Medium" Type="varchar" Nullable="false" MaxLength="5" />
+          <Property Name="MediumID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Medium" Type="varchar" MaxLength="5" Nullable="false" />
           <Property Name="Beschreibung" Type="varchar" MaxLength="50" />
-          <Property Name="Guid" Type="varchar" Nullable="false" MaxLength="36" />
-          <Property Name="Timestamp" Type="timestamp" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="Guid" Type="varchar" MaxLength="36" Nullable="false" />
+          <Property Name="Timestamp" Type="timestamp" Precision="0" Nullable="false" />
         </EntityType>
         <EntityType Name="playlist">
           <Key>
             <PropertyRef Name="ListId" />
           </Key>
-          <Property Name="ListId" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
-          <Property Name="ListName" Type="varchar" Nullable="false" MaxLength="100" />
-          <Property Name="User" Type="varchar" Nullable="false" MaxLength="50" />
-          <Property Name="guid" Type="varchar" Nullable="false" MaxLength="36" />
-          <Property Name="Timestamp" Type="timestamp" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="ListId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ListName" Type="varchar" MaxLength="100" Nullable="false" />
+          <Property Name="User" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="guid" Type="varchar" MaxLength="36" Nullable="false" />
+          <Property Name="Timestamp" Type="timestamp" Precision="0" Nullable="false" />
         </EntityType>
         <EntityType Name="playlistentries">
           <Key>
             <PropertyRef Name="EntryId" />
           </Key>
-          <Property Name="EntryId" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="EntryId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="PlaylistId" Type="int" Nullable="false" />
           <Property Name="LiedId" Type="int" Nullable="false" />
           <Property Name="sortorder" Type="int" />
           <Property Name="Guid" Type="guid" Nullable="false" />
-          <Property Name="Timestamp" Type="timestamp" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="Timestamp" Type="timestamp" Precision="0" Nullable="false" />
         </EntityType>
         <EntityType Name="titel">
           <Key>
             <PropertyRef Name="TitelID" />
           </Key>
-          <Property Name="TitelID" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="TitelID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="InterpretID" Type="int" Nullable="false" />
-          <Property Name="Titel" Type="varchar" Nullable="false" MaxLength="60" />
+          <Property Name="Titel" Type="varchar" MaxLength="60" Nullable="false" />
           <Property Name="ErschDatum" Type="int" />
           <Property Name="MediumID" Type="int" />
           <Property Name="mp3tag" Type="int" />
-          <Property Name="Guid" Type="varchar" Nullable="false" MaxLength="36" />
+          <Property Name="Guid" Type="varchar" MaxLength="36" Nullable="false" />
           <Property Name="PictureFormat" Type="varchar" MaxLength="5" />
           <Property Name="Cover" Type="longblob" />
           <Property Name="thumbnail" Type="mediumblob" />
-          <Property Name="ErstellDatum" Type="datetime" />
+          <Property Name="ErstellDatum" Type="datetime" Precision="0" />
           <Property Name="ErstellerNm" Type="varchar" MaxLength="50" />
-          <Property Name="MutationDatum" Type="datetime" />
+          <Property Name="MutationDatum" Type="datetime" Precision="0" />
           <Property Name="MutationNm" Type="varchar" MaxLength="50" />
-          <Property Name="Timestamp" Type="timestamp" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="Timestamp" Type="timestamp" Precision="0" Nullable="false" />
           <Property Name="genreId" Type="int" />
         </EntityType>
+        <Function Name="GetSearchSuggestions" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="platten">
+          <Parameter Name="searchTerm" Type="varchar" Mode="In" />
+        </Function>
+        <EntityContainer Name="TunesModelStoreContainer">
+          <EntitySet Name="filtersettings" EntityType="Self.filtersettings" Schema="platten" store:Type="Tables" />
+          <EntitySet Name="genre" EntityType="Self.genre" Schema="platten" store:Type="Tables" />
+          <EntitySet Name="history" EntityType="Self.history" Schema="platten" store:Type="Tables" />
+          <EntitySet Name="interpreten" EntityType="Self.interpreten" Schema="platten" store:Type="Tables" />
+          <EntitySet Name="lieder" EntityType="Self.lieder" Schema="platten" store:Type="Tables" />
+          <EntitySet Name="medium" EntityType="Self.medium" Schema="platten" store:Type="Tables" />
+          <EntitySet Name="playlist" EntityType="Self.playlist" Schema="platten" store:Type="Tables" />
+          <EntitySet Name="playlistentries" EntityType="Self.playlistentries" Schema="platten" store:Type="Tables" />
+          <EntitySet Name="titel" EntityType="Self.titel" Schema="platten" store:Type="Tables" />
+        </EntityContainer>
       </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
@@ -138,6 +141,9 @@
           <EntitySet Name="playlist" EntityType="TunesModel.PlaylistEntity" />
           <EntitySet Name="playlistentries" EntityType="TunesModel.PlaylistEntryEntity" />
           <EntitySet Name="titel" EntityType="TunesModel.AlbumEntity" />
+          <FunctionImport Name="GetSearchSuggestions" ReturnType="Collection(String)">
+          <Parameter Name="searchTerm" Mode="In" Type="String" />
+          </FunctionImport>
         </EntityContainer>
         <EntityType Name="filtersettings">
           <Key>
@@ -379,6 +385,8 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="GetSearchSuggestions" FunctionName="TunesModel.Store.GetSearchSuggestions" >
+          </FunctionImportMapping>
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>
@@ -396,6 +404,7 @@
         <DesignerProperty Name="EnablePluralization" Value="False" />
         <DesignerProperty Name="IncludeForeignKeysInModel" Value="True" />
         <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+        <DesignerProperty Name="UseLegacyProvider" Value="True" />
       </DesignerInfoPropertySet>
     </Options>
     <!-- Diagram content (shape and connector positions) -->

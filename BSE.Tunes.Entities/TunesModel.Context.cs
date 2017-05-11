@@ -12,6 +12,9 @@ namespace BSE.Tunes.Entities
     using System;
     using System.Data.Entity;
     using System.Data.Entity.Infrastructure;
+    using System.Data.Objects;
+    using System.Data.Objects.DataClasses;
+    using System.Linq;
     
     public partial class TunesEntities : DbContext
     {
@@ -34,5 +37,14 @@ namespace BSE.Tunes.Entities
         public DbSet<PlaylistEntity> playlist { get; set; }
         public DbSet<PlaylistEntryEntity> playlistentries { get; set; }
         public DbSet<AlbumEntity> titel { get; set; }
+    
+        public virtual ObjectResult<string> GetSearchSuggestions(string searchTerm)
+        {
+            var searchTermParameter = searchTerm != null ?
+                new ObjectParameter("searchTerm", searchTerm) :
+                new ObjectParameter("searchTerm", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<string>("GetSearchSuggestions", searchTermParameter);
+        }
     }
 }

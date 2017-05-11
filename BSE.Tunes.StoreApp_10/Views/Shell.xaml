@@ -7,19 +7,93 @@
       xmlns:behaviors="using:Template10.Behaviors"
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
       xmlns:local="using:BSE.Tunes.StoreApp.Views"
+      xmlns:converters="using:Template10.Converters"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
       xmlns:views="using:BSE.Tunes.StoreApp.Views"
+      xmlns:vm="using:BSE.Tunes.StoreApp.ViewModels"
       xmlns:usercontrols="using:BSE.Tunes.StoreApp.Controls"
       Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
       mc:Ignorable="d">
+
+    <Page.DataContext>
+        <vm:ShellViewModel x:Name="ViewModel" />
+    </Page.DataContext>
+
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="*"/>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
-        <Controls:HamburgerMenu x:Name="MyHamburgerMenu" Grid.Row="0">
-
+        <VisualStateManager.VisualStateGroups>
+            <VisualStateGroup x:Name="AdaptiveVisualStateGroup">
+                <VisualState x:Name="VisualStateNarrow">
+                    <VisualState.StateTriggers>
+                        <AdaptiveTrigger MinWindowWidth="{StaticResource NarrowMinWidth}" />
+                    </VisualState.StateTriggers>
+                    <VisualState.Setters>
+                        <!--<Setter Target="searchButton.Visibility" Value="Collapsed"/>-->
+                    </VisualState.Setters>
+                </VisualState>
+                <VisualState x:Name="VisualStateNormal">
+                    <VisualState.StateTriggers>
+                        <AdaptiveTrigger MinWindowWidth="{StaticResource NormalMinWidth}" />
+                    </VisualState.StateTriggers>
+                    <VisualState.Setters>
+                        <!--  TODO: change properties for wide view  -->
+                        <!--<Setter Target="searchButtonIcon.Visibility" Value="Visible"/>-->
+                    </VisualState.Setters>
+                </VisualState>
+                <VisualState x:Name="VisualStateWide">
+                    <VisualState.StateTriggers>
+                        <AdaptiveTrigger MinWindowWidth="{StaticResource WideMinWidth}" />
+                    </VisualState.StateTriggers>
+                    <VisualState.Setters>
+                        <!--  TODO: change properties for wide view  -->
+                        <!--<Setter Target="searchButtonIcon.Visibility" Value="Collapsed"/>-->
+                    </VisualState.Setters>
+                </VisualState>
+            </VisualStateGroup>
+        </VisualStateManager.VisualStateGroups>
+        <Controls:HamburgerMenu x:Name="MyHamburgerMenu" Grid.Row="0" PaneWidth="300">
             <Controls:HamburgerMenu.PrimaryButtons>
+                <!--  search button and autosuggest  -->
+                <Controls:HamburgerButtonInfo x:Name="searchButton" ButtonType="Literal">
+                    <Grid Height="48">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <SymbolIcon Width="48" Height="48" Symbol="Find" Grid.Column="0"
+                                    Visibility="{x:Bind MyHamburgerMenu.IsOpen, Mode=TwoWay, Converter={StaticResource BooleanToVisibilityConverter}, ConverterParameter=true}"/>
+                        <!--
+                        
+                                        SuggestionChosen="{x:Bind ViewModel.SuggestionChosen}"
+                                        QuerySubmitted="{x:Bind ViewModel.QuerySubmitted}"
+                        ItemsSource="{x:Bind ViewModel.SearchSuggestions}"
+                        TextChanged="{x:Bind ViewModel.LoadSuggestions}"
+                        -->
+                        <AutoSuggestBox x:Uid="TxtSearchAutoSuggestBox" x:Name="searchButtonSuggestBox" PlaceholderText="Search" Margin="12,0,12,0"
+                                        VerticalAlignment="Center" Grid.Column="1" 
+                                        
+                                        
+                                        Text="{x:Bind ViewModel.SearchText, Mode=TwoWay}"
+                                        QueryIcon="Find"/>
+
+                        <Interactivity:Interaction.Behaviors>
+                            <Core:EventTriggerBehavior EventName="QuerySubmitted">
+                                <Core:InvokeCommandAction Command="{x:Bind ViewModel.QuerySubmittedCommand}" InputConverter="{StaticResource AutoSuggestQueryParameterConverter}" />
+                            </Core:EventTriggerBehavior>
+                        </Interactivity:Interaction.Behaviors>
+
+                        <!--<Interactivity:Interaction.Behaviors>
+                            <Core:EventTriggerBehavior EventName="QuerySubmitted">
+                                <Core:EventTriggerBehavior.Actions>
+                                <Core:InvokeCommandAction Command="{x:Bind ViewModel.QuerySubmittedCommand}" InputConverter="{StaticResource AutoSuggestQueryParameterConverter}"/>
+                                </Core:EventTriggerBehavior.Actions>
+                            </Core:EventTriggerBehavior>
+                        </Interactivity:Interaction.Behaviors>-->
+                    </Grid>
+                </Controls:HamburgerButtonInfo>
                 <!--  mainpage button  -->
                 <Controls:HamburgerButtonInfo ClearHistory="True" PageType="views:MainPage">
                     <StackPanel Orientation="Horizontal">
