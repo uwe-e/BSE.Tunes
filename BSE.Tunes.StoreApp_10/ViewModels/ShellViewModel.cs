@@ -15,8 +15,12 @@ namespace BSE.Tunes.StoreApp.ViewModels
     {
         #region FieldsPrivate
         private string m_searchText;
+        private bool m_hasSuggestionChosen;
         private ObservableCollection<string> m_searchSuggestions;
+        private ICommand m_suggestionChosenCommand;
+        private ICommand m_querySubmittedCommand;
         #endregion
+        
         #region Properties
         public string SearchText
         {
@@ -30,19 +34,18 @@ namespace BSE.Tunes.StoreApp.ViewModels
                 RaisePropertyChanged(()=> SearchText);
             }
         }
-
-
-        public ICommand QuerySubmittedCommand => m_querySubmittedCommand ?? (m_querySubmittedCommand = new RelayCommand<string>(async (text) =>
+        public ObservableCollection<String> SearchSuggestions => m_searchSuggestions ?? (m_searchSuggestions = new ObservableCollection<string>());
+        public ICommand QuerySubmittedCommand => m_querySubmittedCommand ?? (m_querySubmittedCommand = new RelayCommand<string>(async (suggestion) =>
         {
-            await Task.Delay(500);
+            m_hasSuggestionChosen = false;
+            await NavigationService.NavigateAsync(typeof(Views.SearchResultPage), suggestion);
         }));
 
-        public ICommand SuggestionChosenCommand => m_suggestionChosenCommand ?? (m_suggestionChosenCommand = new RelayCommand<string>(SelectSuggestion));
-        private ICommand m_suggestionChosenCommand;
-        private bool m_suggestionChosen;
-        private ICommand m_querySubmittedCommand;
-
-        public ObservableCollection<String> SearchSuggestions => m_searchSuggestions ?? (m_searchSuggestions = new ObservableCollection<string>());
+        public ICommand SuggestionChosenCommand => m_suggestionChosenCommand ?? (m_suggestionChosenCommand = new RelayCommand(() =>
+        {
+            m_hasSuggestionChosen = true;
+        }));
+        
         #endregion
 
         #region MethodsPublic
@@ -50,7 +53,7 @@ namespace BSE.Tunes.StoreApp.ViewModels
         {
             if (!string.IsNullOrEmpty(SearchText) && SearchText.Length > 3)
             {
-                if (!m_suggestionChosen)
+                if (!m_hasSuggestionChosen)
                 {
                     SearchSuggestions.Clear();
 
@@ -68,20 +71,6 @@ namespace BSE.Tunes.StoreApp.ViewModels
                 }
             }
         }
-        public void QuerySubmitted()
-        {
-
-        }
-        public void SuggestionChosen()
-        {
-            m_suggestionChosen = true;
-        }
-        public void SelectSuggestion(object obj)
-        {
-
-        }
         #endregion
-
-
     }
 }
