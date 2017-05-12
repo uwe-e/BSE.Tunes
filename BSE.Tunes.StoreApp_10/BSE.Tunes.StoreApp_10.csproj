@@ -113,11 +113,14 @@
     <Compile Include="Controls\Extensions\FlyoutExtensions.cs" />
     <Compile Include="Controls\Extensions\ListViewExtensions.cs" />
     <Compile Include="Collections\IncrementalObservableCollection.cs" />
+    <Compile Include="Controls\PageHeader\AutoSuggestionPageHeader.cs" />
     <Compile Include="Converters\AutoSuggestQueryParameterConverter.cs" />
+    <Compile Include="Converters\Auto​Suggest​Box​Text​ChangedParameterConverter.cs" />
     <Compile Include="Mvvm\Messaging\PlaylistDeletedArgs.cs" />
     <Compile Include="Mvvm\Messaging\PlaylistEntriesChanged.cs" />
     <Compile Include="ViewModels\DeletePlaylistContentDialogViewModel.cs" />
     <Compile Include="ViewModels\SearchResultPageViewModel.cs" />
+    <Compile Include="ViewModels\SearchSuggestionsViewModel.cs" />
     <Compile Include="ViewModels\SelectableItemsBaseViewModel.cs" />
     <Compile Include="ViewModels\ShellViewModel.cs" />
     <Compile Include="Views\DeletePlaylistContentDialog.xaml.cs">
@@ -305,6 +308,11 @@
     </ApplicationDefinition>
   </ItemGroup>
   <ItemGroup>
+    <Page Include="Controls\PageHeader\AutoSuggestionPageHeader.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Page>
     <Page Include="Views\DeletePlaylistContentDialog.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

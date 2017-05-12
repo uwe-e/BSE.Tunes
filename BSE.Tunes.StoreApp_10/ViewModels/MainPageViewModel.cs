@@ -8,7 +8,7 @@ using Windows.UI.Xaml.Navigation;
 
 namespace BSE.Tunes.StoreApp.ViewModels
 {
-    public class MainPageViewModel : ViewModelBase
+    public class MainPageViewModel : SearchSuggestionsViewModel
     {
         public MainPageViewModel()
         {

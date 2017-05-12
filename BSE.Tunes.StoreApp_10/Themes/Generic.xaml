@@ -30,6 +30,7 @@
         <ResourceDictionary Source="ms-appx:///Controls/Carousel/Carousel.xaml"/>
         <ResourceDictionary Source="ms-appx:///Controls/RoundButton/RoundButton.xaml"/>
         <ResourceDictionary Source="ms-appx:///Controls/Indicator/Indicator.xaml"/>
+        <ResourceDictionary Source="ms-appx:///Controls/PageHeader/AutoSuggestionPageHeader.xaml"/>
         <!--<ResourceDictionary Source="ms-appx:///BSE.Tunes.StoreApp/Controls/Carousel/Carousel.xaml"/>
         <ResourceDictionary Source="ms-appx:///BSE.Tunes.StoreApp/Controls/RoundButton/RoundButton.xaml"/>-->
     </ResourceDictionary.MergedDictionaries>
