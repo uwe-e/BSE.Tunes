@@ -14,30 +14,33 @@ namespace BSE.Tunes.StoreApp.ViewModels
     public class SearchSuggestionsViewModel : ViewModelBase
     {
         private bool m_hasSuggestionChosen;
-        private string m_searchText;
+        private string m_queryText;
         private ObservableCollection<string> m_searchSuggestions;
         private ICommand m_suggestionChosenCommand;
         private ICommand m_querySubmittedCommand;
         private ICommand m_textChangedCommand;
 
         public ObservableCollection<String> SearchSuggestions => m_searchSuggestions ?? (m_searchSuggestions = new ObservableCollection<string>());
-        public string SearchText
+        public string QueryText
         {
             get
             {
-                return m_searchText;
+                return m_queryText;
             }
             set
             {
-                m_searchText = value;
-                RaisePropertyChanged(() => SearchText);
+                m_queryText = value;
+                RaisePropertyChanged(() => QueryText);
             }
         }
 
-        public ICommand QuerySubmittedCommand => m_querySubmittedCommand ?? (m_querySubmittedCommand = new RelayCommand<object>(async (suggestionObject) =>
+        public ICommand QuerySubmittedCommand => m_querySubmittedCommand ?? (m_querySubmittedCommand = new RelayCommand<object>(async (queryText) =>
         {
             m_hasSuggestionChosen = false;
-            await NavigationService.NavigateAsync(typeof(Views.SearchResultPage), suggestionObject);
+            if (!string.IsNullOrEmpty(QueryText) && QueryText.Length >= 3)
+            {
+                await NavigationService.NavigateAsync(typeof(Views.SearchResultPage), queryText);
+            }
         }));
 
         public ICommand SuggestionChosenCommand => m_suggestionChosenCommand ?? (m_suggestionChosenCommand = new RelayCommand(() =>
@@ -47,7 +50,7 @@ namespace BSE.Tunes.StoreApp.ViewModels
 
         public ICommand TextChangedCommand => m_textChangedCommand ?? (m_textChangedCommand = new RelayCommand(async () =>
         {
-            if (!string.IsNullOrEmpty(SearchText) && SearchText.Length > 3)
+            if (!string.IsNullOrEmpty(QueryText) && QueryText.Length > 3)
             {
                 if (!m_hasSuggestionChosen)
                 {
@@ -55,7 +58,7 @@ namespace BSE.Tunes.StoreApp.ViewModels
 
                     var suggestions = await DataService.GetSearchSuggestions(new Query
                     {
-                        SearchPhrase = SearchText
+                        SearchPhrase = QueryText
                     });
                     foreach (var suggestion in suggestions)
                     {
@@ -71,7 +74,7 @@ namespace BSE.Tunes.StoreApp.ViewModels
         #region MethodsPublic
         public async void LoadSuggestions()
         {
-            if (!string.IsNullOrEmpty(SearchText) && SearchText.Length > 3)
+            if (!string.IsNullOrEmpty(QueryText) && QueryText.Length >= 3)
             {
                 if (!m_hasSuggestionChosen)
                 {
@@ -79,7 +82,7 @@ namespace BSE.Tunes.StoreApp.ViewModels
 
                     var suggestions = await DataService.GetSearchSuggestions(new Query
                     {
-                        SearchPhrase = SearchText
+                        SearchPhrase = QueryText
                     });
                     foreach (var suggestion in suggestions)
                     {

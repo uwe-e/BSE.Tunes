@@ -53,24 +53,15 @@
                 </VisualState>
             </VisualStateGroup>
         </VisualStateManager.VisualStateGroups>
+
         <!--  header  -->
-        <!--<controls:PageHeader x:Name="pageHeader"
-                             x:Uid="MainPage_Header"
-                             Frame="{x:Bind Frame}"
-                             RelativePanel.AlignLeftWithPanel="True"
-                             RelativePanel.AlignRightWithPanel="True"
-                             RelativePanel.AlignTopWithPanel="True"
-                             Text="Explore"
-                             Visibility="Collapsed"/>-->
-        
-        <!--QueryText="{x:Bind ViewModel.SearchText, Mode=TwoWay}" -->
         <usercontrols:AutoSuggestionPageHeader x:Name="pageHeader"
                                                x:Uid="MainPage_Header"
                                                PlaceholderText="Search"
                                                QueryIcon="Find"
                                                ButtonIcon="Find"
                                                HeaderText="Explore"
-                                               QueryText="{x:Bind ViewModel.SearchText, Mode=TwoWay}"
+                                               QueryText="{x:Bind ViewModel.QueryText, Mode=TwoWay}"
                                                ItemsSource="{x:Bind ViewModel.SearchSuggestions}"
                                                RelativePanel.AlignLeftWithPanel="True"
                                                RelativePanel.AlignRightWithPanel="True"

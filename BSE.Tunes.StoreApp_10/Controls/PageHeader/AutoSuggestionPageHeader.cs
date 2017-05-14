@@ -22,15 +22,10 @@ namespace BSE.Tunes.StoreApp.Controls
 
         private PageHeader m_pageHeader;
         private AutoSuggestBox m_autoSuggestBox;
-        private AppBarButton m_appBarButton;
 
         public event TypedEventHandler<AutoSuggestBox, AutoSuggestBoxQuerySubmittedEventArgs> QuerySubmitted;
         public event TypedEventHandler<AutoSuggestBox, AutoSuggestBoxSuggestionChosenEventArgs> SuggestionChosen;
         public event TypedEventHandler<AutoSuggestBox, AutoSuggestBoxTextChangedEventArgs> TextChanged;
-
-        //public static readonly DependencyProperty QueryIconProperty =
-        //    DependencyProperty.Register("QueryIcon", typeof(IconElement), typeof(AutoSuggestionPageHeader),
-        //        new PropertyMetadata(null, OnQueryIconChanged));
 
         public static readonly DependencyProperty QueryIconProperty =
             DependencyProperty.Register("QueryIcon", typeof(IconElement), typeof(AutoSuggestionPageHeader),
@@ -42,7 +37,7 @@ namespace BSE.Tunes.StoreApp.Controls
 
         public static readonly DependencyProperty QueryTextProperty =
             DependencyProperty.Register("QueryText", typeof(string), typeof(AutoSuggestionPageHeader),
-                new PropertyMetadata(default(string), OnQueryTextChanged));
+                new PropertyMetadata(null));
 
         public static readonly DependencyProperty HeaderTextProperty =
             DependencyProperty.Register("HeaderText", typeof(string), typeof(AutoSuggestionPageHeader),
@@ -139,6 +134,7 @@ namespace BSE.Tunes.StoreApp.Controls
             m_autoSuggestBox = base.GetTemplateChild(AutoSuggestBoxName) as AutoSuggestBox;
             if (m_autoSuggestBox != null)
             {
+                m_autoSuggestBox.RegisterPropertyChangedCallback(AutoSuggestBox.TextProperty, OnAutoSuggestBoxTextChanged);
                 m_autoSuggestBox.QuerySubmitted += (sender, args) =>
                 {
                     if (QuerySubmitted != null)
@@ -162,41 +158,19 @@ namespace BSE.Tunes.StoreApp.Controls
                 };
             }
 
-            m_appBarButton = base.GetTemplateChild(AppBarButtonName) as AppBarButton;
-
-            //OnQueryIconChanged(this);
-            //OnButtonIconChanged(this);
-            //OnQueryTextChanged(this);
             OnHeaderTextChanged(this);
-            //OnPlaceholderTextChanged(this);
             OnItemsSourceChanged(this);
-
             base.OnApplyTemplate();
         }
 
-        //protected virtual void OnQueryIconChanged(DependencyObject dependencyObject)
-        //{
-        //    if (m_autoSuggestBox != null)
-        //    {
-        //        m_autoSuggestBox.QueryIcon = QueryIcon;
-        //    }
-        //}
-
-        //protected virtual void OnButtonIconChanged(DependencyObject dependencyObject)
-        //{
-        //    if (m_appBarButton != null)
-        //    {
-        //        m_appBarButton.Icon = ButtonIcon;
-        //    }
-        //}
-
-        //protected virtual void OnQueryTextChanged(DependencyObject dependencyObject)
-        //{
-        //    if (m_autoSuggestBox != null)
-        //    {
-        //        m_autoSuggestBox.Text = QueryText;
-        //    }
-        //}
+        private void OnAutoSuggestBoxTextChanged(DependencyObject dependencyObject, DependencyProperty dependencyProperty)
+        {
+            AutoSuggestBox autoSuggestBox = dependencyObject as AutoSuggestBox;
+            if (autoSuggestBox != null)
+            {
+                QueryText = autoSuggestBox.Text;
+            }
+        }
 
         protected virtual void OnHeaderTextChanged(DependencyObject dependencyObject)
         {
@@ -205,17 +179,6 @@ namespace BSE.Tunes.StoreApp.Controls
                 m_pageHeader.Content = HeaderText;
             }
         }
-        protected virtual void OnQueryTextChanged(object oldValue, object newValue)
-        {
-            //var value = oldValue as INotifyCollectionChanged;
-        }
-        //protected virtual void OnPlaceholderTextChanged(DependencyObject dependencyObject)
-        //{
-        //    if (m_autoSuggestBox != null)
-        //    {
-        //        m_autoSuggestBox.PlaceholderText = PlaceholderText;
-        //    }
-        //}
 
         protected virtual void OnItemsSourceChanged(DependencyObject dependencyObject)
         {
@@ -237,31 +200,11 @@ namespace BSE.Tunes.StoreApp.Controls
             }
         }
 
-        private static void OnQueryIconChanged(DependencyObject dependencyObject, DependencyPropertyChangedEventArgs dependencyPropertyChangedEventArgs)
-        {
-            //((AutoSuggestionPageHeader)dependencyObject).OnQueryIconChanged(dependencyObject);
-        }
-
-        private static void OnButtonIconChanged(DependencyObject dependencyObject, DependencyPropertyChangedEventArgs dependencyPropertyChangedEventArgs)
-        {
-            //((AutoSuggestionPageHeader)dependencyObject).OnButtonIconChanged(dependencyObject);
-        }
-
-        private static void OnQueryTextChanged(DependencyObject dependencyObject, DependencyPropertyChangedEventArgs dependencyPropertyChangedEventArgs)
-        {
-            ((AutoSuggestionPageHeader)dependencyObject).OnQueryTextChanged(dependencyPropertyChangedEventArgs.OldValue, dependencyPropertyChangedEventArgs.NewValue);
-            //((AutoSuggestionPageHeader)dependencyObject).OnQueryTextChanged(dependencyObject);
-        }
-
         private static void OnHeaderTextChanged(DependencyObject dependencyObject, DependencyPropertyChangedEventArgs dependencyPropertyChangedEventArgs)
         {
             ((AutoSuggestionPageHeader)dependencyObject).OnHeaderTextChanged(dependencyObject);
         }
 
-        private static void OnPlaceholderTextChanged(DependencyObject dependencyObject, DependencyPropertyChangedEventArgs dependencyPropertyChangedEventArgs)
-        {
-            //((AutoSuggestionPageHeader)dependencyObject).OnPlaceholderTextChanged(dependencyObject);
-        }
         private static void OnItemsSourceChanged(DependencyObject dependencyObject, DependencyPropertyChangedEventArgs dependencyPropertyChangedEventArgs)
         {
             ((AutoSuggestionPageHeader)dependencyObject).OnItemsSourceChanged(dependencyObject);
