@@ -328,4 +328,10 @@ Please choose a different name for your playlist!</value>
   <data name="MainPage_Header.PlaceholderText" xml:space="preserve">
     <value>Search</value>
   </data>
+  <data name="SearchResultPage_Header.PlaceholderText" xml:space="preserve">
+    <value>Search</value>
+  </data>
+  <data name="AlbumsResultSection_SectionHeader.Text" xml:space="preserve">
+    <value>Albums</value>
+  </data>
 </root>

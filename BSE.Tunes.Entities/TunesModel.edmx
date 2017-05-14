@@ -113,8 +113,13 @@
           <Property Name="Timestamp" Type="timestamp" Precision="0" Nullable="false" />
           <Property Name="genreId" Type="int" />
         </EntityType>
+        <Function Name="GetAlbumSearch" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="platten">
+          <Parameter Name="searchPhrase" Type="varchar" Mode="In" />
+          <Parameter Name="pageSize" Type="int" Mode="In" />
+          <Parameter Name="pageIndex" Type="int" Mode="In" />
+        </Function>
         <Function Name="GetSearchSuggestions" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="platten">
-          <Parameter Name="searchTerm" Type="varchar" Mode="In" />
+          <Parameter Name="searchPhrase" Type="varchar" Mode="In" />
         </Function>
         <EntityContainer Name="TunesModelStoreContainer">
           <EntitySet Name="filtersettings" EntityType="Self.filtersettings" Schema="platten" store:Type="Tables" />
@@ -142,7 +147,12 @@
           <EntitySet Name="playlistentries" EntityType="TunesModel.PlaylistEntryEntity" />
           <EntitySet Name="titel" EntityType="TunesModel.AlbumEntity" />
           <FunctionImport Name="GetSearchSuggestions" ReturnType="Collection(String)">
-          <Parameter Name="searchTerm" Mode="In" Type="String" />
+          <Parameter Name="searchPhrase" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="GetAlbumSearch" ReturnType="Collection(TunesModel.SearchResult)">
+            <Parameter Name="searchPhrase" Mode="In" Type="String" />
+            <Parameter Name="pageSize" Mode="In" Type="Int32" />
+            <Parameter Name="pageIndex" Mode="In" Type="Int32" />
           </FunctionImport>
         </EntityContainer>
         <EntityType Name="filtersettings">
@@ -386,6 +396,19 @@
             </EntityTypeMapping>
           </EntitySetMapping>
           <FunctionImportMapping FunctionImportName="GetSearchSuggestions" FunctionName="TunesModel.Store.GetSearchSuggestions" >
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="GetAlbumSearch" FunctionName="TunesModel.Store.GetAlbumSearch">
+          <ResultMapping>
+              <ComplexTypeMapping TypeName="TunesModel.SearchResult">
+                <ScalarProperty Name="AlbumId" ColumnName="AlbumId" />
+                <ScalarProperty Name="AlbumName" ColumnName="AlbumName" />
+                <ScalarProperty Name="ArtistId" ColumnName="ArtistId" />
+                <ScalarProperty Name="ArtistName" ColumnName="ArtistName" />
+                <ScalarProperty Name="TrackId" ColumnName="TrackId" />
+                <ScalarProperty Name="Track" ColumnName="Track" />
+                <ScalarProperty Name="Guid" ColumnName="Guid" />
+              </ComplexTypeMapping>
+            </ResultMapping>
           </FunctionImportMapping>
         </EntityContainerMapping>
       </Mapping>

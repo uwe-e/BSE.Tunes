@@ -4,7 +4,10 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="using:BSE.Tunes.StoreApp.Views"
     xmlns:controls="using:Template10.Controls"
+    xmlns:Core="using:Microsoft.Xaml.Interactions.Core"
+    xmlns:Interactivity="using:Microsoft.Xaml.Interactivity"
     xmlns:vm="using:BSE.Tunes.StoreApp.ViewModels"
+    xmlns:usercontrols="using:BSE.Tunes.StoreApp.Controls"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d">
@@ -12,8 +15,87 @@
     <Page.DataContext>
         <vm:SearchResultPageViewModel x:Name="ViewModel"/>
     </Page.DataContext>
-    
-    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
-    </Grid>
+    <RelativePanel Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+        <VisualStateManager.VisualStateGroups>
+            <VisualStateGroup x:Name="AdaptiveVisualStateGroup">
+                <VisualState x:Name="VisualStateNarrow">
+                    <VisualState.StateTriggers>
+                        <AdaptiveTrigger MinWindowWidth="{StaticResource NarrowMinWidth}" />
+                    </VisualState.StateTriggers>
+                    <VisualState.Setters>
+                        <!--  TODO: change properties for narrow view  -->
+                        <Setter Target="pageHeader.Visibility" Value="Visible"/>
+                        <Setter Target="hubContainer.(RelativePanel.AlignTopWithPanel)" Value="False"/>
+                        <Setter Target="hubContainer.(RelativePanel.AlignBottomWithPanel)" Value="True"/>
+                        <Setter Target="hubContainer.(RelativePanel.Below)" Value="pageHeader"/>
+                    </VisualState.Setters>
+                </VisualState>
+                <VisualState x:Name="VisualStateNormal">
+                    <VisualState.StateTriggers>
+                        <AdaptiveTrigger MinWindowWidth="{StaticResource NormalMinWidth}" />
+                    </VisualState.StateTriggers>
+                    <VisualState.Setters>
+                        <!--  TODO: change properties for normal view  -->
+                        <Setter Target="pageHeader.Visibility" Value="Collapsed"/>
+                        <Setter Target="hubContainer.(RelativePanel.AlignTopWithPanel)" Value="True"/>
+                        <Setter Target="hubContainer.(RelativePanel.AlignBottomWithPanel)" Value="False"/>
+                    </VisualState.Setters>
+                </VisualState>
+                <VisualState x:Name="VisualStateWide">
+                    <VisualState.StateTriggers>
+                        <AdaptiveTrigger MinWindowWidth="{StaticResource WideMinWidth}" />
+                    </VisualState.StateTriggers>
+                    <VisualState.Setters>
+                        <!--  TODO: change properties for wide view  -->
+                    </VisualState.Setters>
+                </VisualState>
+            </VisualStateGroup>
+        </VisualStateManager.VisualStateGroups>
+
+        <!--  header  -->
+        <usercontrols:AutoSuggestionPageHeader x:Name="pageHeader"
+                                               x:Uid="SearchResultPage_Header"
+                                               PlaceholderText="Search"
+                                               QueryIcon="Find"
+                                               ButtonIcon="Find"
+                                               HeaderText="{x:Bind ViewModel.QueryText}"
+                                               QueryText="{x:Bind ViewModel.QueryText, Mode=TwoWay}"
+                                               ItemsSource="{x:Bind ViewModel.SearchSuggestions}"
+                                               RelativePanel.AlignLeftWithPanel="True"
+                                               RelativePanel.AlignRightWithPanel="True"
+                                               RelativePanel.AlignTopWithPanel="True"
+                                               Visibility="Collapsed">
+            <Interactivity:Interaction.Behaviors>
+                <Core:EventTriggerBehavior EventName="TextChanged">
+                    <Core:InvokeCommandAction Command="{x:Bind ViewModel.TextChangedCommand}"/>
+                </Core:EventTriggerBehavior>
+                <Core:EventTriggerBehavior EventName="QuerySubmitted">
+                    <Core:InvokeCommandAction Command="{x:Bind ViewModel.QuerySubmittedCommand}" InputConverter="{StaticResource AutoSuggestQueryParameterConverter}" />
+                </Core:EventTriggerBehavior>
+                <Core:EventTriggerBehavior EventName="SuggestionChosen">
+                    <Core:InvokeCommandAction Command="{x:Bind ViewModel.SuggestionChosenCommand}"/>
+                </Core:EventTriggerBehavior>
+            </Interactivity:Interaction.Behaviors>
+        </usercontrols:AutoSuggestionPageHeader>
+
+        <ScrollViewer EntranceNavigationTransitionInfo.IsTargetElement="True"
+                      RelativePanel.AlignBottomWithPanel="True"
+                      RelativePanel.AlignLeftWithPanel="True"
+                      RelativePanel.AlignRightWithPanel="True"
+                      RelativePanel.Below="pageHeader">
+
+            <RelativePanel x:Name="hubContainer" EntranceNavigationTransitionInfo.IsTargetElement="True"
+                       RelativePanel.AlignTopWithPanel="True"
+                       RelativePanel.AlignLeftWithPanel="True"
+                       RelativePanel.AlignRightWithPanel="True">
+
+                <Grid x:Name="featuredAlbums" RelativePanel.AlignLeftWithPanel="True" RelativePanel.AlignRightWithPanel="True" RelativePanel.AlignTopWithPanel="True" >
+                    <local:SearchResultAlbumsUserControl DataContext="x:Bind ViewModel.AlbumsResult"/>
+                </Grid>
+
+            </RelativePanel>
+
+        </ScrollViewer>
+    </RelativePanel>
 </Page>

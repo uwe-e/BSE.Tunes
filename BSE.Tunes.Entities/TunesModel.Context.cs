@@ -38,13 +38,30 @@ namespace BSE.Tunes.Entities
         public DbSet<PlaylistEntryEntity> playlistentries { get; set; }
         public DbSet<AlbumEntity> titel { get; set; }
     
-        public virtual ObjectResult<string> GetSearchSuggestions(string searchTerm)
+        public virtual ObjectResult<string> GetSearchSuggestions(string searchPhrase)
         {
-            var searchTermParameter = searchTerm != null ?
-                new ObjectParameter("searchTerm", searchTerm) :
-                new ObjectParameter("searchTerm", typeof(string));
+            var searchPhraseParameter = searchPhrase != null ?
+                new ObjectParameter("searchPhrase", searchPhrase) :
+                new ObjectParameter("searchPhrase", typeof(string));
     
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<string>("GetSearchSuggestions", searchTermParameter);
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<string>("GetSearchSuggestions", searchPhraseParameter);
+        }
+    
+        public virtual ObjectResult<SearchResult> GetAlbumSearch(string searchPhrase, Nullable<int> pageSize, Nullable<int> pageIndex)
+        {
+            var searchPhraseParameter = searchPhrase != null ?
+                new ObjectParameter("searchPhrase", searchPhrase) :
+                new ObjectParameter("searchPhrase", typeof(string));
+    
+            var pageSizeParameter = pageSize.HasValue ?
+                new ObjectParameter("pageSize", pageSize) :
+                new ObjectParameter("pageSize", typeof(int));
+    
+            var pageIndexParameter = pageIndex.HasValue ?
+                new ObjectParameter("pageIndex", pageIndex) :
+                new ObjectParameter("pageIndex", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<SearchResult>("GetAlbumSearch", searchPhraseParameter, pageSizeParameter, pageIndexParameter);
         }
     }
 }

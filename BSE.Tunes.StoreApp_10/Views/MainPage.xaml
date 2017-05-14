@@ -36,7 +36,6 @@
                     </VisualState.StateTriggers>
                     <VisualState.Setters>
                         <!--  TODO: change properties for normal view  -->
-                        <!--<Setter Target="stateTextBox.Text" Value="Normal Visual State" />-->
                         <Setter Target="pageHeader.Visibility" Value="Collapsed"/>
                         <Setter Target="hubContainer.(RelativePanel.AlignTopWithPanel)" Value="True"/>
                         <Setter Target="hubContainer.(RelativePanel.AlignBottomWithPanel)" Value="False"/>
@@ -48,7 +47,6 @@
                     </VisualState.StateTriggers>
                     <VisualState.Setters>
                         <!--  TODO: change properties for wide view  -->
-                        <!--<Setter Target="stateTextBox.Text" Value="Wide Visual State" />-->
                     </VisualState.Setters>
                 </VisualState>
             </VisualStateGroup>

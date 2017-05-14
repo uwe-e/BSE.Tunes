@@ -808,37 +808,18 @@ namespace BSE.Tunes.Entities
             Album[] albums = null;
             if (query != null && string.IsNullOrEmpty(query.SearchPhrase) == false)
             {
-                query.PageSize = query.PageSize == 0 ? 1 : query.PageSize;
-
-                StringBuilder stringBuilder = new StringBuilder();
-                stringBuilder.Append("SELECT DISTINCT al.titelid AS AlbumId, a.interpretid AS ArtistId, a.interpret AS ArtistName, al.titel AS AlbumName, al.Guid, 0 AS TrackId, '' AS Track");
-                stringBuilder.Append(" FROM titel al");
-                stringBuilder.Append(" JOIN interpreten a ON al.interpretid = a.interpretid");
-                stringBuilder.Append(" JOIN lieder t ON al.titelid = t.titelid AND t.liedpfad IS NOT NULL");
-                stringBuilder.Append(" WHERE MATCH (a.interpret,al.titel) AGAINST (?querystring IN BOOLEAN MODE)");
-                stringBuilder.Append(" ORDER BY a.interpret ,al.titel");
-                stringBuilder.Append(" LIMIT ?limit OFFSET ?offset");
-
                 using (TunesEntities tunesEntity = new TunesEntities(this.ConnectionString))
                 {
                     if (tunesEntity != null)
                     {
-                        MySqlParameter paramQueryString = new MySqlParameter("querystring", MySqlDbType.VarChar, 60);
-                        paramQueryString.Direction = ParameterDirection.Input;
-                        paramQueryString.Value = query.SearchPhrase;
-
-                        MySqlParameter paramLimit = new MySqlParameter("limit", MySqlDbType.Int32, 0);
-                        paramLimit.Direction = ParameterDirection.Input;
-                        paramLimit.Value = query.PageSize;
-
-                        MySqlParameter paramOffset = new MySqlParameter("offset", MySqlDbType.Int32, 0);
-                        paramOffset.Direction = ParameterDirection.Input;
-                        paramOffset.Value = query.PageIndex;
-
                         List<Album> albumCollection = null;
                         using (System.Data.Objects.ObjectContext objectContext = tunesEntity.ObjectContext())
                         {
-                            var result = objectContext.ExecuteStoreQuery<SearchResult>(stringBuilder.ToString(), paramQueryString, paramLimit, paramOffset);
+                            var result = objectContext.ExecuteFunction<SearchResult>("GetAlbumSearch", new System.Data.Objects.ObjectParameter[] {
+                                new System.Data.Objects.ObjectParameter("searchPhrase", query.SearchPhrase),
+                                new System.Data.Objects.ObjectParameter("pageSize", query.PageSize),
+                                new System.Data.Objects.ObjectParameter("pageIndex", query.PageIndex)
+                            });
                             if (result != null)
                             {
                                 if (albumCollection == null)
