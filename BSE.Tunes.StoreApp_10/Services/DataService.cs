@@ -129,6 +129,11 @@ namespace BSE.Tunes.StoreApp.Services
             string strUrl = string.Format("{0}/api/search/albums", this.ServiceUrl);
             return await GetHttpResponseFromPost<ObservableCollection<Album>, Query>(new Uri(strUrl), query);
         }
+        public async Task<ObservableCollection<Track>> GetTrackSearchResults(Query query)
+        {
+            string strUrl = string.Format("{0}/api/search/tracks", this.ServiceUrl);
+            return await GetHttpResponseFromPost<ObservableCollection<Track>, Query>(new Uri(strUrl), query);
+        }
         public async Task<String[]> GetSearchSuggestions(Query query)
         {
             string strUrl = string.Format("{0}/api/search/suggestions", this.ServiceUrl);
