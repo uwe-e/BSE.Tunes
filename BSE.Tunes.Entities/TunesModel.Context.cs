@@ -63,5 +63,22 @@ namespace BSE.Tunes.Entities
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<SearchResult>("GetAlbumSearch", searchPhraseParameter, pageSizeParameter, pageIndexParameter);
         }
+    
+        public virtual ObjectResult<SearchResult> GetTrackSearch(string searchPhrase, Nullable<int> pageSize, Nullable<int> pageIndex)
+        {
+            var searchPhraseParameter = searchPhrase != null ?
+                new ObjectParameter("searchPhrase", searchPhrase) :
+                new ObjectParameter("searchPhrase", typeof(string));
+    
+            var pageSizeParameter = pageSize.HasValue ?
+                new ObjectParameter("pageSize", pageSize) :
+                new ObjectParameter("pageSize", typeof(int));
+    
+            var pageIndexParameter = pageIndex.HasValue ?
+                new ObjectParameter("pageIndex", pageIndex) :
+                new ObjectParameter("pageIndex", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<SearchResult>("GetTrackSearch", searchPhraseParameter, pageSizeParameter, pageIndexParameter);
+        }
     }
 }

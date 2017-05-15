@@ -859,37 +859,18 @@ namespace BSE.Tunes.Entities
             Track[] tracks = null;
             if (query != null && string.IsNullOrEmpty(query.SearchPhrase) == false)
             {
-                query.PageSize = query.PageSize == 0 ? 1 : query.PageSize;
-
-                StringBuilder stringBuilder = new StringBuilder();
-                stringBuilder.Append("SELECT al.titelid AS AlbumId, a.interpretid AS ArtistId, a.interpret AS ArtistName, al.titel AS AlbumName, al.Guid, t.liedid as TrackId, t.lied AS Track");
-                stringBuilder.Append(" FROM titel al");
-                stringBuilder.Append(" JOIN interpreten a ON al.interpretid = a.interpretid");
-                stringBuilder.Append(" JOIN lieder t ON al.titelid = t.titelid AND t.liedpfad IS NOT NULL");
-                stringBuilder.Append(" WHERE MATCH (t.lied) AGAINST (?querystring IN BOOLEAN MODE)");
-                stringBuilder.Append(" ORDER BY t.lied, a.interpret ,al.titel");
-                stringBuilder.Append(" LIMIT ?limit OFFSET ?offset");
-
                 using (TunesEntities tunesEntity = new TunesEntities(this.ConnectionString))
                 {
                     if (tunesEntity != null)
                     {
-                        MySqlParameter paramQueryString = new MySqlParameter("querystring", MySqlDbType.VarChar, 60);
-                        paramQueryString.Direction = ParameterDirection.Input;
-                        paramQueryString.Value = query.SearchPhrase;
-
-                        MySqlParameter paramLimit = new MySqlParameter("limit", MySqlDbType.Int32, 0);
-                        paramLimit.Direction = ParameterDirection.Input;
-                        paramLimit.Value = query.PageSize;
-
-                        MySqlParameter paramOffset = new MySqlParameter("offset", MySqlDbType.Int32, 0);
-                        paramOffset.Direction = ParameterDirection.Input;
-                        paramOffset.Value = query.PageIndex;
-
                         List<Track> trackCollection = null;
                         using (System.Data.Objects.ObjectContext objectContext = tunesEntity.ObjectContext())
                         {
-                            var results = objectContext.ExecuteStoreQuery<SearchResult>(stringBuilder.ToString(), paramQueryString, paramLimit, paramOffset);
+                            var results = objectContext.ExecuteFunction<SearchResult>("GetTrackSearch", new System.Data.Objects.ObjectParameter[] {
+                                new System.Data.Objects.ObjectParameter("searchPhrase", query.SearchPhrase),
+                                new System.Data.Objects.ObjectParameter("pageSize", query.PageSize),
+                                new System.Data.Objects.ObjectParameter("pageIndex", query.PageIndex)
+                                });
                             if (results != null)
                             {
                                 if (trackCollection == null)
@@ -904,6 +885,7 @@ namespace BSE.Tunes.Entities
                                         {
                                             Id = result.TrackId,
                                             Name = result.Track,
+                                            Duration = result.Duration,
                                             Album = new Album
                                             {
                                                 Id = result.AlbumId,

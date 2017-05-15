@@ -121,6 +121,11 @@
         <Function Name="GetSearchSuggestions" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="platten">
           <Parameter Name="searchPhrase" Type="varchar" Mode="In" />
         </Function>
+        <Function Name="GetTrackSearch" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="platten">
+          <Parameter Name="searchPhrase" Type="varchar" Mode="In" />
+          <Parameter Name="pageSize" Type="int" Mode="In" />
+          <Parameter Name="pageIndex" Type="int" Mode="In" />
+        </Function>
         <EntityContainer Name="TunesModelStoreContainer">
           <EntitySet Name="filtersettings" EntityType="Self.filtersettings" Schema="platten" store:Type="Tables" />
           <EntitySet Name="genre" EntityType="Self.genre" Schema="platten" store:Type="Tables" />
@@ -150,6 +155,11 @@
           <Parameter Name="searchPhrase" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="GetAlbumSearch" ReturnType="Collection(TunesModel.SearchResult)">
+            <Parameter Name="searchPhrase" Mode="In" Type="String" />
+            <Parameter Name="pageSize" Mode="In" Type="Int32" />
+            <Parameter Name="pageIndex" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="GetTrackSearch" ReturnType="Collection(TunesModel.SearchResult)">
             <Parameter Name="searchPhrase" Mode="In" Type="String" />
             <Parameter Name="pageSize" Mode="In" Type="Int32" />
             <Parameter Name="pageIndex" Mode="In" Type="Int32" />
@@ -271,7 +281,9 @@
           <Property Type="Int32" Name="TrackId" Nullable="false" />
           <Property Type="String" Name="Track" Nullable="false" />
           <Property Type="String" Name="Guid" Nullable="false" />
+          <Property Type="Time" Name="Duration" Nullable="false" />
         </ComplexType>
+        <ComplexType Name="GetTrackSearch_Result" />
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -407,6 +419,20 @@
                 <ScalarProperty Name="TrackId" ColumnName="TrackId" />
                 <ScalarProperty Name="Track" ColumnName="Track" />
                 <ScalarProperty Name="Guid" ColumnName="Guid" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="GetTrackSearch" FunctionName="TunesModel.Store.GetTrackSearch">
+          <ResultMapping>
+              <ComplexTypeMapping TypeName="TunesModel.SearchResult">
+                <ScalarProperty Name="AlbumId" ColumnName="AlbumId" />
+                <ScalarProperty Name="AlbumName" ColumnName="AlbumName" />
+                <ScalarProperty Name="ArtistId" ColumnName="ArtistId" />
+                <ScalarProperty Name="ArtistName" ColumnName="ArtistName" />
+                <ScalarProperty Name="TrackId" ColumnName="TrackId" />
+                <ScalarProperty Name="Track" ColumnName="Track" />
+                <ScalarProperty Name="Guid" ColumnName="Guid" />
+                <ScalarProperty Name="Duration" ColumnName="Duration" />
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>

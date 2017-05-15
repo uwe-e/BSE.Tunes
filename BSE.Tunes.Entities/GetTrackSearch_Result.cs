@@ -11,15 +11,7 @@ namespace BSE.Tunes.Entities
 {
     using System;
     
-    public partial class SearchResult
+    public partial class GetTrackSearch_Result
     {
-        public int AlbumId { get; set; }
-        public string AlbumName { get; set; }
-        public int ArtistId { get; set; }
-        public string ArtistName { get; set; }
-        public int TrackId { get; set; }
-        public string Track { get; set; }
-        public string Guid { get; set; }
-        public System.TimeSpan Duration { get; set; }
     }
 }
