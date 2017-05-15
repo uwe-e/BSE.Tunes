@@ -38,8 +38,6 @@ namespace BSE.Tunes.StoreApp.ViewModels
                     PageSize = 9
                 });
             }
-
-
         }
     }
 }
