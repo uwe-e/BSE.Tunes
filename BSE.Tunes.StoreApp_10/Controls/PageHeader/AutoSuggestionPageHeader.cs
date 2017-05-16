@@ -41,10 +41,11 @@ namespace BSE.Tunes.StoreApp.Controls
 
         public static readonly DependencyProperty HeaderTextProperty =
             DependencyProperty.Register("HeaderText", typeof(string), typeof(AutoSuggestionPageHeader),
-                new PropertyMetadata(default(string)));
+                new PropertyMetadata(default(string), OnHeaderTextChanged) );
 
-        public static readonly DependencyProperty PlaceholderTextProperty = DependencyProperty.Register("PlaceholderText", typeof(string), typeof(AutoSuggestionPageHeader),
-            new PropertyMetadata(default(string)));
+        public static readonly DependencyProperty PlaceholderTextProperty =
+            DependencyProperty.Register("PlaceholderText", typeof(string), typeof(AutoSuggestionPageHeader),
+                new PropertyMetadata(default(string)));
 
         public static readonly DependencyProperty ItemsSourceProperty =
             DependencyProperty.RegisterAttached("ItemsSource", typeof(object),

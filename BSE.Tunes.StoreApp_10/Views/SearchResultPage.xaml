@@ -59,7 +59,7 @@
                                                PlaceholderText="Search"
                                                QueryIcon="Find"
                                                ButtonIcon="Find"
-                                               HeaderText="{x:Bind ViewModel.QueryText, Mode=TwoWay}"
+                                               HeaderText="{x:Bind ViewModel.HeaderText}"
                                                QueryText="{x:Bind ViewModel.QueryText, Mode=TwoWay}"
                                                ItemsSource="{x:Bind ViewModel.SearchSuggestions}"
                                                RelativePanel.AlignLeftWithPanel="True"
@@ -92,6 +92,10 @@
 
                 <Grid x:Name="featuredAlbums" RelativePanel.AlignLeftWithPanel="True" RelativePanel.AlignRightWithPanel="True" RelativePanel.AlignTopWithPanel="True" >
                     <local:SearchResultAlbumsUserControl DataContext="{x:Bind ViewModel.AlbumsResult}"/>
+                </Grid>
+
+                <Grid x:Name="featuredTracks" RelativePanel.AlignLeftWithPanel="True" RelativePanel.AlignRightWithPanel="True" RelativePanel.Below="featuredAlbums">
+                    <local:SearchResultTracksUserControlViewModel DataContext="{x:Bind ViewModel.TracksResult}"/>
                 </Grid>
 
             </RelativePanel>

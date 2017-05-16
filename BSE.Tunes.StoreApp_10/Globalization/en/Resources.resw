@@ -334,4 +334,10 @@ Please choose a different name for your playlist!</value>
   <data name="AlbumsResultSection_SectionHeader.Text" xml:space="preserve">
     <value>Albums</value>
   </data>
+  <data name="TracksResultSection_SectionHeader.Text" xml:space="preserve">
+    <value>Songs</value>
+  </data>
+  <data name="TracksResultSection_ShowAll.Text" xml:space="preserve">
+    <value>Show All</value>
+  </data>
 </root>

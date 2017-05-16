@@ -2,6 +2,7 @@
 using BSE.Tunes.StoreApp.Mvvm;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -11,8 +12,25 @@ namespace BSE.Tunes.StoreApp.ViewModels
 {
     public class SearchResultPageViewModel : SearchSuggestionsViewModel
     {
+        #region FieldsPrivate
         private SearchResultAlbumsUserControlViewModel m_searchResultAlbumsUserControlViewModel;
+        private SearchResultTracksUserControlViewModel m_searchResultTrackssUserControlViewModel;
+        private string m_headerText;
+        #endregion
 
+        #region Properties
+        public string HeaderText
+        {
+            get
+            {
+                return m_headerText;
+            }
+            set
+            {
+                m_headerText = value;
+                RaisePropertyChanged(() => HeaderText);
+            }
+        }
         public SearchResultAlbumsUserControlViewModel AlbumsResult
         {
             get
@@ -26,10 +44,26 @@ namespace BSE.Tunes.StoreApp.ViewModels
             }
         }
 
+        public SearchResultTracksUserControlViewModel TracksResult
+        {
+            get
+            {
+                return m_searchResultTrackssUserControlViewModel;
+            }
+            set
+            {
+                m_searchResultTrackssUserControlViewModel = value;
+                RaisePropertyChanged(() => TracksResult);
+            }
+        }
+        #endregion
+
+        #region MethodsPublic
         public async override Task OnNavigatedToAsync(object parameter, NavigationMode mode, IDictionary<string, object> state)
         {
             await base.OnNavigatedToAsync(parameter, mode, state);
             QueryText = parameter as string;
+            HeaderText = string.Format(CultureInfo.InvariantCulture, "\"{0}\"", QueryText);
             if (!string.IsNullOrEmpty(QueryText))
             {
                 AlbumsResult = new SearchResultAlbumsUserControlViewModel(new Query
@@ -37,7 +71,14 @@ namespace BSE.Tunes.StoreApp.ViewModels
                     SearchPhrase = QueryText,
                     PageSize = 9
                 });
+
+                TracksResult = new SearchResultTracksUserControlViewModel(new Query
+                {
+                    SearchPhrase = QueryText,
+                    PageSize = 9
+                });
             }
         }
+        #endregion
     }
 }

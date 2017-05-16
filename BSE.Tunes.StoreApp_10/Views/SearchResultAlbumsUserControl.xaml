@@ -6,7 +6,6 @@
     xmlns:vm="using:BSE.Tunes.StoreApp.ViewModels"
     xmlns:interactivity="using:Microsoft.Xaml.Interactivity"
     xmlns:core="using:Microsoft.Xaml.Interactions.Core"
-    xmlns:converters="using:BSE.Tunes.StoreApp.Converters"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:controlextensions="using:BSE.Tunes.StoreApp.Controls.Extensions"
@@ -23,6 +22,7 @@
             <Setter Property="Margin" Value="0,0,12,0"/>
             <Setter Property="Padding" Value="0" />
             <Setter Property="MaxWidth" Value="142" />
+            <Setter Property="VerticalAlignment" Value="Top"/>
         </Style>
         <Style x:Key="NarrowView" TargetType="GridViewItem">
             <Setter Property="Margin" Value="0,0,12,0"/>
@@ -36,8 +36,6 @@
         <ItemsPanelTemplate x:Key="NarrowGridWrapping">
             <ItemsWrapGrid MaximumRowsOrColumns="2"/>
         </ItemsPanelTemplate>
-
-        <converters:RightTappedRoutedEventArgsToPointConverter x:Key="RightTappedToPointConverter"/>
         
         <DataTemplate x:Name="SmallImagePanelTemplate">
             <Grid x:Name="gridViewItem" Width="150">
@@ -55,7 +53,7 @@
                         </MenuFlyout.Items>
                     </MenuFlyout>
                 </FlyoutBase.AttachedFlyout>
-                <Image x:Name="image" Stretch="Uniform" Source="{Binding Path=ImageSource}" Height="150" Grid.Row="0"/>
+                <Image x:Name="image" Stretch="UniformToFill" Source="{Binding Path=ImageSource}" Height="150" Grid.Row="0"/>
                 <TextBlock Grid.Row="1" Text="{Binding Data.Title}" TextWrapping="WrapWholeWords" TextTrimming="WordEllipsis" MaxLines="2" x:Name="title" FontWeight="SemiBold"/>
                 <TextBlock Grid.Row="2" Text="{Binding Data.Artist.Name}" FontWeight="SemiLight" x:Name="description" TextTrimming="WordEllipsis" FontSize="12" />
                 <interactivity:Interaction.Behaviors>
@@ -88,7 +86,6 @@
                 </Grid>
             </HyperlinkButton.Content>
         </HyperlinkButton>
-        <!-- ItemTemplate="{StaticResource PictureSmallTemplate}" -->
         <GridView Margin="0,12,0,0" x:Name="gridview" Padding="0" 
                   SelectionMode="None"
                   IsItemClickEnabled="True"
@@ -103,7 +100,6 @@
                     <ItemsWrapGrid x:Name="wrapGrid" MaximumRowsOrColumns="1"/>
                 </ItemsPanelTemplate>
             </GridView.ItemsPanel>
-           
         </GridView>
     </RelativePanel>
 </UserControl>

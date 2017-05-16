@@ -121,6 +121,7 @@
     <Compile Include="ViewModels\DeletePlaylistContentDialogViewModel.cs" />
     <Compile Include="ViewModels\SearchResultAlbumsUserControlViewModel.cs" />
     <Compile Include="ViewModels\SearchResultPageViewModel.cs" />
+    <Compile Include="ViewModels\SearchResultTracksUserControlViewModel.cs" />
     <Compile Include="ViewModels\SearchSuggestionsViewModel.cs" />
     <Compile Include="ViewModels\SelectableItemsBaseViewModel.cs" />
     <Compile Include="ViewModels\ShellViewModel.cs" />
@@ -255,6 +256,9 @@
     </Compile>
     <Compile Include="Views\SearchResultPage.xaml.cs">
       <DependentUpon>SearchResultPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\SearchResultTracksUserControlViewModel.xaml.cs">
+      <DependentUpon>SearchResultTracksUserControlViewModel.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\ServiceUrlSettingsPage.xaml.cs">
       <DependentUpon>ServiceUrlSettingsPage.xaml</DependentUpon>
@@ -416,6 +420,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\SearchResultPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\SearchResultTracksUserControlViewModel.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
