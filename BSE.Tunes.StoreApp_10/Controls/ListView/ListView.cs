@@ -16,16 +16,6 @@ namespace BSE.Tunes.StoreApp.Controls
             DependencyProperty.Register("AlternatingRow", typeof(Brush), typeof(ListView),
                 new PropertyMetadata(null, AlternatingRowChanged));
 
-        private static void AlternatingRowChanged(DependencyObject dependencyObject, DependencyPropertyChangedEventArgs dependencyPropertyChangedEventArgs)
-        {
-            //throw new NotImplementedException();
-            ListView control = dependencyObject as ListView;
-            if (control != null)
-            {
-                control.AlternatingRow = dependencyPropertyChangedEventArgs.NewValue as Brush;
-            }
-        }
-
         public Brush AlternatingRow
         {
             get
@@ -49,6 +39,15 @@ namespace BSE.Tunes.StoreApp.Controls
                 {
                     lvi.Background = AlternatingRow;
                 }
+            }
+        }
+
+        private static void AlternatingRowChanged(DependencyObject dependencyObject, DependencyPropertyChangedEventArgs dependencyPropertyChangedEventArgs)
+        {
+            ListView control = dependencyObject as ListView;
+            if (control != null)
+            {
+                control.AlternatingRow = dependencyPropertyChangedEventArgs.NewValue as Brush;
             }
         }
     }

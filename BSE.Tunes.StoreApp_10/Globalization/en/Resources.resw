@@ -340,4 +340,10 @@ Please choose a different name for your playlist!</value>
   <data name="TracksResultSection_ShowAll.Text" xml:space="preserve">
     <value>Show All</value>
   </data>
+  <data name="MenuFlyoutPlay.Text" xml:space="preserve">
+    <value>Play</value>
+  </data>
+  <data name="MenuFlyoutShowAlbum.Text" xml:space="preserve">
+    <value>Show Album</value>
+  </data>
 </root>
