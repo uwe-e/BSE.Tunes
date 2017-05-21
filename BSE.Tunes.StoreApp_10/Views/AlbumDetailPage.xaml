@@ -91,14 +91,30 @@
             </VisualStateGroup>
         </VisualStateManager.VisualStateGroups>
 
-        <controls:PageHeader x:Name="pageHeader"
-                             x:Uid="AlbumsDetailPage_Header"
-                             Frame="{x:Bind Frame}"
+        <usercontrols:AutoSuggestionPageHeader x:Name="pageHeader"
+                                               x:Uid="AlbumsDetailPage_Header"
+                                               PlaceholderText="Search"
+                                               QueryIcon="Find"
+                                               ButtonIcon="Find"
+                                               HeaderText="Album"
+                                               QueryText="{x:Bind ViewModel.QueryText, Mode=TwoWay}"
+                                               ItemsSource="{x:Bind ViewModel.SearchSuggestions}"
                              RelativePanel.AlignLeftWithPanel="True"
                              RelativePanel.AlignRightWithPanel="True"
                              RelativePanel.AlignTopWithPanel="True"
-                             Text="Album"
-                             Visibility="Collapsed"/>
+                             Visibility="Collapsed">
+            <interactivity:Interaction.Behaviors>
+                <core:EventTriggerBehavior EventName="TextChanged">
+                    <core:InvokeCommandAction Command="{x:Bind ViewModel.TextChangedCommand}"/>
+                </core:EventTriggerBehavior>
+                <core:EventTriggerBehavior EventName="QuerySubmitted">
+                    <core:InvokeCommandAction Command="{x:Bind ViewModel.QuerySubmittedCommand}" InputConverter="{StaticResource AutoSuggestQueryParameterConverter}" />
+                </core:EventTriggerBehavior>
+                <core:EventTriggerBehavior EventName="SuggestionChosen">
+                    <core:InvokeCommandAction Command="{x:Bind ViewModel.SuggestionChosenCommand}"/>
+                </core:EventTriggerBehavior>
+            </interactivity:Interaction.Behaviors>
+        </usercontrols:AutoSuggestionPageHeader>
 
         <ScrollViewer EntranceNavigationTransitionInfo.IsTargetElement="True"
                       RelativePanel.AlignBottomWithPanel="True"
@@ -175,58 +191,63 @@
                         </Grid>
                     </StackPanel>
                 </Grid>
-                <ListView x:Name="listview" RelativePanel.AlignLeftWithPanel="True" RelativePanel.AlignRightWithPanel="True" RelativePanel.Below="infoPart"
+                <Grid Padding="20,10,20,10" RelativePanel.AlignLeftWithPanel="True" RelativePanel.AlignRightWithPanel="True" RelativePanel.Below="infoPart">
+                    <usercontrols:ListView x:Name="listview" Margin="0,12,0,0" 
                           ItemsSource="{Binding Items}"
                           SelectionMode="{Binding HasSelectedItems, Converter={StaticResource BooleanToSelectionModeConverter}}"
                           IsItemClickEnabled="{Binding HasSelectedItems, Converter={StaticResource InverseBooleanConverter}}"
                           controlextensions:ListViewExtensions.Command="{Binding PlayTrackCommand}" 
-                          controlextensions:ListViewExtensions.SelectedItems="{Binding SelectedItems, Mode=TwoWay}">
-                    <ListView.ItemTemplate>
-                        <DataTemplate>
-                            <Grid  x:Name="listViewItem" Height="48" Margin="0">
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="40"/>
-                                    <ColumnDefinition Width="*"/>
-                                    <ColumnDefinition Width="90"/>
-                                </Grid.ColumnDefinitions>
-                                <FlyoutBase.AttachedFlyout>
-                                    <MenuFlyout controlextensions:FlyoutExtensions.IsOpen="{Binding IsOpen, Mode=TwoWay}" 
+                          controlextensions:ListViewExtensions.SelectedItems="{Binding SelectedItems, Mode=TwoWay}" AlternatingRow="{StaticResource ListViewAlternatingRowBrush}">
+                        <ListView.ItemTemplate>
+                            <DataTemplate>
+                                <Grid  x:Name="listViewItem" Height="48" Margin="0">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="40"/>
+                                        <ColumnDefinition MinWidth="300" MaxWidth="400"/>
+                                        <ColumnDefinition MinWidth="300" MaxWidth="400"/>
+                                        <ColumnDefinition Width="*"/>
+                                    </Grid.ColumnDefinitions>
+                                    <FlyoutBase.AttachedFlyout>
+                                        <MenuFlyout controlextensions:FlyoutExtensions.IsOpen="{Binding IsOpen, Mode=TwoWay}" 
                                                 controlextensions:FlyoutExtensions.Parent="{Binding ElementName=listViewItem}"
                                                 controlextensions:FlyoutExtensions.OffsetPoint="{Binding OffsetPoint, Mode=TwoWay}">
-                                        <MenuFlyout.Items>
-                                            <MenuFlyoutItem x:Uid="MenuFlyoutAddTo" Text="Add to"/>
-                                            <MenuFlyoutItem x:Uid="MenuFlyoutSelectItems" Text="Select" Command="{Binding DataContext.SelectItemsCommand, ElementName=listview}" CommandParameter="{Binding}"
+                                            <MenuFlyout.Items>
+                                                <MenuFlyoutItem x:Uid="MenuFlyoutAddTo" Text="Add to"/>
+                                                <MenuFlyoutItem x:Uid="MenuFlyoutSelectItems" Text="Select" Command="{Binding DataContext.SelectItemsCommand, ElementName=listview}" CommandParameter="{Binding}"
                                                             Visibility="{Binding DataContext.HasSelectedItems, ElementName=listview, Converter={StaticResource BooleanToVisibilityConverter}, ConverterParameter=true, Mode=TwoWay}"/>
-                                            <MenuFlyoutItem x:Uid="MenuFlyoutSelectAllItems" Text="Select All" Command="{Binding DataContext.SelectAllItemsCommand, ElementName=listview}" CommandParameter="{Binding}"
+                                                <MenuFlyoutItem x:Uid="MenuFlyoutSelectAllItems" Text="Select All" Command="{Binding DataContext.SelectAllItemsCommand, ElementName=listview}" CommandParameter="{Binding}"
                                             Visibility="{Binding DataContext.AllItemsSelectable, ElementName=listview, Converter={StaticResource BooleanToVisibilityConverter}, Mode=TwoWay}"/>
-                                            <MenuFlyoutItem x:Uid="MenuFlyoutUnSelectAll" Text="Unselect All" Command="{Binding DataContext.ClearSelectionCommand, ElementName=listview}" CommandParameter="{Binding}"
+                                                <MenuFlyoutItem x:Uid="MenuFlyoutUnSelectAll" Text="Unselect All" Command="{Binding DataContext.ClearSelectionCommand, ElementName=listview}" CommandParameter="{Binding}"
                                             Visibility="{Binding DataContext.AllItemsSelected, ElementName=listview, Converter={StaticResource BooleanToVisibilityConverter}, Mode=TwoWay}"/>
-                                        </MenuFlyout.Items>
-                                    </MenuFlyout>
-                                </FlyoutBase.AttachedFlyout>
-                                <TextBlock Text="{Binding Data.TrackNumber}" VerticalAlignment="Center" HorizontalAlignment="Right" Grid.Column="0"/>
-                                <TextBlock Text="{Binding Data.Name}"
+                                            </MenuFlyout.Items>
+                                        </MenuFlyout>
+                                    </FlyoutBase.AttachedFlyout>
+                                    <TextBlock Text="{Binding Data.TrackNumber}" VerticalAlignment="Center" HorizontalAlignment="Right" Grid.Column="0"/>
+                                    <TextBlock Text="{Binding Data.Name}"
                                        Margin="10,0,0,0" TextTrimming="WordEllipsis" 
                                        VerticalAlignment="Center" Grid.Column="1"/>
-                                <TextBlock Text="{Binding Data.Duration}" 
-                                       Margin="10,0,0,0" VerticalAlignment="Center" Grid.Column="2"/>
-                                <interactivity:Interaction.Behaviors>
-                                    <core:EventTriggerBehavior EventName="RightTapped">
-                                        <core:InvokeCommandAction Command="{Binding DataContext.ShowFlyoutCommand, ElementName=listview}"
+                                    <TextBlock Text="{Binding DataContext.Album.Title, ElementName=listview}" 
+                                       Margin="10,0,0,0" TextTrimming="WordEllipsis" VerticalAlignment="Center" Grid.Column="2"/>
+                                    <TextBlock Text="{Binding Data.Duration}" 
+                                       Margin="10,0,0,0" VerticalAlignment="Center" TextAlignment="Right" Grid.Column="3"/>
+                                    <interactivity:Interaction.Behaviors>
+                                        <core:EventTriggerBehavior EventName="RightTapped">
+                                            <core:InvokeCommandAction Command="{Binding DataContext.ShowFlyoutCommand, ElementName=listview}"
                                                                   InputConverter="{StaticResource RightTappedToPointConverter}"
                                                                   InputConverterParameter="{Binding ElementName=listViewItem}"/>
-                                    </core:EventTriggerBehavior>
-                                </interactivity:Interaction.Behaviors>
-                            </Grid>
+                                        </core:EventTriggerBehavior>
+                                    </interactivity:Interaction.Behaviors>
+                                </Grid>
 
-                        </DataTemplate>
-                    </ListView.ItemTemplate>
-                    <ListView.ItemContainerStyle>
-                        <Style TargetType="ListViewItem">
-                            <Setter Property="HorizontalContentAlignment" Value="Stretch" />
-                        </Style>
-                    </ListView.ItemContainerStyle>
-                </ListView>
+                            </DataTemplate>
+                        </ListView.ItemTemplate>
+                        <ListView.ItemContainerStyle>
+                            <Style TargetType="ListViewItem">
+                                <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+                            </Style>
+                        </ListView.ItemContainerStyle>
+                    </usercontrols:ListView>
+                </Grid>
             </RelativePanel>
         </ScrollViewer>
     </RelativePanel>

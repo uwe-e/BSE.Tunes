@@ -19,7 +19,7 @@ using BSE.Tunes.StoreApp.Managers;
 
 namespace BSE.Tunes.StoreApp.ViewModels
 {
-    public class PlaylistBaseViewModel : ViewModelBase
+    public class PlaylistBaseViewModel : SearchSuggestionsViewModel
     {
         #region FieldsPrivate
         private bool m_hasSelectedItems;

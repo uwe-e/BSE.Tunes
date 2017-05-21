@@ -213,7 +213,7 @@ A registration can only be done by the operator of the server.</value>
   <data name="MainPage_Header.HeaderText" xml:space="preserve">
     <value>Your BSEtunes</value>
   </data>
-  <data name="AlbumsDetailPage_Header.Text" xml:space="preserve">
+  <data name="AlbumsDetailPage_Header.HeaderText" xml:space="preserve">
     <value>Album</value>
   </data>
   <data name="RandomPlayerPanel_Text" xml:space="preserve">
@@ -345,5 +345,8 @@ Please choose a different name for your playlist!</value>
   </data>
   <data name="MenuFlyoutShowAlbum.Text" xml:space="preserve">
     <value>Show Album</value>
+  </data>
+  <data name="AlbumsDetailPage_Header.PlaceholderText" xml:space="preserve">
+    <value>Search</value>
   </data>
 </root>
