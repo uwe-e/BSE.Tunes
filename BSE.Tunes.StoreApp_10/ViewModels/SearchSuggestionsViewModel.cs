@@ -36,11 +36,11 @@ namespace BSE.Tunes.StoreApp.ViewModels
 
         public ICommand QuerySubmittedCommand => m_querySubmittedCommand ?? (m_querySubmittedCommand = new RelayCommand<object>(async (queryText) =>
         {
-            m_hasSuggestionChosen = false;
             if (!string.IsNullOrEmpty(QueryText) && QueryText.Length >= 3)
             {
                 await NavigationService.NavigateAsync(typeof(Views.SearchResultPage), queryText);
             }
+            m_hasSuggestionChosen = false;
         }));
 
         public ICommand SuggestionChosenCommand => m_suggestionChosenCommand ?? (m_suggestionChosenCommand = new RelayCommand(() =>
@@ -60,6 +60,7 @@ namespace BSE.Tunes.StoreApp.ViewModels
                     {
                         SearchPhrase = QueryText
                     });
+
                     foreach (var suggestion in suggestions)
                     {
                         if (!string.IsNullOrEmpty(suggestion))

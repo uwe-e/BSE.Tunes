@@ -113,6 +113,7 @@
     <Compile Include="Controls\Extensions\FlyoutExtensions.cs" />
     <Compile Include="Controls\Extensions\ListViewExtensions.cs" />
     <Compile Include="Collections\IncrementalObservableCollection.cs" />
+    <Compile Include="Controls\ListView\ListView.cs" />
     <Compile Include="Controls\PageHeader\AutoSuggestionPageHeader.cs" />
     <Compile Include="Converters\AutoSuggestQueryParameterConverter.cs" />
     <Compile Include="Converters\Auto​Suggest​Box​Text​ChangedParameterConverter.cs" />
