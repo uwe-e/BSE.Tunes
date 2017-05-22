@@ -70,6 +70,11 @@ namespace BSE.Tunes.StoreApp.ViewModels
         {
             PlayerManager.PlayTrack(((Track)item.Data).Id, PlayerMode.Song);
         }
+
+        public override void NavigateTo()
+        {
+            NavigationService.NavigateAsync(typeof(Views.SearchResultTracksPage), Query);
+        }
         #endregion
 
         #region MethodsPrivate

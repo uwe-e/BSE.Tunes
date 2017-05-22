@@ -13,7 +13,7 @@ using System.Windows.Input;
 
 namespace BSE.Tunes.StoreApp.ViewModels
 {
-    public class FeaturedItemsBaseViewModel : ViewModelBase
+    public class FeaturedItemsBaseViewModel : SearchSuggestionsViewModel
     {
         #region FieldsPrivate
         private ObservableCollection<ListViewItemViewModel> m_items;
