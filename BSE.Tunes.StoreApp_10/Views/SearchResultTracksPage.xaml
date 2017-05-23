@@ -140,6 +140,8 @@
                     </VisualState.StateTriggers>
                     <VisualState.Setters>
                         <Setter Target="pageHeader.Visibility" Value="Visible"/>
+                        <Setter Target="listview.ItemTemplate" Value="{StaticResource narrowListViewItem}"/>
+                        <Setter Target="listview.AlternatingRow" Value="Transparent"/>
                     </VisualState.Setters>
                 </VisualState>
                 <VisualState x:Name="VisualStateNormal">
@@ -148,6 +150,8 @@
                     </VisualState.StateTriggers>
                     <VisualState.Setters>
                         <Setter Target="pageHeader.Visibility" Value="Collapsed"/>
+                        <Setter Target="listview.ItemTemplate" Value="{StaticResource normalListViewItem}"/>
+                        <Setter Target="listview.AlternatingRow" Value="{StaticResource ListViewAlternatingRowBrush}"/>
                     </VisualState.Setters>
                 </VisualState>
                 <VisualState x:Name="VisualStateWide">
@@ -155,8 +159,8 @@
                         <AdaptiveTrigger MinWindowWidth="{StaticResource WideMinWidth}" />
                     </VisualState.StateTriggers>
                     <VisualState.Setters>
-                        <!--  TODO: change properties for wide view  -->
-                        <!--<Setter Target="stateTextBox.Text" Value="Wide Visual State" />-->
+                        <Setter Target="listview.ItemTemplate" Value="{StaticResource normalListViewItem}"/>
+                        <Setter Target="listview.AlternatingRow" Value="{StaticResource ListViewAlternatingRowBrush}"/>
                     </VisualState.Setters>
                 </VisualState>
             </VisualStateGroup>
@@ -166,7 +170,7 @@
                                                PlaceholderText="Search"
                                                QueryIcon="Find"
                                                ButtonIcon="Find"
-                                               HeaderText="Songs"
+                                               HeaderText="{x:Bind ViewModel.HeaderText}"
                                                QueryText="{x:Bind ViewModel.QueryText, Mode=TwoWay}"
                                                ItemsSource="{x:Bind ViewModel.SearchSuggestions}"
                              RelativePanel.AlignLeftWithPanel="True"

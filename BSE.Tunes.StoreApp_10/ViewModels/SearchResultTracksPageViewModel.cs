@@ -3,6 +3,7 @@ using BSE.Tunes.StoreApp.Collections;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -10,13 +11,26 @@ using Windows.UI.Xaml.Navigation;
 
 namespace BSE.Tunes.StoreApp.ViewModels
 {
-    public class SearchResultTracksPageViewModel : SearchResultTracksUserControlViewModel
+    public class SearchResultTracksPageViewModel : SelectableItemsBaseViewModel
     {
         #region FieldsPrivate
         private IncrementalObservableCollection<ListViewItemViewModel> m_tracks;
+        private string m_headerText;
         #endregion
 
         #region Properties
+        public string HeaderText
+        {
+            get
+            {
+                return m_headerText;
+            }
+            set
+            {
+                m_headerText = value;
+                RaisePropertyChanged(() => HeaderText);
+            }
+        }
         public IncrementalObservableCollection<ListViewItemViewModel> Tracks
         {
             get
@@ -34,13 +48,14 @@ namespace BSE.Tunes.StoreApp.ViewModels
         public async override Task OnNavigatedToAsync(object parameter, NavigationMode mode, IDictionary<string, object> state)
         {
             await base.OnNavigatedToAsync(parameter, mode, state);
-            Query = parameter as Query;
-            if (Query != null && !string.IsNullOrEmpty(Query.SearchPhrase))
+            var query = parameter as Query;
+            if (query != null && !string.IsNullOrEmpty(query.SearchPhrase))
             {
-                LoadData();
+                HeaderText = string.Format(CultureInfo.InvariantCulture, "\"{0}\"", query.SearchPhrase);
+                LoadTrackResult(query);
             }
         }
-        public override void LoadData()
+        private void LoadTrackResult(Query query)
         {
             int maximumItems = 100;
             int pageIndex = 0;
@@ -52,21 +67,16 @@ namespace BSE.Tunes.StoreApp.ViewModels
                         Func<Task<Windows.UI.Xaml.Data.LoadMoreItemsResult>> taskFunc = async () =>
                         {
                             int pageSize = (int)count;
-                            //Query query = new Query
-                            //{
-                            //    SearchPhrase = queryString,
-                            //    PageIndex = pageIndex,
-                            //    PageSize = pageSize
-                            //};
-                            Query.PageIndex = pageIndex;
-                            Query.PageSize = pageSize;
 
-                            var tracks = await DataService.GetTrackSearchResults(Query);
+                            query.PageIndex = pageIndex;
+                            query.PageSize = pageSize;
+
+                            var tracks = await DataService.GetTrackSearchResults(query);
                             if (tracks != null)
                             {
                                 foreach (var track in tracks)
                                 {
-                                    this.Items.Add(new GridPanelItemViewModel
+                                    Tracks.Add(new GridPanelItemViewModel
                                     {
                                         Data = track
                                     });
