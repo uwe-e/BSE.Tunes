@@ -20,6 +20,16 @@
     </Page.DataContext>
 
     <Page.Resources>
+
+        <Style x:Name="narrowListViewItemStyle" TargetType="ListViewItem">
+            <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+        </Style>
+
+        <Style x:Name="normalListViewItemStyle" TargetType="ListViewItem">
+            <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+            <Setter Property="Margin" Value="20,0,20,0"/>
+        </Style>
+
         <DataTemplate x:Name="narrowListViewItem">
             <Grid x:Name="listViewItem" Height="48">
                 <Grid.ColumnDefinitions>
@@ -140,8 +150,14 @@
                     </VisualState.StateTriggers>
                     <VisualState.Setters>
                         <Setter Target="pageHeader.Visibility" Value="Visible"/>
+                        <Setter Target="narrowPageTitle.Visibility" Value="Visible"/>
+                        <Setter Target="normalPageHeader.Visibility" Value="Collapsed"/>
+                        <Setter Target="listview.ItemContainerStyle" Value="{StaticResource narrowListViewItemStyle}"/>
                         <Setter Target="listview.ItemTemplate" Value="{StaticResource narrowListViewItem}"/>
                         <Setter Target="listview.AlternatingRow" Value="Transparent"/>
+                        <Setter Target="listview.(RelativePanel.Below)" Value="narrowPageTitle"/>
+                        <Setter Target="pageContent.(RelativePanel.AlignTopWithPanel)" Value="False"/>
+                        <Setter Target="pageContent.(RelativePanel.Below)" Value="pageHeader"/>
                     </VisualState.Setters>
                 </VisualState>
                 <VisualState x:Name="VisualStateNormal">
@@ -150,6 +166,9 @@
                     </VisualState.StateTriggers>
                     <VisualState.Setters>
                         <Setter Target="pageHeader.Visibility" Value="Collapsed"/>
+                        <Setter Target="narrowPageTitle.Visibility" Value="Collapsed"/>
+                        <Setter Target="normalPageHeader.Visibility" Value="Visible"/>
+                        <Setter Target="listview.ItemContainerStyle" Value="{StaticResource normalListViewItemStyle}"/>
                         <Setter Target="listview.ItemTemplate" Value="{StaticResource normalListViewItem}"/>
                         <Setter Target="listview.AlternatingRow" Value="{StaticResource ListViewAlternatingRowBrush}"/>
                     </VisualState.Setters>
@@ -159,6 +178,9 @@
                         <AdaptiveTrigger MinWindowWidth="{StaticResource WideMinWidth}" />
                     </VisualState.StateTriggers>
                     <VisualState.Setters>
+                        <Setter Target="normalPageHeader.Visibility" Value="Visible"/>
+                        <Setter Target="narrowPageTitle.Visibility" Value="Collapsed"/>
+                        <Setter Target="listview.ItemContainerStyle" Value="{StaticResource normalListViewItemStyle}"/>
                         <Setter Target="listview.ItemTemplate" Value="{StaticResource normalListViewItem}"/>
                         <Setter Target="listview.AlternatingRow" Value="{StaticResource ListViewAlternatingRowBrush}"/>
                     </VisualState.Setters>
@@ -173,10 +195,10 @@
                                                HeaderText="{x:Bind ViewModel.HeaderText}"
                                                QueryText="{x:Bind ViewModel.QueryText, Mode=TwoWay}"
                                                ItemsSource="{x:Bind ViewModel.SearchSuggestions}"
-                             RelativePanel.AlignLeftWithPanel="True"
-                             RelativePanel.AlignRightWithPanel="True"
-                             RelativePanel.AlignTopWithPanel="True"
-                             Visibility="Collapsed">
+                                               RelativePanel.AlignLeftWithPanel="True"
+                                               RelativePanel.AlignRightWithPanel="True"
+                                               RelativePanel.AlignTopWithPanel="True"
+                                               Visibility="Collapsed">
             <interactivity:Interaction.Behaviors>
                 <core:EventTriggerBehavior EventName="TextChanged">
                     <core:InvokeCommandAction Command="{x:Bind ViewModel.TextChangedCommand}"/>
@@ -190,19 +212,37 @@
             </interactivity:Interaction.Behaviors>
         </usercontrols:AutoSuggestionPageHeader>
 
-        <usercontrols:ListView x:Name="listview" Margin="0,12,0,0" ItemTemplate="{StaticResource normalListViewItem}"
-                               RelativePanel.AlignLeftWithPanel="True" RelativePanel.AlignRightWithPanel="True" RelativePanel.Below="pageHeader"
-                               ItemsSource="{Binding Tracks}" DataFetchSize="1"
-                               SelectionMode="None" IsItemClickEnabled="True"
-                               controlextensions:ListViewExtensions.Command="{Binding SelectItemCommand}"
-                               AlternatingRow="{StaticResource ListViewAlternatingRowBrush}">
-            <ListView.ItemContainerStyle>
-                <Style TargetType="ListViewItem">
-                    <Setter Property="HorizontalContentAlignment" Value="Stretch" />
-                    <Setter Property="Padding" Value="0"/>
-                </Style>
-            </ListView.ItemContainerStyle>
-        </usercontrols:ListView>
+        <RelativePanel x:Name="pageContent" 
+                       RelativePanel.AlignLeftWithPanel="True"
+                       RelativePanel.AlignRightWithPanel="True"
+                       RelativePanel.AlignTopWithPanel="True"
+                       RelativePanel.AlignBottomWithPanel="True"
+                       RelativePanel.Below="pageHeader">
 
+            <!-- normal header  -->
+            <TextBlock x:Name="normalPageHeader" Text="{x:Bind ViewModel.PageHeaderText}" Style="{StaticResource PageHeaderTextBlockStyle}"
+                       RelativePanel.AlignTopWithPanel="True"
+                       RelativePanel.AlignLeftWithPanel="True"
+                       RelativePanel.AlignRightWithPanel="True"/>
+
+            <TextBlock x:Name="narrowPageTitle" x:Uid="SearchResultTracksPage_PageTitle" Text="Song" Style="{StaticResource PageTitleTextBlockStyle}"
+                       Visibility="Collapsed"
+                       RelativePanel.AlignTopWithPanel="True"
+                       RelativePanel.AlignLeftWithPanel="True"
+                       RelativePanel.AlignRightWithPanel="True"/>
+
+            <usercontrols:ListView x:Name="listview" Padding="0,10,0,0"  ItemTemplate="{StaticResource normalListViewItem}"
+                                   ItemContainerStyle="{StaticResource normalListViewItemStyle}"
+                                   RelativePanel.AlignLeftWithPanel="True"
+                                   RelativePanel.AlignRightWithPanel="True"
+                                   RelativePanel.Below="normalPageHeader"
+                                   ItemsSource="{Binding Tracks}" DataFetchSize="1"
+                                   SelectionMode="None" IsItemClickEnabled="True"
+                                   controlextensions:ListViewExtensions.Command="{Binding SelectItemCommand}"
+                                   AlternatingRow="{StaticResource ListViewAlternatingRowBrush}">
+            </usercontrols:ListView>
+        
+        </RelativePanel>
+    
     </RelativePanel>
 </Page>

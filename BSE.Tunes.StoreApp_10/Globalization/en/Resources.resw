@@ -349,4 +349,13 @@ Please choose a different name for your playlist!</value>
   <data name="AlbumsDetailPage_Header.PlaceholderText" xml:space="preserve">
     <value>Search</value>
   </data>
+  <data name="SearchResultPage_PageHeaderText" xml:space="preserve">
+    <value>Search results for "{0}"</value>
+  </data>
+  <data name="SearchResultTracksPage_PageHeaderText" xml:space="preserve">
+    <value>Search results for "{0}"</value>
+  </data>
+  <data name="SearchResultTracksPage_PageTitle.Text" xml:space="preserve">
+    <value>Songs</value>
+  </data>
 </root>

@@ -16,6 +16,7 @@ namespace BSE.Tunes.StoreApp.ViewModels
         #region FieldsPrivate
         private IncrementalObservableCollection<ListViewItemViewModel> m_tracks;
         private string m_headerText;
+        private string m_pageHeaderText;
         #endregion
 
         #region Properties
@@ -29,6 +30,18 @@ namespace BSE.Tunes.StoreApp.ViewModels
             {
                 m_headerText = value;
                 RaisePropertyChanged(() => HeaderText);
+            }
+        }
+        public string PageHeaderText
+        {
+            get
+            {
+                return m_pageHeaderText;
+            }
+            set
+            {
+                m_pageHeaderText = value;
+                RaisePropertyChanged(() => PageHeaderText);
             }
         }
         public IncrementalObservableCollection<ListViewItemViewModel> Tracks
@@ -52,6 +65,7 @@ namespace BSE.Tunes.StoreApp.ViewModels
             if (query != null && !string.IsNullOrEmpty(query.SearchPhrase))
             {
                 HeaderText = string.Format(CultureInfo.InvariantCulture, "\"{0}\"", query.SearchPhrase);
+                PageHeaderText = string.Format(CultureInfo.CurrentUICulture, ResourceService.GetString("SearchResultTracksPage_PageHeaderText"), query.SearchPhrase);
                 LoadTrackResult(query);
             }
         }

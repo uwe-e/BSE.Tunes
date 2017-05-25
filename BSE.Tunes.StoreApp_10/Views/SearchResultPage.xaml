@@ -24,11 +24,10 @@
                         <AdaptiveTrigger MinWindowWidth="{StaticResource NarrowMinWidth}" />
                     </VisualState.StateTriggers>
                     <VisualState.Setters>
-                        <!--  TODO: change properties for narrow view  -->
                         <Setter Target="pageHeader.Visibility" Value="Visible"/>
-                        <Setter Target="hubContainer.(RelativePanel.AlignTopWithPanel)" Value="False"/>
-                        <Setter Target="hubContainer.(RelativePanel.AlignBottomWithPanel)" Value="True"/>
-                        <Setter Target="hubContainer.(RelativePanel.Below)" Value="pageHeader"/>
+                        <Setter Target="normalPageHeader.Visibility" Value="Collapsed"/>
+                        <Setter Target="pageContent.(RelativePanel.AlignTopWithPanel)" Value="False"/>
+                        <Setter Target="pageContent.(RelativePanel.Below)" Value="pageHeader"/>
                     </VisualState.Setters>
                 </VisualState>
                 <VisualState x:Name="VisualStateNormal">
@@ -36,10 +35,9 @@
                         <AdaptiveTrigger MinWindowWidth="{StaticResource NormalMinWidth}" />
                     </VisualState.StateTriggers>
                     <VisualState.Setters>
-                        <!--  TODO: change properties for normal view  -->
                         <Setter Target="pageHeader.Visibility" Value="Collapsed"/>
-                        <Setter Target="hubContainer.(RelativePanel.AlignTopWithPanel)" Value="True"/>
-                        <Setter Target="hubContainer.(RelativePanel.AlignBottomWithPanel)" Value="False"/>
+                        <Setter Target="normalPageHeader.Visibility" Value="Visible"/>
+                        <Setter Target="hubContainer.(RelativePanel.AlignTopWithPanel)" Value="False"/>
                     </VisualState.Setters>
                 </VisualState>
                 <VisualState x:Name="VisualStateWide">
@@ -47,13 +45,14 @@
                         <AdaptiveTrigger MinWindowWidth="{StaticResource WideMinWidth}" />
                     </VisualState.StateTriggers>
                     <VisualState.Setters>
-                        <!--  TODO: change properties for wide view  -->
+                        <Setter Target="pageHeader.Visibility" Value="Collapsed"/>
+                        <Setter Target="normalPageHeader.Visibility" Value="Visible"/>
                     </VisualState.Setters>
                 </VisualState>
             </VisualStateGroup>
         </VisualStateManager.VisualStateGroups>
 
-        <!--  header  -->
+        <!-- narrow header  -->
         <usercontrols:AutoSuggestionPageHeader x:Name="pageHeader"
                                                x:Uid="SearchResultPage_Header"
                                                PlaceholderText="Search"
@@ -79,27 +78,39 @@
             </Interactivity:Interaction.Behaviors>
         </usercontrols:AutoSuggestionPageHeader>
 
-        <ScrollViewer EntranceNavigationTransitionInfo.IsTargetElement="True"
-                      RelativePanel.AlignBottomWithPanel="True"
-                      RelativePanel.AlignLeftWithPanel="True"
-                      RelativePanel.AlignRightWithPanel="True"
-                      RelativePanel.Below="pageHeader">
-
-            <RelativePanel x:Name="hubContainer" EntranceNavigationTransitionInfo.IsTargetElement="True"
+        <RelativePanel x:Name="pageContent" 
+                       RelativePanel.AlignLeftWithPanel="True"
+                       RelativePanel.AlignRightWithPanel="True"
+                       RelativePanel.AlignTopWithPanel="True"
+                       RelativePanel.AlignBottomWithPanel="True"
+                       RelativePanel.Below="pageHeader">
+            
+            <!-- normal header  -->
+            <TextBlock x:Name="normalPageHeader" Text="{x:Bind ViewModel.PageHeaderText}" Style="{StaticResource PageHeaderTextBlockStyle}"
                        RelativePanel.AlignTopWithPanel="True"
                        RelativePanel.AlignLeftWithPanel="True"
-                       RelativePanel.AlignRightWithPanel="True">
+                       RelativePanel.AlignRightWithPanel="True"/>
 
-                <Grid x:Name="featuredAlbums" RelativePanel.AlignLeftWithPanel="True" RelativePanel.AlignRightWithPanel="True" RelativePanel.AlignTopWithPanel="True" >
-                    <local:SearchResultAlbumsUserControl DataContext="{x:Bind ViewModel.AlbumsResult}"/>
-                </Grid>
+            <ScrollViewer x:Name="hubContainer" 
+                          RelativePanel.AlignBottomWithPanel="True"
+                          RelativePanel.AlignLeftWithPanel="True"
+                          RelativePanel.AlignRightWithPanel="True"
+                          RelativePanel.Below="normalPageHeader">
 
-                <Grid x:Name="featuredTracks" RelativePanel.AlignLeftWithPanel="True" RelativePanel.AlignRightWithPanel="True" RelativePanel.Below="featuredAlbums">
-                    <local:SearchResultTracksUserControlViewModel DataContext="{x:Bind ViewModel.TracksResult}"/>
-                </Grid>
+                <RelativePanel >
 
-            </RelativePanel>
+                    <Grid x:Name="featuredAlbums" RelativePanel.AlignLeftWithPanel="True" RelativePanel.AlignRightWithPanel="True" RelativePanel.AlignTopWithPanel="True" >
+                        <local:SearchResultAlbumsUserControl DataContext="{x:Bind ViewModel.AlbumsResult}"/>
+                    </Grid>
 
-        </ScrollViewer>
+                    <Grid x:Name="featuredTracks" RelativePanel.AlignLeftWithPanel="True" RelativePanel.AlignRightWithPanel="True" RelativePanel.Below="featuredAlbums">
+                        <local:SearchResultTracksUserControlViewModel DataContext="{x:Bind ViewModel.TracksResult}"/>
+                    </Grid>
+
+                </RelativePanel>
+
+            </ScrollViewer>
+
+        </RelativePanel>
     </RelativePanel>
 </Page>

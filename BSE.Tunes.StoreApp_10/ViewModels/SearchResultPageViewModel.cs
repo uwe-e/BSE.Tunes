@@ -16,6 +16,7 @@ namespace BSE.Tunes.StoreApp.ViewModels
         private SearchResultAlbumsUserControlViewModel m_searchResultAlbumsUserControlViewModel;
         private SearchResultTracksUserControlViewModel m_searchResultTrackssUserControlViewModel;
         private string m_headerText;
+        private string m_pageHeaderText;
         #endregion
 
         #region Properties
@@ -29,6 +30,18 @@ namespace BSE.Tunes.StoreApp.ViewModels
             {
                 m_headerText = value;
                 RaisePropertyChanged(() => HeaderText);
+            }
+        }
+        public string PageHeaderText
+        {
+            get
+            {
+                return m_pageHeaderText;
+            }
+            set
+            {
+                m_pageHeaderText = value;
+                RaisePropertyChanged(() => PageHeaderText);
             }
         }
         public SearchResultAlbumsUserControlViewModel AlbumsResult
@@ -64,6 +77,8 @@ namespace BSE.Tunes.StoreApp.ViewModels
             await base.OnNavigatedToAsync(parameter, mode, state);
             QueryText = parameter as string;
             HeaderText = string.Format(CultureInfo.InvariantCulture, "\"{0}\"", QueryText);
+            PageHeaderText = string.Format(CultureInfo.CurrentUICulture, ResourceService.GetString("SearchResultPage_PageHeaderText"), QueryText);
+
             if (!string.IsNullOrEmpty(QueryText))
             {
                 AlbumsResult = new SearchResultAlbumsUserControlViewModel(new Query
