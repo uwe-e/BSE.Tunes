@@ -21,15 +21,6 @@
 
     <Page.Resources>
 
-        <Style x:Name="narrowListViewItemStyle" TargetType="ListViewItem">
-            <Setter Property="HorizontalContentAlignment" Value="Stretch" />
-        </Style>
-
-        <Style x:Name="normalListViewItemStyle" TargetType="ListViewItem">
-            <Setter Property="HorizontalContentAlignment" Value="Stretch" />
-            <Setter Property="Margin" Value="20,0,20,0"/>
-        </Style>
-
         <DataTemplate x:Name="narrowListViewItem">
             <Grid x:Name="listViewItem" Height="48">
                 <Grid.ColumnDefinitions>
@@ -46,7 +37,7 @@
                                         controlextensions:FlyoutExtensions.Parent="{Binding ElementName=listViewItem}"
                                         controlextensions:FlyoutExtensions.OffsetPoint="{Binding OffsetPoint, Mode=TwoWay}">
                             <MenuFlyout.Items>
-                                <MenuFlyoutItem x:Uid="MenuFlyoutPlay" Text="Play" Command="{Binding DataContext.SelectItemCommand, ElementName=listview}" CommandParameter="{Binding}"/>
+                                <MenuFlyoutItem x:Uid="MenuFlyoutPlayAll" Text="Play" Command="{Binding DataContext.PlayAllCommand, ElementName=listview}" CommandParameter="{Binding}"/>
                                 <MenuFlyoutItem x:Uid="MenuFlyoutShowAlbum" Text="Show Album" Command="{Binding DataContext.ShowAlbumCommand, ElementName=listview}" CommandParameter="{Binding}"/>
                             </MenuFlyout.Items>
                         </MenuFlyout>
@@ -119,8 +110,11 @@
                                         controlextensions:FlyoutExtensions.Parent="{Binding ElementName=listViewItem}"
                                         controlextensions:FlyoutExtensions.OffsetPoint="{Binding OffsetPoint, Mode=TwoWay}">
                                 <MenuFlyout.Items>
-                                    <MenuFlyoutItem x:Uid="MenuFlyoutPlay" Text="Play" Command="{Binding DataContext.SelectItemCommand, ElementName=listview}" CommandParameter="{Binding}"/>
+                                    <MenuFlyoutItem x:Uid="MenuFlyoutPlayAll" Text="Play" Command="{Binding DataContext.PlayAllCommand, ElementName=listview}" CommandParameter="{Binding}"/>
                                     <MenuFlyoutItem x:Uid="MenuFlyoutShowAlbum" Text="Show Album" Command="{Binding DataContext.ShowAlbumCommand, ElementName=listview}" CommandParameter="{Binding}"/>
+                                    <MenuFlyoutItem x:Uid="MenuFlyoutSelectItems" Text="Select"
+                                            Command="{Binding DataContext.SelectItemsCommand, ElementName=listview}" CommandParameter="{Binding}"
+                                            Visibility="{Binding DataContext.HasSelectedItems, ElementName=listview, Converter={StaticResource BooleanToVisibilityConverter}, ConverterParameter=true, Mode=TwoWay}"/>
                                 </MenuFlyout.Items>
                             </MenuFlyout>
                         </FlyoutBase.AttachedFlyout>
@@ -140,7 +134,15 @@
             </UserControl>
         </DataTemplate>
     </Page.Resources>
-    
+
+    <Page.BottomAppBar>
+        <CommandBar x:Uid="BottomAppBar" Visibility="{Binding IsCommandBarVisible, Converter={StaticResource BooleanToVisibilityConverter}}">
+            <AppBarButton x:Uid="ButtonClearSelection" Icon="Bullets" Command="{Binding ClearSelectionCommand}"/>
+            <AppBarSeparator/>
+            <AppBarButton x:Uid="ButtonPlaySelection" Icon="Play" Command="{Binding PlaySelectedItemsCommand}"/>
+        </CommandBar>
+    </Page.BottomAppBar>
+
     <RelativePanel Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
         <VisualStateManager.VisualStateGroups>
             <VisualStateGroup x:Name="AdaptiveVisualStateGroup">
@@ -237,8 +239,10 @@
                                    RelativePanel.AlignRightWithPanel="True"
                                    RelativePanel.Below="normalPageHeader"
                                    ItemsSource="{Binding Tracks}" DataFetchSize="1"
-                                   SelectionMode="None" IsItemClickEnabled="True"
+                                   SelectionMode="{Binding HasSelectedItems, Converter={StaticResource BooleanToSelectionModeConverter}}"
+                                   IsItemClickEnabled="{Binding HasSelectedItems, Converter={StaticResource InverseBooleanConverter}}"
                                    controlextensions:ListViewExtensions.Command="{Binding SelectItemCommand}"
+                                   controlextensions:ListViewExtensions.SelectedItems="{Binding SelectedItems, Mode=TwoWay}"
                                    AlternatingRow="{StaticResource ListViewAlternatingRowBrush}">
             </usercontrols:ListView>
         

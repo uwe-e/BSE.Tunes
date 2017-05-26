@@ -1,5 +1,7 @@
 ﻿using BSE.Tunes.Data;
 using BSE.Tunes.StoreApp.Collections;
+using BSE.Tunes.StoreApp.Models;
+using GalaSoft.MvvmLight.Command;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -7,6 +9,7 @@ using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Input;
 using Windows.UI.Xaml.Navigation;
 
 namespace BSE.Tunes.StoreApp.ViewModels
@@ -17,6 +20,7 @@ namespace BSE.Tunes.StoreApp.ViewModels
         private IncrementalObservableCollection<ListViewItemViewModel> m_tracks;
         private string m_headerText;
         private string m_pageHeaderText;
+        private ICommand m_showAlbumCommand;
         #endregion
 
         #region Properties
@@ -56,8 +60,12 @@ namespace BSE.Tunes.StoreApp.ViewModels
                 RaisePropertyChanged(() => Tracks);
             }
         }
+        public ICommand ShowAlbumCommand => m_showAlbumCommand ?? (m_showAlbumCommand = new RelayCommand<GridPanelItemViewModel>(ShowAlbum));
+
+        
         #endregion
 
+        #region MethodsPublic
         public async override Task OnNavigatedToAsync(object parameter, NavigationMode mode, IDictionary<string, object> state)
         {
             await base.OnNavigatedToAsync(parameter, mode, state);
@@ -69,6 +77,35 @@ namespace BSE.Tunes.StoreApp.ViewModels
                 LoadTrackResult(query);
             }
         }
+        public override void SelectItem(GridPanelItemViewModel item)
+        {
+            PlayerManager.PlayTrack(((Track)item.Data).Id, PlayerMode.Song);
+        }
+        public override void PlayAll(GridPanelItemViewModel item)
+        {
+            if (HasSelectedItems)
+            {
+                PlaySelectedItems();
+            }
+            else
+            {
+                PlayerManager.PlayTrack(((Track)item.Data).Id, PlayerMode.Song);
+            }
+        }
+        public override void PlaySelectedItems()
+        {
+            var trackIds = SelectedItems.Cast<GridPanelItemViewModel>().Select(itm => (Track)itm.Data).Select(itm => itm.Id).ToList();
+            if (trackIds != null)
+            {
+                PlayerManager.PlayTracks(
+                    new System.Collections.ObjectModel.ObservableCollection<int>(trackIds),
+                    PlayerMode.CD);
+            }
+            ClearSelection();
+        }
+        #endregion
+
+        #region MethodsPrivate
         private void LoadTrackResult(Query query)
         {
             int maximumItems = 100;
@@ -107,5 +144,10 @@ namespace BSE.Tunes.StoreApp.ViewModels
                     }
                 );
         }
+        private void ShowAlbum(GridPanelItemViewModel item)
+        {
+            NavigationService.NavigateAsync(typeof(Views.AlbumDetailPage), (Album)((Track)item.Data).Album);
+        }
+        #endregion
     }
 }

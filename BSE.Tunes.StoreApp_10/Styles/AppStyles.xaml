@@ -47,6 +47,15 @@
         <Setter Property="Padding" Value="12,10,12,0"/>
     </Style>
 
+    <Style x:Name="narrowListViewItemStyle" TargetType="ListViewItem">
+        <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+    </Style>
+
+    <Style x:Name="normalListViewItemStyle" TargetType="ListViewItem">
+        <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+        <Setter Property="Margin" Value="20,0,20,0"/>
+    </Style>
+
     <!--
         AppBarButtonStyle is used to style a Button (or ToggleButton) for use in an App Bar.  Content will be centered 
         and should fit within the 40 pixel radius glyph provided.  16-point Segoe UI Symbol is used for content text 

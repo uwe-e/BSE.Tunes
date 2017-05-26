@@ -204,7 +204,6 @@
     <Compile Include="ViewModels\AlbumDetailPageViewModel.cs" />
     <Compile Include="ViewModels\FeaturedAlbumsUserControlViewModel.cs" />
     <Compile Include="ViewModels\AlbumsPageViewModel.cs" />
-    <Compile Include="ViewModels\AlbumsViewModel.cs" />
     <Compile Include="ViewModels\FeaturedItemsBaseViewModel.cs" />
     <Compile Include="ViewModels\FeaturedItemsUserControlViewModel.cs" />
     <Compile Include="ViewModels\FeaturedPlaylistsUserControlViewModel.cs" />
