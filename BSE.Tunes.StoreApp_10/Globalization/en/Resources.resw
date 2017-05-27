@@ -207,7 +207,7 @@ A registration can only be done by the operator of the server.</value>
   <data name="Shell_TxtHome.Text" xml:space="preserve">
     <value>Your BSEtunes</value>
   </data>
-  <data name="AlbumsPage_Header.Text" xml:space="preserve">
+  <data name="AlbumsPage_Header.HeaderText" xml:space="preserve">
     <value>Albums</value>
   </data>
   <data name="MainPage_Header.HeaderText" xml:space="preserve">
@@ -362,6 +362,12 @@ Please choose a different name for your playlist!</value>
     <value>Album results for "{0}"</value>
   </data>
   <data name="SearchResultAlbumsPage_PageTitle.Text" xml:space="preserve">
+    <value>Albums</value>
+  </data>
+  <data name="AlbumsPage_Header.PlaceholderText" xml:space="preserve">
+    <value>Search</value>
+  </data>
+  <data name="AlbumsPage_PageHeader.Text" xml:space="preserve">
     <value>Albums</value>
   </data>
 </root>

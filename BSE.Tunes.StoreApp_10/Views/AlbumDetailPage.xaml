@@ -19,6 +19,130 @@
         <vm:AlbumDetailPageViewModel x:Name="ViewModel" />
     </Page.DataContext>
 
+    <Page.Resources>
+        <DataTemplate x:Name="narrowListViewItem">
+            <Grid x:Name="listViewItem" Height="48">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="80"/>
+                </Grid.ColumnDefinitions>
+                <Grid Grid.Column="0">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+                    <FlyoutBase.AttachedFlyout>
+                        <MenuFlyout controlextensions:FlyoutExtensions.IsOpen="{Binding IsOpen, Mode=TwoWay}" 
+                                                controlextensions:FlyoutExtensions.Parent="{Binding ElementName=listViewItem}"
+                                                controlextensions:FlyoutExtensions.OffsetPoint="{Binding OffsetPoint, Mode=TwoWay}">
+                            <MenuFlyout.Items>
+                                <MenuFlyoutItem x:Uid="MenuFlyoutAddTo" Text="Add to"/>
+                                <MenuFlyoutItem x:Uid="MenuFlyoutSelectItems" Text="Select" Command="{Binding DataContext.SelectItemsCommand, ElementName=listview}" CommandParameter="{Binding}"
+                                                            Visibility="{Binding DataContext.HasSelectedItems, ElementName=listview, Converter={StaticResource BooleanToVisibilityConverter}, ConverterParameter=true, Mode=TwoWay}"/>
+                                <MenuFlyoutItem x:Uid="MenuFlyoutSelectAllItems" Text="Select All" Command="{Binding DataContext.SelectAllItemsCommand, ElementName=listview}" CommandParameter="{Binding}"
+                                            Visibility="{Binding DataContext.AllItemsSelectable, ElementName=listview, Converter={StaticResource BooleanToVisibilityConverter}, Mode=TwoWay}"/>
+                                <MenuFlyoutItem x:Uid="MenuFlyoutUnSelectAll" Text="Unselect All" Command="{Binding DataContext.ClearSelectionCommand, ElementName=listview}" CommandParameter="{Binding}"
+                                            Visibility="{Binding DataContext.AllItemsSelected, ElementName=listview, Converter={StaticResource BooleanToVisibilityConverter}, Mode=TwoWay}"/>
+                            </MenuFlyout.Items>
+                        </MenuFlyout>
+                    </FlyoutBase.AttachedFlyout>
+                    <TextBlock TextTrimming="WordEllipsis" TextWrapping="NoWrap"
+                                       VerticalAlignment="Center" Grid.Row="0">
+                                <Run Text="{Binding Data.TrackNumber}"/>
+                                <Run Text=". "/>
+                                <Run Text="{Binding Data.Name}" />
+                    </TextBlock>
+                    <TextBlock Text="{Binding DataContext.Album.Artist.Name, ElementName=listview}"
+                               Style="{StaticResource CaptionTextBlockStyle}"
+                                       TextTrimming="WordEllipsis" 
+                                       VerticalAlignment="Center" Grid.Row="1"/>
+                </Grid>
+                <TextBlock Text="{Binding Data.Duration}"
+                           Margin="10,0,0,0" VerticalAlignment="Center" HorizontalAlignment="Right" Grid.Column="1" />
+                <interactivity:Interaction.Behaviors>
+                    <core:EventTriggerBehavior EventName="RightTapped">
+                        <core:InvokeCommandAction Command="{Binding DataContext.ShowFlyoutCommand, ElementName=listview}"
+                                                  InputConverter="{StaticResource RightTappedToPointConverter}"
+                                                  InputConverterParameter="{Binding ElementName=listViewItem}"/>
+                    </core:EventTriggerBehavior>
+                </interactivity:Interaction.Behaviors>
+            </Grid>
+        </DataTemplate>
+        
+        <DataTemplate x:Name="normalListViewItem">
+            <UserControl>
+                <Grid  x:Name="listViewItem" Height="48">
+                    <VisualStateManager.VisualStateGroups>
+                        <VisualStateGroup x:Name="AdaptiveVisualStateGroup">
+                            <VisualState x:Name="VisualStateNarrow">
+                                <VisualState.StateTriggers>
+                                    <AdaptiveTrigger MinWindowWidth="{StaticResource NarrowMinWidth}" />
+                                </VisualState.StateTriggers>
+                                <VisualState.Setters>
+                                    <Setter Target="listViewItem.ColumnDefinitions[2].MinWidth" Value="0"/>
+                                    <Setter Target="listViewItem.ColumnDefinitions[2].Width" Value="0"/>
+                                </VisualState.Setters>
+                            </VisualState>
+                            <VisualState x:Name="VisualStateNormal">
+                                <VisualState.StateTriggers>
+                                    <AdaptiveTrigger MinWindowWidth="{StaticResource NormalMinWidth}" />
+                                </VisualState.StateTriggers>
+                                <VisualState.Setters>
+                                    <Setter Target="listViewItem.ColumnDefinitions[2].MinWidth" Value="0"/>
+                                    <Setter Target="listViewItem.ColumnDefinitions[2].Width" Value="0"/>
+                                </VisualState.Setters>
+                            </VisualState>
+                            <VisualState x:Name="VisualStateWide">
+                                <VisualState.StateTriggers>
+                                    <AdaptiveTrigger MinWindowWidth="{StaticResource WideMinWidth}" />
+                                </VisualState.StateTriggers>
+                                <VisualState.Setters>
+                                    <Setter Target="listViewItem.ColumnDefinitions[2].MinWidth"  Value="300"/>
+                                </VisualState.Setters>
+                            </VisualState>
+                        </VisualStateGroup>
+                    </VisualStateManager.VisualStateGroups>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="40"/>
+                        <ColumnDefinition MinWidth="300" MaxWidth="400"/>
+                        <ColumnDefinition MinWidth="300" MaxWidth="400"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <FlyoutBase.AttachedFlyout>
+                        <MenuFlyout controlextensions:FlyoutExtensions.IsOpen="{Binding IsOpen, Mode=TwoWay}" 
+                                                controlextensions:FlyoutExtensions.Parent="{Binding ElementName=listViewItem}"
+                                                controlextensions:FlyoutExtensions.OffsetPoint="{Binding OffsetPoint, Mode=TwoWay}">
+                            <MenuFlyout.Items>
+                                <MenuFlyoutItem x:Uid="MenuFlyoutAddTo" Text="Add to"/>
+                                <MenuFlyoutItem x:Uid="MenuFlyoutSelectItems" Text="Select" Command="{Binding DataContext.SelectItemsCommand, ElementName=listview}" CommandParameter="{Binding}"
+                                                            Visibility="{Binding DataContext.HasSelectedItems, ElementName=listview, Converter={StaticResource BooleanToVisibilityConverter}, ConverterParameter=true, Mode=TwoWay}"/>
+                                <MenuFlyoutItem x:Uid="MenuFlyoutSelectAllItems" Text="Select All" Command="{Binding DataContext.SelectAllItemsCommand, ElementName=listview}" CommandParameter="{Binding}"
+                                            Visibility="{Binding DataContext.AllItemsSelectable, ElementName=listview, Converter={StaticResource BooleanToVisibilityConverter}, Mode=TwoWay}"/>
+                                <MenuFlyoutItem x:Uid="MenuFlyoutUnSelectAll" Text="Unselect All" Command="{Binding DataContext.ClearSelectionCommand, ElementName=listview}" CommandParameter="{Binding}"
+                                            Visibility="{Binding DataContext.AllItemsSelected, ElementName=listview, Converter={StaticResource BooleanToVisibilityConverter}, Mode=TwoWay}"/>
+                            </MenuFlyout.Items>
+                        </MenuFlyout>
+                    </FlyoutBase.AttachedFlyout>
+                    <TextBlock Text="{Binding Data.TrackNumber}" VerticalAlignment="Center" HorizontalAlignment="Right" Grid.Column="0"/>
+                    <TextBlock Text="{Binding Data.Name}"
+                                       Margin="10,0,0,0" TextTrimming="WordEllipsis" 
+                                       VerticalAlignment="Center" Grid.Column="1"/>
+                    <TextBlock Text="{Binding DataContext.Album.Artist.Name, ElementName=listview}" 
+                                       Margin="10,0,0,0" TextTrimming="WordEllipsis" VerticalAlignment="Center" Grid.Column="2"/>
+                    <TextBlock Text="{Binding Data.Duration}" 
+                                       Margin="10,0,0,0" VerticalAlignment="Center" TextAlignment="Right" Grid.Column="3"/>
+                    <interactivity:Interaction.Behaviors>
+                        <core:EventTriggerBehavior EventName="RightTapped">
+                            <core:InvokeCommandAction Command="{Binding DataContext.ShowFlyoutCommand, ElementName=listview}"
+                                                                  InputConverter="{StaticResource RightTappedToPointConverter}"
+                                                                  InputConverterParameter="{Binding ElementName=listViewItem}"/>
+                        </core:EventTriggerBehavior>
+                    </interactivity:Interaction.Behaviors>
+                </Grid>
+            </UserControl>
+        </DataTemplate>
+    </Page.Resources>
+    
     <Page.BottomAppBar>
         <CommandBar x:Uid="BottomAppBar" Visibility="{Binding IsCommandBarVisible, Converter={StaticResource BooleanToVisibilityConverter}}">
             <AppBarButton x:Uid="ButtonClearSelection" Icon="Bullets" Command="{Binding ClearSelectionCommand}"/>
@@ -69,6 +193,9 @@
                         <Setter Target="infoSubTitle.HorizontalAlignment" Value="Center"/>
                         <Setter Target="albumGenre.HorizontalAlignment" Value="Center"/>
                         <Setter Target="infoAction.HorizontalAlignment" Value="Center"/>
+                        <Setter Target="listview.ItemContainerStyle" Value="{StaticResource narrowListViewItemStyle}"/>
+                        <Setter Target="listview.ItemTemplate" Value="{StaticResource narrowListViewItem}"/>
+                        <Setter Target="listview.AlternatingRow" Value="Transparent"/>
                     </VisualState.Setters>
                 </VisualState>
                 <VisualState x:Name="VisualStateNormal">
@@ -77,6 +204,9 @@
                     </VisualState.StateTriggers>
                     <VisualState.Setters>
                         <Setter Target="pageHeader.Visibility" Value="Collapsed"/>
+                        <Setter Target="listview.ItemContainerStyle" Value="{StaticResource normalListViewItemStyle}"/>
+                        <Setter Target="listview.ItemTemplate" Value="{StaticResource normalListViewItem}"/>
+                        <Setter Target="listview.AlternatingRow" Value="{StaticResource ListViewAlternatingRowBrush}"/>
                     </VisualState.Setters>
                 </VisualState>
                 <VisualState x:Name="VisualStateWide">
@@ -84,8 +214,9 @@
                         <AdaptiveTrigger MinWindowWidth="{StaticResource WideMinWidth}" />
                     </VisualState.StateTriggers>
                     <VisualState.Setters>
-                        <!--  TODO: change properties for wide view  -->
-                        <!--<Setter Target="stateTextBox.Text" Value="Wide Visual State" />-->
+                        <Setter Target="listview.ItemContainerStyle" Value="{StaticResource normalListViewItemStyle}"/>
+                        <Setter Target="listview.ItemTemplate" Value="{StaticResource normalListViewItem}"/>
+                        <Setter Target="listview.AlternatingRow" Value="{StaticResource ListViewAlternatingRowBrush}"/>
                     </VisualState.Setters>
                 </VisualState>
             </VisualStateGroup>
@@ -158,7 +289,7 @@
                                     </Grid>
                                 </HyperlinkButton>
 
-                                <HyperlinkButton x:Name="buttonAddAllTo" Command="{Binding OpenAllToPlaylistCommand}" VerticalContentAlignment="Center" Foreground="{ThemeResource SystemBaseHighColor}">
+                                <HyperlinkButton x:Name="buttonAddAllTo" Padding="10,0,0,0" Command="{Binding OpenAllToPlaylistCommand}" VerticalContentAlignment="Center" Foreground="{ThemeResource SystemBaseHighColor}">
                                     <Grid VerticalAlignment="Center">
                                         <Grid.ColumnDefinitions>
                                             <ColumnDefinition Width="Auto"/>
@@ -191,62 +322,18 @@
                         </Grid>
                     </StackPanel>
                 </Grid>
-                <Grid Padding="20,10,20,10" RelativePanel.AlignLeftWithPanel="True" RelativePanel.AlignRightWithPanel="True" RelativePanel.Below="infoPart">
-                    <usercontrols:ListView x:Name="listview" Margin="0,12,0,0" 
-                          ItemsSource="{Binding Items}"
-                          SelectionMode="{Binding HasSelectedItems, Converter={StaticResource BooleanToSelectionModeConverter}}"
-                          IsItemClickEnabled="{Binding HasSelectedItems, Converter={StaticResource InverseBooleanConverter}}"
-                          controlextensions:ListViewExtensions.Command="{Binding PlayTrackCommand}" 
-                          controlextensions:ListViewExtensions.SelectedItems="{Binding SelectedItems, Mode=TwoWay}" AlternatingRow="{StaticResource ListViewAlternatingRowBrush}">
-                        <ListView.ItemTemplate>
-                            <DataTemplate>
-                                <Grid  x:Name="listViewItem" Height="48" Margin="0">
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="40"/>
-                                        <ColumnDefinition MinWidth="300" MaxWidth="400"/>
-                                        <ColumnDefinition MinWidth="300" MaxWidth="400"/>
-                                        <ColumnDefinition Width="*"/>
-                                    </Grid.ColumnDefinitions>
-                                    <FlyoutBase.AttachedFlyout>
-                                        <MenuFlyout controlextensions:FlyoutExtensions.IsOpen="{Binding IsOpen, Mode=TwoWay}" 
-                                                controlextensions:FlyoutExtensions.Parent="{Binding ElementName=listViewItem}"
-                                                controlextensions:FlyoutExtensions.OffsetPoint="{Binding OffsetPoint, Mode=TwoWay}">
-                                            <MenuFlyout.Items>
-                                                <MenuFlyoutItem x:Uid="MenuFlyoutAddTo" Text="Add to"/>
-                                                <MenuFlyoutItem x:Uid="MenuFlyoutSelectItems" Text="Select" Command="{Binding DataContext.SelectItemsCommand, ElementName=listview}" CommandParameter="{Binding}"
-                                                            Visibility="{Binding DataContext.HasSelectedItems, ElementName=listview, Converter={StaticResource BooleanToVisibilityConverter}, ConverterParameter=true, Mode=TwoWay}"/>
-                                                <MenuFlyoutItem x:Uid="MenuFlyoutSelectAllItems" Text="Select All" Command="{Binding DataContext.SelectAllItemsCommand, ElementName=listview}" CommandParameter="{Binding}"
-                                            Visibility="{Binding DataContext.AllItemsSelectable, ElementName=listview, Converter={StaticResource BooleanToVisibilityConverter}, Mode=TwoWay}"/>
-                                                <MenuFlyoutItem x:Uid="MenuFlyoutUnSelectAll" Text="Unselect All" Command="{Binding DataContext.ClearSelectionCommand, ElementName=listview}" CommandParameter="{Binding}"
-                                            Visibility="{Binding DataContext.AllItemsSelected, ElementName=listview, Converter={StaticResource BooleanToVisibilityConverter}, Mode=TwoWay}"/>
-                                            </MenuFlyout.Items>
-                                        </MenuFlyout>
-                                    </FlyoutBase.AttachedFlyout>
-                                    <TextBlock Text="{Binding Data.TrackNumber}" VerticalAlignment="Center" HorizontalAlignment="Right" Grid.Column="0"/>
-                                    <TextBlock Text="{Binding Data.Name}"
-                                       Margin="10,0,0,0" TextTrimming="WordEllipsis" 
-                                       VerticalAlignment="Center" Grid.Column="1"/>
-                                    <TextBlock Text="{Binding DataContext.Album.Title, ElementName=listview}" 
-                                       Margin="10,0,0,0" TextTrimming="WordEllipsis" VerticalAlignment="Center" Grid.Column="2"/>
-                                    <TextBlock Text="{Binding Data.Duration}" 
-                                       Margin="10,0,0,0" VerticalAlignment="Center" TextAlignment="Right" Grid.Column="3"/>
-                                    <interactivity:Interaction.Behaviors>
-                                        <core:EventTriggerBehavior EventName="RightTapped">
-                                            <core:InvokeCommandAction Command="{Binding DataContext.ShowFlyoutCommand, ElementName=listview}"
-                                                                  InputConverter="{StaticResource RightTappedToPointConverter}"
-                                                                  InputConverterParameter="{Binding ElementName=listViewItem}"/>
-                                        </core:EventTriggerBehavior>
-                                    </interactivity:Interaction.Behaviors>
-                                </Grid>
+                <Grid RelativePanel.AlignLeftWithPanel="True" RelativePanel.AlignRightWithPanel="True" RelativePanel.Below="infoPart">
 
-                            </DataTemplate>
-                        </ListView.ItemTemplate>
-                        <ListView.ItemContainerStyle>
-                            <Style TargetType="ListViewItem">
-                                <Setter Property="HorizontalContentAlignment" Value="Stretch" />
-                            </Style>
-                        </ListView.ItemContainerStyle>
-                    </usercontrols:ListView>
+                    <usercontrols:ListView x:Name="listview" Margin="0,12,0,0"
+                                           ItemTemplate="{StaticResource normalListViewItem}"
+                                           ItemContainerStyle="{StaticResource normalListViewItemStyle}"
+                                           AlternatingRow="{StaticResource ListViewAlternatingRowBrush}"
+                                           ItemsSource="{Binding Items}"
+                                           SelectionMode="{Binding HasSelectedItems, Converter={StaticResource BooleanToSelectionModeConverter}}"
+                                           IsItemClickEnabled="{Binding HasSelectedItems, Converter={StaticResource InverseBooleanConverter}}"
+                                           controlextensions:ListViewExtensions.Command="{Binding PlayTrackCommand}" 
+                                           controlextensions:ListViewExtensions.SelectedItems="{Binding SelectedItems, Mode=TwoWay}"/>
+
                 </Grid>
             </RelativePanel>
         </ScrollViewer>

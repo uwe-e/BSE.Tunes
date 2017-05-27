@@ -19,9 +19,35 @@ namespace BSE.Tunes.StoreApp.ViewModels
     {
         #region FieldsPrivate
         private IncrementalObservableCollection<ListViewItemViewModel> m_albums;
+        private string m_headerText;
+        private string m_pageHeaderText;
         #endregion
 
         #region Properties
+        public string HeaderText
+        {
+            get
+            {
+                return m_headerText;
+            }
+            set
+            {
+                m_headerText = value;
+                RaisePropertyChanged(() => HeaderText);
+            }
+        }
+        public string PageHeaderText
+        {
+            get
+            {
+                return m_pageHeaderText;
+            }
+            set
+            {
+                m_pageHeaderText = value;
+                RaisePropertyChanged(() => PageHeaderText);
+            }
+        }
         public IncrementalObservableCollection<ListViewItemViewModel> Albums
         {
             get

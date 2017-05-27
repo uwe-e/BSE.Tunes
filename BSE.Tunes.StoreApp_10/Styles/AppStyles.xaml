@@ -58,7 +58,7 @@
 
     <Style x:Key="NormalGridViewItem" TargetType="GridViewItem">
         <Setter Property="Margin" Value="0,0,12,0"/>
-        <Setter Property="Padding" Value="0" />
+        <Setter Property="Padding" Value="0,0,0,24" />
         <Setter Property="MaxWidth" Value="142" />
         <Setter Property="VerticalAlignment" Value="Top"/>
     </Style>

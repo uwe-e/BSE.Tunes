@@ -8,6 +8,7 @@
     xmlns:vm="using:BSE.Tunes.StoreApp.ViewModels"
     xmlns:interactivity="using:Microsoft.Xaml.Interactivity"
     xmlns:core="using:Microsoft.Xaml.Interactions.Core"
+    xmlns:usercontrols="using:BSE.Tunes.StoreApp.Controls"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d">
@@ -32,8 +33,9 @@
                         <AdaptiveTrigger MinWindowWidth="{StaticResource NarrowMinWidth}" />
                     </VisualState.StateTriggers>
                     <VisualState.Setters>
-                        <Setter Target="pageHeader.Visibility" Value="Visible"/>
-                        <!--<Setter Target="listView.Visibility" Value="Visible" />-->
+                        <Setter Target="listView.(RelativePanel.Below)" Value="narrowPageTitle"/>
+                        <Setter Target="pageContent.(RelativePanel.AlignTopWithPanel)" Value="False"/>
+                        <Setter Target="pageContent.(RelativePanel.Below)" Value="pageHeader"/>
                     </VisualState.Setters>
                 </VisualState>
                 <VisualState x:Name="VisualStateNormal">
@@ -41,8 +43,9 @@
                         <AdaptiveTrigger MinWindowWidth="{StaticResource NormalMinWidth}" />
                     </VisualState.StateTriggers>
                     <VisualState.Setters>
-                        <Setter Target="pageHeader.Visibility" Value="Collapsed"/>
-                        <!--<Setter Target="listView.Visibility" Value="Collapsed" />-->
+                        <Setter Target="listView.(RelativePanel.Below)" Value="narrowPageTitle"/>
+                        <Setter Target="pageContent.(RelativePanel.AlignTopWithPanel)" Value="False"/>
+                        <Setter Target="pageContent.(RelativePanel.Below)" Value="pageHeader"/>
                     </VisualState.Setters>
                 </VisualState>
                 <VisualState x:Name="VisualStateWide">
@@ -50,27 +53,60 @@
                         <AdaptiveTrigger MinWindowWidth="{StaticResource WideMinWidth}" />
                     </VisualState.StateTriggers>
                     <VisualState.Setters>
-                        <!--  TODO: change properties for wide view  -->
-                        <!--<Setter Target="stateTextBox.Text" Value="Wide Visual State" />-->
                     </VisualState.Setters>
                 </VisualState>
             </VisualStateGroup>
         </VisualStateManager.VisualStateGroups>
         <!--  header  -->
-        <controls:PageHeader x:Name="pageHeader"
-                             x:Uid="AlbumsPage_Header"
-                             Frame="{x:Bind Frame}"
-                             RelativePanel.AlignLeftWithPanel="True"
-                             RelativePanel.AlignRightWithPanel="True"
-                             RelativePanel.AlignTopWithPanel="True"
-                             Text="Albums"
-                             Visibility="Collapsed"/>
+        <usercontrols:AutoSuggestionPageHeader x:Name="pageHeader"
+                                               x:Uid="AlbumsPage_Header"
+                                               PlaceholderText="Search"
+                                               QueryIcon="Find"
+                                               ButtonIcon="Find"
+                                               QueryText="{x:Bind ViewModel.QueryText, Mode=TwoWay}"
+                                               ItemsSource="{x:Bind ViewModel.SearchSuggestions}"
+                                               RelativePanel.AlignLeftWithPanel="True"
+                                               RelativePanel.AlignRightWithPanel="True"
+                                               RelativePanel.AlignTopWithPanel="True"
+                                               Visibility="Visible">
+            <interactivity:Interaction.Behaviors>
+                <core:EventTriggerBehavior EventName="TextChanged">
+                    <core:InvokeCommandAction Command="{x:Bind ViewModel.TextChangedCommand}"/>
+                </core:EventTriggerBehavior>
+                <core:EventTriggerBehavior EventName="QuerySubmitted">
+                    <core:InvokeCommandAction Command="{x:Bind ViewModel.QuerySubmittedCommand}" InputConverter="{StaticResource AutoSuggestQueryParameterConverter}" />
+                </core:EventTriggerBehavior>
+                <core:EventTriggerBehavior EventName="SuggestionChosen">
+                    <core:InvokeCommandAction Command="{x:Bind ViewModel.SuggestionChosenCommand}"/>
+                </core:EventTriggerBehavior>
+            </interactivity:Interaction.Behaviors>
+        </usercontrols:AutoSuggestionPageHeader>
 
-        <Grid Margin="0" RelativePanel.AlignBottomWithPanel="True"
+        <RelativePanel x:Name="pageContent" 
+                       RelativePanel.AlignLeftWithPanel="True"
+                       RelativePanel.AlignRightWithPanel="True"
+                       RelativePanel.AlignTopWithPanel="True"
+                       RelativePanel.AlignBottomWithPanel="True"
+                       RelativePanel.Below="pageHeader">
+
+            <!-- normal header  -->
+            <TextBlock x:Name="normalPageHeader" x:Uid="AlbumsPage_PageHeader" Text="Albums" Style="{StaticResource PageHeaderTextBlockStyle}"
+                       Visibility="Collapsed"
+                       RelativePanel.AlignTopWithPanel="True"
+                       RelativePanel.AlignLeftWithPanel="True"
+                       RelativePanel.AlignRightWithPanel="True"/>
+
+            <TextBlock x:Name="narrowPageTitle" x:Uid="SearchResultAlbumsPage_PageTitle" Text="Song" Style="{StaticResource PageTitleTextBlockStyle}"
+                       Visibility="Collapsed"
+                       RelativePanel.AlignTopWithPanel="True"
+                       RelativePanel.AlignLeftWithPanel="True"
+                       RelativePanel.AlignRightWithPanel="True"/>
+
+            <ListView x:Name="listView"
                       RelativePanel.AlignLeftWithPanel="True"
                       RelativePanel.AlignRightWithPanel="True"
-                      RelativePanel.Below="pageHeader">
-            <ListView x:Name="listView" ItemsSource="{Binding Albums}" DataFetchSize="1"
+                      RelativePanel.Below="normalPageHeader"
+                      ItemsSource="{Binding Albums}" DataFetchSize="1"
                       SelectionMode="{Binding HasSelectedItems, Converter={StaticResource BooleanToSelectionModeConverter}}"
                       IsItemClickEnabled="{Binding HasSelectedItems, Converter={StaticResource InverseBooleanConverter}}"
                       controlextensions:ListViewExtensions.Command="{Binding SelectItemCommand}"
@@ -116,7 +152,7 @@
                     </DataTemplate>
                 </ListView.ItemTemplate>
             </ListView>
-        </Grid>
+        </RelativePanel>
 
     </RelativePanel>
 </Page>
