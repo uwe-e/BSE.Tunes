@@ -358,4 +358,10 @@ Please choose a different name for your playlist!</value>
   <data name="SearchResultTracksPage_PageTitle.Text" xml:space="preserve">
     <value>Songs</value>
   </data>
+  <data name="SearchResultAlbumsPage_PageHeaderText" xml:space="preserve">
+    <value>Album results for "{0}"</value>
+  </data>
+  <data name="SearchResultAlbumsPage_PageTitle.Text" xml:space="preserve">
+    <value>Albums</value>
+  </data>
 </root>

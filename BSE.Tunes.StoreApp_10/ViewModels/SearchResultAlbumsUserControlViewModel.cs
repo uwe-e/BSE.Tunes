@@ -80,5 +80,9 @@ namespace BSE.Tunes.StoreApp.ViewModels
                 }
             }
         }
+        public override void NavigateTo()
+        {
+            NavigationService.NavigateAsync(typeof(Views.SearchResultAlbumsPage), Query);
+        }
     }
 }

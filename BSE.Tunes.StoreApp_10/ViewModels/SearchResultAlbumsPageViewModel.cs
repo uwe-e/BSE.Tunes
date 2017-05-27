@@ -1,10 +1,8 @@
 ﻿using BSE.Tunes.Data;
 using BSE.Tunes.StoreApp.Collections;
 using BSE.Tunes.StoreApp.Models;
-using GalaSoft.MvvmLight.Command;
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Globalization;
 using System.Linq;
 using System.Text;
@@ -14,13 +12,12 @@ using Windows.UI.Xaml.Navigation;
 
 namespace BSE.Tunes.StoreApp.ViewModels
 {
-    public class SearchResultTracksPageViewModel : SelectableItemsBaseViewModel
+    public class SearchResultAlbumsPageViewModel : SelectableItemsBaseViewModel
     {
         #region FieldsPrivate
-        private IncrementalObservableCollection<ListViewItemViewModel> m_tracks;
+        private IncrementalObservableCollection<ListViewItemViewModel> m_albums;
         private string m_headerText;
         private string m_pageHeaderText;
-        private ICommand m_showAlbumCommand;
         #endregion
 
         #region Properties
@@ -48,21 +45,18 @@ namespace BSE.Tunes.StoreApp.ViewModels
                 RaisePropertyChanged(() => PageHeaderText);
             }
         }
-        public IncrementalObservableCollection<ListViewItemViewModel> Tracks
+        public IncrementalObservableCollection<ListViewItemViewModel> Albums
         {
             get
             {
-                return this.m_tracks;
+                return this.m_albums;
             }
             private set
             {
-                this.m_tracks = value;
-                RaisePropertyChanged(() => Tracks);
+                this.m_albums = value;
+                RaisePropertyChanged(() => Albums);
             }
         }
-        public ICommand ShowAlbumCommand => m_showAlbumCommand ?? (m_showAlbumCommand = new RelayCommand<GridPanelItemViewModel>(ShowAlbum));
-
-        
         #endregion
 
         #region MethodsPublic
@@ -73,15 +67,15 @@ namespace BSE.Tunes.StoreApp.ViewModels
             if (query != null && !string.IsNullOrEmpty(query.SearchPhrase))
             {
                 HeaderText = string.Format(CultureInfo.InvariantCulture, "\"{0}\"", query.SearchPhrase);
-                PageHeaderText = string.Format(CultureInfo.CurrentUICulture, ResourceService.GetString("SearchResultTracksPage_PageHeaderText"), query.SearchPhrase);
+                PageHeaderText = string.Format(CultureInfo.CurrentUICulture, ResourceService.GetString("SearchResultAlbumsPage_PageHeaderText"), query.SearchPhrase);
                 LoadQueryResult(query);
             }
         }
         public override void SelectItem(GridPanelItemViewModel item)
         {
-            PlayerManager.PlayTrack(((Track)item.Data).Id, PlayerMode.Song);
+            NavigationService.NavigateAsync(typeof(Views.AlbumDetailPage), item.Data);
         }
-        public override void PlayAll(GridPanelItemViewModel item)
+        public async override void PlayAll(GridPanelItemViewModel item)
         {
             if (HasSelectedItems)
             {
@@ -89,17 +83,35 @@ namespace BSE.Tunes.StoreApp.ViewModels
             }
             else
             {
-                PlayerManager.PlayTrack(((Track)item.Data).Id, PlayerMode.Song);
+                Album album = item.Data as Album;
+                if (album != null)
+                {
+                    album = await DataService.GetAlbumById(album.Id);
+                    if (album.Tracks != null)
+                    {
+                        var trackIds = album.Tracks.Select(track => track.Id);
+                        if (trackIds != null)
+                        {
+                            PlayerManager.PlayTracks(
+                                new System.Collections.ObjectModel.ObservableCollection<int>(trackIds),
+                                PlayerMode.CD);
+                        }
+                    }
+                }
             }
         }
-        public override void PlaySelectedItems()
+        public async override void PlaySelectedItems()
         {
-            var trackIds = SelectedItems.Cast<GridPanelItemViewModel>().Select(itm => (Track)itm.Data).Select(itm => itm.Id).ToList();
-            if (trackIds != null)
+            var albumIds = SelectedItems.Cast<GridPanelItemViewModel>().Select(itm => (Album)itm.Data).Select(itm => itm.Id).ToList();
+            if (albumIds != null)
             {
-                PlayerManager.PlayTracks(
-                    new System.Collections.ObjectModel.ObservableCollection<int>(trackIds),
-                    PlayerMode.CD);
+                var entryIds = await DataService.GetTrackIdsByAlbumIds(albumIds);
+                if (entryIds != null)
+                {
+                    PlayerManager.PlayTracks(
+                        new System.Collections.ObjectModel.ObservableCollection<int>(entryIds),
+                        PlayerMode.CD);
+                }
             }
             ClearSelection();
         }
@@ -111,7 +123,7 @@ namespace BSE.Tunes.StoreApp.ViewModels
             int maximumItems = 100;
             int pageIndex = 0;
 
-            this.Tracks = new IncrementalObservableCollection<ListViewItemViewModel>(
+            Albums = new IncrementalObservableCollection<ListViewItemViewModel>(
                     (uint)maximumItems,
                     (uint count) =>
                     {
@@ -122,14 +134,17 @@ namespace BSE.Tunes.StoreApp.ViewModels
                             query.PageIndex = pageIndex;
                             query.PageSize = pageSize;
 
-                            var tracks = await DataService.GetTrackSearchResults(query);
-                            if (tracks != null)
+                            var albums = await DataService.GetAlbumSearchResults(query);
+                            if (albums != null)
                             {
-                                foreach (var track in tracks)
+                                foreach (var album in albums)
                                 {
-                                    Tracks.Add(new GridPanelItemViewModel
+                                    Albums.Add(new GridPanelItemViewModel
                                     {
-                                        Data = track
+                                        Title = album.Title,
+                                        Subtitle = album.Artist.Name,
+                                        ImageSource = DataService?.GetImage(album.AlbumId, true),
+                                        Data = album
                                     });
                                 }
                                 pageIndex += pageSize;
@@ -143,10 +158,6 @@ namespace BSE.Tunes.StoreApp.ViewModels
                         return loadMoreItemsTask.AsAsyncOperation<Windows.UI.Xaml.Data.LoadMoreItemsResult>();
                     }
                 );
-        }
-        private void ShowAlbum(GridPanelItemViewModel item)
-        {
-            NavigationService.NavigateAsync(typeof(Views.AlbumDetailPage), (Album)((Track)item.Data).Album);
         }
         #endregion
     }

@@ -18,12 +18,7 @@
     </UserControl.DataContext>
 
     <UserControl.Resources>
-        <Style x:Key="NormalView" TargetType="GridViewItem">
-            <Setter Property="Margin" Value="0,0,12,0"/>
-            <Setter Property="Padding" Value="0" />
-            <Setter Property="MaxWidth" Value="142" />
-            <Setter Property="VerticalAlignment" Value="Top"/>
-        </Style>
+        
         <Style x:Key="NarrowView" TargetType="GridViewItem">
             <Setter Property="Margin" Value="0,0,12,0"/>
             <Setter Property="Padding" Value="0" />
@@ -53,9 +48,9 @@
                         </MenuFlyout.Items>
                     </MenuFlyout>
                 </FlyoutBase.AttachedFlyout>
-                <Image x:Name="image" Stretch="UniformToFill" Source="{Binding Path=ImageSource}" Height="150" Grid.Row="0"/>
-                <TextBlock Grid.Row="1" Text="{Binding Data.Title}" TextWrapping="WrapWholeWords" TextTrimming="WordEllipsis" MaxLines="2" x:Name="title" FontWeight="SemiBold"/>
-                <TextBlock Grid.Row="2" Text="{Binding Data.Artist.Name}" FontWeight="SemiLight" x:Name="description" TextTrimming="WordEllipsis" FontSize="12" />
+                <Image x:Name="image" Stretch="Uniform" Source="{Binding Path=ImageSource}" Height="150" Grid.Row="0"/>
+                <TextBlock Grid.Row="1" Text="{Binding Title}" TextWrapping="WrapWholeWords" TextTrimming="WordEllipsis" MaxLines="2" x:Name="title" FontWeight="SemiBold"/>
+                <TextBlock Grid.Row="2" Text="{Binding Subtitle}" FontWeight="SemiLight" x:Name="description" TextTrimming="WordEllipsis" FontSize="12" />
                 <interactivity:Interaction.Behaviors>
                     <core:EventTriggerBehavior EventName="RightTapped">
                         <core:InvokeCommandAction Command="{Binding DataContext.OpenFlyoutCommand, ElementName=gridview}"
@@ -90,7 +85,7 @@
                   SelectionMode="None"
                   IsItemClickEnabled="True"
                   ItemTemplate="{StaticResource SmallImagePanelTemplate}"
-                  ItemContainerStyle="{StaticResource NormalView}"
+                  ItemContainerStyle="{StaticResource NormalGridViewItem}"
                   ItemsSource="{Binding Items}" RelativePanel.Below="sectionName"  ScrollViewer.VerticalScrollMode="Disabled"
                   ScrollViewer.HorizontalScrollBarVisibility="Hidden" ScrollViewer.HorizontalScrollMode="Enabled" ScrollViewer.IsHorizontalRailEnabled="True"
                   controlextensions:ListViewExtensions.Command="{Binding SelectItemCommand}"

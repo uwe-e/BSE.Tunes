@@ -96,7 +96,7 @@
                                         controlextensions:FlyoutExtensions.OffsetPoint="{Binding OffsetPoint, Mode=TwoWay}">
                                     <MenuFlyout.Items>
                                         <MenuFlyoutItem x:Uid="MenuFlyoutPlayAll" Text="Play" Command="{Binding DataContext.PlayAllCommand, ElementName=gridView}" CommandParameter="{Binding}"/>
-                                        <MenuFlyoutSeparator/>
+                                        <MenuFlyoutSeparator Visibility="{Binding DataContext.HasSelectedItems, ElementName=gridView, Converter={StaticResource BooleanToVisibilityConverter}, ConverterParameter=true, Mode=TwoWay}"/>
                                         <MenuFlyoutItem x:Uid="MenuFlyoutSelectItems" Text="Select"
                                             Command="{Binding DataContext.SelectItemsCommand, ElementName=gridView}" CommandParameter="{Binding}"
                                             Visibility="{Binding DataContext.HasSelectedItems, ElementName=gridView, Converter={StaticResource BooleanToVisibilityConverter}, ConverterParameter=true, Mode=TwoWay}"/>
