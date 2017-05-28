@@ -1057,7 +1057,8 @@ namespace BSE.Tunes.Entities
             if (string.IsNullOrEmpty(userName) == false)
             {
                 StringBuilder stringBuilder = new StringBuilder();
-                stringBuilder.Append("SELECT p.ListId, p.ListName, p.User, p.Guid, pe.EntryId, pe.sortorder, pe.Guid as EntryGuid, t.LiedID, t.Lied, t.Dauer, a.Guid as AlbumId, i.Interpret FROM tunesEntities.playlist AS p");
+                stringBuilder.Append("SELECT p.ListId, p.ListName, p.User, p.Guid, pe.EntryId, pe.sortorder, pe.Guid as EntryGuid, t.LiedID, t.Lied, t.Dauer, a.Guid as AlbumId, a.TitelID, a.Titel1 as Title, a.ErschDatum, i.Interpret");
+                stringBuilder.Append(" FROM tunesEntities.playlist AS p");
                 stringBuilder.Append(" LEFT JOIN tunesEntities.playlistentries AS pe ON p.ListId = pe.PlaylistId");
                 stringBuilder.Append(" LEFT JOIN tunesEntities.lieder AS t ON pe.LiedId = t.LiedID");
                 stringBuilder.Append(" LEFT JOIN tunesEntities.titel AS a ON t.TitelID = a.TitelID");
@@ -1104,17 +1105,78 @@ namespace BSE.Tunes.Entities
                                     int entryId = dataReader.GetInt32("EntryId", true, 0);
                                     if (entryId > 0)
                                     {
+                                        //An "Invalid attempt to read from column ordinal" error occurs when you use DataReader in Visual C#
+                                        //When you use DataReader to read a row, if you try to access columns in that row, you receive an error message that resembles the following:
+                                        //
+                                        //System.InvalidOperationException: Invalid attempt to read from column ordinal '0'. With CommandBehavior.SequentialAccess, you may only read from column ordinal '2' or greater. 
+
+                                        var sortOrder = dataReader.GetInt32("sortorder", true, 0);
+                                        var guid = dataReader.GetGuid("EntryGuid", true, Guid.Empty);
+                                        var trackId = dataReader.GetInt32("LiedID", true, 0);
+                                        var name = dataReader.GetString("Lied", true, string.Empty);
+                                        var duration = dataReader.GetTimeSpan("Dauer", true, TimeSpan.MinValue);
+                                        var albumId = dataReader.GetGuid("AlbumId", false, Guid.Empty);
+                                        var titleId = dataReader.GetInt32("TitelID", true, 0);
+                                        var title = dataReader.GetString("Title", true, string.Empty);
+                                        var year = dataReader.GetInt32("ErschDatum", true, 0);
+                                        var artist = dataReader.GetString("Interpret", true, string.Empty);
+
                                         PlaylistEntry entry = new PlaylistEntry
                                         {
                                             Id = entryId,
-                                            SortOrder = dataReader.GetInt32("sortorder", true, 0),
-                                            Guid = dataReader.GetGuid("EntryGuid", true, Guid.Empty),
-                                            TrackId = dataReader.GetInt32("LiedID", true, 0),
-                                            Name = dataReader.GetString("Lied", true, string.Empty),
-                                            Duration = dataReader.GetTimeSpan("Dauer", true, TimeSpan.MinValue),
-                                            AlbumId = dataReader.GetGuid("AlbumId", false, Guid.Empty),
-                                            Artist = dataReader.GetString("Interpret", true, string.Empty)
+                                            SortOrder = sortOrder,
+                                            Guid = guid,
+                                            TrackId = trackId,
+                                            Name = name,
+                                            Duration = duration,
+                                            AlbumId = albumId,
+                                            Artist = artist,
+                                            Track = new Track
+                                            {
+                                                Id = trackId,
+                                                Name = name,
+                                                Duration = duration,
+                                                Album = new Album
+                                                {
+                                                    AlbumId = albumId,
+                                                    Id = titleId,
+                                                    Title = title,
+                                                    Year = year,
+                                                    Artist = new Artist
+                                                    {
+                                                        Name = artist
+                                                    }
+                                                }
+                                            }
                                         };
+
+                                        //PlaylistEntry entry = new PlaylistEntry
+                                        //{
+                                        //    Id = entryId,
+                                        //    SortOrder = dataReader.GetInt32("sortorder", true, 0),
+                                        //    Guid = dataReader.GetGuid("EntryGuid", true, Guid.Empty),
+                                        //    TrackId = dataReader.GetInt32("LiedID", true, 0),
+                                        //    Name = dataReader.GetString("Lied", true, string.Empty),
+                                        //    Duration = dataReader.GetTimeSpan("Dauer", true, TimeSpan.MinValue),
+                                        //    AlbumId = dataReader.GetGuid("AlbumId", false, Guid.Empty),
+                                        //    Artist = dataReader.GetString("Interpret", true, string.Empty),
+                                        //    Track = new Track
+                                        //    {
+                                        //        //Id = dataReader.GetInt32("LiedID", true, 0),
+                                        //        //Name = dataReader.GetString("Lied", true, string.Empty),
+                                        //        //Duration = dataReader.GetTimeSpan("Dauer", true, TimeSpan.MinValue),
+                                        //        Album = new Album
+                                        //        {
+                                        //        //    AlbumId = dataReader.GetGuid("AlbumId", false, Guid.Empty),
+                                        //            //Title = dataReader.GetString("Title", true, string.Empty),
+                                        //            Year = dataReader.GetInt32("ErschDatum", true, 0),
+                                        //            Artist = new Artist
+                                        //            {
+                                        //                //Name = dataReader.GetString("Interpret", true, string.Empty)
+                                        //            }
+                                        //        }
+                                        //    }
+                                        //};
                                         playlist.Entries.Add(entry);
                                     }
                                 }

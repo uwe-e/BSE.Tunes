@@ -18,14 +18,6 @@
         <vm:AlbumsPageViewModel x:Name="ViewModel" />
     </Page.DataContext>
 
-    <Page.Resources>
-        <Style x:Key="NormalView" TargetType="GridViewItem">
-            <Setter Property="Margin" Value="0,0,12,24"/>
-            <Setter Property="Padding" Value="0" />
-            <Setter Property="MaxWidth" Value="150" />
-        </Style>
-    </Page.Resources>
-
     <Page.BottomAppBar>
         <CommandBar x:Uid="BottomAppBar" Visibility="{Binding IsCommandBarVisible, Converter={StaticResource BooleanToVisibilityConverter}}">
             <AppBarButton x:Uid="ButtonClearSelection" Icon="Bullets" Command="{Binding ClearSelectionCommand}"/>
@@ -106,7 +98,7 @@
                        RelativePanel.AlignLeftWithPanel="True"
                        RelativePanel.AlignRightWithPanel="True"/>
 
-            <TextBlock x:Name="narrowPageTitle" x:Uid="SearchResultAlbumsPage_PageTitle" Text="Song" Style="{StaticResource PageTitleTextBlockStyle}"
+            <TextBlock x:Name="narrowPageTitle" x:Uid="AlbumsPage_PageTitle" Text="Song" Style="{StaticResource PageTitleTextBlockStyle}"
                        Visibility="Collapsed"
                        RelativePanel.AlignTopWithPanel="True"
                        RelativePanel.AlignLeftWithPanel="True"

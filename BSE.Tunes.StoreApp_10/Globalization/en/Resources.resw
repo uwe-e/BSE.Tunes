@@ -234,14 +234,8 @@ A registration can only be done by the operator of the server.</value>
   <data name="AlbumDetailPage_PlayAll.Text" xml:space="preserve">
     <value>Play all</value>
   </data>
-  <data name="PlaylistsPage_Header.Text" xml:space="preserve">
-    <value>Playlists</value>
-  </data>
   <data name="Shell_TxtPlaylists.Text" xml:space="preserve">
     <value>Playlists</value>
-  </data>
-  <data name="PlaylistDetailPage_Header.Text" xml:space="preserve">
-    <value>Playlist</value>
   </data>
   <data name="PlaylistDetailPage_PlayAll.Text" xml:space="preserve">
     <value>Play all</value>
@@ -369,5 +363,20 @@ Please choose a different name for your playlist!</value>
   </data>
   <data name="AlbumsPage_PageHeader.Text" xml:space="preserve">
     <value>Albums</value>
+  </data>
+  <data name="PlaylistsPage_Header.HeaderText" xml:space="preserve">
+    <value>Playlists</value>
+  </data>
+  <data name="PlaylistsPage_Header.PlaceholderText" xml:space="preserve">
+    <value>Search</value>
+  </data>
+  <data name="PlaylistsPage_PageHeader.Text" xml:space="preserve">
+    <value>Playlists</value>
+  </data>
+  <data name="PlaylistDetailPage_Header.HeaderText" xml:space="preserve">
+    <value>Playlist</value>
+  </data>
+  <data name="PlaylistDetailPage_Header.PlaceholderText" xml:space="preserve">
+    <value>Search</value>
   </data>
 </root>

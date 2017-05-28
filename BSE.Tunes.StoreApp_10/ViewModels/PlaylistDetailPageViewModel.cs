@@ -27,7 +27,7 @@ namespace BSE.Tunes.StoreApp.ViewModels
         private Playlist m_playlist;
         private BitmapSource m_coverSource;
         private string m_subTitle;
-        private bool m_hasPlaylistChanged;
+        private ICommand m_showAlbumCommand;
         #endregion
 
         #region Properties
@@ -67,6 +67,7 @@ namespace BSE.Tunes.StoreApp.ViewModels
                 RaisePropertyChanged("InfoSubTitle");
             }
         }
+        public ICommand ShowAlbumCommand => m_showAlbumCommand ?? (m_showAlbumCommand = new RelayCommand<ListViewItemViewModel>(ShowAlbum));
         #endregion
 
         #region MethodsPublic
@@ -90,7 +91,6 @@ namespace BSE.Tunes.StoreApp.ViewModels
 
         public async override Task OnNavigatingFromAsync(NavigatingEventArgs args)
         {
-            Items.CollectionChanged -= OnItemsCollectionChanged;
             await base.OnNavigatingFromAsync(args);
         }
 
@@ -145,13 +145,8 @@ namespace BSE.Tunes.StoreApp.ViewModels
         #endregion
 
         #region MethodsPrivate
-        private void OnItemsCollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
-        {
-            m_hasPlaylistChanged = true;
-        }
         private async void LoadData(Playlist playlist)
         {
-            Items.CollectionChanged -= OnItemsCollectionChanged;
             Items.Clear();
             if (playlist != null)
             {
@@ -164,9 +159,7 @@ namespace BSE.Tunes.StoreApp.ViewModels
                         ICacheableBitmapService cacheableBitmapService = CacheableBitmapService.Instance;
                         Playlist = await this.DataService.GetPlaylistById(playlist.Id, user.UserName);
                         if (this.Playlist != null)
-                        {
-                            
-                            Items.CollectionChanged += OnItemsCollectionChanged;
+                        {                            
                             foreach (var entry in this.Playlist.Entries?.OrderBy(pe => pe.SortOrder))
                             {
                                 if (entry != null)
@@ -205,7 +198,11 @@ namespace BSE.Tunes.StoreApp.ViewModels
             }
             return string.Format(CultureInfo.CurrentUICulture, "{0} {1}", numberOfEntries, ResourceService.GetString("PlaylistItem_PartNumberOfEntries", "Songs"));
         }
+        private void ShowAlbum(ListViewItemViewModel item)
+        {
+            NavigationService.NavigateAsync(typeof(Views.AlbumDetailPage), ((Track)((PlaylistEntry)item.Data).Track).Album);
+        }
         #endregion
-        
+
     }
 }

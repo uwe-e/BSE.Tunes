@@ -9,6 +9,7 @@
     xmlns:core="using:Microsoft.Xaml.Interactions.Core"
     xmlns:converters="using:BSE.Tunes.StoreApp.Converters"
     xmlns:controlextensions="using:BSE.Tunes.StoreApp.Controls.Extensions"
+    xmlns:usercontrols="using:BSE.Tunes.StoreApp.Controls"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d">
@@ -16,52 +17,6 @@
     <Page.DataContext>
         <vm:PlaylistsPageViewModel x:Name="ViewModel" />
     </Page.DataContext>
-    
-    <Page.Resources>
-        <Style x:Key="NormalView" TargetType="GridViewItem">
-            <Setter Property="Margin" Value="0,0,12,24"/>
-            <Setter Property="Padding" Value="0" />
-            <Setter Property="MaxWidth" Value="150" />
-        </Style>
-
-        <DataTemplate x:Name="SmallImagePanelTemplate">
-            <Grid x:Name="gridViewItem" Width="150">
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="150"/>
-                    <RowDefinition Height="*"/>
-                    <RowDefinition Height="Auto"/>
-                </Grid.RowDefinitions>
-                <FlyoutBase.AttachedFlyout>
-                    <MenuFlyout controlextensions:FlyoutExtensions.IsOpen="{Binding IsOpen, Mode=TwoWay}"
-                                        controlextensions:FlyoutExtensions.Parent="{Binding ElementName=gridViewItem}"
-                                        controlextensions:FlyoutExtensions.OffsetPoint="{Binding OffsetPoint, Mode=TwoWay}">
-                        <MenuFlyout.Items>
-                            <MenuFlyoutItem x:Uid="MenuFlyoutPlayAll" Text="Play" Command="{Binding DataContext.PlayAllCommand, ElementName=gridview}" CommandParameter="{Binding}"/>
-                            <MenuFlyoutItem x:Uid="MenuFlyoutDelete" Text="Delete" Command="{Binding DataContext.DeletePlaylistCommand, ElementName=gridview}" CommandParameter="{Binding}"/>
-                            <MenuFlyoutSeparator/>
-                            <MenuFlyoutItem x:Uid="MenuFlyoutSelectItems" Text="Select"
-                                            Command="{Binding DataContext.SelectItemsCommand, ElementName=gridview}" CommandParameter="{Binding}"
-                                            Visibility="{Binding DataContext.HasSelectedItems, ElementName=gridview, Converter={StaticResource BooleanToVisibilityConverter}, ConverterParameter=true, Mode=TwoWay}"/>
-                            <MenuFlyoutItem x:Uid="MenuFlyoutSelectAllItems" Text="Select All" Command="{Binding DataContext.SelectAllItemsCommand, ElementName=gridview}" CommandParameter="{Binding}"
-                                            Visibility="{Binding DataContext.AllItemsSelectable, ElementName=gridview, Converter={StaticResource BooleanToVisibilityConverter}, Mode=TwoWay}"/>
-                            <MenuFlyoutItem x:Uid="MenuFlyoutUnSelectAll" Text="Unselect All" Command="{Binding DataContext.ClearSelectionCommand, ElementName=gridview}" CommandParameter="{Binding}"
-                                            Visibility="{Binding DataContext.AllItemsSelected, ElementName=gridview, Converter={StaticResource BooleanToVisibilityConverter}, Mode=TwoWay}"/>
-                        </MenuFlyout.Items>
-                    </MenuFlyout>
-                </FlyoutBase.AttachedFlyout>
-                <Image x:Name="image" Stretch="Uniform" Source="{Binding Path=BitmapSource}" Height="150" Grid.Row="0"/>
-                <TextBlock Grid.Row="1" Text="{Binding Title}" TextWrapping="WrapWholeWords" TextTrimming="WordEllipsis" MaxLines="2" x:Name="title" FontWeight="SemiBold"/>
-                <TextBlock Grid.Row="2" Text="{Binding Subtitle}" FontWeight="SemiLight" x:Name="description" TextTrimming="WordEllipsis" FontSize="12" />
-                <interactivity:Interaction.Behaviors>
-                    <core:EventTriggerBehavior EventName="RightTapped">
-                        <core:InvokeCommandAction Command="{Binding DataContext.OpenFlyoutCommand, ElementName=gridview}"
-                                                  InputConverter="{StaticResource RightTappedToPointConverter}"
-                                                  InputConverterParameter="{Binding ElementName=gridViewItem}"/>
-                    </core:EventTriggerBehavior>
-                </interactivity:Interaction.Behaviors>
-            </Grid>
-        </DataTemplate>
-    </Page.Resources>
 
     <Page.BottomAppBar>
         <CommandBar x:Uid="BottomAppBar" Visibility="{Binding IsCommandBarVisible, Converter={StaticResource BooleanToVisibilityConverter}}">
@@ -83,6 +38,10 @@
                     </VisualState.StateTriggers>
                     <VisualState.Setters>
                         <Setter Target="pageHeader.Visibility" Value="Visible"/>
+                        <Setter Target="normalPageHeader.Visibility" Value="Collapsed"/>
+                        <Setter Target="gridView.(RelativePanel.Below)" Value="narrowPageTitle"/>
+                        <Setter Target="pageContent.(RelativePanel.AlignTopWithPanel)" Value="False"/>
+                        <Setter Target="pageContent.(RelativePanel.Below)" Value="pageHeader"/>
                     </VisualState.Setters>
                 </VisualState>
                 <VisualState x:Name="VisualStateNormal">
@@ -91,31 +50,114 @@
                     </VisualState.StateTriggers>
                     <VisualState.Setters>
                         <Setter Target="pageHeader.Visibility" Value="Collapsed"/>
+                        <Setter Target="normalPageHeader.Visibility" Value="Visible"/>
+                    </VisualState.Setters>
+                </VisualState>
+                <VisualState x:Name="VisualStateWide">
+                    <VisualState.StateTriggers>
+                        <AdaptiveTrigger MinWindowWidth="{StaticResource WideMinWidth}" />
+                    </VisualState.StateTriggers>
+                    <VisualState.Setters>
+                        <Setter Target="normalPageHeader.Visibility" Value="Visible"/>
                     </VisualState.Setters>
                 </VisualState>
             </VisualStateGroup>
         </VisualStateManager.VisualStateGroups>
-        
-        <!--  header  -->
-        <controls:PageHeader x:Name="pageHeader"
-                             x:Uid="PlaylistsPage_Header"
-                             Frame="{x:Bind Frame}"
-                             RelativePanel.AlignLeftWithPanel="True"
-                             RelativePanel.AlignRightWithPanel="True"
-                             RelativePanel.AlignTopWithPanel="True"
-                             Text="Playlists"
-                             Visibility="Collapsed"/>
 
-        <Grid Padding="24,10,24,10" RelativePanel.AlignBottomWithPanel="True"
+        <!--  header  -->
+        <usercontrols:AutoSuggestionPageHeader x:Name="pageHeader"
+                                               x:Uid="PlaylistsPage_Header"
+                                               PlaceholderText="Search"
+                                               QueryIcon="Find"
+                                               ButtonIcon="Find"
+                                               QueryText="{x:Bind ViewModel.QueryText, Mode=TwoWay}"
+                                               ItemsSource="{x:Bind ViewModel.SearchSuggestions}"
+                                               RelativePanel.AlignLeftWithPanel="True"
+                                               RelativePanel.AlignRightWithPanel="True"
+                                               RelativePanel.AlignTopWithPanel="True"
+                                               Visibility="Collapsed">
+            <interactivity:Interaction.Behaviors>
+                <core:EventTriggerBehavior EventName="TextChanged">
+                    <core:InvokeCommandAction Command="{x:Bind ViewModel.TextChangedCommand}"/>
+                </core:EventTriggerBehavior>
+                <core:EventTriggerBehavior EventName="QuerySubmitted">
+                    <core:InvokeCommandAction Command="{x:Bind ViewModel.QuerySubmittedCommand}" InputConverter="{StaticResource AutoSuggestQueryParameterConverter}" />
+                </core:EventTriggerBehavior>
+                <core:EventTriggerBehavior EventName="SuggestionChosen">
+                    <core:InvokeCommandAction Command="{x:Bind ViewModel.SuggestionChosenCommand}"/>
+                </core:EventTriggerBehavior>
+            </interactivity:Interaction.Behaviors>
+        </usercontrols:AutoSuggestionPageHeader>
+
+        <RelativePanel x:Name="pageContent" 
+                       RelativePanel.AlignLeftWithPanel="True"
+                       RelativePanel.AlignRightWithPanel="True"
+                       RelativePanel.AlignTopWithPanel="True"
+                       RelativePanel.AlignBottomWithPanel="True"
+                       RelativePanel.Below="pageHeader">
+
+            <!-- normal header  -->
+            <TextBlock x:Name="normalPageHeader" x:Uid="PlaylistsPage_PageHeader" Text="Albums" Style="{StaticResource PageHeaderTextBlockStyle}"
+                       RelativePanel.AlignTopWithPanel="True"
+                       RelativePanel.AlignLeftWithPanel="True"
+                       RelativePanel.AlignRightWithPanel="True"/>
+
+            <TextBlock x:Name="narrowPageTitle" x:Uid="PlaylistsPage_PageTitle" Text="Song" Style="{StaticResource PageTitleTextBlockStyle}"
+                       Visibility="Collapsed"
+                       RelativePanel.AlignTopWithPanel="True"
+                       RelativePanel.AlignLeftWithPanel="True"
+                       RelativePanel.AlignRightWithPanel="True"/>
+
+            <GridView x:Name="gridView" Padding="20,10,20,0"
                       RelativePanel.AlignLeftWithPanel="True"
                       RelativePanel.AlignRightWithPanel="True"
-                      RelativePanel.Below="pageHeader">
-            <GridView x:Name="gridview" ItemsSource="{Binding Items}" ItemContainerStyle="{StaticResource NormalView}"
-                      ItemTemplate="{StaticResource SmallImagePanelTemplate}"
+                      RelativePanel.Below="normalPageHeader"
+                      ItemsSource="{Binding Items}" ItemContainerStyle="{StaticResource NormalGridViewItem}"
                       SelectionMode="{Binding HasSelectedItems, Converter={StaticResource BooleanToSelectionModeConverter}}"
                       IsItemClickEnabled="{Binding HasSelectedItems, Converter={StaticResource InverseBooleanConverter}}"
                       controlextensions:ListViewExtensions.Command="{Binding SelectItemCommand}"
-                      controlextensions:ListViewExtensions.SelectedItems="{Binding SelectedItems, Mode=TwoWay}"/>
-        </Grid>
+                      controlextensions:ListViewExtensions.SelectedItems="{Binding SelectedItems, Mode=TwoWay}">
+                <GridView.ItemTemplate>
+                    <DataTemplate>
+                        <Grid x:Name="gridViewItem" Width="150">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="150"/>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="Auto"/>
+                            </Grid.RowDefinitions>
+                            <FlyoutBase.AttachedFlyout>
+                                <MenuFlyout controlextensions:FlyoutExtensions.IsOpen="{Binding IsOpen, Mode=TwoWay}"
+                                        controlextensions:FlyoutExtensions.Parent="{Binding ElementName=gridViewItem}"
+                                        controlextensions:FlyoutExtensions.OffsetPoint="{Binding OffsetPoint, Mode=TwoWay}">
+                                    <MenuFlyout.Items>
+                                        <MenuFlyoutItem x:Uid="MenuFlyoutPlayAll" Text="Play" Command="{Binding DataContext.PlayAllCommand, ElementName=gridView}" CommandParameter="{Binding}"/>
+                                        <MenuFlyoutItem x:Uid="MenuFlyoutDelete" Text="Delete" Command="{Binding DataContext.DeletePlaylistCommand, ElementName=gridView}" CommandParameter="{Binding}"/>
+                                        <MenuFlyoutSeparator/>
+                                        <MenuFlyoutItem x:Uid="MenuFlyoutSelectItems" Text="Select"
+                                            Command="{Binding DataContext.SelectItemsCommand, ElementName=gridView}" CommandParameter="{Binding}"
+                                            Visibility="{Binding DataContext.HasSelectedItems, ElementName=gridView, Converter={StaticResource BooleanToVisibilityConverter}, ConverterParameter=true, Mode=TwoWay}"/>
+                                        <MenuFlyoutItem x:Uid="MenuFlyoutSelectAllItems" Text="Select All" Command="{Binding DataContext.SelectAllItemsCommand, ElementName=gridView}" CommandParameter="{Binding}"
+                                            Visibility="{Binding DataContext.AllItemsSelectable, ElementName=gridview, Converter={StaticResource BooleanToVisibilityConverter}, Mode=TwoWay}"/>
+                                        <MenuFlyoutItem x:Uid="MenuFlyoutUnSelectAll" Text="Unselect All" Command="{Binding DgridviewataContext.ClearSelectionCommand, ElementName=gridView}" CommandParameter="{Binding}"
+                                            Visibility="{Binding DataContext.AllItemsSelected, ElementName=gridView, Converter={StaticResource BooleanToVisibilityConverter}, Mode=TwoWay}"/>
+                                    </MenuFlyout.Items>
+                                </MenuFlyout>
+                            </FlyoutBase.AttachedFlyout>
+                            <Image x:Name="image" Stretch="Uniform" Source="{Binding Path=BitmapSource}" Height="150" Grid.Row="0"/>
+                            <TextBlock Grid.Row="1" Text="{Binding Title}" TextWrapping="WrapWholeWords" TextTrimming="WordEllipsis" MaxLines="2" x:Name="title" FontWeight="SemiBold"/>
+                            <TextBlock Grid.Row="2" Text="{Binding Subtitle}" FontWeight="SemiLight" x:Name="description" TextTrimming="WordEllipsis" FontSize="12" />
+                            <interactivity:Interaction.Behaviors>
+                                <core:EventTriggerBehavior EventName="RightTapped">
+                                    <core:InvokeCommandAction Command="{Binding DataContext.OpenFlyoutCommand, ElementName=gridView}"
+                                                  InputConverter="{StaticResource RightTappedToPointConverter}"
+                                                  InputConverterParameter="{Binding ElementName=gridViewItem}"/>
+                                </core:EventTriggerBehavior>
+                            </interactivity:Interaction.Behaviors>
+                        </Grid>
+                    </DataTemplate>
+                </GridView.ItemTemplate>
+            </GridView>
+
+        </RelativePanel>
     </RelativePanel>
 </Page>
