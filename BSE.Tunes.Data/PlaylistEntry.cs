@@ -57,5 +57,10 @@ namespace BSE.Tunes.Data
         /// </summary>
         [DataMember]
         public int SortOrder { get; set; }
+        [DataMember]
+        public Track Track
+        {
+            get;set;
+        }
     }
 }
