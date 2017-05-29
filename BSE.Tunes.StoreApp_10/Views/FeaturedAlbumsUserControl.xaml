@@ -19,26 +19,6 @@
     </UserControl.DataContext>
 
     <UserControl.Resources>
-        <Style x:Key="NormalView" TargetType="GridViewItem">
-            <Setter Property="Margin" Value="0,0,12,0"/>
-            <Setter Property="Padding" Value="0" />
-            <Setter Property="MaxWidth" Value="142" />
-        </Style>
-        <Style x:Key="NarrowView" TargetType="GridViewItem">
-            <Setter Property="Margin" Value="0,0,12,0"/>
-            <Setter Property="Padding" Value="0" />
-            <Setter Property="MaxWidth" Value="100" />
-        </Style>
-
-        <ItemsPanelTemplate x:Key="NormalGridWrapping">
-            <ItemsWrapGrid MaximumRowsOrColumns="1"/>
-        </ItemsPanelTemplate>
-        <ItemsPanelTemplate x:Key="NarrowGridWrapping">
-            <ItemsWrapGrid MaximumRowsOrColumns="2"/>
-        </ItemsPanelTemplate>
-
-        <converters:RightTappedRoutedEventArgsToPointConverter x:Key="RightTappedToPointConverter"/>
-        
         <DataTemplate x:Name="SmallImagePanelTemplate">
             <Grid x:Name="gridViewItem" Width="150">
                 <Grid.RowDefinitions>
@@ -71,6 +51,26 @@
     </UserControl.Resources>
 
     <RelativePanel Padding="20,10,20,10">
+        <VisualStateManager.VisualStateGroups>
+            <VisualStateGroup x:Name="AdaptiveVisualStateGroup">
+                <VisualState x:Name="VisualStateNarrow">
+                    <VisualState.StateTriggers>
+                        <AdaptiveTrigger MinWindowWidth="{StaticResource NarrowMinWidth}" />
+                    </VisualState.StateTriggers>
+                    <VisualState.Setters>
+                        <Setter Target="gridview.ItemsPanel" Value="{StaticResource NarrowGridWrapping}"/>
+                    </VisualState.Setters>
+                </VisualState>
+                <VisualState x:Name="VisualStateNormal">
+                    <VisualState.StateTriggers>
+                        <AdaptiveTrigger MinWindowWidth="{StaticResource NormalMinWidth}" />
+                    </VisualState.StateTriggers>
+                    <VisualState.Setters>
+                        <Setter Target="gridview.ItemsPanel" Value="{StaticResource NormalGridWrapping}"/>
+                    </VisualState.Setters>
+                </VisualState>
+            </VisualStateGroup>
+        </VisualStateManager.VisualStateGroups>
         <HyperlinkButton x:Name="sectionName" Foreground="{ThemeResource SystemBaseHighColor}" Command="{Binding NavigateToPageCommand}">
             <HyperlinkButton.Content>
                 <TextBlock x:Uid="AlbumSection_SectionHeader" TextTrimming="CharacterEllipsis" Style="{StaticResource SectionSubtitleTextBlockStyle}" Text="Albums"/>
@@ -88,22 +88,16 @@
                 </Grid>
             </HyperlinkButton.Content>
         </HyperlinkButton>
-        <!-- ItemTemplate="{StaticResource PictureSmallTemplate}" -->
         <GridView Margin="0,12,0,0" x:Name="gridview" Padding="0" 
                   SelectionMode="None"
                   IsItemClickEnabled="True"
                   ItemTemplate="{StaticResource SmallImagePanelTemplate}"
-                  ItemContainerStyle="{StaticResource NormalView}"
+                  ItemContainerStyle="{StaticResource NormalGridViewItem}"
+                  ItemsPanel="{StaticResource NormalGridWrapping}"
                   ItemsSource="{Binding Items}" RelativePanel.Below="sectionName"  ScrollViewer.VerticalScrollMode="Disabled"
                   ScrollViewer.HorizontalScrollBarVisibility="Hidden" ScrollViewer.HorizontalScrollMode="Enabled" ScrollViewer.IsHorizontalRailEnabled="True"
                   controlextensions:ListViewExtensions.Command="{Binding SelectItemCommand}"
                   controlextensions:ListViewExtensions.RightTappedCommand="{Binding RightTappedCommand}">
-            <GridView.ItemsPanel>
-                <ItemsPanelTemplate>
-                    <ItemsWrapGrid x:Name="wrapGrid" MaximumRowsOrColumns="1"/>
-                </ItemsPanelTemplate>
-            </GridView.ItemsPanel>
-           
         </GridView>
     </RelativePanel>
 </UserControl>

@@ -63,6 +63,13 @@
         <Setter Property="VerticalAlignment" Value="Top"/>
     </Style>
 
+    <ItemsPanelTemplate x:Key="NormalGridWrapping">
+        <ItemsWrapGrid MaximumRowsOrColumns="1"/>
+    </ItemsPanelTemplate>
+    <ItemsPanelTemplate x:Key="NarrowGridWrapping">
+        <ItemsWrapGrid MaximumRowsOrColumns="2"/>
+    </ItemsPanelTemplate>
+
     <!--
         AppBarButtonStyle is used to style a Button (or ToggleButton) for use in an App Bar.  Content will be centered 
         and should fit within the 40 pixel radius glyph provided.  16-point Segoe UI Symbol is used for content text 

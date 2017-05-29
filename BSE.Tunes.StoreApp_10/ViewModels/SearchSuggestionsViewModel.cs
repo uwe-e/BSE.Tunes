@@ -14,6 +14,7 @@ namespace BSE.Tunes.StoreApp.ViewModels
     public class SearchSuggestionsViewModel : ViewModelBase
     {
         private bool m_hasSuggestionChosen;
+        private bool m_isQuerySubmitted;
         private string m_queryText;
         private ObservableCollection<string> m_searchSuggestions;
         private ICommand m_suggestionChosenCommand;
@@ -40,6 +41,7 @@ namespace BSE.Tunes.StoreApp.ViewModels
             {
                 await NavigationService.NavigateAsync(typeof(Views.SearchResultPage), queryText);
             }
+            m_isQuerySubmitted = true;
             m_hasSuggestionChosen = false;
         }));
 
@@ -48,26 +50,13 @@ namespace BSE.Tunes.StoreApp.ViewModels
             m_hasSuggestionChosen = true;
         }));
 
-        public ICommand TextChangedCommand => m_textChangedCommand ?? (m_textChangedCommand = new RelayCommand(async () =>
+        public ICommand TextChangedCommand => m_textChangedCommand ?? (m_textChangedCommand = new RelayCommand(() =>
         {
             if (!string.IsNullOrEmpty(QueryText) && QueryText.Length > 3)
             {
                 if (!m_hasSuggestionChosen)
                 {
-                    SearchSuggestions.Clear();
-
-                    var suggestions = await DataService.GetSearchSuggestions(new Query
-                    {
-                        SearchPhrase = QueryText
-                    });
-
-                    foreach (var suggestion in suggestions)
-                    {
-                        if (!string.IsNullOrEmpty(suggestion))
-                        {
-                            SearchSuggestions.Add(suggestion);
-                        }
-                    }
+                    LoadSuggestions();
                 }
             }
         }));
@@ -85,13 +74,17 @@ namespace BSE.Tunes.StoreApp.ViewModels
                     {
                         SearchPhrase = QueryText
                     });
-                    foreach (var suggestion in suggestions)
+                    if (!m_isQuerySubmitted)
                     {
-                        if (!string.IsNullOrEmpty(suggestion))
+                        foreach (var suggestion in suggestions)
                         {
-                            SearchSuggestions.Add(suggestion);
+                            if (!string.IsNullOrEmpty(suggestion))
+                            {
+                                SearchSuggestions.Add(suggestion);
+                            }
                         }
                     }
+                    m_isQuerySubmitted = false;
                 }
             }
         }
