@@ -96,8 +96,11 @@ namespace BSE.Tunes.StoreApp.Services
 								index++;
 							}
 						}
-						catch (Exception)
-						{ }
+						catch (Exception ex)
+						{
+
+
+                        }
 					}
 					await writeableBitmap.SaveAsync(storageFolder, cacheFileName, CreationCollisionOption.ReplaceExisting);
 				}

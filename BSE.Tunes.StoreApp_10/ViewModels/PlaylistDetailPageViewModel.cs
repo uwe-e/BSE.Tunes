@@ -17,6 +17,7 @@ using Windows.UI.Xaml.Navigation;
 using System.Collections.Specialized;
 using Template10.Services.NavigationService;
 using BSE.Tunes.StoreApp.Mvvm.Messaging;
+using BSE.Tunes.Data.Extensions;
 using GalaSoft.MvvmLight.Messaging;
 
 namespace BSE.Tunes.StoreApp.ViewModels
@@ -28,6 +29,7 @@ namespace BSE.Tunes.StoreApp.ViewModels
         private BitmapSource m_coverSource;
         private string m_subTitle;
         private ICommand m_showAlbumCommand;
+        private RelayCommand m_playRandomCommand;
         #endregion
 
         #region Properties
@@ -68,6 +70,7 @@ namespace BSE.Tunes.StoreApp.ViewModels
             }
         }
         public ICommand ShowAlbumCommand => m_showAlbumCommand ?? (m_showAlbumCommand = new RelayCommand<ListViewItemViewModel>(ShowAlbum));
+        public RelayCommand PlayRandomCommand => m_playRandomCommand ?? (m_playRandomCommand = new RelayCommand(PlayRandom, CanPlayRandom));
         #endregion
 
         #region MethodsPublic
@@ -182,9 +185,14 @@ namespace BSE.Tunes.StoreApp.ViewModels
                             this.InfoSubTitle = FormatNumberOfEntriesString(Playlist);
                         }
                     }
+                    catch(Exception ex)
+                    {
+
+                    }
                     finally
                     {
                         this.PlayAllCommand.RaiseCanExecuteChanged();
+                        this.PlayRandomCommand.RaiseCanExecuteChanged();
                     }
                 }
             }
@@ -201,6 +209,22 @@ namespace BSE.Tunes.StoreApp.ViewModels
         private void ShowAlbum(ListViewItemViewModel item)
         {
             NavigationService.NavigateAsync(typeof(Views.AlbumDetailPage), ((Track)((PlaylistEntry)item.Data).Track).Album);
+        }
+
+        private bool CanPlayRandom()
+        {
+            return CanPlayAll();
+        }
+
+        private void PlayRandom()
+        {
+            var entryIds = this.Playlist.Entries.Select(entry => entry.TrackId);
+            if (entryIds != null)
+            {
+                PlayerManager.PlayTracks(
+                    new System.Collections.ObjectModel.ObservableCollection<int>(entryIds).ToRandomCollection(),
+                    PlayerMode.Playlist);
+            }
         }
         #endregion
 

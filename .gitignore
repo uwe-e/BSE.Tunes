@@ -156,3 +156,5 @@ $RECYCLE.BIN/
 .DS_Store
 /BSE.Tunes/
 /BSE.Tunes.WebApi2/Logs
+/BSE.Tunes.StoreApp_10/BundleArtifacts
+/BSE.Tunes.StoreApp_10/BundleArtifacts/arm.txt

@@ -285,6 +285,17 @@
                                     </Grid>
                                 </HyperlinkButton>
 
+                                <HyperlinkButton x:Name="buttonPlayRandom" Command="{Binding PlayRandomCommand}" Padding="10,0,0,0" VerticalContentAlignment="Center" Foreground="{ThemeResource SystemBaseHighColor}">
+                                    <Grid VerticalAlignment="Center">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="Auto"/>
+                                            <ColumnDefinition Width="*"/>
+                                        </Grid.ColumnDefinitions>
+                                        <FontIcon Glyph="&#xE8B1;" Grid.Column="0"/>
+                                        <TextBlock x:Uid="PlaylistDetailPage_PlayRandom" Text="zufällige Wiedergabe" Margin="6,0,0,0" Grid.Column="1"/>
+                                    </Grid>
+                                </HyperlinkButton>
+
                                 <HyperlinkButton x:Name="buttonAddAllTo" Padding="10,0,0,0" Command="{Binding OpenAllToPlaylistCommand}" VerticalContentAlignment="Center" Foreground="{ThemeResource SystemBaseHighColor}">
                                     <Grid VerticalAlignment="Center">
                                         <Grid.ColumnDefinitions>

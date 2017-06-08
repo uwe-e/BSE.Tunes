@@ -54,24 +54,27 @@ namespace BSE.Tunes.StoreApp.ViewModels
                     Items.Clear();
                     ICacheableBitmapService cacheableBitmapService = CacheableBitmapService.Instance;
                     var playlists = await DataService.GetPlaylistsByUserName(User.UserName, 6);
-                    foreach (var playlst in playlists)
+                    if (playlists != null)
                     {
-                        if (playlst != null)
+                        foreach (var playlst in playlists)
                         {
-                            var playlist = await DataService.GetPlaylistByIdWithNumberOfEntries(playlst.Id, User.UserName);
-                            if (playlist != null)
+                            if (playlst != null)
                             {
-                                System.Collections.ObjectModel.ObservableCollection<Guid> albumIds = await DataService.GetPlaylistImageIdsById(playlist.Id, User.UserName, 4);
-                                Items.Add(new GridPanelItemViewModel
+                                var playlist = await DataService.GetPlaylistByIdWithNumberOfEntries(playlst.Id, User.UserName);
+                                if (playlist != null)
                                 {
-                                    Title = playlist.Name,
-                                    Subtitle = FormatNumberOfEntriesString(playlist),
-                                    BitmapSource = await cacheableBitmapService.GetBitmapSource(
-                                        new ObservableCollection<Uri>(albumIds.Select(id => DataService.GetImage(id, true))),
-                                        playlist.Guid.ToString(),
-                                        150, true),
-                                    Data = playlist
-                                });
+                                    System.Collections.ObjectModel.ObservableCollection<Guid> albumIds = await DataService.GetPlaylistImageIdsById(playlist.Id, User.UserName, 4);
+                                    Items.Add(new GridPanelItemViewModel
+                                    {
+                                        Title = playlist.Name,
+                                        Subtitle = FormatNumberOfEntriesString(playlist),
+                                        BitmapSource = await cacheableBitmapService.GetBitmapSource(
+                                            new ObservableCollection<Uri>(albumIds.Select(id => DataService.GetImage(id, true))),
+                                            playlist.Guid.ToString(),
+                                            150, true),
+                                        Data = playlist
+                                    });
+                                }
                             }
                         }
                     }

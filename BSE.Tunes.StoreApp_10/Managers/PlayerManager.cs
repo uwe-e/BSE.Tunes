@@ -224,7 +224,7 @@ namespace BSE.Tunes.StoreApp.Managers
         #region MethodsPrivate
         private void OnMediaEnded()
         {
-            if (this.PlayerMode != PlayerMode.None)
+            if (this.PlayerMode != PlayerMode.None && this.PlayerMode != PlayerMode.Song)
             {
                 this.ExecuteNextTrack();
             }

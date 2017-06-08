@@ -88,10 +88,11 @@ namespace BSE.Tunes.StoreApp
                 bool isAccessible = isAccessibleTask.Result;
                 if (isAccessible)
                 {
-                    IAuthenticationService authenticationHandler = ServiceLocator.Current.GetInstance<IAuthenticationService>();
-                    Task<User> verifyUserTask = Task.Run(async () => await authenticationHandler.VerifyUserAuthenticationAsync());
                     try
                     {
+                        IAuthenticationService authenticationHandler = ServiceLocator.Current.GetInstance<IAuthenticationService>();
+                        Task<User> verifyUserTask = Task.Run(async () => await authenticationHandler.VerifyUserAuthenticationAsync());
+
                         verifyUserTask.Wait();
                         User user = verifyUserTask.Result;
                         if (user != null)

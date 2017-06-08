@@ -217,7 +217,7 @@ A registration can only be done by the operator of the server.</value>
     <value>Album</value>
   </data>
   <data name="RandomPlayerPanel_Text" xml:space="preserve">
-    <value>We have {0} songs and if you have enough time we play it all.</value>
+    <value>We have {0} songs and if you have enough time we play them all.</value>
   </data>
   <data name="AlbumSection_ShowAll.Text" xml:space="preserve">
     <value>Show All</value>
@@ -378,5 +378,8 @@ Please choose a different name for your playlist!</value>
   </data>
   <data name="PlaylistDetailPage_Header.PlaceholderText" xml:space="preserve">
     <value>Search</value>
+  </data>
+  <data name="PlaylistDetailPage_PlayRandom.Text" xml:space="preserve">
+    <value>Play random</value>
   </data>
 </root>
