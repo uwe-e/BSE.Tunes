@@ -4,6 +4,8 @@ using System.Windows.Input;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Input;
+using BSE.Tunes.StoreApp.Extensions;
+using System.Reflection;
 
 namespace BSE.Tunes.StoreApp.Controls.Extensions
 {
@@ -315,8 +317,7 @@ namespace BSE.Tunes.StoreApp.Controls.Extensions
                     m_listView.SelectedItems.Add(item);
                 }
             }
-
-            var eventInfo = m_boundSelection.GetType().GetDeclaredEvent("CollectionChanged");
+            var eventInfo = ((object)m_boundSelection).GetDeclaredEvent("CollectionChanged");
             eventInfo.AddEventHandler(m_boundSelection, m_notifyCollectionChangedHandler);
         }
 
@@ -386,7 +387,7 @@ namespace BSE.Tunes.StoreApp.Controls.Extensions
         {
             m_listView.SelectionChanged -= OnListViewSelectionChanged;
             m_listView = null;
-            var eventInfo = m_boundSelection.GetType().GetDeclaredEvent("CollectionChanged");
+            var eventInfo = ((object)m_boundSelection).GetDeclaredEvent("CollectionChanged");
             eventInfo.RemoveEventHandler(m_boundSelection, m_notifyCollectionChangedHandler);
             m_boundSelection = null;
         }
