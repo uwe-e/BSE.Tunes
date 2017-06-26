@@ -44,9 +44,12 @@ namespace BSE.Tunes.StoreApp
 
         public override UIElement CreateRootElement(IActivatedEventArgs e)
         {
-            var service = NavigationServiceFactory(BackButton.Attach, ExistingContent.Exclude);
+            //Relaunching suspended app on W10 Mobile shows blank page.
+            //https://github.com/Windows-XAML/Template10/issues/1286
+            var service = NavigationServiceFactory(BackButton.Attach, ExistingContent.Include);
             //The style resource contains the mediaelement and registers the player service
             service.Frame.Style = Resources["RootFrameStyle"] as Style;
+
             return new ModalDialog
             {
                 DisableBackButtonWhenModal = true,
@@ -54,8 +57,7 @@ namespace BSE.Tunes.StoreApp
                 ModalContent = new Views.Busy(),
             };
         }
-
-        public override async Task OnStartAsync(StartKind startKind, IActivatedEventArgs args)
+        public override Task OnInitializeAsync(IActivatedEventArgs args)
         {
             if (Windows.Foundation.Metadata.ApiInformation.IsTypePresent("Windows.UI.ViewManagement.ApplicationView"))
             {
@@ -80,6 +82,10 @@ namespace BSE.Tunes.StoreApp
                     statusBar.ForegroundColor = (Windows.UI.Color)Current.Resources["SystemBaseHighColor"];
                 }
             }
+            return base.OnInitializeAsync(args);
+        }
+        public override async Task OnStartAsync(StartKind startKind, IActivatedEventArgs args)
+        {
             IDataService dataService = ServiceLocator.Current.GetInstance<IDataService>();
             Task<bool> isAccessibleTask = Task.Run(async () => await dataService.IsHostAccessible());
             try
@@ -97,11 +103,15 @@ namespace BSE.Tunes.StoreApp
                         User user = verifyUserTask.Result;
                         if (user != null)
                         {
-                            //Deletes the tmp download folder with its files from the local store.
-                            await LocalStorage.ClearTempFolderAsync();
+                            //clears the cache only if the application lauches
+                            if (startKind == StartKind.Launch)
+                            {
+                                //Deletes the tmp download folder with its files from the local store.
+                                await LocalStorage.ClearTempFolderAsync();
 
-                            m_settingsService.IsFullScreen = false;
-                            await NavigationService.NavigateAsync(typeof(Views.MainPage));
+                                m_settingsService.IsFullScreen = false;
+                                await NavigationService.NavigateAsync(typeof(Views.MainPage));
+                            }
                         }
                         else
                         {
