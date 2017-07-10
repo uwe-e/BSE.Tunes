@@ -24,14 +24,13 @@
                      Text="{Binding ServiceUrl, Mode=TwoWay}" Margin="4" Width="300">
 
                 <interactivity:Interaction.Behaviors>
-
                     <!--  enable submit on enter key  -->
                     <behaviors:KeyBehavior Key="Enter">
                         <core:CallMethodAction MethodName="SaveUrl" TargetObject="{Binding}" />
                     </behaviors:KeyBehavior>
                 </interactivity:Interaction.Behaviors>
             </TextBox>
-            <Button x:Uid="HostSettingsPage_ButtonSave" Command="{x:Bind ViewModel.SaveHostCommand}" Content="Speichern" Width="80" HorizontalAlignment="Center" Margin="0,20"/>
+            <Button x:Uid="HostSettingsPage_ButtonSave" Command="{x:Bind ViewModel.SaveHostCommand}" Content="Speichern" Width="Auto" HorizontalAlignment="Center" Margin="0,20"/>
         </StackPanel>
     </Grid>
 </Page>

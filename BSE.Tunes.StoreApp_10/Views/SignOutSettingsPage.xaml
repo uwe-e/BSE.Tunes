@@ -35,10 +35,11 @@
                 <RelativePanel>
                     <TextBlock x:Uid="SignOutSettingsPage_TxtAcountDescription"
                        x:Name="TextBlockAccountDescription" Text="Your account" Width="300" TextWrapping="Wrap" RelativePanel.AlignTopWithPanel="True"/>
-                    <TextBlock x:Name="TextBlockUserName"
-                       Text="{Binding UserName}" Margin="0,12,0,0"
-                       RelativePanel.Below="TextBlockAccountDescription"/>
-                    <Button x:Uid="SignOutSettingsPage_ButtonSignOut" Content="Sign Out" Command="{x:Bind ViewModel.SignOutCommand}" Width="80" Margin="0,12,0,0" RelativePanel.Below="TextBlockUserName" RelativePanel.AlignRightWith="TextBlockUserName"/>
+                    <TextBox x:Name="TextBlockUserName"
+                             Text="{Binding UserName}" Margin="0,12,0,0"
+                             IsEnabled="False"
+                             RelativePanel.Below="TextBlockAccountDescription"/>
+                    <Button x:Uid="SignOutSettingsPage_ButtonSignOut" Content="Sign Out" Command="{x:Bind ViewModel.SignOutCommand}" Width="Auto" Margin="0,12,0,0" RelativePanel.Below="TextBlockUserName" RelativePanel.AlignRightWith="TextBlockUserName"/>
                 </RelativePanel>
             </ScrollViewer>
         </RelativePanel>

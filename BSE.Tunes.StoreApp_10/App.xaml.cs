@@ -27,6 +27,14 @@ namespace BSE.Tunes.StoreApp
         public App()
         {
             InitializeComponent();
+
+            //For localization tests
+            //var culture = new System.Globalization.CultureInfo("en-US");
+            //var culture = new System.Globalization.CultureInfo("de-DE");
+            //Windows.Globalization.ApplicationLanguages.PrimaryLanguageOverride = culture.Name;
+            //System.Globalization.CultureInfo.DefaultThreadCurrentCulture = culture;
+            //System.Globalization.CultureInfo.DefaultThreadCurrentUICulture = culture;
+
             SplashFactory = (e) => new Views.Splash(e);
 
             #region app settings

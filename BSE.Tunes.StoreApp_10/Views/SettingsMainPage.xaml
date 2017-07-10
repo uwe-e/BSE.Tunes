@@ -15,24 +15,6 @@
         <vm:SettingsMainPageViewModel x:Name="ViewModel" />
     </Page.DataContext>
 
-    <!--<Page.Resources>
-        <DataTemplate x:Name="SettingsItemDataTemplate">
-            <StackPanel Orientation="Vertical">
-                <TextBlock Text="{Binding Icon}"/>
-                <SymbolIcon Symbol="{Binding Icon}"/>
-                <StackPanel Orientation="Vertical">
-                    <TextBlock Text="{Binding Text}"/>
-                    <TextBlock Text="{Binding Description}"/>
-                </StackPanel>
-                <interactivity:Interaction.Behaviors>
-                    <core:EventTriggerBehavior EventName="Tapped">
-                    <core:InvokeCommandAction Command="{Binding NavigationCommand}" />
-                    </core:EventTriggerBehavior>
-                </interactivity:Interaction.Behaviors>
-            </StackPanel>
-        </DataTemplate>
-    </Page.Resources>-->
-
     <RelativePanel Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
         <VisualStateManager.VisualStateGroups>
             <VisualStateGroup x:Name="AdaptiveVisualStateGroup">
@@ -59,6 +41,7 @@
         </VisualStateManager.VisualStateGroups>
         <!--  header  -->
         <controls:PageHeader x:Name="pageHeader"
+                             x:Uid="SettingsMainpage-PageHeader"
                              Frame="{x:Bind Frame}"
                              RelativePanel.AlignLeftWithPanel="True"
                              RelativePanel.AlignRightWithPanel="True"

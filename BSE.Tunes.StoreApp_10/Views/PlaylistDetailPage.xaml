@@ -35,7 +35,7 @@
                                                 controlextensions:FlyoutExtensions.Parent="{Binding ElementName=listViewItem}"
                                                 controlextensions:FlyoutExtensions.OffsetPoint="{Binding OffsetPoint, Mode=TwoWay}">
                             <MenuFlyout.Items>
-                                <MenuFlyoutItem x:Uid="MenuFlyoutAddTo" Text="Add to"/>
+                                <!--<MenuFlyoutItem x:Uid="MenuFlyoutAddTo" Text="Add to"/>-->
                                 <MenuFlyoutItem x:Uid="MenuFlyoutShowAlbum" Text="Show Album" Command="{Binding DataContext.ShowAlbumCommand, ElementName=listview}" CommandParameter="{Binding}"/>
                                 <MenuFlyoutItem x:Uid="MenuFlyoutSelectItems" Text="Select" Command="{Binding DataContext.SelectItemsCommand, ElementName=listview}" CommandParameter="{Binding}"
                                                             Visibility="{Binding DataContext.HasSelectedItems, ElementName=listview, Converter={StaticResource BooleanToVisibilityConverter}, ConverterParameter=true, Mode=TwoWay}"/>
@@ -118,7 +118,7 @@
                                                 controlextensions:FlyoutExtensions.Parent="{Binding ElementName=listViewItem}"
                                                 controlextensions:FlyoutExtensions.OffsetPoint="{Binding OffsetPoint, Mode=TwoWay}">
                             <MenuFlyout.Items>
-                                <MenuFlyoutItem x:Uid="MenuFlyoutAddTo" Text="Add to"/>
+                                <!--<MenuFlyoutItem x:Uid="MenuFlyoutAddTo" Text="Add to"/>-->
                                 <MenuFlyoutItem x:Uid="MenuFlyoutShowAlbum" Text="Show Album" Command="{Binding DataContext.ShowAlbumCommand, ElementName=listview}" CommandParameter="{Binding}"/>
                                 <MenuFlyoutItem x:Uid="MenuFlyoutSelectItems" Text="Select" Command="{Binding DataContext.SelectItemsCommand, ElementName=listview}" CommandParameter="{Binding}"
                                                             Visibility="{Binding DataContext.HasSelectedItems, ElementName=listview, Converter={StaticResource BooleanToVisibilityConverter}, ConverterParameter=true, Mode=TwoWay}"/>

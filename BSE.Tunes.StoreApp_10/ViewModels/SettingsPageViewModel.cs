@@ -10,25 +10,15 @@ namespace BSE.Tunes.StoreApp.ViewModels
 {
     public class SettingsPageViewModel : ViewModelBase
     {
-        public SettingsPartViewModel SettingsPartViewModel { get; } = new SettingsPartViewModel();
-        public AboutPartViewModel AboutPartViewModel { get; } = new AboutPartViewModel();
-    }
-
-    public class SettingsPartViewModel : ViewModelBase
-    {
         #region FieldsPrivate
         SettingsService m_settings;
         private bool m_themeSelectionHasChanged;
         #endregion
 
         #region Properties
-        public SettingsPartViewModel()
+        public SettingsPageViewModel()
         {
-            if (Windows.ApplicationModel.DesignMode.DesignModeEnabled)
-            {
-                // designtime
-            }
-            else
+            if (!Windows.ApplicationModel.DesignMode.DesignModeEnabled)
             {
                 m_settings = SettingsService.Instance;
             }
@@ -86,27 +76,6 @@ namespace BSE.Tunes.StoreApp.ViewModels
             }
         }
         #endregion
-       
-    }
-    
-    public class AboutPartViewModel : ViewModelBase
-    {
-        public Uri Logo => Windows.ApplicationModel.Package.Current.Logo;
-
-        public string DisplayName => Windows.ApplicationModel.Package.Current.DisplayName;
-
-        public string Publisher => Windows.ApplicationModel.Package.Current.PublisherDisplayName;
-
-        public string Version
-        {
-            get
-            {
-                var v = Windows.ApplicationModel.Package.Current.Id.Version;
-                return $"{v.Major}.{v.Minor}.{v.Build}.{v.Revision}";
-            }
-        }
-
-        public Uri RateMe => new Uri("http://aka.ms/template10");
     }
 }
 

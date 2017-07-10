@@ -43,6 +43,7 @@ namespace BSE.Tunes.StoreApp.ViewModels
                 SettingItems.Add(new ServiceUrlSettingsItemViewModel());
                 SettingItems.Add(new SignOutSettingsItemViewModel());
                 SettingItems.Add(new SystemSettingsItemViewModel());
+                SettingItems.Add(new AboutItemViewModel());
             }
         }
         #endregion

@@ -1,0 +1,77 @@
+﻿<Page
+    x:Class="BSE.Tunes.StoreApp.Views.AboutPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:BSE.Tunes.StoreApp.Views"
+    xmlns:controls="using:Template10.Controls"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:vm="using:BSE.Tunes.StoreApp.ViewModels"
+    mc:Ignorable="d">
+
+    <Page.DataContext>
+        <vm:AboutPageViewModel x:Name="ViewModel" />
+    </Page.DataContext>
+
+    <RelativePanel Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+
+        <controls:PageHeader x:Name="pageHeader"
+                             x:Uid="AboutPage-PageHeader"
+                             Content="Info"
+                             Frame="{x:Bind Frame}"
+                             RelativePanel.AlignLeftWithPanel="True"
+                             RelativePanel.AlignRightWithPanel="True"
+                             RelativePanel.AlignTopWithPanel="True" />
+
+        <RelativePanel EntranceNavigationTransitionInfo.IsTargetElement="True"
+                       x:Name="infoPart"
+                       RelativePanel.AlignLeftWithPanel="True"
+                       RelativePanel.AlignRightWithPanel="True"
+                       RelativePanel.Below="pageHeader" Margin="12,14,0,13">
+            <Border x:Name="LogoImage"
+                            HorizontalAlignment="Right"
+                            VerticalAlignment="Top"
+                            BorderBrush="DimGray"
+                            BorderThickness="1"
+                            IsHitTestVisible="False"
+                            RelativePanel.AlignRightWithPanel="True"
+                            RelativePanel.AlignTopWithPanel="True">
+                <Border.Background>
+                    <SolidColorBrush Color="{ThemeResource SystemAccentColor}" />
+                </Border.Background>
+                <Image Margin="12" Source="{Binding Logo}" Stretch="None" />
+            </Border>
+
+            <TextBlock x:Name="DisplayNameTextBlock"
+                               Margin="0,0,0,12"
+                               FontSize="24"
+                               RelativePanel.AlignLeftWithPanel="True"
+                               RelativePanel.AlignRightWith="LogoImage"
+                               RelativePanel.AlignTopWithPanel="True"
+                               Text="{Binding DisplayName}" />
+
+            <TextBlock x:Name="PublisherTextBlock"
+                               RelativePanel.AlignLeftWithPanel="True"
+                               RelativePanel.Below="DisplayNameTextBlock"
+                               Text="{Binding Publisher}" />
+
+            <TextBlock x:Name="VersionTextBlock"
+                               RelativePanel.AlignLeftWithPanel="True"
+                               RelativePanel.Below="PublisherTextBlock">
+                        <Run>Version</Run>
+                        <Run Text="{Binding Version}" />
+            </TextBlock>
+
+        </RelativePanel>
+        <RelativePanel x:Name="privacyPart" RelativePanel.Below="infoPart"
+                       RelativePanel.AlignLeftWithPanel="True"
+                       RelativePanel.AlignRightWithPanel="True" Margin="12,14,0,13">
+            <TextBlock x:Name="TxtPrivacy" x:Uid="AboutPage-TxtPrivacy-Header" Text="Datenschutz" Style="{StaticResource SubtitleTextBlockStyle}"
+                       RelativePanel.AlignTopWithPanel="True"/>
+            <TextBlock x:Uid="AboutPage-TxtPrivacy_Statement" FontSize="16" TextWrapping="Wrap" RelativePanel.Below="TxtPrivacy" Text="Diese Applikation spielt die Audiodateien eines, in den Einstellungen eingetragenen, entfernten Computers ab. 
+Die Applikation benötigt die eingetragene, nicht überprüfte EMail- Adresse nur für personenbezogene Wiedergabelisten. Es werden sonst keine personenbezogenen Informationen gespeichert."/>
+        </RelativePanel>
+
+
+    </RelativePanel>
+</Page>

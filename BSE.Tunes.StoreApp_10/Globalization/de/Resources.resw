@@ -118,19 +118,19 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="HostSettingsPage_ButtonSave.Content" xml:space="preserve">
-    <value>Save</value>
+    <value>Speichern</value>
   </data>
   <data name="HostSettingsPage_Header.Text" xml:space="preserve">
-    <value>Hello in BSEtunes</value>
+    <value>Hallo in BSEtunes</value>
   </data>
   <data name="HostSettingsPage_TxtServiceHostDescription.Text" xml:space="preserve">
-    <value>Enter here the address of the webserver that contains your BSEtunes.</value>
+    <value>Trage hier die Adresse des Webservers ein, der Dein BSEtunes enthält.</value>
   </data>
   <data name="SignInPage_Header.Text" xml:space="preserve">
-    <value>Account Settings</value>
+    <value>Konto</value>
   </data>
   <data name="SignInSettingsPage_ButtonSave.Content" xml:space="preserve">
-    <value>Save</value>
+    <value>Speichern</value>
   </data>
   <data name="SignInSettingsPage_TSUseSecureLogin.OffContent" xml:space="preserve">
     <value>No</value>
@@ -139,271 +139,277 @@
     <value>Yes</value>
   </data>
   <data name="SignInSettingsPage_TxtAccountInfo.Text" xml:space="preserve">
-    <value>Due to copyright of the music files to stream, the load of your server and because the perhaps limited bandwidth in the operation of the server, you need a user account on this server. 
-You may not have to register via the app. A registration can only be done by the operator of the server.</value>
+    <value>Wegen dem Schutz des Urheberrechts der zu streamenden Musikdateien, der Belastung Deines Servers und wegen der eventuell eingeschränkten Bandbreite beim Betrieb des Servers brauchst Du ein Benutzerkonto auf diesem Server. 
+Du kannst Dich nicht über die App registrieren. Die Registrierung kann nur durch den Betreiber des Servers erfolgen.</value>
   </data>
   <data name="SignInSettingsPage_TxtPassword.PlaceholderText" xml:space="preserve">
-    <value>Password</value>
+    <value>Passwort</value>
   </data>
   <data name="SignInSettingsPage_TxtUserName.PlaceholderText" xml:space="preserve">
-    <value>EMail Address</value>
+    <value>Mail Adresse</value>
   </data>
   <data name="SignInSettingsPage_TxtUseSecureLogin.Text" xml:space="preserve">
     <value>Should the login be encrypted if the webserver supports that?</value>
   </data>
   <data name="IDS_SignInSettingsDescription" xml:space="preserve">
-    <value>Your account at BSEtunes.</value>
+    <value>Dein Konto bei BSEtunes.</value>
   </data>
   <data name="IDS_SignInSettingsHeader" xml:space="preserve">
-    <value>Account Settings</value>
+    <value>Konto</value>
   </data>
   <data name="SignOutSettingsPage_ButtonSignOut.Content" xml:space="preserve">
-    <value>Sign Out</value>
+    <value>Abmelden</value>
   </data>
   <data name="ExceptionMessageDialogHeader" xml:space="preserve">
-    <value>Error</value>
+    <value>Fehler</value>
   </data>
   <data name="ServiceUrlNotAvailableExceptionMessage" xml:space="preserve">
-    <value>The address of your webserver was entered incorrectly or the webserver is not available.</value>
+    <value>Die Adresse des Webservers wurde falsch eingegeben oder der Webserver ist momentan nicht erreichbar.</value>
   </data>
   <data name="IDS_ServiceUrlSettingsDescription" xml:space="preserve">
-    <value>The web address of your BSEtunes</value>
+    <value>Die Adresse Deines BSEtunes.</value>
   </data>
   <data name="IDS_ServiceUrlSettingsHeader" xml:space="preserve">
     <value>Webserver</value>
   </data>
   <data name="ServiceUrlSettingsPage_ButtonRemove.Content" xml:space="preserve">
-    <value>Remove</value>
+    <value>Entfernen</value>
   </data>
   <data name="ServiceUrlSettingsPage-PageHeader.Content" xml:space="preserve">
-    <value>Web server</value>
+    <value>Webserver</value>
   </data>
   <data name="ServiceUrlSettingsPage_TxtServiceHostDescription.Text" xml:space="preserve">
-    <value>The web address of your BSEtunes</value>
+    <value>Die Adresse Deines BSEtunes</value>
   </data>
   <data name="SignOutSettingsPage_PageHeader.Content" xml:space="preserve">
-    <value>Account</value>
+    <value>Konto</value>
   </data>
   <data name="SignOutSettingsPage_TxtAcountDescription.Text" xml:space="preserve">
-    <value>Your account at BSEtunes</value>
+    <value>Dein Konto bei BSEtunes</value>
   </data>
   <data name="SettingsPage_TxtModeChangedMessage.Text" xml:space="preserve">
-    <value>You'll see your change the next time you start the app</value>
+    <value>Du siehst Deine Änderung das nächste Mal, wenn Du die App startest.</value>
   </data>
   <data name="SettingsPage_TxtModeTitle.Text" xml:space="preserve">
-    <value>Mode</value>
+    <value>Modus</value>
   </data>
   <data name="AlbumSection_SectionHeader.Text" xml:space="preserve">
-    <value>New Albums</value>
+    <value>Alben</value>
   </data>
   <data name="Shell_TxtAlbums.Text" xml:space="preserve">
-    <value>Albums</value>
+    <value>Alben</value>
   </data>
   <data name="Shell_TxtHome.Text" xml:space="preserve">
-    <value>Your BSEtunes</value>
+    <value>Dein BSEtunes</value>
   </data>
   <data name="AlbumsPage_Header.HeaderText" xml:space="preserve">
     <value>Albums</value>
   </data>
   <data name="MainPage_Header.HeaderText" xml:space="preserve">
-    <value>Your BSEtunes</value>
+    <value>Dein BSEtunes</value>
   </data>
   <data name="AlbumsDetailPage_Header.HeaderText" xml:space="preserve">
     <value>Album</value>
   </data>
   <data name="RandomPlayerPanel_Text" xml:space="preserve">
-    <value>We have {0} songs and if you have enough time we play them all.</value>
+    <value>Wir haben {0} Songs und wenn Du genug Zeit hast, dann spielen wir sie alle.</value>
   </data>
   <data name="AlbumSection_ShowAll.Text" xml:space="preserve">
-    <value>Show All</value>
+    <value>Alle anzeigen</value>
   </data>
   <data name="FeaturedPlaylists_SectionHeader.Text" xml:space="preserve">
-    <value>My Playlists</value>
+    <value>Meine Wiedergabelisten</value>
   </data>
   <data name="FeaturedPlaylists_ShowAll.Text" xml:space="preserve">
-    <value>Show All</value>
+    <value>Alle anzeigen</value>
   </data>
   <data name="PlaylistItem_PartNumberOfEntries" xml:space="preserve">
     <value>Songs</value>
   </data>
   <data name="AlbumDetailPage_PlayAll.Text" xml:space="preserve">
-    <value>Play all</value>
+    <value>Alle wiedergeben</value>
   </data>
   <data name="Shell_TxtPlaylists.Text" xml:space="preserve">
-    <value>Playlists</value>
+    <value>Wiedergabelisten</value>
   </data>
   <data name="PlaylistDetailPage_PlayAll.Text" xml:space="preserve">
-    <value>Play all</value>
+    <value>Alle wiedergeben</value>
   </data>
   <data name="ButtonPlaySelection.Label" xml:space="preserve">
-    <value>Play</value>
+    <value>Wiedergeben</value>
   </data>
   <data name="MenuFlyoutAddTo.Text" xml:space="preserve">
-    <value>Add to</value>
+    <value>Hinzufügen zu</value>
   </data>
   <data name="MenuFlyoutSelectItems.Text" xml:space="preserve">
-    <value>Select</value>
+    <value>Auswählen</value>
   </data>
   <data name="ButtonAddToPlaylist.Label" xml:space="preserve">
-    <value>Add to</value>
+    <value>Hinzufügen zu</value>
   </data>
   <data name="FlyoutMenuItem_AddNewPlaylist" xml:space="preserve">
-    <value>New Playlist</value>
+    <value>Neue Wiedergabeliste</value>
   </data>
   <data name="NewPlaylistContentDialog.PrimaryButtonText" xml:space="preserve">
-    <value>Save</value>
+    <value>Speichern</value>
   </data>
   <data name="NewPlaylistContentDialog.SecondaryButtonText" xml:space="preserve">
-    <value>Cancel</value>
+    <value>Abbrechen</value>
   </data>
   <data name="NewPlaylistContentDialog_TxtNewPlaylist.Header" xml:space="preserve">
-    <value>Name the new playlist</value>
+    <value>Diese Wiedergabeliste benennen</value>
   </data>
   <data name="NewPlaylistContentDialog_PlayListAlreadyExistsExceptionMessage" xml:space="preserve">
-    <value>The name "{0}" for the playlist already exists.
-Please choose a different name for your playlist!</value>
+    <value>Der Name "{0}" existiert bereits.
+Bitte wähle einen neuen Namen.</value>
   </data>
   <data name="AlbumDetailPage_AddTo.Text" xml:space="preserve">
-    <value>Add to</value>
+    <value>Hinzufügen zu</value>
   </data>
   <data name="MenuFlyoutPlayAll.Text" xml:space="preserve">
-    <value>Play</value>
+    <value>Wiedergeben</value>
   </data>
   <data name="MenuFlyoutDelete.Text" xml:space="preserve">
-    <value>Delete</value>
+    <value>Löschen</value>
   </data>
   <data name="DeletePlaylistContentDialog.PrimaryButtonText" xml:space="preserve">
     <value>OK</value>
   </data>
   <data name="DeletePlaylistContentDialog.SecondaryButtonText" xml:space="preserve">
-    <value>Cancel</value>
+    <value>Abbrechen</value>
   </data>
   <data name="DeletePlaylistContentDialog.Title" xml:space="preserve">
-    <value>Do you want delete this?</value>
+    <value>Möchtest Du dies wirklich löschen?</value>
   </data>
   <data name="DeletePlaylistContentDialog_TxtDeleteInformation" xml:space="preserve">
-    <value>If you delete "{0}" from your library, you can't play it anymore from other devices.</value>
+    <value>Wenn Du "{0}" aus Deiner Bibliothek löscht, kannst Du sie nicht mehr auf Deinen anderen Geräten wiedergeben.</value>
   </data>
   <data name="ButtonClearSelection.Label" xml:space="preserve">
-    <value>Cancel</value>
+    <value>Abbrechen</value>
   </data>
   <data name="ButtonDeleteSelection.Label" xml:space="preserve">
-    <value>Delete</value>
+    <value>Löschen</value>
   </data>
   <data name="ButtonSelectAll.Label" xml:space="preserve">
-    <value>Select all</value>
+    <value>Alles auswählen</value>
   </data>
   <data name="ButtonUnSelectAll.Label" xml:space="preserve">
-    <value>Unselect all</value>
+    <value>Alles abwählen</value>
   </data>
   <data name="MenuFlyoutSelectAllItems.Text" xml:space="preserve">
-    <value>Select all</value>
+    <value>Alles auswählen</value>
   </data>
   <data name="MenuFlyoutUnSelectAll.Text" xml:space="preserve">
-    <value>Unselect all</value>
+    <value>Alles abwählen</value>
   </data>
   <data name="DeletePlaylistContentDialog_TxtDeleteSelectedInformation" xml:space="preserve">
-    <value>If you delete this playlists from your library, you can't play it anymore from other devices.</value>
+    <value>Wenn Du diese Wiedergabelisten löscht, kannst Du sie nicht auf Ihren anderen Geräten wiedergeben.</value>
   </data>
   <data name="PlaylistDetailPage_AddTo.Text" xml:space="preserve">
-    <value>Add to</value>
+    <value>Hinzufügen zu</value>
   </data>
   <data name="ButtonDeleteItems.Label" xml:space="preserve">
-    <value>Remove from playlist</value>
+    <value>Aus Wiedergabeliste löschen</value>
   </data>
   <data name="TxtSearchAutoSuggestBox.PlaceholderText" xml:space="preserve">
-    <value>Search</value>
+    <value>Suche</value>
   </data>
   <data name="MainPage_Header.PlaceholderText" xml:space="preserve">
-    <value>Search</value>
+    <value>Suche</value>
   </data>
   <data name="SearchResultPage_Header.PlaceholderText" xml:space="preserve">
-    <value>Search</value>
+    <value>Suche</value>
   </data>
   <data name="AlbumsResultSection_SectionHeader.Text" xml:space="preserve">
-    <value>Albums</value>
+    <value>Alben</value>
   </data>
   <data name="TracksResultSection_SectionHeader.Text" xml:space="preserve">
     <value>Songs</value>
   </data>
   <data name="TracksResultSection_ShowAll.Text" xml:space="preserve">
-    <value>Show All</value>
+    <value>Alle anzeigen</value>
   </data>
   <data name="MenuFlyoutPlay.Text" xml:space="preserve">
-    <value>Play</value>
+    <value>Wiedergeben</value>
   </data>
   <data name="MenuFlyoutShowAlbum.Text" xml:space="preserve">
-    <value>Show Album</value>
+    <value>Album anzeigen</value>
   </data>
   <data name="AlbumsDetailPage_Header.PlaceholderText" xml:space="preserve">
-    <value>Search</value>
+    <value>Suche</value>
   </data>
   <data name="SearchResultPage_PageHeaderText" xml:space="preserve">
-    <value>Search results for "{0}"</value>
+    <value>Ergebnisse für "{0}"</value>
   </data>
   <data name="SearchResultTracksPage_PageHeaderText" xml:space="preserve">
-    <value>Search results for "{0}"</value>
+    <value>Songergebnisse für "{0}"</value>
   </data>
   <data name="SearchResultTracksPage_PageTitle.Text" xml:space="preserve">
     <value>Songs</value>
   </data>
   <data name="SearchResultAlbumsPage_PageHeaderText" xml:space="preserve">
-    <value>Album results for "{0}"</value>
+    <value>Albumergebnisse für "{0}"</value>
   </data>
   <data name="SearchResultAlbumsPage_PageTitle.Text" xml:space="preserve">
-    <value>Albums</value>
+    <value>Alben</value>
   </data>
   <data name="AlbumsPage_Header.PlaceholderText" xml:space="preserve">
-    <value>Search</value>
+    <value>Suche</value>
   </data>
   <data name="AlbumsPage_PageHeader.Text" xml:space="preserve">
-    <value>Albums</value>
+    <value>Alben</value>
   </data>
   <data name="PlaylistsPage_Header.HeaderText" xml:space="preserve">
-    <value>Playlists</value>
+    <value>Wiedergabelisten</value>
   </data>
   <data name="PlaylistsPage_Header.PlaceholderText" xml:space="preserve">
-    <value>Search</value>
+    <value>Suche</value>
   </data>
   <data name="PlaylistsPage_PageHeader.Text" xml:space="preserve">
-    <value>Playlists</value>
+    <value>Wiedergabelisten</value>
   </data>
   <data name="PlaylistDetailPage_Header.HeaderText" xml:space="preserve">
-    <value>Playlist</value>
+    <value>Wiedergabeliste</value>
   </data>
   <data name="PlaylistDetailPage_Header.PlaceholderText" xml:space="preserve">
-    <value>Search</value>
+    <value>Suche</value>
   </data>
   <data name="PlaylistDetailPage_PlayRandom.Text" xml:space="preserve">
-    <value>Play random</value>
+    <value>Zufallswiedergabe</value>
+  </data>
+  <data name="SignInSettingsPage_Header.Text" xml:space="preserve">
+    <value>Dein Konto bei BSEtunes</value>
+  </data>
+  <data name="IDS_SystemSettingsDescription" xml:space="preserve">
+    <value>Deine persönlichen Einstellungen</value>
+  </data>
+  <data name="IDS_SystemSettingsHeader" xml:space="preserve">
+    <value>Personalisierung</value>
+  </data>
+  <data name="Shell_TxtSettings.Text" xml:space="preserve">
+    <value>Einstellungen</value>
   </data>
   <data name="AboutPage-PageHeader.Content" xml:space="preserve">
     <value>Info</value>
   </data>
+  <data name="IDS_AboutPageHeader" xml:space="preserve">
+    <value>Info</value>
+  </data>
   <data name="AboutPage-TxtPrivacy-Header.Text" xml:space="preserve">
-    <value>Privacy</value>
+    <value>Datenschutz</value>
   </data>
   <data name="AboutPage-TxtPrivacy_Statement.Text" xml:space="preserve">
-    <value>This application communicates with a web service that is located in your private network or in the internet. The application uses an email address and a password only for authentication and personal playlists. Other than that the application stores no other informations about you.
+    <value>Diese Applikation kommuniziert mit einem Webserver der sich im heimischen Netzwerk oder auch im Internet befinden kann. Du benötigst die EMail- Adresse und das Passwort zur Authentifizierung und zur Verwaltung der personenbezogenen Wiedergabelisten. Es werden sonst keine personenbezogenen Informationen gespeichert.
 
-Due to copyright of the music files to stream, the load of your server and because the perhaps limited bandwidth in the operation of the server, you need a user account on this server. 
+Wegen dem Schutz des Urheberrechts der zu streamenden Musikdateien, der Belastung Deines Servers und wegen der eventuell eingeschränkten Bandbreite beim Betrieb des Servers brauchst Du ein Benutzerkonto auf diesem Server. 
 
-You may not have to register via the app.
-A registration can only be done by the operator of the server.</value>
-  </data>
-  <data name="IDS_SystemSettingsHeader" xml:space="preserve">
-    <value>Personalization</value>
+Du kannst Dich nicht über die App registrieren. 
+Die Registrierung kann nur durch den Betreiber des Servers erfolgen.</value>
   </data>
   <data name="SettingsPage-PageHeader.Content" xml:space="preserve">
-    <value>Personalization</value>
+    <value>Personalisierung</value>
   </data>
   <data name="SettingsMainpage-PageHeader.Text" xml:space="preserve">
-    <value>Settings</value>
-  </data>
-  <data name="IDS_SystemSettingsDescription" xml:space="preserve">
-    <value>Your personal settings</value>
-  </data>
-  <data name="SignInSettingsPage_Header.Text" xml:space="preserve">
-    <value>Your account at BSEtunes</value>
+    <value>Einstellungen</value>
   </data>
 </root>

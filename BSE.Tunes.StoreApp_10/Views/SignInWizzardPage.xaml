@@ -14,13 +14,12 @@
 
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
         <StackPanel Orientation="Vertical" VerticalAlignment="Center">
-            <TextBlock x:Uid="SignInSettingsPage_Header" TextAlignment="Center" Margin="4" Text="Account Settings"/>
-            <TextBlock x:Uid="SignInSettingsPage_TxtAccountInfo" Text="Due to copyright of the music..." TextAlignment="Center" TextWrapping="Wrap"/>
-            <TextBlock x:Uid="SignInSettingsPage_TxtAcountDescription" Text="Login with your account" TextAlignment="Center" Width="300" TextWrapping="Wrap"/>
+            <TextBlock x:Uid="SignInSettingsPage_Header" TextAlignment="Center" Margin="4" Text="Account Settings" Style="{StaticResource TitleTextBlockStyle}"/>
+            <TextBlock x:Uid="SignInSettingsPage_TxtAccountInfo" Text="Due to copyright of the music..." TextAlignment="Center" TextWrapping="Wrap" Style="{StaticResource BodyTextBlockStyle}"/>
             <TextBox x:Uid="SignInSettingsPage_TxtUserName" AutomationProperties.LabeledBy="{Binding ElementName=TxtUserName}" InputScope="EmailSmtpAddress"
                      AutomationProperties.IsRequiredForForm="True"
                      Text="{Binding UserName, Mode=TwoWay}" Width="300"
-                     Margin="4"/>
+                     Margin="4,10"/>
             <PasswordBox x:Uid="SignInSettingsPage_TxtPassword" AutomationProperties.LabeledBy="{Binding ElementName=TxtPassword}"
                      AutomationProperties.IsRequiredForForm="True"
                      Password="{Binding Password, Mode=TwoWay}" Width="300"

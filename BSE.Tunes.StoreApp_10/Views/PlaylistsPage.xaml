@@ -137,8 +137,8 @@
                                             Command="{Binding DataContext.SelectItemsCommand, ElementName=gridView}" CommandParameter="{Binding}"
                                             Visibility="{Binding DataContext.HasSelectedItems, ElementName=gridView, Converter={StaticResource BooleanToVisibilityConverter}, ConverterParameter=true, Mode=TwoWay}"/>
                                         <MenuFlyoutItem x:Uid="MenuFlyoutSelectAllItems" Text="Select All" Command="{Binding DataContext.SelectAllItemsCommand, ElementName=gridView}" CommandParameter="{Binding}"
-                                            Visibility="{Binding DataContext.AllItemsSelectable, ElementName=gridview, Converter={StaticResource BooleanToVisibilityConverter}, Mode=TwoWay}"/>
-                                        <MenuFlyoutItem x:Uid="MenuFlyoutUnSelectAll" Text="Unselect All" Command="{Binding DgridviewataContext.ClearSelectionCommand, ElementName=gridView}" CommandParameter="{Binding}"
+                                            Visibility="{Binding DataContext.AllItemsSelectable, ElementName=gridView, Converter={StaticResource BooleanToVisibilityConverter}, Mode=TwoWay}"/>
+                                        <MenuFlyoutItem x:Uid="MenuFlyoutUnSelectAll" Text="Unselect All" Command="{Binding DataContext.ClearSelectionCommand, ElementName=gridView}" CommandParameter="{Binding}"
                                             Visibility="{Binding DataContext.AllItemsSelected, ElementName=gridView, Converter={StaticResource BooleanToVisibilityConverter}, Mode=TwoWay}"/>
                                     </MenuFlyout.Items>
                                 </MenuFlyout>
