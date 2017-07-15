@@ -11,4 +11,4 @@ A sample audio .net solution that contains the following projects.
 
 The *BSEtunes* winrt app is available in the [Windows Store](http://apps.microsoft.com/windows/app/bsetunes/385d719f-f272-4995-844d-0113a7257e04).
 
-![BSEtunes](https://cloud.githubusercontent.com/assets/6463194/3687763/1143694e-132d-11e4-9464-a55b7a5c9a6f.jpg)
+![bse-tunes-de](https://user-images.githubusercontent.com/6463194/28237925-7e8501c8-6949-11e7-81d5-63c3447bd1ca.jpg)
