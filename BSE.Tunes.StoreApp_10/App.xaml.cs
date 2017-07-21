@@ -95,9 +95,10 @@ namespace BSE.Tunes.StoreApp
         public override async Task OnStartAsync(StartKind startKind, IActivatedEventArgs args)
         {
             IDataService dataService = ServiceLocator.Current.GetInstance<IDataService>();
-            Task<bool> isAccessibleTask = Task.Run(async () => await dataService.IsHostAccessible());
+            
             try
             {
+                Task<bool> isAccessibleTask = Task.Run(async () => await dataService.IsHostAccessible());
                 isAccessibleTask.Wait();
                 bool isAccessible = isAccessibleTask.Result;
                 if (isAccessible)
@@ -125,6 +126,15 @@ namespace BSE.Tunes.StoreApp
                         {
                             m_settingsService.IsFullScreen = true;
                             await NavigationService.NavigateAsync(typeof(Views.SignInWizzardPage));
+                        }
+                    }
+                    catch (AggregateException ae)
+                    {
+                        var unauthorizedAccessException = ae.Flatten().InnerExceptions
+                            .Select(exception => exception as UnauthorizedAccessException).FirstOrDefault();
+                        if (unauthorizedAccessException != null)
+                        {
+                            await NavigationService.NavigateAsync(typeof(Views.SignInWizzardPage), unauthorizedAccessException);
                         }
                     }
                     catch (Exception exception)

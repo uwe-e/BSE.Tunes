@@ -64,16 +64,24 @@ namespace BSE.Tunes.StoreApp.ViewModels
 
                 await DataService.IsHostAccessible(serviceUrl);
                 m_settingsService.ServiceUrl = serviceUrl;
-                User user = await m_authenticationHandler.VerifyUserAuthenticationAsync();
-                if (user == null)
+                try
+                {
+                    User user = await m_authenticationHandler.VerifyUserAuthenticationAsync();
+                    if (user == null)
+                    {
+                        m_settingsService.IsFullScreen = true;
+                        await NavigationService.NavigateAsync(typeof(Views.SignInWizzardPage));
+                    }
+                    else
+                    {
+                        m_settingsService.IsFullScreen = false;
+                        await NavigationService.NavigateAsync(typeof(Views.MainPage));
+                    }
+                }
+                catch(UnauthorizedAccessException)
                 {
                     m_settingsService.IsFullScreen = true;
                     await NavigationService.NavigateAsync(typeof(Views.SignInWizzardPage));
-                }
-                else
-                {
-                    m_settingsService.IsFullScreen = false;
-                    await NavigationService.NavigateAsync(typeof(Views.MainPage));
                 }
             }
             catch (Exception)
