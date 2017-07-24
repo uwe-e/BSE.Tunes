@@ -28,16 +28,39 @@ namespace BSE.Tunes.StoreApp.Controls
             }
         }
 
+        protected override void OnDrop(DragEventArgs e)
+        {
+            base.OnDrop(e);
+            if (AlternatingRow != null)
+            {
+                foreach (var itm in Items)
+                {
+                    var index = Items.IndexOf(itm);
+                    ListViewItem item = this.ContainerFromIndex(index) as ListViewItem;
+                    SetAlternatingBackground(item, index);
+                }
+            }
+        }
+
         protected override void PrepareContainerForItemOverride(DependencyObject element, object item)
         {
             base.PrepareContainerForItemOverride(element, item);
             int index = IndexFromContainer(element);
+            SetAlternatingBackground(element, index);
+        }
+
+        private void SetAlternatingBackground(DependencyObject element, int index)
+        {
             if (AlternatingRow != null)
             {
                 ListViewItem lvi = element as ListViewItem;
                 if (index % 2 == 0)
                 {
                     lvi.Background = AlternatingRow;
+                }
+                else
+                {
+                    lvi.Background = Background;
                 }
             }
         }

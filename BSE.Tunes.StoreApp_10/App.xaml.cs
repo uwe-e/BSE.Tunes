@@ -95,21 +95,15 @@ namespace BSE.Tunes.StoreApp
         public override async Task OnStartAsync(StartKind startKind, IActivatedEventArgs args)
         {
             IDataService dataService = ServiceLocator.Current.GetInstance<IDataService>();
-            
             try
             {
-                Task<bool> isAccessibleTask = Task.Run(async () => await dataService.IsHostAccessible());
-                isAccessibleTask.Wait();
-                bool isAccessible = isAccessibleTask.Result;
+                var isAccessible = await dataService.IsHostAccessible().ConfigureAwait(true);
                 if (isAccessible)
                 {
                     try
                     {
                         IAuthenticationService authenticationHandler = ServiceLocator.Current.GetInstance<IAuthenticationService>();
-                        Task<User> verifyUserTask = Task.Run(async () => await authenticationHandler.VerifyUserAuthenticationAsync());
-
-                        verifyUserTask.Wait();
-                        User user = verifyUserTask.Result;
+                        User user = await authenticationHandler.VerifyUserAuthenticationAsync().ConfigureAwait(true);
                         if (user != null)
                         {
                             //clears the cache only if the application lauches

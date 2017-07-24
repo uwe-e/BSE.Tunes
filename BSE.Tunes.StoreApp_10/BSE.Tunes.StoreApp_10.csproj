@@ -126,7 +126,6 @@
     <Compile Include="Controls\ListView\ListView.cs" />
     <Compile Include="Controls\PageHeader\AutoSuggestionPageHeader.cs" />
     <Compile Include="Converters\AutoSuggestQueryParameterConverter.cs" />
-    <Compile Include="Converters\Auto​Suggest​Box​Text​ChangedParameterConverter.cs" />
     <Compile Include="Extensions\DynamicExtension.cs" />
     <Compile Include="Mvvm\Messaging\PlaylistDeletedArgs.cs" />
     <Compile Include="Mvvm\Messaging\PlaylistEntriesChanged.cs" />
@@ -213,10 +212,8 @@
     <Compile Include="Services\ICacheableBitmapService.cs" />
     <Compile Include="Services\IDataService.cs" />
     <Compile Include="Services\IDialogService.cs" />
-    <Compile Include="Services\NavigationService\INavigationService.cs" />
     <Compile Include="Services\IPlayerService.cs" />
     <Compile Include="Services\IResourceService.cs" />
-    <Compile Include="Services\NavigationService\NavigationService.cs" />
     <Compile Include="Services\PlayerService.cs" />
     <Compile Include="Services\ResourceService.cs" />
     <Compile Include="Services\SettingsService.cs" />

@@ -30,6 +30,7 @@ namespace BSE.Tunes.StoreApp.ViewModels
         private string m_subTitle;
         private ICommand m_showAlbumCommand;
         private RelayCommand m_playRandomCommand;
+        private ICommand m_updatePlaylistCommand;
         #endregion
 
         #region Properties
@@ -70,6 +71,10 @@ namespace BSE.Tunes.StoreApp.ViewModels
             }
         }
         public ICommand ShowAlbumCommand => m_showAlbumCommand ?? (m_showAlbumCommand = new RelayCommand<ListViewItemViewModel>(ShowAlbum));
+        public ICommand UpdatePlaylistCommand => m_updatePlaylistCommand ?? (m_updatePlaylistCommand = new RelayCommand(async () =>
+        {
+            await UpdatePlaylistEntries();
+        }));
         public RelayCommand PlayRandomCommand => m_playRandomCommand ?? (m_playRandomCommand = new RelayCommand(PlayRandom, CanPlayRandom));
         #endregion
 
@@ -89,7 +94,6 @@ namespace BSE.Tunes.StoreApp.ViewModels
         {
             LoadData(parameter as Playlist);
             await base.OnNavigatedToAsync(parameter, mode, state);
-            
         }
 
         public async override Task OnNavigatingFromAsync(NavigatingEventArgs args)
@@ -119,17 +123,13 @@ namespace BSE.Tunes.StoreApp.ViewModels
         {
             if (SelectedItems?.Count > 0)
             {
-                var list = SelectedItems.ToList(); ;
+                var list = SelectedItems.ToList();
+                ;
                 foreach (var item in list)
                 {
                     Items.Remove((ListViewItemViewModel)item);
                 }
-                Playlist.Entries.Clear();
-                foreach (var entry in Items.Select(itm => itm.Data).Cast<PlaylistEntry>())
-                {
-                    Playlist.Entries.Add(entry);
-                }
-                await DataService.UpdatePlaylistEntries(Playlist);
+                await UpdatePlaylistEntries();
                 ICacheableBitmapService cacheableBitmapService = CacheableBitmapService.Instance;
                 await cacheableBitmapService.RemoveCache(Playlist.Guid.ToString());
                 Messenger.Default.Send<PlaylistChangedArgs>(new PlaylistEntriesChangedArgs(Playlist));
@@ -197,6 +197,18 @@ namespace BSE.Tunes.StoreApp.ViewModels
                 }
             }
         }
+
+        private async Task UpdatePlaylistEntries()
+        {
+            Playlist.Entries.Clear();
+            foreach (var entry in Items.Select(itm => itm.Data).Cast<PlaylistEntry>())
+            {
+                entry.SortOrder = Items.IndexOf(Items.Where(itm => ((PlaylistEntry)itm.Data).Id == entry.Id).FirstOrDefault());
+                Playlist.Entries.Add(entry);
+            }
+            await DataService.UpdatePlaylistEntries(Playlist);
+        }
+
         private string FormatNumberOfEntriesString(Playlist playlist)
         {
             int numberOfEntries = 0;
@@ -206,6 +218,7 @@ namespace BSE.Tunes.StoreApp.ViewModels
             }
             return string.Format(CultureInfo.CurrentUICulture, "{0} {1}", numberOfEntries, ResourceService.GetString("PlaylistItem_PartNumberOfEntries", "Songs"));
         }
+
         private void ShowAlbum(ListViewItemViewModel item)
         {
             NavigationService.NavigateAsync(typeof(Views.AlbumDetailPage), ((Track)((PlaylistEntry)item.Data).Track).Album);
@@ -227,6 +240,5 @@ namespace BSE.Tunes.StoreApp.ViewModels
             }
         }
         #endregion
-
     }
 }

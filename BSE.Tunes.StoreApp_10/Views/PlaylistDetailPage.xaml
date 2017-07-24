@@ -332,14 +332,21 @@
 
                 <Grid RelativePanel.AlignLeftWithPanel="True" RelativePanel.AlignRightWithPanel="True" RelativePanel.Below="infoPart">
                     <usercontrols:ListView x:Name="listview" Margin="0,12,0,0"
+                                           AllowDrop="{Binding HasSelectedItems, Converter={StaticResource InverseBooleanConverter}}"
+                                           CanDragItems="True" CanReorderItems="True"
                                            ItemTemplate="{StaticResource normalListViewItem}"
                                            ItemContainerStyle="{StaticResource normalListViewItemStyle}"
                                            AlternatingRow="{StaticResource ListViewAlternatingRowBrush}"
-                              ItemsSource="{Binding Items}" SelectionMode="{Binding HasSelectedItems, Converter={StaticResource BooleanToSelectionModeConverter}}"
-                              IsItemClickEnabled="{Binding HasSelectedItems, Converter={StaticResource InverseBooleanConverter}}"
-                              controlextensions:ListViewExtensions.Command="{Binding PlayTrackCommand}" 
-                              controlextensions:ListViewExtensions.SelectedItems="{Binding SelectedItems, Mode=TwoWay}"/>
-
+                                           ItemsSource="{Binding Items}" SelectionMode="{Binding HasSelectedItems, Converter={StaticResource BooleanToSelectionModeConverter}}"
+                                           IsItemClickEnabled="{Binding HasSelectedItems, Converter={StaticResource InverseBooleanConverter}}"
+                                           controlextensions:ListViewExtensions.Command="{Binding PlayTrackCommand}" 
+                                           controlextensions:ListViewExtensions.SelectedItems="{Binding SelectedItems, Mode=TwoWay}">
+                        <interactivity:Interaction.Behaviors>
+                            <core:EventTriggerBehavior EventName="DragItemsCompleted">
+                                <core:InvokeCommandAction Command="{x:Bind ViewModel.UpdatePlaylistCommand}"/>
+                            </core:EventTriggerBehavior>
+                        </interactivity:Interaction.Behaviors>
+                    </usercontrols:ListView>
                 </Grid>
             </RelativePanel>
         </ScrollViewer>

@@ -66,7 +66,7 @@ namespace BSE.Tunes.StoreApp.ViewModels
                 m_settingsService.ServiceUrl = serviceUrl;
                 try
                 {
-                    User user = await m_authenticationHandler.VerifyUserAuthenticationAsync();
+                    User user = await m_authenticationHandler.VerifyUserAuthenticationAsync().ConfigureAwait(true);
                     if (user == null)
                     {
                         m_settingsService.IsFullScreen = true;
