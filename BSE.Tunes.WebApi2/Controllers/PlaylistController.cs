@@ -35,6 +35,16 @@ namespace BSE.Tunes.WebApi.Controllers
 		{
 			return this.TunesService.UpdatePlaylistEntries(playlist);
 		}
+        [Route("{username}/numbersofplaylists")]
+        public int GetNumberOfPlaylistsByUserName(string userName)
+        {
+            return this.TunesService.GetNumberOfPlaylistsByUserName(userName);
+        }
+        [Route("{username}/playlists/{pageIndex:int}/{pageSize:int}")]
+        public Playlist[] GetPlaylistsByUserName(string userName, int pageIndex, int pageSize)
+        {
+            return TunesService.GetPlaylistsByUserName(userName, pageIndex, pageSize);
+        }
         [HttpPost]
         [Route("{username}/trackids")]
         public ICollection<int> GetTrackIdsByPlaylistIds([FromBody] IList<int> playlistIds, string userName)

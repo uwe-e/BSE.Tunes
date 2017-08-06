@@ -104,7 +104,7 @@
                     </Grid>
 
                     <Grid x:Name="featuredTracks" RelativePanel.AlignLeftWithPanel="True" RelativePanel.AlignRightWithPanel="True" RelativePanel.Below="featuredAlbums">
-                        <local:SearchResultTracksUserControlViewModel DataContext="{x:Bind ViewModel.TracksResult}"/>
+                        <local:SearchResultTracksUserControl DataContext="{x:Bind ViewModel.TracksResult}"/>
                     </Grid>
 
                 </RelativePanel>

@@ -84,6 +84,13 @@ namespace BSE.Tunes.StoreApp.Services
             string strUrl = string.Format("{0}/api/albums/trackids", this.ServiceUrl);
             return await GetHttpResponseFromPost<ObservableCollection<int>, ICollection<int>>(new Uri(strUrl), albumIds);
         }
+
+        public async Task<ObservableCollection<Track>> GetTopTracks(int pageIndex, int pageSize)
+        {
+            string strUrl = string.Format("{0}/api/tunes/tracks/top/{1}/{2}", this.ServiceUrl, pageIndex, pageSize);
+            return await GetHttpResponse<ObservableCollection<Track>>(new Uri(strUrl));
+        }
+
         public async Task<Album> GetAlbumById(int albumId)
         {
             string strUrl = string.Format("{0}/api/albums/{1}", this.ServiceUrl, albumId);
@@ -149,6 +156,11 @@ namespace BSE.Tunes.StoreApp.Services
             string strUrl = string.Format("{0}/api/system", this.ServiceUrl);
             return await GetHttpResponse<SystemInfo>(new Uri(strUrl));
         }
+        public async Task<int> GetNumberOfPlaylistsByUserName(string userName)
+        {
+            string strUrl = string.Format("{0}/api/playlist/{1}/numbersofplaylists", this.ServiceUrl, userName);
+            return await GetHttpResponse<int>(new Uri(strUrl));
+        }
         public async Task<ObservableCollection<int>> GetTrackIdsByPlaylistIds(ICollection<int> playlistIds, string userName)
         {
             string strUrl = string.Format("{0}/api/playlist/{1}/trackids", this.ServiceUrl, userName);
@@ -167,6 +179,11 @@ namespace BSE.Tunes.StoreApp.Services
         public async Task<ObservableCollection<Playlist>> GetPlaylistsByUserName(string userName, int limit)
         {
             string strUrl = string.Format("{0}/api/playlist/{1}/{2}/playlists", this.ServiceUrl, userName, limit);
+            return await this.GetHttpResponse<ObservableCollection<Playlist>>(new Uri(strUrl));
+        }
+        public async Task<ObservableCollection<Playlist>> GetPlaylistsByUserName(string userName, int pageIndex, int pageSize)
+        {
+            string strUrl = string.Format("{0}/api/playlist/{1}/playlists/{2}/{3}", this.ServiceUrl, userName, pageIndex, pageSize);
             return await this.GetHttpResponse<ObservableCollection<Playlist>>(new Uri(strUrl));
         }
         public async Task<Playlist> GetPlaylistByIdWithNumberOfEntries(int playlistId, string userName)

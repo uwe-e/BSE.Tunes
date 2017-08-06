@@ -140,6 +140,7 @@
     <Compile Include="ViewModels\SearchSuggestionsViewModel.cs" />
     <Compile Include="ViewModels\SelectableItemsBaseViewModel.cs" />
     <Compile Include="ViewModels\ShellViewModel.cs" />
+    <Compile Include="ViewModels\TopSongsUserControlViewModel.cs" />
     <Compile Include="Views\AboutPage.xaml.cs">
       <DependentUpon>AboutPage.xaml</DependentUpon>
     </Compile>
@@ -274,8 +275,8 @@
     <Compile Include="Views\SearchResultTracksPage.xaml.cs">
       <DependentUpon>SearchResultTracksPage.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\SearchResultTracksUserControlViewModel.xaml.cs">
-      <DependentUpon>SearchResultTracksUserControlViewModel.xaml</DependentUpon>
+    <Compile Include="Views\SearchResultTracksUserControl.xaml.cs">
+      <DependentUpon>SearchResultTracksUserControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\ServiceUrlSettingsPage.xaml.cs">
       <DependentUpon>ServiceUrlSettingsPage.xaml</DependentUpon>
@@ -303,6 +304,9 @@
     </Compile>
     <Compile Include="Views\Splash.xaml.cs">
       <DependentUpon>Splash.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\TopSongsUserControl.xaml.cs">
+      <DependentUpon>TopSongsUserControl.xaml</DependentUpon>
     </Compile>
   </ItemGroup>
   <ItemGroup>
@@ -456,7 +460,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\SearchResultTracksUserControlViewModel.xaml">
+    <Page Include="Views\SearchResultTracksUserControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -493,6 +497,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\Splash.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\TopSongsUserControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

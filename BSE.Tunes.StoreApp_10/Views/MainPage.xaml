@@ -106,6 +106,9 @@
                     <local:FeaturedPlaylistsUserControl/>
                 </Grid>
 
+                <Grid x:Name="topSongs" RelativePanel.AlignLeftWithPanel="True" RelativePanel.AlignRightWithPanel="True" RelativePanel.Below="featuredPlaylists">
+                    <local:TopSongsUserControl/>
+                </Grid>
             </RelativePanel>
         </ScrollViewer>
     </RelativePanel>

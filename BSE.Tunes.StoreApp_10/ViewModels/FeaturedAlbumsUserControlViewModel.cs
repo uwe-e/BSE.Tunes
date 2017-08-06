@@ -13,14 +13,6 @@ namespace BSE.Tunes.StoreApp.ViewModels
 {
     public class FeaturedAlbumsUserControlViewModel : FeaturedItemsBaseViewModel
     {
-        //#region FieldsPrivate
-        //private ICommand m_openFlyoutCommand;
-        //#endregion
-
-        //#region Properties
-        //public ICommand OpenFlyoutCommand => m_openFlyoutCommand ?? (m_openFlyoutCommand = new RelayCommand<GridPanelItemViewModel>(OpenFlyout));
-        //#endregion
-
         #region MethodsPublic
         public override async void LoadData()
         {
@@ -71,10 +63,6 @@ namespace BSE.Tunes.StoreApp.ViewModels
         #endregion
 
         #region MethodsPrivate
-        //private void OpenFlyout(GridPanelItemViewModel item)
-        //{
-        //    item.IsOpen = true;
-        //}
         #endregion
     }
 }

@@ -27,8 +27,6 @@ namespace BSE.Tunes.WebApi.Controllers
 		{
 			return this.m_tunesService.GetGenres();
 		}
-		
-		
 		[Route("GetTrackById/{trackId:int}")]
 		public Track GetTrackById(int trackId)
 		{
@@ -40,8 +38,13 @@ namespace BSE.Tunes.WebApi.Controllers
 		{
 			return this.m_tunesService.GetTrackIdsByFilters(filter);
 		}
-		[HttpGet]
-		[AllowAnonymous]
+        [Route("tracks/top/{pageIndex:int}/{pageSize:int}")]
+        public ICollection<Track> GetTopTracks(int pageIndex, int pageSize)
+        {
+            return m_tunesService.GetTopTracks(pageIndex, pageSize);
+        }
+        [HttpGet]
+        [AllowAnonymous]
 		public bool IsHostAccessible()
 		{
 			return this.m_tunesService.IsHostAccessible();

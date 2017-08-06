@@ -1,4 +1,5 @@
 ﻿using BSE.Tunes.Data;
+using BSE.Tunes.StoreApp.Collections;
 using BSE.Tunes.StoreApp.Models;
 using BSE.Tunes.StoreApp.Mvvm.Messaging;
 using BSE.Tunes.StoreApp.Services;
@@ -19,9 +20,22 @@ namespace BSE.Tunes.StoreApp.ViewModels
     {
         #region FieldsPrivate
         private ICommand m_showDeletePlaylistDialogCommand;
+        private IncrementalObservableCollection<ListViewItemViewModel> m_playlists;
         #endregion
 
         #region Properties
+        public IncrementalObservableCollection<ListViewItemViewModel> Playlists
+        {
+            get
+            {
+                return m_playlists;
+            }
+            private set
+            {
+                m_playlists = value;
+                RaisePropertyChanged("Playlists");
+            }
+        }
         public User User
         {
             get;
@@ -47,42 +61,57 @@ namespace BSE.Tunes.StoreApp.ViewModels
         }
         public override async void LoadData()
         {
+            Playlists = null;
+            ICacheableBitmapService cacheableBitmapService = CacheableBitmapService.Instance;
             if (!string.IsNullOrEmpty(User.UserName))
             {
-                try
-                {
-                    Items.Clear();
-                    ICacheableBitmapService cacheableBitmapService = CacheableBitmapService.Instance;
-                    var playlists = await DataService.GetPlaylistsByUserName(User.UserName, 6);
-                    if (playlists != null)
+                int numberOfPlaylists = await DataService?.GetNumberOfPlaylistsByUserName(User.UserName);
+                numberOfPlaylists = numberOfPlaylists > 20 ? 20 : numberOfPlaylists;
+                int pageNumber = 0;
+
+                Playlists = new IncrementalObservableCollection<ListViewItemViewModel>(
+                    (uint)numberOfPlaylists,
+                    (uint count) =>
                     {
-                        foreach (var playlst in playlists)
+                        Func<Task<Windows.UI.Xaml.Data.LoadMoreItemsResult>> taskFunc = async () =>
                         {
-                            if (playlst != null)
+                            int pageSize = (int)count;
+
+                            ObservableCollection<Playlist> playlists = await DataService?.GetPlaylistsByUserName(User.UserName, pageNumber, pageSize);
+                            if (playlists != null)
                             {
-                                var playlist = await DataService.GetPlaylistByIdWithNumberOfEntries(playlst.Id, User.UserName);
-                                if (playlist != null)
+                                foreach (var playlst in playlists)
                                 {
-                                    System.Collections.ObjectModel.ObservableCollection<Guid> albumIds = await DataService.GetPlaylistImageIdsById(playlist.Id, User.UserName, 4);
-                                    Items.Add(new GridPanelItemViewModel
+                                    if (playlst != null)
                                     {
-                                        Title = playlist.Name,
-                                        Subtitle = FormatNumberOfEntriesString(playlist),
-                                        BitmapSource = await cacheableBitmapService.GetBitmapSource(
-                                            new ObservableCollection<Uri>(albumIds.Select(id => DataService.GetImage(id, true))),
-                                            playlist.Guid.ToString(),
-                                            150, true),
-                                        Data = playlist
-                                    });
+                                        var playlist = await DataService.GetPlaylistByIdWithNumberOfEntries(playlst.Id, User.UserName);
+                                        if (playlst != null)
+                                        {
+                                            System.Collections.ObjectModel.ObservableCollection<Guid> albumIds = await DataService.GetPlaylistImageIdsById(playlist.Id, User.UserName, 4);
+                                            Playlists.Add(new GridPanelItemViewModel
+                                            {
+                                                Title = playlist.Name,
+                                                Subtitle = FormatNumberOfEntriesString(playlist),
+                                                BitmapSource = await cacheableBitmapService.GetBitmapSource(
+                                                new ObservableCollection<Uri>(albumIds.Select(id => DataService.GetImage(id, true))),
+                                                playlist.Guid.ToString(),
+                                                150, true),
+                                                Data = playlist
+                                            });
+                                        }
+                                    }
                                 }
+                                pageNumber += pageSize;
                             }
-                        }
+                            return new Windows.UI.Xaml.Data.LoadMoreItemsResult()
+                            {
+                                Count = (uint)count
+                            };
+                        };
+                        Task<Windows.UI.Xaml.Data.LoadMoreItemsResult> loadMoreItemsTask = taskFunc();
+                        return loadMoreItemsTask.AsAsyncOperation<Windows.UI.Xaml.Data.LoadMoreItemsResult>();
                     }
-                }
-                finally
-                {
-                    //this.IsBusy = false;
-                }
+                );
             }
         }
         public async override void PlayAll(GridPanelItemViewModel item)

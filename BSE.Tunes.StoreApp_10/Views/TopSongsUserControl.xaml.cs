@@ -17,9 +17,9 @@ using Windows.UI.Xaml.Navigation;
 
 namespace BSE.Tunes.StoreApp.Views
 {
-    public sealed partial class SearchResultTracksUserControlViewModel : UserControl
+    public sealed partial class TopSongsUserControl : UserControl
     {
-        public SearchResultTracksUserControlViewModel()
+        public TopSongsUserControl()
         {
             this.InitializeComponent();
         }

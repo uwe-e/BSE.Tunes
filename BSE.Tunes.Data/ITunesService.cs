@@ -35,6 +35,8 @@ namespace BSE.Tunes.Data
 		[OperationContract]
         ICollection<Track> GetTracksByFilters(Filter filter);
         [OperationContract]
+        ICollection<Track> GetTopTracks(int pageIndex, int pageSize);
+        [OperationContract]
         String[] GetSearchSuggestions(Query query);
         [OperationContract]
         SearchResult GetSearchResults(Query query);
@@ -45,6 +47,8 @@ namespace BSE.Tunes.Data
         [OperationContract]
         bool UpdateHistory(History history);
         [OperationContract]
+        int GetNumberOfPlaylistsByUserName(string userName);
+        [OperationContract]
         ICollection<int> GetTrackIdsByPlaylistIds(IList<int> playlistIds, string userName);
         [OperationContract]
 		ICollection<Guid> GetPlaylistImageIdsById(int playlistId, string userName, int limit);
@@ -52,6 +56,8 @@ namespace BSE.Tunes.Data
         Playlist GetPlaylistById(int playlistId, string userName);
         [OperationContract(Name = "GetPlaylistsByUserName")]
         Playlist[] GetPlaylistsByUserName(string userName);
+        [OperationContract]
+        Playlist[] GetPlaylistsByUserName(string userName, int pageIndex, int pageSize);
         [OperationContract(Name = "GetPlaylistsByUserNameAndLimit")]
         Playlist[] GetPlaylistsByUserName(string userName, int limit);
         [OperationContract]

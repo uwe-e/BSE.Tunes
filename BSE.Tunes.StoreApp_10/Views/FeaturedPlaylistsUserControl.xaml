@@ -95,7 +95,7 @@
                   ItemTemplate="{StaticResource SmallImagePanelTemplate}"
                   ItemContainerStyle="{StaticResource NormalGridViewItem}"
                   ItemsPanel="{StaticResource NormalGridWrapping}"
-                  ItemsSource="{Binding Items}" RelativePanel.Below="sectionName"  ScrollViewer.VerticalScrollMode="Disabled"
+                  ItemsSource="{Binding Playlists}" DataFetchSize="1" RelativePanel.Below="sectionName"  ScrollViewer.VerticalScrollMode="Disabled"
                   ScrollViewer.HorizontalScrollBarVisibility="Hidden" ScrollViewer.HorizontalScrollMode="Enabled" ScrollViewer.IsHorizontalRailEnabled="True"
                   controlextensions:ListViewExtensions.Command="{Binding SelectItemCommand}">
         </GridView>
