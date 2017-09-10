@@ -21,6 +21,7 @@ namespace BSE.Tunes.StoreApp.ViewModels
         #region FieldsPrivate
         private Album m_album;
         private Uri m_coverSource;
+        private ArtistsAlbumsUserControlViewModel m_artistsAlbums;
         #endregion
 
         #region Properties
@@ -48,6 +49,18 @@ namespace BSE.Tunes.StoreApp.ViewModels
                 RaisePropertyChanged("CoverSource");
             }
         }
+        public ArtistsAlbumsUserControlViewModel ArtistsAlbums
+        {
+            get
+            {
+                return m_artistsAlbums;
+            }
+            set
+            {
+                m_artistsAlbums = value;
+                RaisePropertyChanged(() => ArtistsAlbums);
+            }
+        }
         #endregion
 
         #region MethodsPublic
@@ -70,6 +83,7 @@ namespace BSE.Tunes.StoreApp.ViewModels
                     }
                 }
                 this.CoverSource = DataService.GetImage(album.AlbumId);
+                ArtistsAlbums = new ArtistsAlbumsUserControlViewModel(album.Artist);
                 this.PlayAllCommand.RaiseCanExecuteChanged();
             }
         }

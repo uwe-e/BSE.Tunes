@@ -79,6 +79,16 @@ namespace BSE.Tunes.StoreApp.Services
             string strUrl = string.Format("{0}/api/albums", this.ServiceUrl);
             return await GetHttpResponseFromPost<ObservableCollection<Album>, Query>(new Uri(strUrl), query);
         }
+        public async Task<int> GetNumberOfAlbumsByArtist(int artistId)
+        {
+            string strUrl = string.Format("{0}/api/artists/albums/{1}/numberofalbums", this.ServiceUrl, artistId);
+            return await GetHttpResponse<int>(new Uri(strUrl));
+        }
+        public async Task<ObservableCollection<Album>> GetAlbumsByArtist(Query query)
+        {
+            string strUrl = string.Format("{0}/api/artists/albums", this.ServiceUrl);
+            return await GetHttpResponseFromPost<ObservableCollection<Album>, Query>(new Uri(strUrl), query);
+        }
         public async Task<ObservableCollection<int>> GetTrackIdsByAlbumIds(ICollection<int> albumIds)
         {
             string strUrl = string.Format("{0}/api/albums/trackids", this.ServiceUrl);

@@ -157,6 +157,7 @@
     <Compile Include="Configuration\Settings.cs" />
     <Compile Include="Configuration\TunesConfiguration.cs" />
     <Compile Include="Controllers\AlbumsController.cs" />
+    <Compile Include="Controllers\ArtistsController.cs" />
     <Compile Include="Controllers\BaseApiController.cs" />
     <Compile Include="Controllers\FilesController.cs" />
     <Compile Include="Controllers\PlaylistController.cs" />

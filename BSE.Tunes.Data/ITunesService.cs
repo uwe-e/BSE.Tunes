@@ -23,6 +23,10 @@ namespace BSE.Tunes.Data
         [OperationContract]
         Album[] GetAlbums(Query query);
         [OperationContract]
+        int GetNumberOfAlbumsByArtist(int artistId);
+        [OperationContract]
+        Album[] GetAlbumsByArtist(Query query);
+        [OperationContract]
         Album[] GetNewestAlbums(int limit);
         [OperationContract]
         Album[] GetFeaturedAlbums(int limit);

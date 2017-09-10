@@ -21,6 +21,8 @@ namespace BSE.Tunes.StoreApp.Services
         Task<bool> IsHostAccessible();
         Task<bool> IsHostAccessible(string serviceUrl);
         Task<ObservableCollection<Album>> GetAlbums(Query query);
+        Task<int> GetNumberOfAlbumsByArtist(int artistId);
+        Task<ObservableCollection<Album>> GetAlbumsByArtist(Query query);
         Task<ObservableCollection<int>> GetTrackIdsByAlbumIds(ICollection<int> albumIds);
         Task<ObservableCollection<Track>> GetTopTracks(int pageIndex, int pageSize);
         Task<Album> GetAlbumById(int albumId);

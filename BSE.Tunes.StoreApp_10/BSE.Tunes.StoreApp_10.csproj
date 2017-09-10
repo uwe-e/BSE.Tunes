@@ -131,6 +131,7 @@
     <Compile Include="Mvvm\Messaging\PlaylistEntriesChanged.cs" />
     <Compile Include="ViewModels\AboutItemViewModel.cs" />
     <Compile Include="ViewModels\AboutPageViewModel.cs" />
+    <Compile Include="ViewModels\ArtistsAlbumsUserControlViewModel.cs" />
     <Compile Include="ViewModels\DeletePlaylistContentDialogViewModel.cs" />
     <Compile Include="ViewModels\SearchResultAlbumsPageViewModel.cs" />
     <Compile Include="ViewModels\SearchResultAlbumsUserControlViewModel.cs" />
@@ -143,6 +144,9 @@
     <Compile Include="ViewModels\TopSongsUserControlViewModel.cs" />
     <Compile Include="Views\AboutPage.xaml.cs">
       <DependentUpon>AboutPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\ArtistsAlbumsUserControl.xaml.cs">
+      <DependentUpon>ArtistsAlbumsUserControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\DeletePlaylistContentDialog.xaml.cs">
       <DependentUpon>DeletePlaylistContentDialog.xaml</DependentUpon>
@@ -343,6 +347,10 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Page>
     <Page Include="Views\AboutPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\ArtistsAlbumsUserControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

@@ -322,8 +322,7 @@
                         </Grid>
                     </StackPanel>
                 </Grid>
-                <Grid RelativePanel.AlignLeftWithPanel="True" RelativePanel.AlignRightWithPanel="True" RelativePanel.Below="infoPart">
-
+                <Grid x:Name="tracksPart" RelativePanel.AlignLeftWithPanel="True" RelativePanel.AlignRightWithPanel="True" RelativePanel.Below="infoPart">
                     <usercontrols:ListView x:Name="listview" Margin="0,12,0,0"
                                            ItemTemplate="{StaticResource normalListViewItem}"
                                            ItemContainerStyle="{StaticResource normalListViewItemStyle}"
@@ -334,6 +333,9 @@
                                            controlextensions:ListViewExtensions.Command="{Binding PlayTrackCommand}" 
                                            controlextensions:ListViewExtensions.SelectedItems="{Binding SelectedItems, Mode=TwoWay}"/>
 
+                </Grid>
+                <Grid x:Name="artistsAlbums" RelativePanel.AlignLeftWithPanel="True" RelativePanel.AlignRightWithPanel="True" RelativePanel.Below="tracksPart">
+                    <local:ArtistsAlbumsUserControl DataContext="{x:Bind ViewModel.ArtistsAlbums}"/>
                 </Grid>
             </RelativePanel>
         </ScrollViewer>
