@@ -406,4 +406,10 @@ A registration can only be done by the operator of the server.</value>
   <data name="SignInSettingsPage_Header.Text" xml:space="preserve">
     <value>Your account at BSEtunes</value>
   </data>
+  <data name="ArtistsAlbums_SectionHeader.Text" xml:space="preserve">
+    <value>Albums by</value>
+  </data>
+  <data name="ArtistsAlbums_ShowAll.Text" xml:space="preserve">
+    <value>Show All</value>
+  </data>
 </root>

@@ -412,4 +412,10 @@ Die Registrierung kann nur durch den Betreiber des Servers erfolgen.</value>
   <data name="SettingsMainpage-PageHeader.Text" xml:space="preserve">
     <value>Einstellungen</value>
   </data>
+  <data name="ArtistsAlbums_SectionHeader.Text" xml:space="preserve">
+    <value>Alben von</value>
+  </data>
+  <data name="ArtistsAlbums_ShowAll.Text" xml:space="preserve">
+    <value>Alle anzeigen</value>
+  </data>
 </root>

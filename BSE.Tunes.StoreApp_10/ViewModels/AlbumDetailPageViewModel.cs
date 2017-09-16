@@ -73,17 +73,17 @@ namespace BSE.Tunes.StoreApp.ViewModels
             Album album = parameter as Album;
             if (album != null)
             {
-                this.Album = await DataService.GetAlbumById(album.Id);
+                Album = await DataService.GetAlbumById(album.Id);
 
-                foreach (Track track in this.Album.Tracks)
+                foreach (Track track in Album.Tracks)
                 {
                     if (track != null)
                     {
                         this.Items.Add(new ListViewItemViewModel { Data = track });
                     }
                 }
-                this.CoverSource = DataService.GetImage(album.AlbumId);
-                ArtistsAlbums = new ArtistsAlbumsUserControlViewModel(album.Artist);
+                this.CoverSource = DataService.GetImage(Album.AlbumId);
+                ArtistsAlbums = new ArtistsAlbumsUserControlViewModel(Album.Artist);
                 this.PlayAllCommand.RaiseCanExecuteChanged();
             }
         }

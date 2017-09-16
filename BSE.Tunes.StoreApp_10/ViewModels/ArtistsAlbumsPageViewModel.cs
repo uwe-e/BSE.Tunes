@@ -1,20 +1,49 @@
 ﻿using BSE.Tunes.Data;
 using BSE.Tunes.StoreApp.Collections;
-using BSE.Tunes.StoreApp.Models;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
+using Windows.UI.Xaml.Navigation;
+using BSE.Tunes.StoreApp.Models;
 
 namespace BSE.Tunes.StoreApp.ViewModels
 {
-    public class ArtistsAlbumsUserControlViewModel : FeaturedItemsBaseViewModel
+    public class ArtistsAlbumsPageViewModel : SelectableItemsBaseViewModel
     {
-        private Artist m_artist;
+        #region FieldsPrivate
         private IncrementalObservableCollection<ListViewItemViewModel> m_albums;
+        private string m_headerText;
+        private string m_pageHeaderText;
+        private Artist m_artist;
+        #endregion
 
+        #region Properties
+        public string HeaderText
+        {
+            get
+            {
+                return m_headerText;
+            }
+            set
+            {
+                m_headerText = value;
+                RaisePropertyChanged(() => HeaderText);
+            }
+        }
+        public string PageHeaderText
+        {
+            get
+            {
+                return m_pageHeaderText;
+            }
+            set
+            {
+                m_pageHeaderText = value;
+                RaisePropertyChanged(() => PageHeaderText);
+            }
+        }
         public Artist Artist
         {
             get
@@ -27,7 +56,6 @@ namespace BSE.Tunes.StoreApp.ViewModels
                 RaisePropertyChanged(() => Artist);
             }
         }
-
         public IncrementalObservableCollection<ListViewItemViewModel> Albums
         {
             get
@@ -40,20 +68,69 @@ namespace BSE.Tunes.StoreApp.ViewModels
                 RaisePropertyChanged("Albums");
             }
         }
+        #endregion
 
-        public ArtistsAlbumsUserControlViewModel()
+        #region MethodsPublic
+
+        public override async Task OnNavigatedToAsync(object parameter, NavigationMode mode, IDictionary<string, object> state)
         {
+            await base.OnNavigatedToAsync(parameter, mode, state);
+            LoadData(parameter as Artist);
         }
-        public ArtistsAlbumsUserControlViewModel(Artist artist)
+        public override void SelectItem(GridPanelItemViewModel item)
         {
-            Artist = artist;
-            LoadData();
+            NavigationService.NavigateAsync(typeof(Views.AlbumDetailPage), item.Data);
         }
-        public async override void LoadData()
+        public async override void PlayAll(GridPanelItemViewModel item)
         {
-            this.Albums = null;
-            if (Artist != null)
+            if (HasSelectedItems)
             {
+                PlaySelectedItems();
+            }
+            else
+            {
+                Album album = item.Data as Album;
+                if (album != null)
+                {
+                    album = await DataService.GetAlbumById(album.Id);
+                    if (album.Tracks != null)
+                    {
+                        var trackIds = album.Tracks.Select(track => track.Id);
+                        if (trackIds != null)
+                        {
+                            PlayerManager.PlayTracks(
+                                new System.Collections.ObjectModel.ObservableCollection<int>(trackIds),
+                                PlayerMode.CD);
+                        }
+                    }
+                }
+            }
+        }
+        public async override void PlaySelectedItems()
+        {
+            var albumIds = SelectedItems.Cast<GridPanelItemViewModel>().Select(itm => (Album)itm.Data).Select(itm => itm.Id).ToList();
+            if (albumIds != null)
+            {
+                var entryIds = await DataService.GetTrackIdsByAlbumIds(albumIds);
+                if (entryIds != null)
+                {
+                    PlayerManager.PlayTracks(
+                        new System.Collections.ObjectModel.ObservableCollection<int>(entryIds),
+                        PlayerMode.CD);
+                }
+            }
+            ClearSelection();
+        }
+        #endregion
+
+        #region MethodsPrivate
+        private async void LoadData(Artist artist)
+        {
+            Albums = null;
+            if (artist != null)
+            {
+                Artist = artist;
+
                 int numberOfAlbums = await DataService?.GetNumberOfAlbumsByArtist(Artist.Id);
                 numberOfAlbums = numberOfAlbums > 20 ? 20 : numberOfAlbums;
                 int pageNumber = 0;
@@ -97,31 +174,6 @@ namespace BSE.Tunes.StoreApp.ViewModels
                 );
             }
         }
-        public override void NavigateTo()
-        {
-            NavigationService.NavigateAsync(typeof(Views.ArtistsAlbumsPage), Artist);
-        }
-        public override void SelectItem(GridPanelItemViewModel item)
-        {
-            NavigationService.NavigateAsync(typeof(Views.AlbumDetailPage), item.Data);
-        }
-        public override async void PlayAll(GridPanelItemViewModel item)
-        {
-            Album album = item.Data as Album;
-            if (album != null)
-            {
-                album = await DataService.GetAlbumById(album.Id);
-                if (album.Tracks != null)
-                {
-                    var trackIds = album.Tracks.Select(track => track.Id);
-                    if (trackIds != null)
-                    {
-                        PlayerManager.PlayTracks(
-                            new System.Collections.ObjectModel.ObservableCollection<int>(trackIds),
-                            PlayerMode.CD);
-                    }
-                }
-            }
-        }
+        #endregion
     }
 }

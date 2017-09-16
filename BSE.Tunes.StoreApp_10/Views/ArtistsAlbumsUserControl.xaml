@@ -73,7 +73,11 @@
         </VisualStateManager.VisualStateGroups>
         <HyperlinkButton x:Name="sectionName" Foreground="{ThemeResource SystemBaseHighColor}" Command="{Binding NavigateToPageCommand}">
             <HyperlinkButton.Content>
-                <TextBlock x:Uid="ArtistsAlbums_SectionHeader" TextTrimming="CharacterEllipsis" Style="{StaticResource SectionSubtitleTextBlockStyle}" Text="Top-Alben von"/>
+                <TextBlock TextTrimming="CharacterEllipsis" Style="{StaticResource SectionSubtitleTextBlockStyle}">
+                    <Run x:Uid="ArtistsAlbums_SectionHeader" Text="Albums by"/>
+                    <Run Text="{Binding Artist.Name}"/>
+                </TextBlock>
+                
             </HyperlinkButton.Content>
         </HyperlinkButton>
         <HyperlinkButton x:Name="sectionButton" RelativePanel.AlignRightWithPanel="True" RelativePanel.AlignVerticalCenterWith="sectionName" Command="{Binding NavigateToPageCommand}" FontSize="14">
