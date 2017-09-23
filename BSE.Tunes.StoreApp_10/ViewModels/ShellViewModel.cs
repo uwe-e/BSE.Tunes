@@ -1,5 +1,6 @@
 ﻿using BSE.Tunes.Data;
 using BSE.Tunes.StoreApp.Mvvm;
+using BSE.Tunes.StoreApp.Services;
 using GalaSoft.MvvmLight.Command;
 using System;
 using System.Collections.Generic;
@@ -11,66 +12,47 @@ using System.Windows.Input;
 
 namespace BSE.Tunes.StoreApp.ViewModels
 {
-    public class ShellViewModel : SearchSuggestionsViewModel
-    {
-        #region FieldsPrivate
-        //private string m_searchText;
-        //private bool m_hasSuggestionChosen;
-        //private ObservableCollection<string> m_searchSuggestions;
-        //private ICommand m_suggestionChosenCommand;
-        //private ICommand m_querySubmittedCommand;
-        #endregion
-        
-        #region Properties
-        //public string SearchText
-        //{
-        //    get
-        //    {
-        //        return m_searchText;
-        //    }
-        //    set
-        //    {
-        //        m_searchText = value;
-        //        RaisePropertyChanged(()=> SearchText);
-        //    }
-        //}
-        //public ObservableCollection<String> SearchSuggestions => m_searchSuggestions ?? (m_searchSuggestions = new ObservableCollection<string>());
-        //public ICommand QuerySubmittedCommand => m_querySubmittedCommand ?? (m_querySubmittedCommand = new RelayCommand<string>(async (suggestion) =>
-        //{
-        //    m_hasSuggestionChosen = false;
-        //    await NavigationService.NavigateAsync(typeof(Views.SearchResultPage), suggestion);
-        //}));
+	public class ShellViewModel : SearchSuggestionsViewModel
+	{
+		#region FieldsPrivate
+		private SettingsService m_settingsService;
+		private bool m_isHamburgerMenuOpen;
+		private ICommand m_isOpenChangedCommand;
+		private ICommand m_openMenuPanelCommand;
+		#endregion
 
-        //public ICommand SuggestionChosenCommand => m_suggestionChosenCommand ?? (m_suggestionChosenCommand = new RelayCommand(() =>
-        //{
-        //    m_hasSuggestionChosen = true;
-        //}));
-        
-        #endregion
+		#region Properties
+		public bool IsHamburgerMenuOpen
+		{
+			get
+			{
+				return m_isHamburgerMenuOpen;
+			}
+			set
+			{
+				m_isHamburgerMenuOpen = value;
+				RaisePropertyChanged(() => IsHamburgerMenuOpen);
+			}
+		}
+		public ICommand OpenMenuPanelCommand => m_openMenuPanelCommand ?? (m_openMenuPanelCommand = new RelayCommand(() =>
+		{
+			IsHamburgerMenuOpen = true;
+		}));
 
-        #region MethodsPublic
-        //public async void LoadSuggestions()
-        //{
-        //    if (!string.IsNullOrEmpty(SearchText) && SearchText.Length > 3)
-        //    {
-        //        if (!m_hasSuggestionChosen)
-        //        {
-        //            SearchSuggestions.Clear();
+		public ICommand IsOpenChangedCommand => m_isOpenChangedCommand ?? (m_isOpenChangedCommand = new RelayCommand<bool> ((isOpen) =>
+		{
+			m_settingsService.IsHamburgerMenuOpen = isOpen;
+		}));
+		#endregion
 
-        //            var suggestions = await DataService.GetSearchSuggestions(new Query
-        //            {
-        //                SearchPhrase = SearchText
-        //            });
-        //            foreach (var suggestion in suggestions)
-        //            {
-        //                if (!string.IsNullOrEmpty(suggestion))
-        //                {
-        //                    SearchSuggestions.Add(suggestion);
-        //                }
-        //            }
-        //        }
-        //    }
-        //}
-        #endregion
-    }
+		#region MethodsPublic
+		public ShellViewModel()
+		{
+			if (!Windows.ApplicationModel.DesignMode.DesignModeEnabled)
+			{
+				m_settingsService = SettingsService.Instance;
+			}
+		}
+		#endregion
+	}
 }

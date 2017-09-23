@@ -10,13 +10,14 @@ namespace BSE.Tunes.StoreApp.Services
 {
     public class SettingsService
     {
-        public static SettingsService Instance { get; } = new SettingsService();
-        Template10.Services.SettingsService.ISettingsHelper m_settingsHelper;
-        private SettingsService()
-        {
-            m_settingsHelper = new Template10.Services.SettingsService.SettingsHelper();
-        }
-        public bool UseLightTheme
+		#region FieldsPrivate
+		private Template10.Services.SettingsService.ISettingsHelper m_settingsHelper;
+		private bool m_isStartUp;
+		#endregion
+		
+		#region Properties
+		public static SettingsService Instance { get; } = new SettingsService();
+		public bool UseLightTheme
         {
             get
             {
@@ -52,6 +53,24 @@ namespace BSE.Tunes.StoreApp.Services
                 Messenger.Default.Send(new ScreenSizeChangedArgs(value));
             }
         }
+		/// <summary>
+		/// Gets or sets an information that indicates the HamburgerMenu IsOpen state.
+		/// </summary>
+		public bool IsHamburgerMenuOpen
+		{
+			get
+			{
+				return m_settingsHelper.Read<bool>(nameof(IsHamburgerMenuOpen), true);
+			}
+			set
+			{
+				if (m_isStartUp)
+				{
+					m_settingsHelper.Write(nameof(IsHamburgerMenuOpen), value);
+				}
+				m_isStartUp = true;
+			}
+		}
         /// <summary>
         /// Gets or sets the url that contains the service
         /// </summary>
@@ -77,6 +96,24 @@ namespace BSE.Tunes.StoreApp.Services
                 m_settingsHelper.Write(nameof(User), value);
             }
         }
-    }
+		#endregion
+
+		#region MethodsPublic
+		public void ApplyStartUpSettings()
+		{
+			//A successful startup needs no fullscreen. A fullscreen has no visible hamburger menu.
+			IsFullScreen = false;
+			//Sets the HamurgerMenu's IsOpen state.
+			Views.Shell.HamburgerMenu.IsOpen = IsHamburgerMenuOpen;
+		}
+		#endregion
+
+		#region MethodsPrivate
+		private SettingsService()
+		{
+			m_settingsHelper = new Template10.Services.SettingsService.SettingsHelper();
+		}
+		#endregion
+	}
 }
 

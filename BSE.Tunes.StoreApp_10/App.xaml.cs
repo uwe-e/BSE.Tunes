@@ -111,9 +111,9 @@ namespace BSE.Tunes.StoreApp
                             {
                                 //Deletes the tmp download folder with its files from the local store.
                                 await LocalStorage.ClearTempFolderAsync();
+								m_settingsService.ApplyStartUpSettings();
 
-                                m_settingsService.IsFullScreen = false;
-                                await NavigationService.NavigateAsync(typeof(Views.MainPage));
+								await NavigationService.NavigateAsync(typeof(Views.MainPage));
                             }
                         }
                         else

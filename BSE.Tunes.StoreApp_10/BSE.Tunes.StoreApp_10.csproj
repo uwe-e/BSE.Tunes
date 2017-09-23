@@ -126,6 +126,7 @@
     <Compile Include="Controls\ListView\ListView.cs" />
     <Compile Include="Controls\PageHeader\AutoSuggestionPageHeader.cs" />
     <Compile Include="Converters\AutoSuggestQueryParameterConverter.cs" />
+    <Compile Include="Converters\HamburgerMenuIsOpenChangedConverter.cs" />
     <Compile Include="Extensions\DynamicExtension.cs" />
     <Compile Include="Mvvm\Messaging\PlaylistDeletedArgs.cs" />
     <Compile Include="Mvvm\Messaging\PlaylistEntriesChanged.cs" />
