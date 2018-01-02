@@ -33,7 +33,7 @@
                         <AdaptiveTrigger MinWindowWidth="{StaticResource NarrowMinWidth}" />
                     </VisualState.StateTriggers>
                     <VisualState.Setters>
-                        <Setter Target="listView.(RelativePanel.Below)" Value="narrowPageTitle"/>
+                        <Setter Target="listView.(RelativePanel.Below)" Value="randomPlayPanel"/>
                         <Setter Target="pageContent.(RelativePanel.AlignTopWithPanel)" Value="False"/>
                         <Setter Target="pageContent.(RelativePanel.Below)" Value="pageHeader"/>
                     </VisualState.Setters>
@@ -43,7 +43,7 @@
                         <AdaptiveTrigger MinWindowWidth="{StaticResource NormalMinWidth}" />
                     </VisualState.StateTriggers>
                     <VisualState.Setters>
-                        <Setter Target="listView.(RelativePanel.Below)" Value="narrowPageTitle"/>
+                        <Setter Target="listView.(RelativePanel.Below)" Value="randomPlayPanel"/>
                         <Setter Target="pageContent.(RelativePanel.AlignTopWithPanel)" Value="False"/>
                         <Setter Target="pageContent.(RelativePanel.Below)" Value="pageHeader"/>
                     </VisualState.Setters>
@@ -101,11 +101,59 @@
                        RelativePanel.AlignTopWithPanel="True"
                        RelativePanel.AlignLeftWithPanel="True"
                        RelativePanel.AlignRightWithPanel="True"/>
+            
+            <StackPanel x:Name="filterPanel" Padding="20,10,20,0"
+                       RelativePanel.AlignLeftWithPanel="True"
+                       RelativePanel.AlignRightWithPanel="True" RelativePanel.Below="normalPageHeader">
+                <StackPanel Orientation="Horizontal" >
+                    <TextBlock x:Uid="AlbumsPage_FilterPanel_TxtGenre" Text="Genre" Style="{StaticResource BodyTextBlockStyle}" VerticalAlignment="Center"/>
+                    <HyperlinkButton x:Name="buttonGenre" Command="{Binding OpenGenreFlyoutCommand}" VerticalAlignment="Center" Padding="10,0,0,0">
+                        <HyperlinkButton.Content>
+                            <TextBlock TextTrimming="CharacterEllipsis" Style="{StaticResource BodyTextBlockStyle}" Text="{Binding SelectedGenre.Name}"/>
+                        </HyperlinkButton.Content>
+                        <HyperlinkButton.ContextFlyout>
+                            <Flyout controlextensions:FlyoutExtensions.IsOpen="{Binding IsGenreFlyoutOpen, Mode=TwoWay}"
+                                    controlextensions:FlyoutExtensions.Parent="{Binding ElementName=buttonGenre}"
+                                    controlextensions:FlyoutExtensions.ItemsSource="{Binding Genres}">
+                                <controlextensions:FlyoutExtensions.ItemTemplate>
+                                    <DataTemplate>
+                                        <Grid>
+                                            <MenuFlyoutItem Command="{Binding MenuItemClickedCommand}"
+                                                    CommandParameter="{Binding}"
+                                                    Text="{Binding Text}"/>
+                                        </Grid>
+                                    </DataTemplate>
+                                </controlextensions:FlyoutExtensions.ItemTemplate>
+                            </Flyout>
+                        </HyperlinkButton.ContextFlyout>
+                    </HyperlinkButton>
+                </StackPanel>
+            </StackPanel>
+
+            <StackPanel x:Name="randomPlayPanel" Padding="20,10,20,0"
+                       RelativePanel.AlignLeftWithPanel="True"
+                       RelativePanel.AlignRightWithPanel="True" RelativePanel.Below="filterPanel">
+                <HyperlinkButton x:Name="buttonPlayFiltered" Command="{Binding PlayRandomCommand}" VerticalContentAlignment="Center" Foreground="{ThemeResource SystemBaseHighColor}">
+                    <Grid VerticalAlignment="Center">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <FontIcon Glyph="&#xE8B1;" Grid.Column="0"/>
+                        <TextBlock TextTrimming="WordEllipsis" TextWrapping="NoWrap" Margin="6,0,0,0" Grid.Column="1">
+                            <Run x:Uid="AlbumsPage_PlayRandom" Text="Shuffle all"/>
+                            <Run Text="("/><Run Text="{Binding TracksCount}"/><Run Text=")"/>
+                        </TextBlock>
+                    </Grid>
+                </HyperlinkButton>
+            </StackPanel>
+
+
 
             <ListView x:Name="listView"
                       RelativePanel.AlignLeftWithPanel="True"
                       RelativePanel.AlignRightWithPanel="True"
-                      RelativePanel.Below="normalPageHeader"
+                      RelativePanel.Below="randomPlayPanel"
                       ItemsSource="{Binding Albums}" DataFetchSize="1"
                       SelectionMode="{Binding HasSelectedItems, Converter={StaticResource BooleanToSelectionModeConverter}}"
                       IsItemClickEnabled="{Binding HasSelectedItems, Converter={StaticResource InverseBooleanConverter}}"

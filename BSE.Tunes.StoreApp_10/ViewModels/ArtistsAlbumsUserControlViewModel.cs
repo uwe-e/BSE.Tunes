@@ -65,13 +65,7 @@ namespace BSE.Tunes.StoreApp.ViewModels
                         Func<Task<Windows.UI.Xaml.Data.LoadMoreItemsResult>> taskFunc = async () =>
                         {
                             int pageSize = (int)count;
-
-                            ObservableCollection<Album> albums = await DataService?.GetAlbumsByArtist(new Query
-                            {
-                                Data = Artist,
-                                PageIndex = pageNumber,
-                                PageSize = pageSize
-                            });
+                            ObservableCollection<Album> albums = await DataService?.GetAlbumsByArtist(Artist.Id, pageNumber, pageSize);
                             if (albums != null)
                             {
                                 foreach (var album in albums)

@@ -97,7 +97,7 @@ publish/
 
 # NuGet Packages Directory
 ## TODO: If you have NuGet Package Restore enabled, uncomment the next line
-#packages/
+packages/
 
 # Windows Azure Build Output
 csx
@@ -159,3 +159,4 @@ $RECYCLE.BIN/
 /BSE.Tunes.StoreApp_10/BundleArtifacts
 /BSE.Tunes.StoreApp_10/BundleArtifacts/arm.txt
 /.vs/BSE.Tunes/v15/sqlite3/storage.ide
+/.vs/BSE.Tunes/v15

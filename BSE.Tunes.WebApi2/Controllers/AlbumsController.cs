@@ -1,4 +1,5 @@
 ﻿using BSE.Tunes.Data;
+using Microsoft.Web.Http;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,7 +8,7 @@ using System.Web.Http;
 
 namespace BSE.Tunes.WebApi.Controllers
 {
-	[RoutePrefix("api/albums")]
+    [RoutePrefix("api/albums")]
 	[Authorize(Roles = "tunesusers")]
 	public class AlbumsController : BaseApiController
 	{
@@ -18,6 +19,7 @@ namespace BSE.Tunes.WebApi.Controllers
 			return this.TunesService.GetAlbums(query);
 		}
 		[Route("{id:int}")]
+        [AllowAnonymous]
 		public Album GetAlbumById(int id)
 		{
 			return this.TunesService.GetAlbumById(id);
@@ -37,6 +39,13 @@ namespace BSE.Tunes.WebApi.Controllers
 		{
 			return this.TunesService.GetNumberOfPlayableAlbums();
 		}
+		[HttpPost]
+		[Route("numberof")]
+		public int GetNumberOfPlayableAlbums([FromBody] Query query)
+		{
+            return this.TunesService.GetNumberOfPlayableAlbums(query.Data);
+        }
+
         [HttpPost]
         [Route("trackids")]
         public ICollection<int> GetTrackIdsByAlbumIds([FromBody] IList<int> albumIds)

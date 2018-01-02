@@ -59,7 +59,12 @@ namespace BSE.Tunes.StoreApp.ViewModels
                 RaisePropertyChanged("Text");
             }
         }
-        public ICommand MenuItemClickedCommand => m_menuItemClickedCommand ?? (m_menuItemClickedCommand = new RelayCommand<MenuFlyoutItemViewModel>(MenuItemClicked));
+		public dynamic Data
+		{
+			get;
+			set;
+		}
+		public ICommand MenuItemClickedCommand => m_menuItemClickedCommand ?? (m_menuItemClickedCommand = new RelayCommand<MenuFlyoutItemViewModel>(MenuItemClicked));
         #endregion
 
         #region MethodsPrivate

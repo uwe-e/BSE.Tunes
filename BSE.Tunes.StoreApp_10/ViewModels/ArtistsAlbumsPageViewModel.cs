@@ -132,7 +132,6 @@ namespace BSE.Tunes.StoreApp.ViewModels
                 Artist = artist;
 
                 int numberOfAlbums = await DataService?.GetNumberOfAlbumsByArtist(Artist.Id);
-                numberOfAlbums = numberOfAlbums > 20 ? 20 : numberOfAlbums;
                 int pageNumber = 0;
 
                 this.Albums = new IncrementalObservableCollection<ListViewItemViewModel>(
@@ -142,13 +141,7 @@ namespace BSE.Tunes.StoreApp.ViewModels
                         Func<Task<Windows.UI.Xaml.Data.LoadMoreItemsResult>> taskFunc = async () =>
                         {
                             int pageSize = (int)count;
-
-                            ObservableCollection<Album> albums = await DataService?.GetAlbumsByArtist(new Query
-                            {
-                                Data = Artist,
-                                PageIndex = pageNumber,
-                                PageSize = pageSize
-                            });
+                            ObservableCollection<Album> albums = await DataService?.GetAlbumsByArtist(Artist.Id, pageNumber, pageSize);
                             if (albums != null)
                             {
                                 foreach (var album in albums)

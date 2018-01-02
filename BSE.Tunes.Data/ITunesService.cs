@@ -20,26 +20,43 @@ namespace BSE.Tunes.Data
         Album GetAlbumById(int albumId);
         [OperationContract]
         Genre[] GetGenres();
+        [Obsolete("Use the common method GetAlbums(genreId, artistId, skip, limit) instead")]
         [OperationContract]
         Album[] GetAlbums(Query query);
+
+        [OperationContract]
+        Album[] GetAlbums(int? genreId, int? artistId, int skip, int limit);
+        [OperationContract]
+        int GetNumberOfAlbums(int? genreId, int? artistId);
+        [Obsolete("Use the common method GetNumberOfAlbums instead")]
         [OperationContract]
         int GetNumberOfAlbumsByArtist(int artistId);
         [OperationContract]
         Album[] GetAlbumsByArtist(Query query);
+
         [OperationContract]
         Album[] GetNewestAlbums(int limit);
         [OperationContract]
         Album[] GetFeaturedAlbums(int limit);
+        [Obsolete("Use the common method GetNumberOfAlbums instead")]
         [OperationContract]
         int GetNumberOfPlayableAlbums();
+
+        [Obsolete("Use the common method GetNumberOfAlbums instead")]
+        [OperationContract]
+        int GetNumberOfPlayableAlbums(Query query);
         [OperationContract]
         Track GetTrackById(int trackId);
+
+        [OperationContract]
+        ICollection<int> GetTrackIdsByFilter(int? genreId);
+        [Obsolete("Use the method GetTrackIdsByFilter(int? genreId) instead")]
         [OperationContract]
 		ICollection<int> GetTrackIdsByFilters(Filter filter);
 		[OperationContract]
         ICollection<Track> GetTracksByFilters(Filter filter);
         [OperationContract]
-        ICollection<Track> GetTopTracks(int pageIndex, int pageSize);
+        ICollection<Track> GetTopTracks(int skip, int limit);
         [OperationContract]
         String[] GetSearchSuggestions(Query query);
         [OperationContract]

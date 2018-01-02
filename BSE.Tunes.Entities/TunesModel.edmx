@@ -22,7 +22,7 @@
           <Property Name="genreid" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="genre" Type="varchar" MaxLength="100" Nullable="false" />
           <Property Name="guid" Type="varchar" MaxLength="36" Nullable="false" />
-          <Property Name="timestamp" Type="timestamp" Precision="0" Nullable="false" />
+          <Property Name="timestamp" Type="timestamp" Precision="0" StoreGeneratedPattern="Identity" Nullable="false" />
         </EntityType>
         <EntityType Name="history">
           <Key>
@@ -46,7 +46,7 @@
           <Property Name="Interpret" Type="varchar" MaxLength="60" Nullable="false" />
           <Property Name="Interpret_Lang" Type="varchar" MaxLength="60" Nullable="false" />
           <Property Name="Guid" Type="varchar" MaxLength="36" Nullable="false" />
-          <Property Name="Timestamp" Type="timestamp" Precision="0" Nullable="false" />
+          <Property Name="Timestamp" Type="timestamp" Precision="0" StoreGeneratedPattern="Identity" Nullable="false" />
         </EntityType>
         <EntityType Name="lieder">
           <Key>
@@ -59,7 +59,7 @@
           <Property Name="Dauer" Type="datetime" Precision="0" />
           <Property Name="Liedpfad" Type="varchar" MaxLength="255" />
           <Property Name="guid" Type="varchar" MaxLength="36" Nullable="false" />
-          <Property Name="Timestamp" Type="timestamp" Precision="0" Nullable="false" />
+          <Property Name="Timestamp" Type="timestamp" Precision="0" StoreGeneratedPattern="Identity" Nullable="false" />
         </EntityType>
         <EntityType Name="medium">
           <Key>
@@ -69,7 +69,7 @@
           <Property Name="Medium" Type="varchar" MaxLength="5" Nullable="false" />
           <Property Name="Beschreibung" Type="varchar" MaxLength="50" />
           <Property Name="Guid" Type="varchar" MaxLength="36" Nullable="false" />
-          <Property Name="Timestamp" Type="timestamp" Precision="0" Nullable="false" />
+          <Property Name="Timestamp" Type="timestamp" Precision="0" StoreGeneratedPattern="Identity" Nullable="false" />
         </EntityType>
         <EntityType Name="playlist">
           <Key>
@@ -79,7 +79,7 @@
           <Property Name="ListName" Type="varchar" MaxLength="100" Nullable="false" />
           <Property Name="User" Type="varchar" MaxLength="50" Nullable="false" />
           <Property Name="guid" Type="varchar" MaxLength="36" Nullable="false" />
-          <Property Name="Timestamp" Type="timestamp" Precision="0" Nullable="false" />
+          <Property Name="Timestamp" Type="timestamp" Precision="0" StoreGeneratedPattern="Identity" Nullable="false" />
         </EntityType>
         <EntityType Name="playlistentries">
           <Key>
@@ -90,7 +90,7 @@
           <Property Name="LiedId" Type="int" Nullable="false" />
           <Property Name="sortorder" Type="int" />
           <Property Name="Guid" Type="guid" Nullable="false" />
-          <Property Name="Timestamp" Type="timestamp" Precision="0" Nullable="false" />
+          <Property Name="Timestamp" Type="timestamp" Precision="0" StoreGeneratedPattern="Identity" Nullable="false" />
         </EntityType>
         <EntityType Name="titel">
           <Key>
@@ -110,8 +110,31 @@
           <Property Name="ErstellerNm" Type="varchar" MaxLength="50" />
           <Property Name="MutationDatum" Type="datetime" Precision="0" />
           <Property Name="MutationNm" Type="varchar" MaxLength="50" />
-          <Property Name="Timestamp" Type="timestamp" Precision="0" Nullable="false" />
+          <Property Name="Timestamp" Type="timestamp" Precision="0" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="genreId" Type="int" />
+        </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'def.platten.albums' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="albums">
+          <Key>
+            <PropertyRef Name="Artist_Id" />
+            <PropertyRef Name="Artist_Name" />
+            <PropertyRef Name="Artist_SortName" />
+            <PropertyRef Name="Album_Id" />
+            <PropertyRef Name="Album_Title" />
+            <PropertyRef Name="Album_AlbumId" />
+            <PropertyRef Name="Genre_Id" />
+            <PropertyRef Name="Genre_Name" />
+          </Key>
+          <Property Name="Artist_Id" Type="int" Nullable="false" />
+          <Property Name="Artist_Name" Type="varchar" MaxLength="60" Nullable="false" />
+          <Property Name="Artist_SortName" Type="varchar" MaxLength="60" Nullable="false" />
+          <Property Name="Album_Id" Type="int" Nullable="false" />
+          <Property Name="Album_Title" Type="varchar" MaxLength="60" Nullable="false" />
+          <Property Name="Album_AlbumId" Type="varchar" MaxLength="36" Nullable="false" />
+          <Property Name="Album_Year" Type="int" />
+          <Property Name="Genre_Id" Type="int" Nullable="false" />
+          <Property Name="Genre_Name" Type="varchar" MaxLength="100" Nullable="false" />
         </EntityType>
         <Function Name="GetAlbumSearch" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="platten">
           <Parameter Name="searchPhrase" Type="varchar" Mode="In" />
@@ -136,6 +159,19 @@
           <EntitySet Name="playlist" EntityType="Self.playlist" Schema="platten" store:Type="Tables" />
           <EntitySet Name="playlistentries" EntityType="Self.playlistentries" Schema="platten" store:Type="Tables" />
           <EntitySet Name="titel" EntityType="Self.titel" Schema="platten" store:Type="Tables" />
+          <EntitySet Name="albums" EntityType="Self.albums" store:Type="Views" store:Schema="platten">
+            <DefiningQuery>SELECT
+`albums`.`Artist_Id`, 
+`albums`.`Artist_Name`, 
+`albums`.`Artist_SortName`, 
+`albums`.`Album_Id`, 
+`albums`.`Album_Title`, 
+`albums`.`Album_AlbumId`, 
+`albums`.`Album_Year`, 
+`albums`.`Genre_Id`, 
+`albums`.`Genre_Name`
+FROM `albums` AS `albums`</DefiningQuery>
+          </EntitySet>
         </EntityContainer>
       </Schema></edmx:StorageModels>
     <!-- CSDL content -->
@@ -164,6 +200,7 @@
             <Parameter Name="pageSize" Mode="In" Type="Int32" />
             <Parameter Name="pageIndex" Mode="In" Type="Int32" />
           </FunctionImport>
+          <EntitySet Name="albums" EntityType="TunesModel.albums" />
         </EntityContainer>
         <EntityType Name="filtersettings">
           <Key>
@@ -284,6 +321,27 @@
           <Property Type="Time" Name="Duration" Nullable="false" />
         </ComplexType>
         <ComplexType Name="GetTrackSearch_Result" />
+        <EntityType Name="albums">
+          <Key>
+            <PropertyRef Name="Artist_Id" />
+            <PropertyRef Name="Artist_Name" />
+            <PropertyRef Name="Artist_SortName" />
+            <PropertyRef Name="Album_Id" />
+            <PropertyRef Name="Album_Title" />
+            <PropertyRef Name="Album_AlbumId" />
+            <PropertyRef Name="Genre_Id" />
+            <PropertyRef Name="Genre_Name" />
+          </Key>
+          <Property Name="Artist_Id" Type="Int32" Nullable="false" />
+          <Property Name="Artist_Name" Type="String" Nullable="false" MaxLength="60" FixedLength="false" Unicode="false" />
+          <Property Name="Artist_SortName" Type="String" Nullable="false" MaxLength="60" FixedLength="false" Unicode="false" />
+          <Property Name="Album_Id" Type="Int32" Nullable="false" />
+          <Property Name="Album_Title" Type="String" Nullable="false" MaxLength="60" FixedLength="false" Unicode="false" />
+          <Property Name="Album_AlbumId" Type="String" Nullable="false" MaxLength="36" FixedLength="false" Unicode="false" />
+          <Property Name="Album_Year" Type="Int32" />
+          <Property Name="Genre_Id" Type="Int32" Nullable="false" />
+          <Property Name="Genre_Name" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
+        </EntityType>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -436,6 +494,21 @@
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
+          <EntitySetMapping Name="albums">
+            <EntityTypeMapping TypeName="TunesModel.albums">
+              <MappingFragment StoreEntitySet="albums">
+                <ScalarProperty Name="Genre_Name" ColumnName="Genre_Name" />
+                <ScalarProperty Name="Genre_Id" ColumnName="Genre_Id" />
+                <ScalarProperty Name="Album_Year" ColumnName="Album_Year" />
+                <ScalarProperty Name="Album_AlbumId" ColumnName="Album_AlbumId" />
+                <ScalarProperty Name="Album_Title" ColumnName="Album_Title" />
+                <ScalarProperty Name="Album_Id" ColumnName="Album_Id" />
+                <ScalarProperty Name="Artist_SortName" ColumnName="Artist_SortName" />
+                <ScalarProperty Name="Artist_Name" ColumnName="Artist_Name" />
+                <ScalarProperty Name="Artist_Id" ColumnName="Artist_Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

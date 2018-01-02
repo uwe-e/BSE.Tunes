@@ -200,13 +200,13 @@ You may not have to register via the app. A registration can only be done by the
     <value>Albums</value>
   </data>
   <data name="Shell_TxtHome.Text" xml:space="preserve">
-    <value>Your BSEtunes</value>
+    <value>My BSEtunes</value>
   </data>
   <data name="AlbumsPage_Header.HeaderText" xml:space="preserve">
     <value>Albums</value>
   </data>
   <data name="MainPage_Header.HeaderText" xml:space="preserve">
-    <value>Your BSEtunes</value>
+    <value>My BSEtunes</value>
   </data>
   <data name="AlbumsDetailPage_Header.HeaderText" xml:space="preserve">
     <value>Album</value>
@@ -411,5 +411,14 @@ A registration can only be done by the operator of the server.</value>
   </data>
   <data name="ArtistsAlbums_ShowAll.Text" xml:space="preserve">
     <value>Show All</value>
+  </data>
+  <data name="AlbumsPage_FilterPanel_AllGenres.Value" xml:space="preserve">
+    <value>All</value>
+  </data>
+  <data name="AlbumsPage_FilterPanel_TxtGenre.Text" xml:space="preserve">
+    <value>Genre:</value>
+  </data>
+  <data name="AlbumsPage_PlayRandom.Text" xml:space="preserve">
+    <value>Shuffle all</value>
   </data>
 </root>

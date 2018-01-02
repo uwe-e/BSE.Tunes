@@ -23,26 +23,29 @@ namespace BSE.Tunes.WebApi.Controllers
 		{
 			this.m_tunesService = new BSE.Tunes.Entities.TunesBusinessObject();
 		}
+		[Route("genres")]
 		public Genre[] GetGenres()
 		{
 			return this.m_tunesService.GetGenres();
 		}
+        [Obsolete("Please use instead the /api/v2/tracks/{trackId:int} method")]
 		[Route("GetTrackById/{trackId:int}")]
 		public Track GetTrackById(int trackId)
 		{
 			return this.m_tunesService.GetTrackById(trackId);
 		}
-		[HttpPost]
+        [Obsolete("Please use instead the /api/v2/tracks/genre/{genreId:int} method")]
+        [HttpPost]
 		[Route("GetTrackIdsByFilters")]
 		public ICollection<int> GetTrackIdsByFilters([FromBody]Filter filter)
 		{
 			return this.m_tunesService.GetTrackIdsByFilters(filter);
 		}
-        [Route("tracks/top/{pageIndex:int}/{pageSize:int}")]
-        public ICollection<Track> GetTopTracks(int pageIndex, int pageSize)
-        {
-            return m_tunesService.GetTopTracks(pageIndex, pageSize);
-        }
+        //[Route("tracks/top/{pageIndex:int}/{pageSize:int}")]
+        //public ICollection<Track> GetTopTracks(int pageIndex, int pageSize)
+        //{
+        //    return m_tunesService.GetTopTracks(pageIndex, pageSize);
+        //}
         [HttpGet]
         [AllowAnonymous]
 		public bool IsHostAccessible()

@@ -200,13 +200,13 @@ Du kannst Dich nicht über die App registrieren. Die Registrierung kann nur durc
     <value>Alben</value>
   </data>
   <data name="Shell_TxtHome.Text" xml:space="preserve">
-    <value>Dein BSEtunes</value>
+    <value>Mein BSEtunes</value>
   </data>
   <data name="AlbumsPage_Header.HeaderText" xml:space="preserve">
     <value>Albums</value>
   </data>
   <data name="MainPage_Header.HeaderText" xml:space="preserve">
-    <value>Dein BSEtunes</value>
+    <value>Mein BSEtunes</value>
   </data>
   <data name="AlbumsDetailPage_Header.HeaderText" xml:space="preserve">
     <value>Album</value>
@@ -417,5 +417,14 @@ Die Registrierung kann nur durch den Betreiber des Servers erfolgen.</value>
   </data>
   <data name="ArtistsAlbums_ShowAll.Text" xml:space="preserve">
     <value>Alle anzeigen</value>
+  </data>
+  <data name="AlbumsPage_FilterPanel_AllGenres-Value" xml:space="preserve">
+    <value>Alle</value>
+  </data>
+  <data name="AlbumsPage_FilterPanel_TxtGenre.Text" xml:space="preserve">
+    <value>Genre:</value>
+  </data>
+  <data name="AlbumsPage_PlayRandom.Text" xml:space="preserve">
+    <value>Zufallswiedergabe</value>
   </data>
 </root>

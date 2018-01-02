@@ -11,10 +11,8 @@ namespace BSE.Tunes.Entities
 {
     using System;
     using System.Data.Entity;
+    using System.Data.Entity.Core.Objects;
     using System.Data.Entity.Infrastructure;
-    using System.Data.Objects;
-    using System.Data.Objects.DataClasses;
-    using System.Linq;
     
     public partial class TunesEntities : DbContext
     {
@@ -37,6 +35,7 @@ namespace BSE.Tunes.Entities
         public DbSet<PlaylistEntity> playlist { get; set; }
         public DbSet<PlaylistEntryEntity> playlistentries { get; set; }
         public DbSet<AlbumEntity> titel { get; set; }
+        public DbSet<albums> albums { get; set; }
     
         public virtual ObjectResult<string> GetSearchSuggestions(string searchPhrase)
         {

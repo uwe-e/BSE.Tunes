@@ -67,7 +67,7 @@ namespace BSE.Tunes.StoreApp.ViewModels
         private async void LoadData()
         {
             //Get the id's of all playable tracks and randomize it
-            ObservableCollection<int> trackIds = await DataService.GetTrackIdsByFilters(new Filter());
+            ObservableCollection<int> trackIds = await DataService.GetTrackIdsByGenre();
             if (trackIds != null)
             {
                 FilteredTrackIds = trackIds.ToRandomCollection();

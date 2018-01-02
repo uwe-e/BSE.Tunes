@@ -35,8 +35,6 @@ namespace BSE.Tunes.StoreApp
             //System.Globalization.CultureInfo.DefaultThreadCurrentCulture = culture;
             //System.Globalization.CultureInfo.DefaultThreadCurrentUICulture = culture;
 
-            SplashFactory = (e) => new Views.Splash(e);
-
             #region app settings
 
             // some settings must be set in app.constructor
