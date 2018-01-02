@@ -83,6 +83,9 @@
       <DependentUpon>TunesModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Extension\DataReader.cs" />
+    <Compile Include="genres.cs">
+      <DependentUpon>TunesModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="GetTrackSearch_Result.cs">
       <DependentUpon>TunesModel.tt</DependentUpon>
     </Compile>

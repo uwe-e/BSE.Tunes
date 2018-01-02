@@ -136,6 +136,16 @@ warning 6002: The table/view 'def.platten.albums' does not have a primary key de
           <Property Name="Genre_Id" Type="int" Nullable="false" />
           <Property Name="Genre_Name" Type="varchar" MaxLength="100" Nullable="false" />
         </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'def.platten.genres' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="genres">
+          <Key>
+            <PropertyRef Name="Genre_Id" />
+            <PropertyRef Name="Genre_Name" />
+          </Key>
+          <Property Name="Genre_Id" Type="int" Nullable="false" />
+          <Property Name="Genre_Name" Type="varchar" MaxLength="100" Nullable="false" />
+        </EntityType>
         <Function Name="GetAlbumSearch" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="platten">
           <Parameter Name="searchPhrase" Type="varchar" Mode="In" />
           <Parameter Name="pageSize" Type="int" Mode="In" />
@@ -172,6 +182,12 @@ warning 6002: The table/view 'def.platten.albums' does not have a primary key de
 `albums`.`Genre_Name`
 FROM `albums` AS `albums`</DefiningQuery>
           </EntitySet>
+          <EntitySet Name="genres" EntityType="Self.genres" store:Type="Views" store:Schema="platten">
+            <DefiningQuery>SELECT
+`genres`.`Genre_Id`, 
+`genres`.`Genre_Name`
+FROM `genres` AS `genres`</DefiningQuery>
+          </EntitySet>
         </EntityContainer>
       </Schema></edmx:StorageModels>
     <!-- CSDL content -->
@@ -201,6 +217,7 @@ FROM `albums` AS `albums`</DefiningQuery>
             <Parameter Name="pageIndex" Mode="In" Type="Int32" />
           </FunctionImport>
           <EntitySet Name="albums" EntityType="TunesModel.albums" />
+          <EntitySet Name="genres" EntityType="TunesModel.genres" />
         </EntityContainer>
         <EntityType Name="filtersettings">
           <Key>
@@ -339,6 +356,14 @@ FROM `albums` AS `albums`</DefiningQuery>
           <Property Name="Album_Title" Type="String" Nullable="false" MaxLength="60" FixedLength="false" Unicode="false" />
           <Property Name="Album_AlbumId" Type="String" Nullable="false" MaxLength="36" FixedLength="false" Unicode="false" />
           <Property Name="Album_Year" Type="Int32" />
+          <Property Name="Genre_Id" Type="Int32" Nullable="false" />
+          <Property Name="Genre_Name" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <EntityType Name="genres">
+          <Key>
+            <PropertyRef Name="Genre_Id" />
+            <PropertyRef Name="Genre_Name" />
+          </Key>
           <Property Name="Genre_Id" Type="Int32" Nullable="false" />
           <Property Name="Genre_Name" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
         </EntityType>
@@ -509,6 +534,14 @@ FROM `albums` AS `albums`</DefiningQuery>
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="genres">
+            <EntityTypeMapping TypeName="TunesModel.genres">
+              <MappingFragment StoreEntitySet="genres">
+                <ScalarProperty Name="Genre_Name" ColumnName="Genre_Name" />
+                <ScalarProperty Name="Genre_Id" ColumnName="Genre_Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>
@@ -524,7 +557,7 @@ FROM `albums` AS `albums`</DefiningQuery>
       <DesignerInfoPropertySet>
         <DesignerProperty Name="ValidateOnBuild" Value="true" />
         <DesignerProperty Name="EnablePluralization" Value="False" />
-        <DesignerProperty Name="IncludeForeignKeysInModel" Value="True" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="False" />
         <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
         <DesignerProperty Name="UseLegacyProvider" Value="True" />
       </DesignerInfoPropertySet>

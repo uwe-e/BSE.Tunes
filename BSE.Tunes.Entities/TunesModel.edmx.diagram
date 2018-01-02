@@ -15,6 +15,7 @@
         <EntityTypeShape EntityType="TunesModel.PlaylistEntryEntity" Width="1.5" PointX="9.375" PointY="0.625" IsExpanded="true" />
         <EntityTypeShape EntityType="TunesModel.AlbumEntity" Width="1.5" PointX="2.75" PointY="0.75" IsExpanded="true" />
         <EntityTypeShape EntityType="TunesModel.albums" Width="1.5" PointX="0.75" PointY="5.75" />
+        <EntityTypeShape EntityType="TunesModel.genres" Width="1.5" PointX="3.5" PointY="5.75" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

@@ -36,6 +36,7 @@ namespace BSE.Tunes.Entities
         public DbSet<PlaylistEntryEntity> playlistentries { get; set; }
         public DbSet<AlbumEntity> titel { get; set; }
         public DbSet<albums> albums { get; set; }
+        public DbSet<genres> genres { get; set; }
     
         public virtual ObjectResult<string> GetSearchSuggestions(string searchPhrase)
         {

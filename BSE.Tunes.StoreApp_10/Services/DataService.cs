@@ -152,7 +152,7 @@ namespace BSE.Tunes.StoreApp.Services
         }
 		public async Task<ObservableCollection<Genre>> GetGenres()
 		{
-			string strUrl = string.Format("{0}/api/tunes/genres", ServiceUrl);
+			string strUrl = string.Format("{0}/api/v2/genres", ServiceUrl);
 			return await GetHttpResponse<ObservableCollection<Genre>>(new Uri(strUrl));
 		}
 		public async Task<ObservableCollection<Track>> GetTrackSearchResults(Query query)

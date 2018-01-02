@@ -189,6 +189,7 @@
     <Compile Include="Startup.cs" />
     <Compile Include="V2\Controllers\AlbumsController.cs" />
     <Compile Include="V2\Controllers\ArtistsController.cs" />
+    <Compile Include="V2\Controllers\GenresController.cs" />
     <Compile Include="V2\Controllers\TracksController.cs" />
     <Compile Include="Web\Http\HttpError.cs" />
     <Compile Include="Web\Http\HttpErrorKeys.cs" />

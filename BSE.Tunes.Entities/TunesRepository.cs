@@ -26,6 +26,55 @@ namespace BSE.Tunes.Entities
         #endregion
 
         #region MethodsPublic
+        public Genre[] GetGenres()
+        {
+            Genre[] genres = null;
+            using (EntityConnection entityConnection =
+                new EntityConnection(ConnectionString))
+            {
+                try
+                {
+                    entityConnection.Open();
+                    using (EntityCommand entityCommand = entityConnection.CreateCommand())
+                    {
+                        List<Genre> genreCollection = null;
+
+                        StringBuilder stringBuilder = new StringBuilder();
+                        stringBuilder.Append("SELECT g.Genre_Id, g.Genre_Name FROM tunesEntities.genres AS g");
+                        stringBuilder.Append(" ORDER BY g.Genre_Name");
+
+                        entityCommand.CommandText = stringBuilder.ToString();
+
+                        using (EntityDataReader dataReader = entityCommand.ExecuteReader(System.Data.CommandBehavior.SequentialAccess))
+                        {
+                            // Start reading results.
+                            while (dataReader.Read())
+                            {
+                                if (genreCollection == null)
+                                {
+                                    genreCollection = new List<Genre>();
+                                }
+                                genreCollection.Add(new Genre
+                                {
+                                    Id = dataReader.GetInt32("Genre_Id", false, 0),
+                                    Name = dataReader.GetString("Genre_Name", false, string.Empty)
+                                });
+                            }
+                        }
+                        if (genreCollection != null)
+                        {
+                            genres = genreCollection.ToArray();
+                        }
+                    }
+                }
+                finally
+                {
+                    entityConnection.Close();
+                }
+            }
+            return genres;
+        }
+
         public int GetNumberOfAlbums(int? genreId, int? artistId)
         {
             int numberofAlbums = default(int);
@@ -271,7 +320,8 @@ namespace BSE.Tunes.Entities
                     entityConnection.Open();
                     using (EntityCommand entityCommand = entityConnection.CreateCommand())
                     {
-                        entityCommand.Parameters.Add(new EntityParameter {
+                        entityCommand.Parameters.Add(new EntityParameter
+                        {
                             ParameterName = "skip",
                             Value = skip
                         });

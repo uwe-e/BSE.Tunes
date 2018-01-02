@@ -23,7 +23,8 @@ namespace BSE.Tunes.WebApi.Controllers
 		{
 			this.m_tunesService = new BSE.Tunes.Entities.TunesBusinessObject();
 		}
-		[Route("genres")]
+        [Obsolete("Please use instead the /api/v2/genres/ method")]
+        [Route("genres")]
 		public Genre[] GetGenres()
 		{
 			return this.m_tunesService.GetGenres();

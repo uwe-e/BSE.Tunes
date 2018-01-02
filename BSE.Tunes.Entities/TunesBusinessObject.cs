@@ -64,61 +64,61 @@ namespace BSE.Tunes.Entities
             }
             return isAccessible;
         }
-        public Genre[] GetGenres()
-        {
-            Genre[] genres = null;
+        //public Genre[] GetGenres()
+        //{
+        //    Genre[] genres = null;
 
-            StringBuilder stringBuilder = new StringBuilder();
-            stringBuilder.Append("SELECT g.genreid, g.genre1 FROM tunesEntities.titel AS a");
-            stringBuilder.Append(" INNER JOIN tunesEntities.genre AS g ON a.genreid = g.genreid");
-            stringBuilder.Append(" INNER JOIN tunesEntities.lieder AS t ON a.TitelID = t.TitelID");
-            stringBuilder.Append(" WHERE t.Liedpfad IS NOT NULL");
-            stringBuilder.Append(" GROUP BY g.genreid, g.genre1");
-            stringBuilder.Append(" ORDER BY g.genre1");
+        //    StringBuilder stringBuilder = new StringBuilder();
+        //    stringBuilder.Append("SELECT g.genreid, g.genre1 FROM tunesEntities.titel AS a");
+        //    stringBuilder.Append(" INNER JOIN tunesEntities.genre AS g ON a.genreid = g.genreid");
+        //    stringBuilder.Append(" INNER JOIN tunesEntities.lieder AS t ON a.TitelID = t.TitelID");
+        //    stringBuilder.Append(" WHERE t.Liedpfad IS NOT NULL");
+        //    stringBuilder.Append(" GROUP BY g.genreid, g.genre1");
+        //    stringBuilder.Append(" ORDER BY g.genre1");
 
-            using (EntityConnection entityConnection =
-                    new EntityConnection(this.ConnectionString))
-            {
-                try
-                {
-                    entityConnection.Open();
-                    using (EntityCommand entityCommand = entityConnection.CreateCommand())
-                    {
-                        List<Genre> genreCollection = null;
-                        entityCommand.CommandText = stringBuilder.ToString();
-                        // Execute the command.
-                        using (EntityDataReader dataReader =
-                            entityCommand.ExecuteReader(System.Data.CommandBehavior.SequentialAccess))
-                        {
-                            // Start reading results.
-                            while (dataReader.Read())
-                            {
-                                IDataReader dataR = dataReader;
-                                if (genreCollection == null)
-                                {
-                                    genreCollection = new List<Genre>();
-                                }
-                                Genre genre = new Genre
-                                {
-                                    Id = dataReader.GetInt32("genreid", false, 0),
-                                    Name = dataReader.GetString("genre1", false, string.Empty)
-                                };
-                                genreCollection.Add(genre);
-                            }
-                        }
-                        if (genreCollection != null)
-                        {
-                            genres = genreCollection.ToArray();
-                        }
-                    }
-                }
-                finally
-                {
-                    entityConnection.Close();
-                }
-            }
-            return genres;
-        }
+        //    using (EntityConnection entityConnection =
+        //            new EntityConnection(this.ConnectionString))
+        //    {
+        //        try
+        //        {
+        //            entityConnection.Open();
+        //            using (EntityCommand entityCommand = entityConnection.CreateCommand())
+        //            {
+        //                List<Genre> genreCollection = null;
+        //                entityCommand.CommandText = stringBuilder.ToString();
+        //                // Execute the command.
+        //                using (EntityDataReader dataReader =
+        //                    entityCommand.ExecuteReader(System.Data.CommandBehavior.SequentialAccess))
+        //                {
+        //                    // Start reading results.
+        //                    while (dataReader.Read())
+        //                    {
+        //                        IDataReader dataR = dataReader;
+        //                        if (genreCollection == null)
+        //                        {
+        //                            genreCollection = new List<Genre>();
+        //                        }
+        //                        Genre genre = new Genre
+        //                        {
+        //                            Id = dataReader.GetInt32("genreid", false, 0),
+        //                            Name = dataReader.GetString("genre1", false, string.Empty)
+        //                        };
+        //                        genreCollection.Add(genre);
+        //                    }
+        //                }
+        //                if (genreCollection != null)
+        //                {
+        //                    genres = genreCollection.ToArray();
+        //                }
+        //            }
+        //        }
+        //        finally
+        //        {
+        //            entityConnection.Close();
+        //        }
+        //    }
+        //    return genres;
+        //}
         [Obsolete("Use the common method GetNumberOfAlbums instead")]
         public int GetNumberOfPlayableAlbums()
         {
