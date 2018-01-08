@@ -412,7 +412,7 @@ A registration can only be done by the operator of the server.</value>
   <data name="ArtistsAlbums_ShowAll.Text" xml:space="preserve">
     <value>Show All</value>
   </data>
-  <data name="AlbumsPage_FilterPanel_AllGenres.Value" xml:space="preserve">
+  <data name="AlbumsPage_FilterPanel_AllGenres-Value" xml:space="preserve">
     <value>All</value>
   </data>
   <data name="AlbumsPage_FilterPanel_TxtGenre.Text" xml:space="preserve">
@@ -420,5 +420,11 @@ A registration can only be done by the operator of the server.</value>
   </data>
   <data name="AlbumsPage_PlayRandom.Text" xml:space="preserve">
     <value>Shuffle all</value>
+  </data>
+  <data name="IDS_AboutPageHeader" xml:space="preserve">
+    <value>Info</value>
+  </data>
+  <data name="Shell_TxtSettings.Text" xml:space="preserve">
+    <value>Settings</value>
   </data>
 </root>

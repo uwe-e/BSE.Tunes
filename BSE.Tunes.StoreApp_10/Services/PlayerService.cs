@@ -228,7 +228,7 @@ namespace BSE.Tunes.StoreApp.Services
                     }
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 throw;
             }
@@ -246,7 +246,7 @@ namespace BSE.Tunes.StoreApp.Services
                     await m_audioStreamPreloader.PreloadAsync(new Uri(strUrl), guid);
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 throw;
             }

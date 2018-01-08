@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Package xmlns="http://schemas.microsoft.com/appx/manifest/foundation/windows10" xmlns:mp="http://schemas.microsoft.com/appx/2014/phone/manifest" xmlns:uap="http://schemas.microsoft.com/appx/manifest/uap/windows10" xmlns:uap3="http://schemas.microsoft.com/appx/manifest/uap/windows10/3" IgnorableNamespaces="uap mp uap3">
-  <Identity Name="21447uwe.bse.BSEtunes" Publisher="CN=438A661D-E2DD-4C49-9A75-9143B493592A" Version="1.1.7.0" />
+  <Identity Name="21447uwe.bse.BSEtunes" Publisher="CN=438A661D-E2DD-4C49-9A75-9143B493592A" Version="1.1.11.0" />
   <mp:PhoneIdentity PhoneProductId="f522c5bd-cd5c-4446-9c74-65c8ae3915df" PhonePublisherId="00000000-0000-0000-0000-000000000000" />
   <Properties>
     <DisplayName>BSEtunes</DisplayName>
