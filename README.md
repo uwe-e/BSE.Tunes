@@ -1,6 +1,6 @@
 BSE.Tunes
 =========
-A sample audio .net solution that contains the following projects. 
+A sample audio .net solution as the web part of the [BSEtunes](https://www.codeproject.com/Articles/43068/BSEtunes) system. The solution contains the following projects. 
 
 - BSE.Tunes.StoreApp_8.1 - c# Windows Store App,
 - BSE.Tunes.StoreApp_10 - c# Windows Universal Store App,
