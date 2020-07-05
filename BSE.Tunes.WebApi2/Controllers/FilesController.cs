@@ -2,6 +2,7 @@
 using BSE.Tunes.WebApi.Configuration;
 using BSE.Tunes.WebApi.Providers;
 using BSE.Tunes.WebApi.Security;
+using NLog;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -23,6 +24,8 @@ namespace BSE.Tunes.WebApi.Controllers
         private ImpersonationUser m_impersonationUser;
 		// Track whether Dispose has been called.
 		private bool m_isDisposed;
+
+		private static Logger logger = LogManager.GetCurrentClassLogger();
         #endregion
 
         #region MethodsPublic
@@ -34,9 +37,20 @@ namespace BSE.Tunes.WebApi.Controllers
 		}
 		[AcceptVerbs("GET", "HEAD")]
 		[Route("audio/{id:guid}")]
+		//[AllowAnonymous]
 		public HttpResponseMessage GetAudioFile(Guid id)
 		{
 			HttpResponseMessage responseMessage = null;
+
+			if (id is Guid newGuid)
+            {
+				logger.Info($"{nameof(GetAudioFile)} has requested a file with the id {id} ");
+            }
+            else
+            {
+				logger.Info($"{nameof(GetAudioFile)} has requested a file with the wrong id");
+			}
+
 			string fileName = this.TunesService.GetAudioFileNameByGuid(id);
 			if (string.IsNullOrEmpty(fileName))
 			{
@@ -57,6 +71,7 @@ namespace BSE.Tunes.WebApi.Controllers
 				this.m_impersonationUser.Password,
 				this.m_impersonationUser.LogonType))
 			{
+				logger.Info($"{nameof(GetAudioFile)} has requested the file {fileName} ");
 				lock (fileName)
 				{
 					var fileStream = this.m_fileProvider.Open(fileName);
