@@ -90,6 +90,10 @@ namespace BSE.Tunes.Data
         [OperationContract]
         bool UpdatePlaylistEntries(Playlist playlist);
         [OperationContract]
+        Playlist UpdatePlaylist(Playlist playlist);
+        [OperationContract]
+        void DeletePlaylist(int playlistId);
+        [OperationContract]
         bool DeletePlaylists(IList<Playlist> playlists);
         [OperationContract]
         SystemInfo GetSystemInfo();

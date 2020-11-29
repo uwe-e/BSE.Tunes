@@ -19,6 +19,20 @@ namespace BSE.Tunes.WebApi.V2.Controllers
             return TunesService.AppendToPlaylist(playlist);
         }
 
+        [HttpDelete]
+        [Route("{playlistId:int}")]
+        public void DeletePlaylist(int playlistId)
+        {
+            TunesService.DeletePlaylist(playlistId);
+        }
+
+        [HttpPut]
+        [Route("playlist/update")]
+        public Playlist UpdatePlaylist([FromBody] Playlist playlist)
+        {
+            return TunesService.UpdatePlaylist(playlist);
+        }
+
         [Route("{username}")]
         public Playlist[] GetPlaylistsByUserName(string userName, [FromUri] int skip = 0, int limit = 10)
         {

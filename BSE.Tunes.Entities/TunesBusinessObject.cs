@@ -1347,6 +1347,7 @@ namespace BSE.Tunes.Entities
                                         PlaylistEntry entry = new PlaylistEntry
                                         {
                                             Id = entryId,
+                                            PlaylistId = playlist.Id,
                                             SortOrder = sortOrder,
                                             Guid = guid,
                                             TrackId = trackId,
@@ -1619,12 +1620,14 @@ namespace BSE.Tunes.Entities
                     PlaylistEntity playlistEntity = tunesEntity.playlist.FirstOrDefault(pl => pl.ListId == playlist.Id);
                     if (playlistEntity == null)
                     {
-                        if (tunesEntity.playlist.FirstOrDefault(
-                            pl => string.Compare(pl.ListName, entity.ListName) == 0 && string.Compare(pl.User, entity.User) == 0) != null)
-                        {
-                            string playlistExistsExceptionMessage = string.Format(CultureInfo.InvariantCulture, SRResources.PlaylistExistsException, playlist.Name);
-                            throw new PlaylistExistsException(playlistExistsExceptionMessage);
-                        }
+                        // Unique index on playlist table removed
+                        // because of, we allow now multiple playlists with the same name. 
+                        //if (tunesEntity.playlist.FirstOrDefault(
+                        //    pl => string.Compare(pl.ListName, entity.ListName) == 0 && string.Compare(pl.User, entity.User) == 0) != null)
+                        //{
+                        //    string playlistExistsExceptionMessage = string.Format(CultureInfo.InvariantCulture, SRResources.PlaylistExistsException, playlist.Name);
+                        //    throw new PlaylistExistsException(playlistExistsExceptionMessage);
+                        //}
                         tunesEntity.playlist.Add(entity);
                     }
                     tunesEntity.SaveChanges();
@@ -1648,7 +1651,11 @@ namespace BSE.Tunes.Entities
                 {
                     if (tunesEntity != null)
                     {
-                        int sortOrder = tunesEntity.playlistentries.Where(pe => pe.PlaylistId == playlist.Id).Count();
+                        //Get the highest sort number and increase it
+                        int sortOrder = (tunesEntity.playlistentries
+                            .Where(pe => pe.PlaylistId == playlist.Id)
+                            .OrderByDescending(pe => pe.sortorder).FirstOrDefault()?.sortorder ?? 0) + 1;
+
                         entries.ForEach((playlistEntry) =>
                             {
                                 if (playlistEntry != null)
@@ -1669,6 +1676,46 @@ namespace BSE.Tunes.Entities
             }
             return playlist = this.GetPlaylistById(playlist.Id, playlist.UserName);
         }
+
+        public Playlist UpdatePlaylist(Playlist playlist)
+        {
+            if (playlist != null && playlist.Entries != null)
+            {
+                List<PlaylistEntry> entries = new List<PlaylistEntry>(playlist.Entries);
+                using (TunesEntities tunesEntity = new TunesEntities(this.ConnectionString))
+                {
+                    if (tunesEntity != null)
+                    {
+                        var entr = tunesEntity.playlistentries.Where((e) => e.PlaylistId == playlist.Id).ToList();
+                        entr.ForEach((e) =>
+                        {
+                            if (e != null)
+                            {
+                                tunesEntity.playlistentries.Remove(e);
+                            }
+                        });
+                        foreach (var e in playlist.Entries)
+                        {
+                            if (e != null)
+                            {
+                                PlaylistEntryEntity entity = new PlaylistEntryEntity
+                                {
+                                    Guid = e.Guid,
+                                    LiedId = e.TrackId,
+                                    PlaylistId = playlist.Id,
+                                    Timestamp = DateTime.Now,
+                                    sortorder = e.SortOrder
+                                };
+                                tunesEntity.playlistentries.Add(entity);
+                            }
+                        }
+                        tunesEntity.SaveChanges();
+                    }
+                }
+            }
+            return this.GetPlaylistById(playlist.Id, playlist.UserName);
+        }
+
         public bool UpdatePlaylistEntries(Playlist playlist)
         {
             bool hasUpdated = false;
@@ -1709,6 +1756,31 @@ namespace BSE.Tunes.Entities
             }
             return hasUpdated;
         }
+
+        public void DeletePlaylist(int playlistId)
+        {
+            using (TunesEntities tunesEntity = new TunesEntities(this.ConnectionString))
+            {
+                var entryEntities = tunesEntity.playlistentries.Where(entry => entry.PlaylistId == playlistId);
+                if (entryEntities != null)
+                {
+                    foreach (var entry in entryEntities)
+                    {
+                        if (entry != null)
+                        {
+                            tunesEntity.playlistentries.Remove(entry);
+                        }
+                    }
+                }
+                var playlistEntity = tunesEntity.playlist.Where(list => list.ListId == playlistId).FirstOrDefault();
+                if (playlistEntity != null)
+                {
+                    tunesEntity.playlist.Remove(playlistEntity);
+                }
+                tunesEntity.SaveChanges();
+            }
+        }
+
         public bool DeletePlaylists(IList<Playlist> playlists)
         {
             bool hasDeleted = false;
