@@ -3,6 +3,7 @@ using Microsoft.AspNet.Identity;
 using Microsoft.Owin.Security;
 using Microsoft.Owin.Security.Cookies;
 using Microsoft.Owin.Security.OAuth;
+using NLog;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,6 +17,7 @@ namespace BSE.Tunes.WebApi.Providers
 	{
 		private readonly string _publicClientId;
 		private readonly Func<UserManager<IdentityUser>> _userManagerFactory;
+		private static Logger logger = LogManager.GetCurrentClassLogger();
 
 		public ApplicationOAuthProvider(string publicClientId, Func<UserManager<IdentityUser>> userManagerFactory)
 		{
@@ -41,6 +43,8 @@ namespace BSE.Tunes.WebApi.Providers
 
 				if (user == null)
 				{
+					logger.Info($"{nameof(GrantResourceOwnerCredentials)} invalid grant for user {context.UserName} ");
+					
 					context.SetError("invalid_grant", "The user name or password is incorrect.");
 					return;
 				}
