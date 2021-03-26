@@ -65,13 +65,16 @@ namespace BSE.Tunes.WebApi.Controllers
 
 				throw new HttpResponseException(response);
 			}
+			
+			logger.Info($"{nameof(FileStream)} has requested the file {fileName} ");
+			
 			using (var impersonator = new Impersonator(
 				this.m_impersonationUser.Username,
 				this.m_impersonationUser.Domain,
 				this.m_impersonationUser.Password,
 				this.m_impersonationUser.LogonType))
 			{
-				logger.Info($"{nameof(GetAudioFile)} has requested the file {fileName} ");
+				
 				lock (fileName)
 				{
 					var fileStream = this.m_fileProvider.Open(fileName);
