@@ -1,16 +1,21 @@
-﻿using Microsoft.Owin.Security;
+﻿using BSE.Tunes.WebApi.Identity;
+using BSE.Tunes.WebApi.Identity.Extensions;
 using Microsoft.Owin.Security.Infrastructure;
 using System;
-using System.Collections.Concurrent;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
-using System.Web;
 
 namespace BSE.Tunes.WebApi.Providers
 {
     public class AuthenticationTokenProvider : IAuthenticationTokenProvider
     {
+        private readonly Func<RefreshTokenManager<RefreshToken>> _refreshTokenManager;
+
+        public AuthenticationTokenProvider(Func<RefreshTokenManager<RefreshToken>> refreshTokenManager)
+        {
+            _refreshTokenManager = refreshTokenManager;
+        }
+
         public void Create(AuthenticationTokenCreateContext context)
         {
         }
@@ -37,13 +42,29 @@ namespace BSE.Tunes.WebApi.Providers
             //    ExpiresUtc = DateTime.Now.AddMinutes(1)
             //};
 
-            //var refreshTokenTicket = new AuthenticationTicket(context.Ticket.Identity, refreshTokenProperties);
-            //_refreshTokens.TryAdd(guid, context.Ticket);
-            //_refreshTokens.TryAdd(guid, refreshTokenTicket);
-            context.Ticket.Properties.IssuedUtc = DateTime.Now;
-            context.Ticket.Properties.ExpiresUtc = new DateTimeOffset(DateTime.Now.AddDays(1));
+            var refreshToken = new RefreshToken
+            {
+                Id = refreshTokenId,
+                UserName = context.Ticket.Identity.Name,
+                CreationTime = DateTime.UtcNow,
+                LifeTime = 1296000
+            };
 
-            context.SetToken(context.SerializeTicket());
+
+            //context.Ticket.Properties.IssuedUtc = refreshToken.CreationTime;
+            //context.Ticket.Properties.ExpiresUtc = refreshToken.LifeTime;
+
+            refreshToken.SerializedTicket = context.SerializeTicket();
+
+            using (  RefreshTokenManager<RefreshToken> refreshTokenManager = _refreshTokenManager())
+            {
+                await refreshTokenManager.StoreRefreshToken(refreshToken);
+            }
+
+
+            //context.SetToken(context.SerializeTicket());
+            context.SetToken(refreshTokenId);
+
             //context.SetToken(refreshTokenTicket.ToString());
         }
         public void Receive(AuthenticationTokenReceiveContext context)
@@ -51,7 +72,42 @@ namespace BSE.Tunes.WebApi.Providers
         }
         public async Task ReceiveAsync(AuthenticationTokenReceiveContext context)
         {
-            context.DeserializeTicket(context.Token);
+            var token = context.Token;
+
+            using (RefreshTokenManager<RefreshToken> refreshTokenManager = _refreshTokenManager())
+            {
+                var refreshToken = await refreshTokenManager.GetRefreshTokenAsync(token);
+                if (refreshToken == null)
+                {
+                    //Invalid refresh token
+                    return ;
+
+                }
+                
+                if (refreshToken.CreationTime.HasExceeded(refreshToken.LifeTime, DateTime.UtcNow))
+                {
+                    //Refresh token has expired.
+                    //isInvalidGrant = true;
+                    //return;
+                    return;
+                }
+
+                context.DeserializeTicket(refreshToken.SerializedTicket);
+
+                //var properties = new Microsoft.Owin.Security.AuthenticationProperties(new Dictionary<string, string>
+                //{
+                //    {
+                //        "expires_at", DateTime.UtcNow.AddSeconds(refreshToken.LifeTime).ToString()
+                //    }
+                //});
+
+                //var refreshTokenTicket = new Microsoft.Owin.Security.AuthenticationTicket(context.Ticket.Identity, properties);
+                //context.SetTicket(refreshTokenTicket);
+                await refreshTokenManager.RemoveRefreshTokenAsync(token);
+
+            }
         }
+
+        //context.DeserializeTicket(context.Token);
     }
 }

@@ -4,9 +4,7 @@ using BSE.Tunes.WebApi.Providers;
 using BSE.Tunes.WebApi.Security;
 using NLog;
 using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
@@ -15,7 +13,7 @@ using System.Web.Http.Tracing;
 
 namespace BSE.Tunes.WebApi.Controllers
 {
-    [RoutePrefix("api/files")]
+	[RoutePrefix("api/files")]
     [Authorize(Roles = "tunesusers")]
     public class FilesController : BaseApiController
     {
@@ -42,15 +40,6 @@ namespace BSE.Tunes.WebApi.Controllers
 		{
 			HttpResponseMessage responseMessage = null;
 
-			if (id is Guid newGuid)
-            {
-				logger.Info($"{nameof(GetAudioFile)} has requested a file with the id {id} ");
-            }
-            else
-            {
-				logger.Info($"{nameof(GetAudioFile)} has requested a file with the wrong id");
-			}
-
 			string fileName = this.TunesService.GetAudioFileNameByGuid(id);
 			if (string.IsNullOrEmpty(fileName))
 			{
@@ -68,7 +57,7 @@ namespace BSE.Tunes.WebApi.Controllers
 			
 			logger.Info($"{nameof(FileStream)} has requested the file {fileName} ");
 			
-			using (var impersonator = new Impersonator(
+			using (var impersonator = new ImpersonateUser(
 				this.m_impersonationUser.Username,
 				this.m_impersonationUser.Domain,
 				this.m_impersonationUser.Password,

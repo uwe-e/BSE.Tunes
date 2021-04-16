@@ -6,14 +6,12 @@ using Microsoft.Owin.Security.OAuth;
 using NLog;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
-using System.Web;
 
 namespace BSE.Tunes.WebApi.Providers
 {
-	public class ApplicationOAuthProvider : OAuthAuthorizationServerProvider
+    public class ApplicationOAuthProvider : OAuthAuthorizationServerProvider
 	{
 		private readonly string _publicClientId;
 		private readonly Func<UserManager<IdentityUser>> _userManagerFactory;
@@ -61,24 +59,35 @@ namespace BSE.Tunes.WebApi.Providers
                     },
                     {
                         "userName", user.UserName
-                    }
+                    },
+                    {
+						"sub", user.Id
+					}
                 });
-
-
-				//AuthenticationProperties properties = CreateProperties(user.UserName);
-
-
 
 				AuthenticationTicket ticket = new AuthenticationTicket(oAuthIdentity, properties);
 				context.Validated(ticket);
-				context.Request.Context.Authentication.SignIn(cookiesIdentity);
+				//context.Request.Context.Authentication.SignIn(cookiesIdentity);
 			}
 		}
-		public override Task GrantRefreshToken(OAuthGrantRefreshTokenContext context)
-		{
-			return base.GrantRefreshToken(context);
-		}
-		public override Task TokenEndpoint(OAuthTokenEndpointContext context)
+
+
+        public override Task GrantRefreshToken(OAuthGrantRefreshTokenContext context)
+        {
+            var gdgdgd = base.GrantRefreshToken(context);
+
+            return gdgdgd;
+        }
+        //public override Task GrantRefreshToken(OAuthGrantRefreshTokenContext context)
+        //{
+        //	//var identity = new ClaimsIdentity(context.Ticket.Identity);
+        //	//AuthenticationTicket ticket = new AuthenticationTicket(identity, context.Ticket.Properties);
+        //	//context.Validated(ticket);
+
+        //	//return Task.FromResult<object>(null);
+        //	//return base.GrantRefreshToken(context);
+        //}
+        public override Task TokenEndpoint(OAuthTokenEndpointContext context)
 		{
 			foreach (KeyValuePair<string, string> property in context.Properties.Dictionary)
 			{
@@ -122,13 +131,14 @@ namespace BSE.Tunes.WebApi.Providers
 			return Task.FromResult<object>(null);
 		}
 
-		public static AuthenticationProperties CreateProperties(string userName)
-		{
-			IDictionary<string, string> data = new Dictionary<string, string>
-            {
-                { "userName", userName }
-            };
-			return new AuthenticationProperties(data);
-		}
+		//public static AuthenticationProperties CreateProperties(string userName)
+		//{
+		//	IDictionary<string, string> data = new Dictionary<string, string>
+  //          {
+  //              { "userName", userName }
+  //          };
+		//	return new AuthenticationProperties(data);
+		//}
+
 	}
 }

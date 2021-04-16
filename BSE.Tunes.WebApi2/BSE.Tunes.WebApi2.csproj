@@ -211,6 +211,13 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Identity\Extensions\DateTimeExtensions.cs" />
+    <Compile Include="Identity\IRefreshTokenStore.cs" />
+    <Compile Include="Identity\IRefreshToken.cs" />
+    <Compile Include="Identity\RefreshToken.cs" />
+    <Compile Include="Identity\RefreshTokenManager.cs" />
+    <Compile Include="Identity\MySQL\RefreshTokenStore.cs" />
+    <Compile Include="Identity\MySQL\RefreshTokenTable.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Providers\ApplicationOAuthProvider.cs" />
     <Compile Include="Providers\AuthenticationTokenProvider.cs" />
@@ -220,7 +227,9 @@
       <DesignTime>True</DesignTime>
     </Compile>
     <Compile Include="Providers\FileProvider.cs" />
+    <Compile Include="Providers\RefreshTokenProvider.cs" />
     <Compile Include="Security\Impersonator.cs" />
+    <Compile Include="Security\ImpersonateUser.cs" />
     <Compile Include="Startup.cs" />
     <Compile Include="V2\Controllers\AlbumsController.cs" />
     <Compile Include="V2\Controllers\ArtistsController.cs" />

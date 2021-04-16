@@ -1,0 +1,42 @@
+https://byalexblog.net/how-to-keep-your-production-config-secured-on-public-github-repo
+
+
+Creating an RSA Key Container
+----------------------------
+
+aspnet_regiis.exe -pc "BSEtunesRsaKey" –exp
+
+
+Modify Web.config/App.config
+------------------------------
+
+Then you need to add 'configProtectedData' with 'provider' to your configuration file (inside 'configuration' section and under 'configSections' if you have it)
+<configProtectedData>
+  <providers>
+    <add name="BSEtunesRSAProvider"
+         type="System.Configuration.RsaProtectedConfigurationProvider, System.Configuration, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a"
+         keyContainerName="BSEtunesRsaKey"
+         useMachineContainer="true" />
+  </providers>
+</configProtectedData>
+
+Encrypt sections in Web.config/App.config
+-----------------------------------------
+
+aspnet_regiis -pef "bsetunes.configuration" "C:\Git\BSE.Tunes\BSE.Tunes.WebApi2" -prov BSEtunesRSAProvider
+
+Export RSA Key Container
+----------------------
+
+aspnet_regiis.exe -px "BSEtunesRsaKey" "c:/BSEtunesRSAKey.xml" -pri
+
+Import RSA Key Container on Production Server
+---------------------------------------------
+
+aspnet_regiis.exe -pi "BSEtunesRsaKey" "c:\BSEtunesRSAKey.xml"
+aspnet_regiis.exe -pi "BSEtunesRsaKey" "\\bse01-2016\Data\BSE\BSEtunesRSAKey.xml"
+
+Allow IIS process to access RSA key container
+---------------------------------------------
+
+aspnet_regiis.exe -pa "BSEtunesRsaKey" "NT AUTHORITY\NETWORK SERVICE"

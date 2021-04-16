@@ -1,6 +1,7 @@
 ﻿using BSE.Tunes.Data;
 using Microsoft.Practices.ServiceLocation;
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -242,10 +243,42 @@ namespace BSE.Tunes.StoreApp.Services
             {
                 tokenResponse = await m_authenticationHandler.RefreshToken();
             }
+            //if (tokenResponse.Json.TryGetValue(".issued", out Newtonsoft.Json.Linq.JToken value))
+            //{
+            //    if ((DateTime)value is DateTime issuedTime)
+            //    {
+            //        if (DateTime.Now > issuedTime.AddMinutes(5))
+            //        {
+            //            var refreshToken = tokenResponse.RefreshToken;
+            //            var shouldRefresh = _pendingRefreshTokenRequests.TryAdd(refreshToken, true);
+            //            if (shouldRefresh)
+            //            {
+            //                try
+            //                {
+            //                    tokenResponse = await m_authenticationHandler.RefreshToken();
+            //                }
+            //                finally
+            //                {
+            //                    _pendingRefreshTokenRequests.TryRemove(refreshToken, out _);
+            //                }
+                            
+            //            }
+            //            else
+            //            {
+
+            //            }
+            //        }
+            //    }
+            //    //DateTime.Parse(value.)
+            //}
+
             var client = new HttpClient();
             client.SetBearerToken(tokenResponse.AccessToken);
             return client;
         }
+
+        private static readonly ConcurrentDictionary<string, bool> _pendingRefreshTokenRequests =
+            new ConcurrentDictionary<string, bool>();
 
         #endregion
 
@@ -279,7 +312,8 @@ namespace BSE.Tunes.StoreApp.Services
                     responseMessage.EnsureExtendedSuccessStatusCode();
                     result = responseMessage.Content.ReadAsAsync<T>().Result;
                 }
-                catch (Exception)
+                //catch(Authori)
+                catch (Exception e)
                 {
                     throw;
                 }

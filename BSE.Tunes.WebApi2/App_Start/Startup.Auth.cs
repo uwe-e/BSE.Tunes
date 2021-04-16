@@ -1,74 +1,46 @@
 ﻿
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using Owin;
+using AspNet.Identity.MySQL;
+using BSE.Tunes.WebApi.Identity;
+using BSE.Tunes.WebApi.Identity.MySQL;
+using BSE.Tunes.WebApi.Providers;
+using Microsoft.AspNet.Identity;
 using Microsoft.Owin;
 using Microsoft.Owin.Security.OAuth;
-using Microsoft.AspNet.Identity;
-using AspNet.Identity.MySQL;
-using BSE.Tunes.WebApi.Providers;
+using Owin;
+using System;
 
 namespace BSE.Tunes.WebApi2
 {
-	public partial class Startup
+    public partial class Startup
 	{
-		static Startup()
+		public static string PublicClientId => "self";
+
+		private static MySQLDatabase _database => new MySQLDatabase();
+
+		public static OAuthAuthorizationServerOptions OAuthOptions => new OAuthAuthorizationServerOptions
 		{
-			PublicClientId = "self";
+			TokenEndpointPath = new PathString("/Token"),
+			Provider = new ApplicationOAuthProvider(PublicClientId, UserManagerFactory),
+			RefreshTokenProvider = new RefreshTokenProvider(),
+			ApplicationCanDisplayErrors = true,
+			AllowInsecureHttp = true
+		};
 
-			UserManagerFactory = () => new UserManager<IdentityUser>(new UserStore(new MySQLDatabase()));
-			OAuthOptions = new OAuthAuthorizationServerOptions
-			{
-				TokenEndpointPath = new PathString("/Token"),
-				Provider = new ApplicationOAuthProvider(PublicClientId, UserManagerFactory),
-				RefreshTokenProvider = new AuthenticationTokenProvider(),
-				//AccessTokenExpireTimeSpan = TimeSpan.FromDays(14),
-				ApplicationCanDisplayErrors = true,
-				AllowInsecureHttp = true
-			};
-		}
+  //      public static Func<RefreshTokenManager<RefreshToken>> RefreshTokenManager = () =>
+		//{
+		//	return new RefreshTokenManager<RefreshToken>(new RefreshTokenStore(_database));
+		//};
 
-		public static OAuthAuthorizationServerOptions OAuthOptions { get; private set; }
-		public static Func<UserManager<IdentityUser>> UserManagerFactory { get; set; }
-		public static string PublicClientId { get; private set; }
+		public static Func<UserManager<IdentityUser>> UserManagerFactory = () =>
+        {
+            return new UserManager<IdentityUser>(new UserStore(_database));
+        };
 
 		// For more information on configuring authentication, please visit http://go.microsoft.com/fwlink/?LinkId=301864
 		public void ConfigureAuth(IAppBuilder app)
 		{
-			// Configure the application for OAuth based flow
-			//PublicClientId = "self";
-			//OAuthOptions = new OAuthAuthorizationServerOptions
-			//{
-			//	TokenEndpointPath = new PathString("/Token"),
-			//	Provider = new ApplicationOAuthProvider(PublicClientId),
-			//	AuthorizeEndpointPath = new PathString("/api/Account/ExternalLogin"),
-			//	AccessTokenExpireTimeSpan = TimeSpan.FromDays(14),
-			//	AllowInsecureHttp = true
-			//};
-
 			// Enable the application to use bearer tokens to authenticate users
 			app.UseOAuthBearerTokens(OAuthOptions);
-
-			// Uncomment the following lines to enable logging in with third party login providers
-			//app.UseMicrosoftAccountAuthentication(
-			//    clientId: "",
-			//    clientSecret: "");
-
-			//app.UseTwitterAuthentication(
-			//    consumerKey: "",
-			//    consumerSecret: "");
-
-			//app.UseFacebookAuthentication(
-			//    appId: "",
-			//    appSecret: "");
-
-			//app.UseGoogleAuthentication(new GoogleOAuth2AuthenticationOptions()
-			//{
-			//    ClientId = "",
-			//    ClientSecret = ""
-			//});
 		}
 	}
 }
