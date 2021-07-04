@@ -1,4 +1,5 @@
 https://byalexblog.net/how-to-keep-your-production-config-secured-on-public-github-repo
+https://docs.microsoft.com/en-us/previous-versions/aspnet/2w117ede(v=vs.100)
 
 
 Creating an RSA Key Container
@@ -38,5 +39,7 @@ aspnet_regiis.exe -pi "BSEtunesRsaKey" "\\bse01-2016\Data\BSE\BSEtunesRSAKey.xml
 
 Allow IIS process to access RSA key container
 ---------------------------------------------
+
+Please check, if the App Pools Identity == NETWORK SERVICE
 
 aspnet_regiis.exe -pa "BSEtunesRsaKey" "NT AUTHORITY\NETWORK SERVICE"

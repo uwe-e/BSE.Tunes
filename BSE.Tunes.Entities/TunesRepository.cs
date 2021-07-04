@@ -622,7 +622,8 @@ namespace BSE.Tunes.Entities
             var albumIDCollection = new Collection<int>(albumIDs?.ToList());
             //            if (albumIDCollection.Count > limit)
             {
-                Random random = new Random(DateTime.Now.Millisecond);
+                //Random random = new Random(DateTime.Now.Millisecond);
+                Random random = new Random(Guid.NewGuid().GetHashCode());
                 while (albumIDCollection.Count > 0)
                 {
                     int index = random.Next(albumIDCollection.Count);

@@ -1399,10 +1399,14 @@ namespace BSE.Tunes.Entities
                 pageSize = pageSize == 0 ? 1 : pageSize;
 
                 StringBuilder stringBuilder = new StringBuilder();
-                stringBuilder.Append("SELECT p.ListId, p.ListName, p.User, p.guid FROM tunesEntities.playlist AS p");
+                stringBuilder.Append("SELECT p.ListId, p.ListName, p.User, p.guid, COUNT(pe.PlaylistId) as Number ");
+                stringBuilder.Append(" FROM tunesEntities.playlist AS p");
+                stringBuilder.Append(" LEFT JOIN tunesEntities.playlistentries AS pe ON p.ListId = pe.PlaylistId");
                 stringBuilder.Append(" WHERE p.User = @userName");
+                stringBuilder.Append(" GROUP BY p.listid, p.ListName, p.User, p.guid");
                 stringBuilder.Append(" ORDER BY p.ListName");
                 stringBuilder.Append(" SKIP @skip LIMIT @limit ");
+
                 string sql = stringBuilder.ToString();
 
                 using (EntityConnection entityConnection =
@@ -1446,7 +1450,8 @@ namespace BSE.Tunes.Entities
                                         Id = dataReader.GetInt32("ListId", false, 0),
                                         Name = dataReader.GetString("ListName", false, string.Empty),
                                         UserName = dataReader.GetString("User", false, string.Empty),
-                                        Guid = dataReader.GetGuid("guid", true, Guid.Empty)
+                                        Guid = dataReader.GetGuid("guid", true, Guid.Empty),
+                                        NumberEntries = dataReader.GetInt32("Number",false,0)
                                     };
                                     playlistCollection.Add(playlist);
                                 }
