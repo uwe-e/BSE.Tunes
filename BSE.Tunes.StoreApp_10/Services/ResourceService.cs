@@ -1,9 +1,4 @@
-﻿using Microsoft.Practices.ServiceLocation;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using CommonServiceLocator;
 using Windows.ApplicationModel.Resources;
 
 namespace BSE.Tunes.StoreApp.Services

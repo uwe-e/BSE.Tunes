@@ -1,20 +1,20 @@
 ﻿using BSE.Tunes.Data;
+using BSE.Tunes.StoreApp.IO;
+using BSE.Tunes.StoreApp.Models;
+using BSE.Tunes.StoreApp.Mvvm.Messaging;
+using CommonServiceLocator;
 using GalaSoft.MvvmLight.Messaging;
-using Microsoft.Practices.ServiceLocation;
+using MediaParsers;
 using System;
 using System.Threading.Tasks;
 using Windows.Media;
+using Windows.Media.Core;
+using Windows.Media.MediaProperties;
+using Windows.Media.Playback;
+using Windows.Storage.Streams;
 using Windows.UI.Core;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
-using Windows.Media.Core;
-using Windows.Storage.Streams;
-using Windows.Media.MediaProperties;
-using BSE.Tunes.StoreApp.IO;
-using MediaParsers;
-using BSE.Tunes.StoreApp.Models;
-using BSE.Tunes.StoreApp.Mvvm.Messaging;
-using Windows.Media.Playback;
 
 namespace BSE.Tunes.StoreApp.Services
 {
@@ -92,7 +92,7 @@ namespace BSE.Tunes.StoreApp.Services
         // MP3 Framesize and length for Layer II and Layer III
         private const UInt32 sampleSize = 1152;
         private TimeSpan sampleDuration = new TimeSpan(0, 0, 0, 0, 70);
-        
+
         #endregion
 
         #region Properties

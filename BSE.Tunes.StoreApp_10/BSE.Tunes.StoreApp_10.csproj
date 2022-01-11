@@ -527,26 +527,29 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
+    <PackageReference Include="CommonServiceLocator">
+      <Version>2.0.6</Version>
+    </PackageReference>
     <PackageReference Include="Microsoft.AspNet.WebApi.Client">
-      <Version>5.2.3</Version>
+      <Version>5.2.7</Version>
     </PackageReference>
     <PackageReference Include="Microsoft.CSharp">
-      <Version>4.3.0</Version>
+      <Version>4.7.0</Version>
     </PackageReference>
     <PackageReference Include="Microsoft.NETCore.UniversalWindowsPlatform">
       <Version>5.2.2</Version>
     </PackageReference>
     <PackageReference Include="Microsoft.Xaml.Behaviors.Uwp.Managed">
-      <Version>2.0.0</Version>
+      <Version>2.0.1</Version>
     </PackageReference>
     <PackageReference Include="MvvmDialogs">
-      <Version>5.1.0</Version>
+      <Version>8.0.0</Version>
     </PackageReference>
     <PackageReference Include="MvvmLight">
-      <Version>5.3.0</Version>
+      <Version>5.4.1.1</Version>
     </PackageReference>
     <PackageReference Include="Newtonsoft.Json">
-      <Version>10.0.3</Version>
+      <Version>13.0.1</Version>
     </PackageReference>
     <PackageReference Include="Template10">
       <Version>1.1.12</Version>
@@ -555,7 +558,7 @@
       <Version>4.0.1</Version>
     </PackageReference>
     <PackageReference Include="WriteableBitmapEx">
-      <Version>1.5.1</Version>
+      <Version>1.6.8</Version>
     </PackageReference>
   </ItemGroup>
   <ItemGroup>

@@ -1,12 +1,7 @@
 ﻿using BSE.Tunes.StoreApp.Managers;
 using BSE.Tunes.StoreApp.Services;
+using CommonServiceLocator;
 using GalaSoft.MvvmLight.Ioc;
-using Microsoft.Practices.ServiceLocation;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace BSE.Tunes.StoreApp.ViewModels
 {

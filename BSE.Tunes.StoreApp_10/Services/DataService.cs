@@ -1,12 +1,10 @@
 ﻿using BSE.Tunes.Data;
-using Microsoft.Practices.ServiceLocation;
+using CommonServiceLocator;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Linq;
 using System.Net.Http;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace BSE.Tunes.StoreApp.Services
@@ -151,12 +149,12 @@ namespace BSE.Tunes.StoreApp.Services
             string strUrl = string.Format("{0}/api/search/albums", ServiceUrl);
             return await GetHttpResponseFromPost<ObservableCollection<Album>, Query>(new Uri(strUrl), query);
         }
-		public async Task<ObservableCollection<Genre>> GetGenres()
-		{
-			string strUrl = string.Format("{0}/api/v2/genres", ServiceUrl);
-			return await GetHttpResponse<ObservableCollection<Genre>>(new Uri(strUrl));
-		}
-		public async Task<ObservableCollection<Track>> GetTrackSearchResults(Query query)
+        public async Task<ObservableCollection<Genre>> GetGenres()
+        {
+            string strUrl = string.Format("{0}/api/v2/genres", ServiceUrl);
+            return await GetHttpResponse<ObservableCollection<Genre>>(new Uri(strUrl));
+        }
+        public async Task<ObservableCollection<Track>> GetTrackSearchResults(Query query)
         {
             string strUrl = string.Format("{0}/api/search/tracks", ServiceUrl);
             return await GetHttpResponseFromPost<ObservableCollection<Track>, Query>(new Uri(strUrl), query);
@@ -261,7 +259,7 @@ namespace BSE.Tunes.StoreApp.Services
             //                {
             //                    _pendingRefreshTokenRequests.TryRemove(refreshToken, out _);
             //                }
-                            
+
             //            }
             //            else
             //            {

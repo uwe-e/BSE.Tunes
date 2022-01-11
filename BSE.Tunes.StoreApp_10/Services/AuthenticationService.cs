@@ -1,9 +1,7 @@
 ﻿using BSE.Tunes.StoreApp.Models;
-using Microsoft.Practices.ServiceLocation;
+using CommonServiceLocator;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using Thinktecture.IdentityModel.Client;
 using Windows.Security.Credentials;

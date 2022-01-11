@@ -1,17 +1,16 @@
-using Windows.UI.Xaml;
-using System.Threading.Tasks;
+using BSE.Tunes.StoreApp.IO;
+using BSE.Tunes.StoreApp.Models;
 using BSE.Tunes.StoreApp.Services;
-using Windows.ApplicationModel.Activation;
-using Template10.Controls;
-using Template10.Common;
+using CommonServiceLocator;
 using System;
 using System.Linq;
-using Windows.UI.Xaml.Data;
-using Windows.UI.Xaml.Controls;
-using Microsoft.Practices.ServiceLocation;
-using BSE.Tunes.StoreApp.Models;
-using BSE.Tunes.StoreApp.IO;
+using System.Threading.Tasks;
+using Template10.Common;
+using Template10.Controls;
+using Windows.ApplicationModel.Activation;
 using Windows.UI.ViewManagement;
+using Windows.UI.Xaml;
+using Windows.UI.Xaml.Data;
 
 namespace BSE.Tunes.StoreApp
 {
@@ -109,9 +108,9 @@ namespace BSE.Tunes.StoreApp
                             {
                                 //Deletes the tmp download folder with its files from the local store.
                                 await LocalStorage.ClearTempFolderAsync();
-								m_settingsService.ApplyStartUpSettings();
+                                m_settingsService.ApplyStartUpSettings();
 
-								await NavigationService.NavigateAsync(typeof(Views.MainPage));
+                                await NavigationService.NavigateAsync(typeof(Views.MainPage));
                             }
                         }
                         else

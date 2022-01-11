@@ -1,20 +1,15 @@
 ﻿using BSE.Tunes.Data;
-using BSE.Tunes.Data.Extensions;
 using BSE.Tunes.Data.Collections;
-using BSE.Tunes.StoreApp.Services;
-using BSE.Tunes.StoreApp.Mvvm.Messaging;
+using BSE.Tunes.Data.Extensions;
 using BSE.Tunes.StoreApp.Models;
+using BSE.Tunes.StoreApp.Mvvm.Messaging;
+using BSE.Tunes.StoreApp.Services;
+using CommonServiceLocator;
+using GalaSoft.MvvmLight.Messaging;
 using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
-using GalaSoft.MvvmLight.Messaging;
-using BSE.Tunes.StoreApp.ViewModels;
-using System.Globalization;
-using Microsoft.Practices.ServiceLocation;
-
 
 namespace BSE.Tunes.StoreApp.Managers
 {
@@ -35,7 +30,7 @@ namespace BSE.Tunes.StoreApp.Managers
         }
         public NavigableCollection<int> Playlist
         {
-            get;set;
+            get; set;
         }
         public Track CurrentTrack
         {
@@ -63,7 +58,7 @@ namespace BSE.Tunes.StoreApp.Managers
             get;
             private set;
         }
-        
+
         #endregion
 
         #region MethodsPublic
@@ -148,7 +143,7 @@ namespace BSE.Tunes.StoreApp.Managers
         }
         public bool CanExecuteNextTrack()
         {
-			return this.Playlist?.CanMoveNext ?? false;
+            return this.Playlist?.CanMoveNext ?? false;
         }
         public async void ExecuteNextTrack()
         {
@@ -170,7 +165,7 @@ namespace BSE.Tunes.StoreApp.Managers
         }
         public bool CanExecutePreviousTrack()
         {
-			return this.Playlist?.CanMovePrevious ?? false;
+            return this.Playlist?.CanMovePrevious ?? false;
         }
         public async void ExecutePreviousTrack()
         {
@@ -209,7 +204,7 @@ namespace BSE.Tunes.StoreApp.Managers
         }
         public bool CanExecutePlay()
         {
-			return this.Playlist?.Count > 0;
+            return this.Playlist?.Count > 0;
         }
         public void Play()
         {
