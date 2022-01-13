@@ -1,24 +1,22 @@
 ﻿using BSE.Tunes.Data;
+using BSE.Tunes.Data.Extensions;
 using BSE.Tunes.StoreApp.Managers;
 using BSE.Tunes.StoreApp.Models;
-using BSE.Tunes.StoreApp.Mvvm;
+using BSE.Tunes.StoreApp.Mvvm.Messaging;
 using BSE.Tunes.StoreApp.Services;
 using GalaSoft.MvvmLight.Command;
+using GalaSoft.MvvmLight.Messaging;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Collections.Specialized;
 using System.Globalization;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using Template10.Services.NavigationService;
 using Windows.UI.Xaml.Media.Imaging;
 using Windows.UI.Xaml.Navigation;
-using System.Collections.Specialized;
-using Template10.Services.NavigationService;
-using BSE.Tunes.StoreApp.Mvvm.Messaging;
-using BSE.Tunes.Data.Extensions;
-using GalaSoft.MvvmLight.Messaging;
 
 namespace BSE.Tunes.StoreApp.ViewModels
 {
@@ -162,7 +160,7 @@ namespace BSE.Tunes.StoreApp.ViewModels
                         ICacheableBitmapService cacheableBitmapService = CacheableBitmapService.Instance;
                         Playlist = await this.DataService.GetPlaylistById(playlist.Id, user.UserName);
                         if (this.Playlist != null)
-                        {                            
+                        {
                             foreach (var entry in this.Playlist.Entries?.OrderBy(pe => pe.SortOrder))
                             {
                                 if (entry != null)
@@ -185,7 +183,7 @@ namespace BSE.Tunes.StoreApp.ViewModels
                             this.InfoSubTitle = FormatNumberOfEntriesString(Playlist);
                         }
                     }
-                    catch(Exception ex)
+                    catch (Exception ex)
                     {
 
                     }
