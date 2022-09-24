@@ -1,3 +1,0 @@
-MainPackage=C:\Git\BSE.Tunes\BSE.Tunes.StoreApp_8.1\bin\Debug\BSE.Tunes.StoreApp_8.1_1.1.0.20_AnyCPU_Debug.appx
-SymbolPackage=C:\Git\BSE.Tunes\BSE.Tunes.StoreApp_8.1\AppPackages\BSE.Tunes.StoreApp_8.1_1.1.0.20_Debug_Test\BSE.Tunes.StoreApp_8.1_1.1.0.20_AnyCPU_Debug.appxsym
-ResourcePack=C:\Git\BSE.Tunes\BSE.Tunes.StoreApp_8.1\bin\Debug\BSE.Tunes.StoreApp_8.1_1.1.0.20_language-de.appx
