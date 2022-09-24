@@ -12,7 +12,7 @@ namespace BSE.Tunes.WebApi.Web.Http.Tracing
 
 		public override void Log(ExceptionLoggerContext context)
 		{
-			classLogger.Log(NLog.LogLevel.Error, context.Exception.Message, context.Exception);
+			classLogger.Log(NLog.LogLevel.Error, context.Exception, context.Exception.Message);
 		}
 	}
 }
