@@ -165,7 +165,7 @@ namespace BSE.Tunes.Entities
                             });
                         }
 
-                        stringBuilder.Append(" ORDER BY a.Artist_Name, a.Album_Title");
+                        stringBuilder.Append(" ORDER BY a.Artist_SortName, a.Album_Title");
                         stringBuilder.Append(" SKIP @skip LIMIT @limit ");
 
                         entityCommand.Parameters.Add(new EntityParameter
