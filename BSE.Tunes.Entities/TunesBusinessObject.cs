@@ -1,17 +1,13 @@
 ﻿using BSE.Tunes.Data;
 using System;
 using System.Collections.Generic;
-using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Collections.ObjectModel;
-using BSE.Tunes.Data.Exceptions;
-using MySql.Data.MySqlClient;
-using System.Globalization;
-using BSE.Tunes.Entities.Properties;
+using System.Data;
 using System.Data.Entity.Core.EntityClient;
 using System.Data.Entity.Core.Objects;
+using System.Globalization;
+using System.Linq;
+using System.Text;
 
 namespace BSE.Tunes.Entities
 {

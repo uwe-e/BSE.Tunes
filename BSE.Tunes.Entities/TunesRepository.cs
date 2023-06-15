@@ -6,7 +6,6 @@ using System.Data;
 using System.Data.Entity.Core.EntityClient;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace BSE.Tunes.Entities
 {
