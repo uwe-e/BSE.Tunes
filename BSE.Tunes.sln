@@ -3,11 +3,13 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.3.32825.248
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BSE.Tunes.Data", "BSE.Tunes.Data\BSE.Tunes.Data.csproj", "{ED746C94-C561-4573-A2C9-FA7A3830A995}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BSE.Tunes.Data", "BSE.Tunes.Data\BSE.Tunes.Data.csproj", "{ED746C94-C561-4573-A2C9-FA7A3830A995}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BSE.Tunes.Entities", "BSE.Tunes.Entities\BSE.Tunes.Entities.csproj", "{D5613911-81D8-4B8F-828F-6BBD3229B71D}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BSE.Tunes.WebApi2", "BSE.Tunes.WebApi2\BSE.Tunes.WebApi2.csproj", "{1CCFA4C1-D848-4A88-94D5-96609A43DC1E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AspNet.Identity.MySQL", "..\BSE.Web\AspNet.Identity.MySQL\AspNet.Identity.MySQL.csproj", "{D299B420-2A02-4E28-9415-EDD6A557D23E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -54,6 +56,22 @@ Global
 		{1CCFA4C1-D848-4A88-94D5-96609A43DC1E}.Release|ARM.ActiveCfg = Release|Any CPU
 		{1CCFA4C1-D848-4A88-94D5-96609A43DC1E}.Release|x64.ActiveCfg = Release|Any CPU
 		{1CCFA4C1-D848-4A88-94D5-96609A43DC1E}.Release|x86.ActiveCfg = Release|Any CPU
+		{D299B420-2A02-4E28-9415-EDD6A557D23E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D299B420-2A02-4E28-9415-EDD6A557D23E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D299B420-2A02-4E28-9415-EDD6A557D23E}.Debug|ARM.ActiveCfg = Debug|Any CPU
+		{D299B420-2A02-4E28-9415-EDD6A557D23E}.Debug|ARM.Build.0 = Debug|Any CPU
+		{D299B420-2A02-4E28-9415-EDD6A557D23E}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{D299B420-2A02-4E28-9415-EDD6A557D23E}.Debug|x64.Build.0 = Debug|Any CPU
+		{D299B420-2A02-4E28-9415-EDD6A557D23E}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{D299B420-2A02-4E28-9415-EDD6A557D23E}.Debug|x86.Build.0 = Debug|Any CPU
+		{D299B420-2A02-4E28-9415-EDD6A557D23E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D299B420-2A02-4E28-9415-EDD6A557D23E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D299B420-2A02-4E28-9415-EDD6A557D23E}.Release|ARM.ActiveCfg = Release|Any CPU
+		{D299B420-2A02-4E28-9415-EDD6A557D23E}.Release|ARM.Build.0 = Release|Any CPU
+		{D299B420-2A02-4E28-9415-EDD6A557D23E}.Release|x64.ActiveCfg = Release|Any CPU
+		{D299B420-2A02-4E28-9415-EDD6A557D23E}.Release|x64.Build.0 = Release|Any CPU
+		{D299B420-2A02-4E28-9415-EDD6A557D23E}.Release|x86.ActiveCfg = Release|Any CPU
+		{D299B420-2A02-4E28-9415-EDD6A557D23E}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

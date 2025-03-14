@@ -35,7 +35,7 @@ namespace BSE.Tunes.WebApi.Controllers
         }
         [AcceptVerbs("GET", "HEAD")]
         [Route("audio/{id:guid}")]
-        //[AllowAnonymous]
+        [AllowAnonymous]
         public HttpResponseMessage GetAudioFile(Guid id)
         {
             HttpResponseMessage responseMessage = null;
@@ -90,6 +90,18 @@ namespace BSE.Tunes.WebApi.Controllers
                         responseMessage.Content.Headers.ContentType = new MediaTypeHeaderValue("application/octet-stream");
                     }
                 }
+            }
+            return responseMessage;
+        }
+        [AcceptVerbs("GET", "HEAD")]
+        [Route("{filename}")]
+        [AllowAnonymous]
+        public HttpResponseMessage GetAudioFile(string filename)
+        {
+            HttpResponseMessage responseMessage = null;
+            var file = Path.GetFileNameWithoutExtension(filename);
+            if (Guid.TryParse(file, out Guid id)){
+                responseMessage = GetAudioFile(id);
             }
             return responseMessage;
         }
