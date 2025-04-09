@@ -1,8 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Runtime.Serialization;
-using System.Text;
 
 namespace BSE.Tunes.Data
 {
@@ -19,6 +16,8 @@ namespace BSE.Tunes.Data
         public TimeSpan Duration { get; set; }
         [DataMember]
         public Guid Guid { get; set; }
+        [DataMember]
+        public string Extension { get; set; }
         [DataMember]
         public Album Album { get; set; }
     }
