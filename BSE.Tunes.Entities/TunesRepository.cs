@@ -76,7 +76,7 @@ namespace BSE.Tunes.Entities
 
         public int GetNumberOfAlbums(int? genreId, int? artistId)
         {
-            int numberofAlbums = default(int);
+            int numberofAlbums = default;
 
             using (EntityConnection entityConnection =
                     new EntityConnection(this.ConnectionString))
@@ -372,6 +372,26 @@ namespace BSE.Tunes.Entities
 
             return tracks;
         }
+
+        public Track[] GetTracksByAlbumId(int albumId)
+        {
+            Track[] tracks = null;
+            using (EntityConnection entityConnection =
+                    new EntityConnection(this.ConnectionString))
+            {
+                try
+                {
+                    entityConnection.Open();
+                    tracks = GetTracksByAlbumId(albumId, entityConnection);
+                }
+                finally
+                {
+                    entityConnection.Close();
+                }
+            }
+            return tracks;
+        }
+        
         public Track GetTrackById(int trackId)
         {
             Track track = null;
@@ -531,6 +551,54 @@ namespace BSE.Tunes.Entities
             }
             return albums;
         }
+        protected Track[] GetTracksByAlbumId(int albumId, EntityConnection entityConnection)
+        {
+            Track[] tracks = null;
+            if (entityConnection != null)
+            {
+                StringBuilder stringBuilder = new StringBuilder();
+                stringBuilder.Append("SELECT t.LiedID, t.Track, t.Lied ,t.Dauer");
+                stringBuilder.Append(" FROM tunesEntities.lieder AS t");
+                stringBuilder.Append(" WHERE t.titelid = @albumId");
+                stringBuilder.Append(" AND t.Liedpfad IS NOT NULL");
+                string sql = stringBuilder.ToString();
+                using (EntityCommand entityCommand = entityConnection.CreateCommand())
+                {
+                    entityCommand.Parameters.Add(new EntityParameter
+                    {
+                        ParameterName = "albumid",
+                        Value = albumId
+                    });
+                    entityCommand.CommandText = sql;
+                    tracks = ExecuteTrackReader(entityCommand);
+                }
+            }
+            return tracks;
+        }
+
+        private Track[] ExecuteTrackReader(EntityCommand entityCommand)
+        {
+            List<Track> tracks = null;
+            using (EntityDataReader dataReader = entityCommand.ExecuteReader(System.Data.CommandBehavior.SequentialAccess))
+            {
+                while (dataReader.Read())
+                {
+                    if (tracks == null)
+                    {
+                        tracks = new List<Track>();
+                    }
+                    Track track = new Track
+                    {
+                        Id = dataReader.GetInt32("LiedID", false, 0),
+                        TrackNumber = dataReader.GetInt32("Track", false, 0),
+                        Name = dataReader.GetString("Lied", false, string.Empty),
+                        Duration = dataReader.GetTimeSpan("Dauer", true, TimeSpan.MinValue)
+                    };
+                    tracks.Add(track);
+                }
+            }
+            return tracks?.ToArray();
+        }
 
         protected void GetAlbumTracksByTitelId(Album album, EntityConnection entityConnection)
         {
@@ -546,9 +614,11 @@ namespace BSE.Tunes.Entities
 
                 using (EntityCommand entityCommand = entityConnection.CreateCommand())
                 {
-                    EntityParameter id = new EntityParameter();
-                    id.ParameterName = "albumid";
-                    id.Value = album.Id;
+                    EntityParameter id = new EntityParameter
+                    {
+                        ParameterName = "albumid",
+                        Value = album.Id
+                    };
                     entityCommand.Parameters.Add(id);
                     entityCommand.CommandText = sql;
 
