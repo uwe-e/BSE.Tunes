@@ -45,6 +45,10 @@ namespace BSE.Tunes.Data
         [Obsolete("Use the common method GetNumberOfAlbums instead")]
         [OperationContract]
         int GetNumberOfPlayableAlbums(Query query);
+        
+        [OperationContract]
+        Track[] GetTracksByAlbumId(int albumId);
+        
         [OperationContract]
         Track GetTrackById(int trackId);
 
