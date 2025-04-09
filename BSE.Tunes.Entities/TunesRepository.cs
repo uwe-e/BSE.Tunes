@@ -411,7 +411,9 @@ namespace BSE.Tunes.Entities
                                         TrackNumber = dataReader.GetInt32("Track", false, 0),
                                         Name = dataReader.GetString("Lied", false, string.Empty),
                                         Duration = dataReader.GetTimeSpan("Dauer", true, TimeSpan.MinValue),
+                                        Extension = System.IO.Path.GetExtension(dataReader.GetString("Liedpfad", true, string.Empty)),
                                         Guid = dataReader.GetGuid("guid", false, Guid.Empty),
+
                                         Album = new Album
                                         {
                                             Id = dataReader.GetInt32("TitelID", false, 0),

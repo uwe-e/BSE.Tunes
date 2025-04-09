@@ -9,15 +9,15 @@ using System.Web.Http.Routing;
 
 namespace BSE.Tunes.WebApi
 {
-	public static class WebApiConfig
-	{
-		public static void Register(HttpConfiguration config)
-		{
+    public static class WebApiConfig
+    {
+        public static void Register(HttpConfiguration config)
+        {
             var constraintResolver = new DefaultInlineConstraintResolver()
             {
                 ConstraintMap = { ["apiVersion"] = typeof(ApiVersionRouteConstraint) }
             };
-			config.IncludeErrorDetailPolicy = IncludeErrorDetailPolicy.Always;
+            config.IncludeErrorDetailPolicy = IncludeErrorDetailPolicy.Always;
 
             //config.AddApiVersioning(o => o.ReportApiVersions = true);
             //Enable Backward Compatibility
@@ -28,24 +28,31 @@ namespace BSE.Tunes.WebApi
             // Web API configuration and services
             // Configure the custom exceptions.
             config.Filters.Add(new BSE.Tunes.WebApi.Filters.ExceptionFilter());
-			config.Services.Add(typeof(IExceptionLogger), new TraceExceptionLogger());
+            config.Services.Add(typeof(IExceptionLogger), new TraceExceptionLogger());
 
-            
+
 
             config.Routes.MapHttpRoute(
-				name: "FilesApi",
-				routeTemplate: "api/files/{action}/{id}",
-				defaults: new
-				{
-					id = RouteParameter.Optional
-				}
-			);
+                name: "FilesApi",
+                routeTemplate: "api/files/{action}/{id}",
+                defaults: new
+                {
+                    id = RouteParameter.Optional
+                }
+            );
 
-			config.Routes.MapHttpRoute(
-				name: "DefaultApi",
-				routeTemplate: "api/{controller}/{action}/{id}",
-				defaults: new { id = RouteParameter.Optional }
-			);
+            config.Routes.MapHttpRoute(
+                name: "FilesApi123",
+                routeTemplate: "api/files/{fileName}",
+                defaults: new { controller = "Files", action = "GetAudioFile" },
+                constraints: null
+            );
+
+            config.Routes.MapHttpRoute(
+                name: "DefaultApi",
+                routeTemplate: "api/{controller}/{action}/{id}",
+                defaults: new { id = RouteParameter.Optional }
+            );
             //map the versioned route
             config.Routes.MapHttpRoute(
                 "VersionedUrl",
