@@ -283,7 +283,8 @@ namespace BSE.Tunes.Entities
                         entityCommand.CommandText = stringBuilder.ToString();
 
                         album = ExecuteAlbumReader(entityCommand).FirstOrDefault();
-                        GetAlbumTracksByTitelId(album, entityConnection);
+                        //GetAlbumTracksByTitelId(album, entityConnection);
+                        album.Tracks = GetTracksByAlbumId(albumId, entityConnection);
                     }
                 }
                 finally
@@ -561,6 +562,7 @@ namespace BSE.Tunes.Entities
                 stringBuilder.Append(" FROM tunesEntities.lieder AS t");
                 stringBuilder.Append(" WHERE t.titelid = @albumId");
                 stringBuilder.Append(" AND t.Liedpfad IS NOT NULL");
+                stringBuilder.Append(" ORDER BY t.Track");
                 string sql = stringBuilder.ToString();
                 using (EntityCommand entityCommand = entityConnection.CreateCommand())
                 {
@@ -598,55 +600,6 @@ namespace BSE.Tunes.Entities
                 }
             }
             return tracks?.ToArray();
-        }
-
-        protected void GetAlbumTracksByTitelId(Album album, EntityConnection entityConnection)
-        {
-            if (album != null)
-            {
-                StringBuilder stringBuilder = new StringBuilder();
-                stringBuilder.Append("SELECT t.LiedID, t.Track, t.Lied ,t.Dauer");
-                stringBuilder.Append(" FROM tunesEntities.lieder AS t");
-                stringBuilder.Append(" WHERE t.titelid = @albumId");
-                stringBuilder.Append(" AND t.Liedpfad IS NOT NULL");
-                stringBuilder.Append(" ORDER BY t.Track");
-                string sql = stringBuilder.ToString();
-
-                using (EntityCommand entityCommand = entityConnection.CreateCommand())
-                {
-                    EntityParameter id = new EntityParameter
-                    {
-                        ParameterName = "albumid",
-                        Value = album.Id
-                    };
-                    entityCommand.Parameters.Add(id);
-                    entityCommand.CommandText = sql;
-
-                    List<Track> tracks = null;
-                    using (EntityDataReader dataReader = entityCommand.ExecuteReader(System.Data.CommandBehavior.SequentialAccess))
-                    {
-                        while (dataReader.Read())
-                        {
-                            if (tracks == null)
-                            {
-                                tracks = new List<Track>();
-                            }
-                            Track track = new Track
-                            {
-                                Id = dataReader.GetInt32("LiedID", false, 0),
-                                TrackNumber = dataReader.GetInt32("Track", false, 0),
-                                Name = dataReader.GetString("Lied", false, string.Empty),
-                                Duration = dataReader.GetTimeSpan("Dauer", true, TimeSpan.MinValue)
-                            };
-                            tracks.Add(track);
-                        }
-                        if (tracks != null)
-                        {
-                            album.Tracks = tracks.ToArray();
-                        }
-                    }
-                }
-            }
         }
 
         protected ICollection<int> GetAlbumsThatHavePlayableTracks()
