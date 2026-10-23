@@ -1,5 +1,8 @@
 BSE.Tunes
 =========
+
+> Further development of the BSE.Tunes project has been discontinued, and the remaining API has been ported to an ASP.NET Core API at https://github.com/uwe-e/BSEtunes.
+
 A sample audio .net solution as the web part of the [BSEtunes](https://www.codeproject.com/Articles/43068/BSEtunes) system. The solution contains the following projects. 
 
 - BSE.Tunes.WebApi2 - modified ASP.NET Web Api service,
